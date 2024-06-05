@@ -1,8 +1,6 @@
 import { PageHeader } from "@/app/_components/page-header";
 import Account from "@/app/_components/settings/account";
-import Companies from "@/app/_components/settings/companies";
 import Customization from "@/app/_components/settings/customization";
-import Membership from "@/app/_components/settings/membership";
 import SettingsTabs from "@/app/_components/settings/settings-tabs";
 import { type SearchParams } from "@/types";
 import { constructMetadata } from "@/lib/utils";
@@ -25,12 +23,6 @@ export interface SettingsPageProps {
 }
 
 const getActiveTab = (tab?: string) => {
-  if (tab === "companies") {
-    return <Companies />;
-  }
-  if (tab === "membership") {
-    return <Membership />;
-  }
   if (tab === "customization") {
     return <Customization />;
   }

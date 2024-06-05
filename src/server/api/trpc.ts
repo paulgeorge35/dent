@@ -6,13 +6,10 @@
  * TL;DR - This is where all the tRPC server stuff is created and plugged in. The pieces you will
  * need to use are documented accordingly near the end.
  */
-import { Role, Status } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import { env } from "@/env";
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 
 import { db } from "@/server/db";
 import { auth } from "@/auth";
@@ -101,32 +98,6 @@ export const publicProcedure = t.procedure;
  * @see https://trpc.io/docs/procedures
  */
 
-export const rateLimit = (identifier: string, tokens: number) =>
-  t.middleware(async ({ ctx, next }) => {
-    const key = `rate-limit:${identifier}${ctx.session.user.id}`;
-
-    const { success } = await new Ratelimit({
-      redis: new Redis({
-        url: env.KV_URL,
-        token: env.KV_REST_API_TOKEN,
-      }),
-      limiter: Ratelimit.fixedWindow(tokens, "10 s"),
-    }).limit(key);
-
-    if (!success) {
-      throw new TRPCError({
-        code: "TOO_MANY_REQUESTS",
-        message: "Too many requests",
-      });
-    }
-
-    return next({
-      ctx: {
-        session: { ...ctx.session, user: ctx.session.user },
-      },
-    });
-  });
-
 const isAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session ?? !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
@@ -168,9 +139,6 @@ const isMember = t.middleware(async ({ ctx, next }) => {
   const user = await ctx.db.user.findUnique({
     where: {
       id: ctx.session.user.id,
-      subscription: {
-        status: Status.ACTIVE,
-      },
     },
   });
 

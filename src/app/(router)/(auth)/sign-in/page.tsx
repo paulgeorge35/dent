@@ -6,7 +6,6 @@ import { Separator } from "@/components/ui/separator";
 import { Icons } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import GoogleSignIn from "./google";
-import GitHubSignIn from "./github";
 import { type SearchParams } from "@/types";
 import { z } from "zod";
 import RootFormError from "@/components/ui/root-form-error";
@@ -38,7 +37,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
       <span className="vertical gap-4">
         {banned && <RootFormError error="Your account has been banned" />}
         <GoogleSignIn />
-        <GitHubSignIn />
       </span>
       <span className="horizontal center-v w-full gap-4">
         <Separator className="w-auto grow" />

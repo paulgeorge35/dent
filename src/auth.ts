@@ -170,11 +170,6 @@ export async function consumeToken(
             avatar: true,
           },
         },
-        subscription: {
-          select: {
-            status: true,
-          },
-        },
       },
     })) as SessionUser;
 

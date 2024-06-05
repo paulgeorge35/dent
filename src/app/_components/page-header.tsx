@@ -1,7 +1,5 @@
 import { cn } from "@/lib/utils";
 
-import MobileDrawer from "./sidebar/mobile-drawer";
-
 export const PageHeader = ({
   icon,
   title,
@@ -19,7 +17,6 @@ export const PageHeader = ({
       className,
     )}
   >
-    <MobileDrawer />
     <span className="flex items-center gap-6">
       {icon && <h1>{icon}</h1>}
       <h1 className="text-2xl font-bold">{title}</h1>

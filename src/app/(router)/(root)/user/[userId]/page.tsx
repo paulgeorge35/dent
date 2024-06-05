@@ -1,7 +1,5 @@
 import UserBadges from "@/app/_components/auth/user-badges";
 import BackButton from "@/app/_components/back-button";
-import CompanyCard from "@/app/_components/settings/company-card";
-import SocialBadge from "@/app/_components/settings/social-badge";
 import { api } from "@/trpc/server";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -12,9 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import AvatarComponent from "@/components/avatar-component";
 import { Shell } from "@/components/shell";
 
-import { type Social, type SocialName, socials } from "@/lib/socials";
 import RenderOnRole from "@/components/security/render-on-role";
-import BanDialog from "@/app/_components/user-table/ban-dialog";
+import BanDialog from "@/app/_components/ban-dialog";
 import { Button } from "@/components/ui/button";
 import { LockKeyhole, LockKeyholeOpen } from "lucide-react";
 
@@ -29,7 +26,6 @@ export async function generateMetadata({
   });
   return constructMetadata({
     page: `${user.profile.firstName} ${user.profile.lastName}`,
-    description: user.profile.bio ?? undefined,
   });
 }
 
@@ -43,12 +39,6 @@ export default async function User({ params: { userId } }: UserPageProps) {
     notFound();
   });
   if (!user) notFound();
-
-  const featuredCompany = user.companies.find((company) => company.isFeatured);
-
-  const hasSocials = (Object.keys(socials) as SocialName[]).some(
-    (id) => user.social?.[id],
-  );
 
   return (
     <Shell>
@@ -110,26 +100,6 @@ export default async function User({ params: { userId } }: UserPageProps) {
             {user.profile.firstName} {user.profile.lastName}
           </h1>
         </span>
-        {hasSocials && (
-          <span className="flex flex-wrap gap-2">
-            {(Object.keys(socials) as SocialName[]).map((id) => {
-              const social: Social = socials[id];
-              return (
-                <SocialBadge
-                  key={social.id}
-                  social={social}
-                  link={user.social?.[social.id] ?? undefined}
-                  size="icon"
-                />
-              );
-            })}
-          </span>
-        )}
-        {featuredCompany && (
-          <p className="text-center text-sm font-extralight">
-            @<strong>{featuredCompany.name}</strong>
-          </p>
-        )}
         <p className="text-center text-sm font-extralight text-muted-foreground">
           {user.email}
         </p>
@@ -138,26 +108,7 @@ export default async function User({ params: { userId } }: UserPageProps) {
             {user.phone}
           </p>
         )}
-        {user.profile.bio && (
-          <p className="text-center text-xs font-extralight italic text-muted-foreground">
-            {user.profile.bio}
-          </p>
-        )}
         <Separator className="my-4" />
-        <section className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
-          {featuredCompany && (
-            <CompanyCard
-              key={featuredCompany.id}
-              company={featuredCompany}
-              preview
-            />
-          )}
-          {user.companies
-            .filter((company) => company.id !== featuredCompany?.id)
-            .map((company) => (
-              <CompanyCard key={company.id} company={company} preview />
-            ))}
-        </section>
       </section>
     </Shell>
   );

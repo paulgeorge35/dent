@@ -34,27 +34,11 @@ export async function signUp({
       throw new Error("User already exists");
     }
 
-    const defaultTimezone = await tx.timezone.findFirst({
-      where: {
-        nameShort: "Europe/Bucharest",
-      },
-    });
-
     const user = await tx.user.create({
       data: {
         name: `${firstName} ${lastName}`,
         email: email,
-        county: county,
         passwordHash: await bcrypt.hash(password, 10),
-        config: {
-          create: defaultTimezone
-            ? {
-                timezone: { connect: { id: defaultTimezone.id } },
-              }
-            : {},
-        },
-        subscription: { create: {} },
-        social: { create: {} },
         profile: {
           create: {
             firstName,
