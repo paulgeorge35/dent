@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { PhoneInput } from "@/components/phone-input";
+import { PhoneInput, getPhoneData } from "@/components/phone-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DateTimePicker } from "@/components/datetime-input/datetime";
 import { cn } from "@/lib/utils";
@@ -77,6 +77,10 @@ export default function PatientForm({ className }: PatientFormProps) {
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(PatientFormSchema),
     defaultValues: {
+      lastName: "",
+      firstName: "",
+      email: "",
+      phone: "",
       county: "",
       city: "",
     },
@@ -87,13 +91,24 @@ export default function PatientForm({ className }: PatientFormProps) {
   const { data: cities, isFetching: isFetchingCities } =
     api.utils.getCities.useQuery(county);
 
+  const onSubmit = (data: PatientFormValues) => {
+    const phoneData = getPhoneData(data.phone);
+
+    if (!phoneData.isValid) {
+      form.setError("phone", {
+        type: "manual",
+        message: "Invalid phone number",
+      });
+      return;
+    }
+    console.log(data);
+  };
+
   return (
     <section className={cn(className)}>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(async (values) => {
-            console.log(values);
-          })}
+          onSubmit={form.handleSubmit(onSubmit)}
           className="grid grid-cols-2 gap-4"
         >
           <FormField
@@ -124,7 +139,6 @@ export default function PatientForm({ className }: PatientFormProps) {
                 <FormLabel htmlFor={field.name}>Email</FormLabel>
                 <Input
                   id={field.name}
-                  // type="email"
                   {...field}
                   placeholder="john@example.com"
                 />
@@ -141,7 +155,9 @@ export default function PatientForm({ className }: PatientFormProps) {
                   <PhoneInput
                     id={field.name}
                     autoComplete="tel"
-                    {...field}
+                    // {...field}
+                    value={field.value}
+                    onChange={field.onChange}
                     required={true}
                   />
                 </FormControl>
