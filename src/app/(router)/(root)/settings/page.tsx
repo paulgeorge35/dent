@@ -2,48 +2,27 @@ import { PageHeader } from "@/app/_components/page-header";
 import Account from "@/app/_components/settings/account";
 import Customization from "@/app/_components/settings/customization";
 import SettingsTabs from "@/app/_components/settings/settings-tabs";
-import { type SearchParams } from "@/types";
 import { constructMetadata } from "@/lib/utils";
-import { z } from "zod";
 
 import { Shell } from "@/components/shell";
-
-const searchParamsSchema = z
-  .object({
-    tab: z.string().optional(),
-  })
-  .optional();
 
 export const metadata = constructMetadata({
   page: "Settings",
 });
 
-export interface SettingsPageProps {
-  searchParams?: SearchParams;
-}
-
-const getActiveTab = (tab?: string) => {
-  if (tab === "customization") {
-    return <Customization />;
-  }
-  return <Account />;
-};
-
-export default async function Settings({ searchParams }: SettingsPageProps) {
-  const params = searchParamsSchema.safeParse(searchParams);
-
+export default async function Settings() {
   return (
-    <Shell className="flex flex-col items-start">
+    <Shell variant="center">
       <PageHeader
         icon="⚙️"
         title="Account Settings"
         subtitle="Customize your account settings and preferences."
+        className="mb-4 md:hidden"
       />
-      <PageHeader
-        title="Account Settings"
-        className="fixed z-[49] mt-[-16px] bg-background py-4 opacity-0 md:hidden"
-      />
-      <SettingsTabs>{getActiveTab(params.data?.tab)}</SettingsTabs>
+      <SettingsTabs>
+        <Account />
+        <Customization />
+      </SettingsTabs>
     </Shell>
   );
 }

@@ -30,4 +30,7 @@ export type SessionUser = z.infer<typeof sessionUserSchema>;
 
 export type UserComplete = z.infer<typeof userCompleteSchema>;
 
-export const emailSchema = z.union([z.literal(""), z.string().email().max(50)]);
+export const emailSchema = z.union([
+  z.literal(""),
+  z.string().email("Invalid email address").max(50),
+]);

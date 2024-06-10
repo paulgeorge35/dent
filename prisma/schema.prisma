@@ -50,10 +50,11 @@ model User {
   role          Role      @default(USER)
   banned        Boolean   @default(false)
 
-  profile      Profile?
+  profile Profile?
 
-  accounts       Account[]
-  tokens         Token[]
+  accounts Account[]
+  tokens   Token[]
+  patients Patient[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -82,6 +83,86 @@ model Token {
   userId String
 
   @@index([userId, token])
+}
+
+model Patient {
+  id                 String    @id @default(cuid())
+  firstName          String
+  lastName           String
+  gender             String?
+  dob                DateTime?
+  email              String?
+  phone              String?
+  city               String?
+  county             String?
+  status             Status    @default(ACTIVE)
+  smsNotifications   Boolean   @default(false)
+  emailNotifications Boolean   @default(false)
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  appointments Event[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  date        DateTime
+  start       DateTime?
+  end         DateTime?
+  allDay      Boolean     @default(false)
+  type        EventType   @default(APPOINTMENT)
+  status      EventStatus @default(CREATED)
+
+  proposedTimes ProposedTime[]
+  products      Product[]
+
+  patientId String?
+  patient   Patient? @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([patientId])
+}
+
+model ProposedTime {
+  id       String      @id @default(cuid())
+  date     DateTime
+  start    DateTime?
+  end      DateTime?
+  status   EventStatus @default(CREATED)
+  notified Boolean     @default(false)
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  priceMax    Float?
+  image       String?
+  tags        String[]
+  isDeleted   Boolean  @default(false)
+
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model County {
@@ -119,4 +200,16 @@ enum TokenType {
   ACTIVATION
   PASSWORD_RESET
   MAGIC_LINK
+}
+
+enum EventStatus {
+  CREATED
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  RESCHEDULED
+}
+
+enum EventType {
+  APPOINTMENT
 }

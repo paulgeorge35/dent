@@ -20,26 +20,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 
 import { PhoneInput, getPhoneData } from "@/components/phone-input";
 
 import DropzoneInput from "@/components/dropzone-input";
+import { Save } from "lucide-react";
 
 const schema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  county: z.string().min(1, "County is required"),
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
-  bio: z.string().max(200, "Bio must be less than 200 characters").optional(),
   avatar: z.string().optional().nullable(),
 });
 
@@ -51,8 +42,6 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ me }: ProfileFormProps) {
   const router = useRouter();
-  const { data: counties, isFetching: isFetchingCounties } =
-    api.utils.getCounties.useQuery();
   const { mutate, isPending } = api.user.update.useMutation({
     onSuccess: (data) => {
       toast.success("Profile updated successfully");
@@ -104,8 +93,7 @@ export default function ProfileForm({ me }: ProfileFormProps) {
           control={form.control}
           name="avatar"
           render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel htmlFor={field.name}>Avatar</FormLabel>
+            <FormItem className="vertical center-h col-span-2">
               <DropzoneInput
                 {...field}
                 id={field.name}
@@ -144,31 +132,6 @@ export default function ProfileForm({ me }: ProfileFormProps) {
             <FormItem className="col-span-1 w-full">
               <FormLabel htmlFor={field.name}>Last name</FormLabel>
               <Input id={field.name} {...field} placeholder="Last name" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="county"
-          rules={{
-            required: "County is required",
-          }}
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>County</FormLabel>
-              <Select onValueChange={field.onChange} required {...field}>
-                <SelectTrigger id="county" disabled={isFetchingCounties}>
-                  <SelectValue id="county" placeholder="Select a county" />
-                </SelectTrigger>
-                <SelectContent>
-                  {counties?.map((county) => (
-                    <SelectItem key={county.id} value={county.name}>
-                      {county.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
               <FormMessage />
             </FormItem>
           )}
@@ -220,32 +183,15 @@ export default function ProfileForm({ me }: ProfileFormProps) {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="bio"
-          rules={{
-            maxLength: {
-              value: 200,
-              message: "Bio must be less than 200 characters",
-            },
-          }}
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Bio</FormLabel>
-              <Textarea
-                id={field.name}
-                {...field}
-                placeholder=""
-                className="max-h-40"
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <span className="hidden sm:col-span-1 sm:block" />
         <Button
           isLoading={isPending}
           disabled={!form.formState.isDirty}
+          Icon={Save}
+          variant="expandIcon"
+          iconPlacement="left"
           type="submit"
+          className="col-span-2 sm:w-fit"
         >
           Update profile
         </Button>

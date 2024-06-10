@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { Shell } from "@/components/shell";
+import NavBar from "@/components/navbar";
 
 export default async function RootLayout({
   children,
@@ -10,10 +12,9 @@ export default async function RootLayout({
   if (!session) redirect("/sign-in");
 
   return (
-    <main className="flex min-h-[100dvh] md:min-h-screen">
-      <section className="flex grow flex-col items-center justify-center">
-        {children}
-      </section>
-    </main>
+    <Shell variant="layout">
+      <NavBar />
+      {children}
+    </Shell>
   );
 }

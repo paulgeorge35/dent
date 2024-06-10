@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Bell,
-  Brush,
-  LifeBuoy,
-  User,
-} from "lucide-react";
+import { Bell, Brush, LifeBuoy, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -50,7 +45,7 @@ export default function SettingsTabs({ children }: SettingsTabsProps) {
 
   return (
     <Tabs defaultValue={activeTab} className="w-full md:max-w-3xl">
-      <TabsList className="mb-4 grid w-full grid-cols-4 md:max-w-3xl h-10">
+      <TabsList className="mb-4 grid h-10 w-full grid-cols-4 md:max-w-3xl">
         {tabs.map((tab) => (
           <TabsTrigger
             key={tab.value}

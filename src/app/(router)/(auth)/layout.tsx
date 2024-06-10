@@ -21,7 +21,7 @@ export default async function AuthLayout({
               backgroundImage: `url(https://images.unsplash.com/photo-1612736777093-461fb48101d7?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)`,
             }}
           />
-          <div className="relative z-20 flex items-center text-lg font-medium">
+          <div className="relative z-20 flex items-center text-lg font-medium text-black">
             <Image
               height={40}
               width={40}

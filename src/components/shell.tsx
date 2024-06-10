@@ -3,23 +3,19 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const shellVariants = cva(
-  "h-[100dvh] grid gap-4 w-screen overflow-y-auto p-4 max-w-screen md:max-w-[calc(100vw-250px)] relative m:h-screen",
-  {
-    variants: {
-      variant: {
-        default: "container",
-        sidebar: "",
-        centered:
-          "container flex h-dvh max-w-2xl flex-col justify-center py-16",
-        markdown: "container max-w-3xl py-8 md:py-10 lg:py-10",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
+const shellVariants = cva("", {
+  variants: {
+    variant: {
+      default: "vertical gap-4 relative w-full",
+      layout: "min-h-[100dvh] md:min-h-screen md:pt-16 vertical center-h",
+      nav: "hidden md:horizontal center-v gap-4 fixed top-0 h-16 left-0 w-screen z-10 border-b p-4 text-sm bg-background",
+      center: "vertical flex-1 p-4 md:max-w-screen-md",
     },
   },
-);
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
 interface ShellProps
   extends React.HTMLAttributes<HTMLDivElement>,

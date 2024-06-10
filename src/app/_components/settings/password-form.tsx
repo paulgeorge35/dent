@@ -16,10 +16,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import RootFormError from "@/components/ui/root-form-error";
 
 import { getErrorMessage } from "@/lib/handle-error";
+import { Save } from "lucide-react";
+import { PasswordInput } from "@/components/password-input";
 
 const schema = z
   .object({
@@ -102,7 +103,7 @@ export default function PasswordForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="grid grid-cols-2 gap-6 items-start">
+      <form onSubmit={onSubmit} className="grid grid-cols-2 items-start gap-6">
         <FormField
           control={form.control}
           name="current"
@@ -110,9 +111,9 @@ export default function PasswordForm() {
             required: "Password is required",
           }}
           render={({ field }) => (
-            <FormItem className="w-full col-span-2">
+            <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>Current Password</FormLabel>
-              <Input id={field.name} {...field} type="password" />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -128,9 +129,9 @@ export default function PasswordForm() {
             },
           }}
           render={({ field }) => (
-            <FormItem className="w-full col-span-2">
+            <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>New Password</FormLabel>
-              <Input id={field.name} {...field} type="password" />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -144,9 +145,9 @@ export default function PasswordForm() {
               value === form.getValues("password") || "Passwords do not match",
           }}
           render={({ field }) => (
-            <FormItem className="w-full col-span-2">
+            <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
-              <Input id={field.name} {...field} type="password" />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -160,9 +161,13 @@ export default function PasswordForm() {
         <Button
           isLoading={isPending}
           disabled={!form.formState.isDirty}
+          Icon={Save}
+          variant="expandIcon"
+          iconPlacement="left"
           type="submit"
+          className="col-span-2 sm:w-fit"
         >
-          Update Password
+          Update password
         </Button>
       </form>
     </Form>

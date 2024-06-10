@@ -2,16 +2,16 @@
 
 import { signOut } from "@/app/(router)/(root)/settings/actions";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Credenza,
+  CredenzaTrigger,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaFooter,
+} from "@/components/ui/credenza";
 import { Button } from "@/components/ui/button";
+import { LogOut } from "lucide-react";
 import { useTransition } from "react";
 
 export default function LogoutDialog() {
@@ -24,25 +24,29 @@ export default function LogoutDialog() {
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button size="lg" variant="destructive" className="w-full md:w-auto">
+    <Credenza>
+      <CredenzaTrigger asChild>
+        <Button
+          Icon={LogOut}
+          variant="expandIcon"
+          color="destructive"
+          iconPlacement="left"
+          className="w-full sm:w-fit"
+        >
           Log Out
         </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to sign out?
-          </AlertDialogTitle>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction disabled={pending} onClick={handleClick}>
+      </CredenzaTrigger>
+      <CredenzaContent>
+        <CredenzaHeader>
+          <CredenzaTitle>Are you sure you want to sign out?</CredenzaTitle>
+        </CredenzaHeader>
+        <CredenzaFooter className="gap-4">
+          <CredenzaClose>Cancel</CredenzaClose>
+          <Button disabled={pending} color="destructive" onClick={handleClick}>
             Log Out
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </CredenzaFooter>
+      </CredenzaContent>
+    </Credenza>
   );
 }

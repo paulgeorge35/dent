@@ -131,26 +131,3 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
 });
 
 export const adminProcedure = t.procedure.use(isAdmin);
-
-const isMember = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session ?? !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
-  }
-  const user = await ctx.db.user.findUnique({
-    where: {
-      id: ctx.session.user.id,
-    },
-  });
-
-  if (!user) {
-    throw new TRPCError({ code: "FORBIDDEN" });
-  }
-
-  return next({
-    ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
-    },
-  });
-});
-
-export const memberProcedure = t.procedure.use(isMember);

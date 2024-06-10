@@ -39,7 +39,10 @@ export default function Customization() {
     },
   });
   return (
-    <TabsContent value="customization">
+    <TabsContent
+      value="customization"
+      className="flex flex-col gap-4 md:max-w-screen-md"
+    >
       <Card>
         <CardContent className="space-y-2 pt-4">
           <Form {...form}>
@@ -59,7 +62,7 @@ export default function Customization() {
                         field.onChange(value);
                         document.cookie = `theme=${value}; path=/`;
                       }}
-                      className="grid max-w-xl grid-cols-3 gap-8 pt-2"
+                      className="grid w-full grid-cols-3 gap-8 pt-2"
                     >
                       <FormItem className="col-span-3 sm:col-span-1">
                         <FormLabel className="[&:has([data-state=checked])>div]:border-primary">

@@ -24,6 +24,7 @@ import { type County } from "@prisma/client";
 import { useTransition } from "react";
 import { signUp } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
+import { PasswordInput } from "@/components/password-input";
 
 const schema = z
   .object({
@@ -225,7 +226,7 @@ export default function RegisterForm({ counties }: RegisterFormProps) {
             render={({ field }) => (
               <FormItem className="col-span-2 w-full">
                 <FormLabel htmlFor={field.name}>Password</FormLabel>
-                <Input id={field.name} {...field} type="password" />
+                <PasswordInput id={field.name} {...field} />
                 <FormMessage />
               </FormItem>
             )}
@@ -242,7 +243,7 @@ export default function RegisterForm({ counties }: RegisterFormProps) {
             render={({ field }) => (
               <FormItem className="col-span-2 w-full">
                 <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
-                <Input id={field.name} {...field} type="password" />
+                <PasswordInput id={field.name} {...field} />
                 <FormMessage />
               </FormItem>
             )}

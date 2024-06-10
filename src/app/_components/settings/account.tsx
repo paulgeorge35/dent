@@ -11,7 +11,10 @@ export default async function Account() {
   const me = await api.user.me();
 
   return (
-    <TabsContent value="account" className="flex flex-col gap-4">
+    <TabsContent
+      value="account"
+      className="flex flex-col gap-4 md:max-w-screen-md"
+    >
       <Card>
         <CardContent className="pt-4">
           <ProfileForm me={me} />

@@ -21,7 +21,7 @@ export async function signUp({
   lastName,
   email,
   password,
-  county,
+  // county,
 }: SignUpParams) {
   await db.$transaction(async (tx) => {
     const existingUser = await tx.user.findFirst({

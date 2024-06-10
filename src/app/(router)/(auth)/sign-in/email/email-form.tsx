@@ -16,6 +16,7 @@ import { z } from "zod";
 import { signIn } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
 import Link from "next/link";
+import { PasswordInput } from "@/components/password-input";
 
 const schema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email address"),
@@ -81,7 +82,7 @@ export default function EmailSignIn() {
                   Forgot your password?
                 </Link>
               </div>
-              <Input id={field.name} type="password" {...field} />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}

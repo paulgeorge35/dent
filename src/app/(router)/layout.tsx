@@ -13,52 +13,60 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 import { cn, constructMetadata } from "@/lib/utils";
 
-const Geist = localFont({
+// const Geist = localFont({
+//   src: [
+//     {
+//       path: "../fonts/geist/GeistMono-Thin.woff2",
+//       weight: "100",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-UltraLight.woff2",
+//       weight: "200",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-Light.woff2",
+//       weight: "300",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-Regular.woff2",
+//       weight: "400",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-Medium.woff2",
+//       weight: "500",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-SemiBold.woff2",
+//       weight: "600",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-Bold.woff2",
+//       weight: "700",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-Black.woff2",
+//       weight: "800",
+//       style: "normal",
+//     },
+//     {
+//       path: "../fonts/geist/GeistMono-UltraBlack.woff2",
+//       weight: "900",
+//       style: "normal",
+//     },
+//   ],
+// });
+
+const SFProExpanded = localFont({
   src: [
     {
-      path: "../fonts/geist/GeistMono-Thin.woff2",
-      weight: "100",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-UltraLight.woff2",
-      weight: "200",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-Light.woff2",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-Regular.woff2",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-Medium.woff2",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-SemiBold.woff2",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-Bold.woff2",
-      weight: "700",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-Black.woff2",
-      weight: "800",
-      style: "normal",
-    },
-    {
-      path: "../fonts/geist/GeistMono-UltraBlack.woff2",
-      weight: "900",
-      style: "normal",
+      path: "../fonts/SF-Pro-Expanded.ttf",
     },
   ],
 });
@@ -81,7 +89,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn(Geist.className, theme)}
+      className={cn(SFProExpanded.className, theme)}
       style={{ colorScheme: theme }}
     >
       <head>

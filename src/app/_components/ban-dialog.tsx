@@ -1,15 +1,16 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Credenza,
+  CredenzaTrigger,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaFooter,
+} from "@/components/ui/credenza";
+
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { useRouter } from "next/navigation";
@@ -53,26 +54,30 @@ export default function BanDialog({
   };
 
   return (
-    <AlertDialog
+    <Credenza
       open={openDialog.value}
       onOpenChange={(value) => {
         openDialog.setValue(value);
       }}
     >
-      <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
+      <CredenzaTrigger asChild>{children}</CredenzaTrigger>
+      <CredenzaContent>
+        <CredenzaHeader>
+          <CredenzaTitle>
             Are you sure you want to {banned ? "unban" : "ban"} this user?
-          </AlertDialogTitle>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction disabled={isPending} onClick={handleClick}>
+          </CredenzaTitle>
+        </CredenzaHeader>
+        <CredenzaFooter className="gap-4">
+          <CredenzaClose>Cancel</CredenzaClose>
+          <Button
+            disabled={isPending}
+            color="destructive"
+            onClick={handleClick}
+          >
             Confirm
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+          </Button>
+        </CredenzaFooter>
+      </CredenzaContent>
+    </Credenza>
   );
 }

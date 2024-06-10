@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface BackButtonProps {
   title?: string;
@@ -20,12 +21,11 @@ export default function BackButton({ title }: BackButtonProps) {
 
   return (
     <Button
-      className="self-start"
+      className={cn("self-start", !isDesktop && "h-9 w-9 px-0")}
       onClick={handleClick}
-      size={isDesktop ? "default" : "icon"}
       variant={isDesktop ? "link" : "outline"}
     >
-      <ChevronLeft className="w-4 h-4 md:mr-2" />
+      <ChevronLeft className="h-4 w-4 md:mr-2" />
       <span className="hidden md:block">{title ?? "Back"}</span>
     </Button>
   );

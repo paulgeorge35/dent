@@ -166,14 +166,22 @@ export function PhoneInput({
             className="w-max items-center justify-between whitespace-nowrap"
           >
             {selectedCountry?.name ? (
-              <span className="relative top-0.5">{selectedCountry.emoji}</span>
+              <span>
+                <Image
+                  src={`/flags/${selectedCountry.iso2}.svg`}
+                  alt={selectedCountry.name}
+                  width={0}
+                  height={0}
+                  className="h-auto w-6"
+                />
+              </span>
             ) : (
               "Select country"
             )}
             <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="p-0 w-max" align="start">
+        <PopoverContent className="w-max p-0" align="start">
           <Command>
             <CommandInput placeholder="Search country..." />
             <CommandList>
@@ -209,9 +217,9 @@ export function PhoneInput({
                         />
                         <Image
                           src={`/flags/${country.iso2.toLowerCase()}.svg`}
-                          width={16}
-                          height={16}
-                          className="relative top-0.5 mr-2 w-4 h-3 object-cover"
+                          width={0}
+                          height={0}
+                          className="mr-2 h-auto w-4 object-cover"
                           aria-labelledby={country.name}
                           title={country.name}
                           alt={country.name}

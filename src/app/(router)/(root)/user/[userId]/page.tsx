@@ -48,8 +48,12 @@ export default async function User({ params: { userId } }: UserPageProps) {
           <RenderOnRole roles={["ADMIN"]}>
             <BanDialog userId={user.id} banned={user.banned}>
               <Button
-                variant={user.banned ? "destructive" : "destructive-outline"}
-                className={cn("group", user.banned && "hover:bg-green-700")}
+                variant={user.banned ? "default" : "destructive"}
+                color="destructive"
+                className={cn(
+                  "hover:text- group",
+                  user.banned && "hover:bg-green-700",
+                )}
               >
                 <LockKeyhole
                   className={cn(

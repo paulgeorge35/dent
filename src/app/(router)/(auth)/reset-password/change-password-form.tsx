@@ -8,12 +8,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updatePassword } from "./actions";
+import { PasswordInput } from "@/components/password-input";
 
 const schema = z
   .object({
@@ -89,7 +89,7 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>Password</FormLabel>
-              <Input id={field.name} type="password" {...field} />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}
@@ -100,7 +100,7 @@ export default function ChangePasswordForm({ token }: ChangePasswordFormProps) {
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
-              <Input id={field.name} type="password" {...field} />
+              <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}

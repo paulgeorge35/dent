@@ -100,6 +100,10 @@ export default {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        shine: {
+          from: { backgroundPosition: "200% 0" },
+          to: { backgroundPosition: "-200% 0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -107,6 +111,7 @@ export default {
         "height-scale": "max-height-scale 0.5s ease-out",
         "slide-down": "slide-down 1s forwards",
         "width-scale": "width-scale 1s forwards",
+        shine: "shine 8s ease-in-out infinite",
         pulsate: "pulsate 1s ease-out infinite",
         fadeIn: "fadeIn 1s forwards",
       },

@@ -8,7 +8,6 @@ import { z } from "zod";
 import {
   adminProcedure,
   createTRPCRouter,
-  memberProcedure,
   protectedProcedure,
   publicProcedure,
 } from "../trpc";
@@ -185,7 +184,7 @@ export const userRouter = createTRPCRouter({
     return user;
   }),
 
-  getAll: memberProcedure
+  getAll: protectedProcedure
     .input(
       z
         .object({
