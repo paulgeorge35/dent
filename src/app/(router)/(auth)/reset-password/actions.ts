@@ -20,7 +20,7 @@ export async function updatePassword(token: string, password: string) {
   });
 
   void resend.emails.send({
-    from: "MyDent <contact@paulgeorge.dev>",
+    from: "MyDent <hello@mydent.one>",
     to: user.email,
     subject: "MyDent - Password Recovery",
     react: PasswordChanged({

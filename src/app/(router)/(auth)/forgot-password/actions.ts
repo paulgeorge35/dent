@@ -22,7 +22,7 @@ export async function sendResetPasswordEmail(email: string) {
       const token = await generateToken(email, "PASSWORD_RESET");
 
       void resend.emails.send({
-        from: "MyDent <contact@paulgeorge.dev>",
+        from: "MyDent <hello@mydent.one>",
         to: email,
         subject: "MyDent - Password Recovery",
         react: PasswordRecovery({

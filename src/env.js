@@ -33,9 +33,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GOOGLE_CALLBACK_URL: z.string(),
     URL: z.string().url(),
-    EMAIL_LABEL: z.string(),
-    EMAIL_USER: z.string().email(),
-    EMAIL_PASS: z.string(),
     RESEND_API_KEY: z.string(),
   },
 
@@ -62,9 +59,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
-    EMAIL_LABEL: process.env.EMAIL_LABEL,
-    EMAIL_USER: process.env.EMAIL_USER,
-    EMAIL_PASS: process.env.EMAIL_PASS,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
   },
   /**

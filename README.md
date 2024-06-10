@@ -41,9 +41,6 @@ NEXTAUTH_URL="your_nextauth_url"
 GOOGLE_CLIENT_ID="your_google_client_id"
 GOOGLE_CLIENT_SECRET="your_google_client_secret"
 GOOGLE_CALLBACK_URL="/api/auth/callback/google"
-EMAIL_LABEL="Label"
-EMAIL_USER="example@gmail.com"
-EMAIL_PASS="password"
 RESEND_API_KEY="re_key"
 ```
 

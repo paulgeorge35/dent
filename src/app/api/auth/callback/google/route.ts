@@ -146,7 +146,7 @@ export async function GET(request: Request): Promise<Response> {
     await setSession(newUser as SessionUser, { days: 30 });
 
     void resend.emails.send({
-      from: "MyDent <contact@paulgeorge.dev>",
+      from: "MyDent <hello@mydent.one>",
       to: newUser.email,
       subject: "MyDent - Welcome",
       react: Welcome({

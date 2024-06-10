@@ -18,7 +18,7 @@ export async function sendMagicLink(email: string) {
   const token = await generateToken(email, "MAGIC_LINK");
 
   void resend.emails.send({
-    from: "MyDent <contact@paulgeorge.dev>",
+    from: "MyDent <hello@mydent.one>",
     to: email,
     subject: "MyDent - Authentication",
     react: MagicLink({
@@ -31,7 +31,7 @@ export async function sendActivationLink(email: string, name: string) {
   const token = await generateToken(email, "ACTIVATION");
 
   void resend.emails.send({
-    from: "MyDent <contact@paulgeorge.dev>",
+    from: "MyDent <hello@mydent.one>",
     to: email,
     subject: "MyDent - Account Activation",
     react: Activation({

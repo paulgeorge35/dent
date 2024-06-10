@@ -67,7 +67,7 @@ export async function signUp({
     const token = await generateToken(email, "ACTIVATION");
 
     void resend.emails.send({
-      from: "MyDent <contact@paulgeorge.dev>",
+      from: "MyDent <hello@mydent.one>",
       to: email,
       subject: "MyDent - Welcome",
       react: Welcome({
