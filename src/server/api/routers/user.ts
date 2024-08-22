@@ -102,7 +102,7 @@ export const userRouter = createTRPCRouter({
             create: {
               type: TokenType.ACTIVATION,
               token,
-              expires: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+              expires: DateTime.now().plus({ days: 1 }).toJSDate(),
             },
           },
         },

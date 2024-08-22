@@ -161,8 +161,15 @@ export const tenantRouter = createTRPCRouter({
 
     return await ctx.db.invitation.findMany({
       where: {
-        invitedBy: { tenantId },
         expires: { gt: DateTime.now().toJSDate() },
+        invitedBy: {
+          tenantId,
+          tenant: {
+            profile: {
+              activeSubscription: true,
+            },
+          },
+        },
       },
       include: {
         invitedBy: true,
@@ -348,6 +355,13 @@ export const tenantRouter = createTRPCRouter({
           email: ctx.session.email,
           userId: null,
           expires: { gt: DateTime.now().toJSDate() },
+          invitedBy: {
+            tenant: {
+              profile: {
+                activeSubscription: true,
+              },
+            },
+          },
         },
         include: {
           invitedBy: true,

@@ -117,68 +117,66 @@ export async function consumeToken(
   token: string | null | undefined,
   type: TokenType,
 ) {
-  return await db.$transaction(async (tx) => {
-    if (!token) {
-      throw new Error("Invalid token");
-    }
+  if (!token) {
+    throw new Error("Invalid token");
+  }
 
-    const existingToken = await tx.token.findFirst({
-      where: {
-        token,
-        type,
-      },
-    });
+  const existingToken = await db.token.findFirst({
+    where: {
+      token,
+      type,
+    },
+  });
 
-    if (!existingToken) {
-      throw new Error("Invalid token");
-    }
+  if (!existingToken) {
+    throw new Error("Invalid token");
+  }
 
-    if (existingToken.expires < new Date()) {
-      await tx.token.delete({
-        where: {
-          id: existingToken.id,
-        },
-      });
-      throw new Error("Token expired");
-    }
-
-    const user = await tx.user.findUnique({
-      where: {
-        id: existingToken.userId,
-      },
-      select: {
-        id: true,
-        role: true,
-        tenantId: true,
-        profile: {
-          select: {
-            id: true,
-            email: true,
-            avatar: true,
-            firstName: true,
-            lastName: true,
-          },
-        },
-      },
-    });
-
-    await tx.token.delete({
+  if (existingToken.expires < new Date()) {
+    await db.token.delete({
       where: {
         id: existingToken.id,
       },
     });
+    throw new Error("Token expired");
+  }
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    return {
-      ...user.profile,
-      user: {
-        id: user.id,
-        role: user.role,
-        tenantId: user.tenantId,
+  const user = await db.user.findUnique({
+    where: {
+      id: existingToken.userId,
+    },
+    select: {
+      id: true,
+      role: true,
+      tenantId: true,
+      profile: {
+        select: {
+          id: true,
+          email: true,
+          avatar: true,
+          firstName: true,
+          lastName: true,
+        },
       },
-    };
+    },
   });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  await db.token.delete({
+    where: {
+      id: existingToken.id,
+    },
+  });
+
+  return {
+    ...user.profile,
+    user: {
+      id: user.id,
+      role: user.role,
+      tenantId: user.tenantId,
+    },
+  };
 }

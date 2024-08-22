@@ -12,6 +12,7 @@ import {
   CheckIcon,
   ChevronDown,
   DoorOpen,
+  Ellipsis,
   Settings,
   SquareActivity,
   User,
@@ -19,9 +20,11 @@ import {
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { useRouter } from "next/navigation";
-import { useTransition, useState } from "react";
+import { useTransition, useState, useEffect } from "react";
 import { toggleTenant } from "@/app/(router)/(tenant)/welcome/actions";
 import LogoutDialog from "@/app/_components/auth/logout-dialog";
+
+const DISPLAY_TENANTS_CUTOFF = 2;
 
 interface AccountButtonProps {
   session: SessionUser;
@@ -37,6 +40,7 @@ export default function AccountButton({
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
+  const [showAllTenants, setShowAllTenants] = useState(false);
 
   const handleTenantClick = (tenantId: string) => {
     startTransition(() =>
@@ -55,6 +59,10 @@ export default function AccountButton({
     action();
     setOpen(false);
   };
+
+  useEffect(() => {
+    setShowAllTenants(false);
+  }, [accounts, open]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -98,26 +106,42 @@ export default function AccountButton({
           </Button>
           <Separator />
           <div>
-            {accounts.map((account) => (
-              <Button
-                key={account.tenantId}
-                variant="ghost"
-                size="sm"
-                className="flex w-56 flex-row items-center justify-start gap-4 overflow-hidden whitespace-nowrap text-xs"
-                disabled={
-                  account.tenantId === session.user?.tenantId || pending
-                }
-                onClick={() => handleTenantClick(account.tenantId)}
-              >
-                <CheckIcon
-                  className={cn("size-4 flex-shrink-0 font-light opacity-0", {
-                    "opacity-100": account.tenantId === session.user?.tenantId,
-                  })}
-                />
-                <span className="truncate">{account.tenant.profile.name}</span>
-              </Button>
-            ))}
+            {accounts
+              .slice(
+                0,
+                showAllTenants ? accounts.length : DISPLAY_TENANTS_CUTOFF,
+              )
+              .map((account) => (
+                <Button
+                  key={account.tenantId}
+                  variant="ghost"
+                  size="sm"
+                  className="flex w-56 flex-row items-center justify-start gap-4 overflow-hidden whitespace-nowrap text-xs"
+                  disabled={
+                    account.tenantId === session.user?.tenantId || pending
+                  }
+                  onClick={() => handleTenantClick(account.tenantId)}
+                >
+                  <CheckIcon
+                    className={cn("size-4 flex-shrink-0 font-light opacity-0", {
+                      "opacity-100":
+                        account.tenantId === session.user?.tenantId,
+                    })}
+                  />
+                  <span className="truncate">
+                    {account.tenant.profile.name}
+                  </span>
+                </Button>
+              ))}
           </div>
+          {accounts.length > DISPLAY_TENANTS_CUTOFF && !showAllTenants && (
+            <button
+              className="horizontal center-h bg-muted text-xs text-muted-foreground"
+              onClick={() => setShowAllTenants(true)}
+            >
+              <Ellipsis className="size-4" />
+            </button>
+          )}
           <Separator />
           <Button
             variant="ghost"

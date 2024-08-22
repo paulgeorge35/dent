@@ -1,5 +1,7 @@
 import Invitations from "@/app/_components/auth/invitations";
+import LogoutDialog from "@/app/_components/auth/logout-dialog";
 import Tenants from "@/app/_components/auth/tenants";
+import { Button } from "@/components/ui/button";
 import { constructMetadata } from "@/lib/utils";
 import Image from "next/image";
 
@@ -22,7 +24,7 @@ export default async function Welcome() {
           MyDent
         </div>
         <h1 className="text-3xl font-bold">
-          Welcome back! Let&apos;s get back to work!
+          Welcome back! Let&apos;s get you back to work!
         </h1>
         <p className="text-balance text-muted-foreground">
           Choose a clinic below to get back to working on your team.
@@ -30,6 +32,14 @@ export default async function Welcome() {
       </div>
       <Tenants />
       <Invitations />
+      <LogoutDialog>
+        <Button
+          variant="destructive"
+          className="w-full bg-transparent border-destructive text-destructive border hover:bg-destructive hover:text-white"
+        >
+          Sign out
+        </Button>
+      </LogoutDialog>
     </div>
   );
 }
