@@ -13,7 +13,6 @@ import { ZodError } from "zod";
 
 import { db } from "@/server/db";
 import { auth, logOut } from "@/auth";
-import { redirect } from "next/navigation";
 
 /**
  * 1. CONTEXT

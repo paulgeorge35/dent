@@ -14,7 +14,10 @@ export const ConfirmInvitationDelete = ({ id }: { id: string }) => {
   const queryClient = api.useUtils();
   const { mutate, isPending } = api.tenant.deleteInvitation.useMutation({
     onSuccess: () => {
-      toast.success("Invitation deleted");
+      toast.success("Invitation deleted successfully", {
+        description:
+          "The invitation has been deleted and can no longer be used",
+      });
       dialogOpen.setFalse();
       router.refresh();
     },

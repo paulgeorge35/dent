@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
 import type { Role } from "@prisma/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type RoleSelectProps = {
   userId: string;
@@ -17,13 +19,28 @@ type RoleSelectProps = {
 };
 
 export const RoleSelect = ({ userId, value, disabled }: RoleSelectProps) => {
-  const { mutate } = api.tenant.updateRole.useMutation();
+  const router = useRouter();
+  const { mutate, isPending } = api.tenant.updateRole.useMutation({
+    onSuccess: () => {
+      toast.success("Role updated successfully", {
+        description: "The user's role has been updated",
+      });
+      router.refresh();
+    },
+    onError: () => {
+      toast.error("Something went wrong. Please try again.");
+    },
+  });
 
   const handleChange = (role: Role) => {
     mutate({ userId: userId, role });
   };
   return (
-    <Select value={value} onValueChange={handleChange} disabled={disabled}>
+    <Select
+      value={value}
+      onValueChange={handleChange}
+      disabled={disabled ?? isPending}
+    >
       <SelectTrigger>
         <SelectValue />
       </SelectTrigger>

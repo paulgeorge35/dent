@@ -48,7 +48,10 @@ export default function EditSpecializationDialog({
   const dialogOpen = useBoolean(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(specializationSchema),
-    defaultValues: specialization,
+    defaultValues: {
+      name: specialization.name,
+      description: specialization.description ?? undefined,
+    },
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -64,7 +67,7 @@ export default function EditSpecializationDialog({
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
       <CredenzaTrigger>
-        <Button size="icon" variant='secondary'>
+        <Button size="icon" variant="secondary">
           <Edit className="size-4" />
         </Button>
       </CredenzaTrigger>

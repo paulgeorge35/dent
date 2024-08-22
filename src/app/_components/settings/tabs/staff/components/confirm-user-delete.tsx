@@ -8,13 +8,22 @@ import { toast } from "sonner";
 import { useBoolean } from "react-hanger";
 import { useRouter } from "next/navigation";
 
-export const ConfirmUserDelete = ({ id, disabled }: { id: string; disabled?: boolean }) => {
+export const ConfirmUserDelete = ({
+  id,
+  disabled,
+}: {
+  id: string;
+  disabled?: boolean;
+}) => {
   const dialogOpen = useBoolean(false);
   const router = useRouter();
   const queryClient = api.useUtils();
   const { mutate, isPending } = api.tenant.deleteUser.useMutation({
     onSuccess: () => {
-      toast.success("User deleted");
+      toast.success("User deleted successfully", {
+        description:
+          "The user has been deleted and no longer has access to the clinic",
+      });
       dialogOpen.setFalse();
       router.refresh();
     },
@@ -40,7 +49,12 @@ export const ConfirmUserDelete = ({ id, disabled }: { id: string; disabled?: boo
       onConfirm={handleDelete}
       loading={isPending}
       trigger={
-        <Button variant="ghost" size="icon" className="rounded-full" disabled={disabled}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full"
+          disabled={disabled}
+        >
           <Trash2Icon className="size-4" />
         </Button>
       }

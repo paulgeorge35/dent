@@ -12,7 +12,7 @@ import { z } from "zod";
 
 export const specializationSchema = z.object({
   name: z.string().min(1),
-  description: z.string().max(250).nullish(),
+  description: z.string().max(250).nullable(),
 });
 
 export type FormValues = z.infer<typeof specializationSchema>;
@@ -45,6 +45,7 @@ export default function SpecializationForm({ form }: SpecializationFormProps) {
               <Textarea
                 id={field.name}
                 {...field}
+                value={field.value ?? ""}
                 className="h-40 max-h-40"
                 placeholder="Description"
               />
