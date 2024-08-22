@@ -15,7 +15,7 @@ export const metadata = constructMetadata({
 });
 
 const searchParamsSchema = z.object({
-  tab: z.string().optional(),
+  tab: z.string().optional().default("account"),
 });
 export interface StaffPageProps {
   searchParams: SearchParams;
@@ -32,8 +32,8 @@ export default async function Settings({ searchParams }: StaffPageProps) {
     <Shell variant="center">
       <SettingsTabs isAdmin={session!.user?.role === "ADMIN"}>
         <Account />
-        <Staff />
-        <Plan />
+        {isAdmin && <Staff />}
+        {isAdmin && <Plan />}
         <Customization />
       </SettingsTabs>
     </Shell>

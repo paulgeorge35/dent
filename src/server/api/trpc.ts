@@ -153,7 +153,7 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
   });
 
   if (!user) {
-    redirect("/");
+    throw new TRPCError({ code: "FORBIDDEN" });
   }
 
   return next({

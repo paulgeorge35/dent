@@ -63,7 +63,7 @@ export default function SettingsTabs({ children, isAdmin }: SettingsTabsProps) {
     <Tabs defaultValue={activeTab} className="w-full md:max-w-5xl">
       <TabsList className="mb-4 flex h-10 w-full md:max-w-5xl">
         {tabs
-          .filter((tab) => tab.adminsOnly ?? isAdmin)
+          .filter((tab) => !tab.adminsOnly || isAdmin)
           .map((tab) => (
             <TabsTrigger
               key={tab.value}

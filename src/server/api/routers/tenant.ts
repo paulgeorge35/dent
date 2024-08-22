@@ -162,6 +162,7 @@ export const tenantRouter = createTRPCRouter({
     return await ctx.db.invitation.findMany({
       where: {
         expires: { gt: DateTime.now().toJSDate() },
+        userId: null,
         invitedBy: {
           tenantId,
           tenant: {
