@@ -9,15 +9,15 @@ import ProfileForm from "./components/profile-form";
 
 export default async function Account() {
   const me = await api.user.me();
-
+  const specializations = await api.specialization.list();
   return (
     <TabsContent
       value="account"
-      className="flex flex-col gap-4 md:max-w-screen-md !mt-0"
+      className="!mt-0 flex flex-col gap-4 md:max-w-screen-md"
     >
       <Card>
         <CardContent className="pt-4">
-          <ProfileForm me={me} />
+          <ProfileForm me={me} specializations={specializations} />
         </CardContent>
       </Card>
       <h1 className="text-lg font-bold">Change Password</h1>

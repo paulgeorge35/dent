@@ -374,7 +374,8 @@ export const userRouter = createTRPCRouter({
       z.object({
         firstName: z.string().max(50).optional(),
         lastName: z.string().max(50).optional(),
-        county: z.string().max(50).optional(),
+        title: z.string().max(50).optional(),
+        specializationId: z.string().optional(),
         email: z.string().email().max(50).optional(),
         phone: z
           .string()
@@ -401,10 +402,16 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.update({
         where: { id: userId },
         data: {
+          specialization: {
+            connect: {
+              id: input.specializationId,
+            },
+          },
           profile: {
             update: {
               email: input.email,
               phone: input.phone,
+              title: input.title,
               avatar: avatarUrl,
               firstName: input.firstName,
               lastName: input.lastName,

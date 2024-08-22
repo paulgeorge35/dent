@@ -8,7 +8,13 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 import { type UserComplete } from "@/server/api/routers/user";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,10 +32,13 @@ import { PhoneInput, getPhoneData } from "@/components/phone-input";
 import DropzoneInput from "@/components/dropzone-input";
 import { Save } from "lucide-react";
 import { avatarSchema } from "@/types/schema";
+import type { Specialization } from "@prisma/client";
 
 const schema = z.object({
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
+  specializationId: z.string().nullish(),
+  title: z.string().optional(),
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
   avatar: avatarSchema,
@@ -39,9 +48,10 @@ type FormValues = z.infer<typeof schema>;
 
 interface ProfileFormProps {
   me: UserComplete;
+  specializations: Specialization[];
 }
 
-export default function ProfileForm({ me }: ProfileFormProps) {
+export default function ProfileForm({ me, specializations }: ProfileFormProps) {
   const router = useRouter();
   const { mutate, isPending } = api.user.update.useMutation({
     onSuccess: (data) => {
@@ -50,6 +60,8 @@ export default function ProfileForm({ me }: ProfileFormProps) {
       form.reset({
         firstName: data.profile?.firstName ?? undefined,
         lastName: data.profile?.lastName ?? undefined,
+        specializationId: data.specializationId ?? undefined,
+        title: data.profile?.title ?? undefined,
         avatar: data.profile?.avatar ?? undefined,
         email: data.profile?.email ?? undefined,
         phone: data.profile?.phone ?? undefined,
@@ -65,6 +77,8 @@ export default function ProfileForm({ me }: ProfileFormProps) {
     defaultValues: {
       firstName: me.profile?.firstName ?? undefined,
       lastName: me.profile?.lastName ?? undefined,
+      specializationId: me.specializationId ?? undefined,
+      title: me.profile?.title ?? undefined,
       avatar: me.profile?.avatar ?? undefined,
       email: me.profile?.email ?? undefined,
       phone: me.profile?.phone ?? undefined,
@@ -134,6 +148,41 @@ export default function ProfileForm({ me }: ProfileFormProps) {
               <FormLabel htmlFor={field.name}>Last name</FormLabel>
               <Input id={field.name} {...field} placeholder="Last name" />
               <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem className="col-span-1 w-full">
+              <FormLabel htmlFor={field.name}>Title</FormLabel>
+              <Input id={field.name} {...field} placeholder="e.g. Dr." />
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="specializationId"
+          render={({ field }) => (
+            <FormItem className="col-span-1 w-full">
+              <FormLabel htmlFor={field.name}>Specialization</FormLabel>
+              <Select onValueChange={(value) => field.onChange(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose specialization" />
+                </SelectTrigger>
+                <SelectContent>
+                  {specializations.map((specialization) => (
+                    <SelectItem
+                      key={specialization.id}
+                      value={specialization.id}
+                    >
+                      {specialization.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
