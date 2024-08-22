@@ -4,6 +4,7 @@ import { userRouter } from "./routers/user";
 import { appointmentRouter } from "./routers/appointment";
 import { tenantRouter } from "./routers/tenant";
 import { stripeRouter } from "./routers/stripe";
+import { specializationRouter } from "./routers/specialization";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   appointment: appointmentRouter,
   tenant: tenantRouter,
   stripe: stripeRouter,
+  specialization: specializationRouter,
 });
 
 // export type definition of API

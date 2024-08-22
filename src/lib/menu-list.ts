@@ -1,12 +1,11 @@
 import {
   Users,
-  Settings,
   LayoutGrid,
   type LucideIcon,
   SquareUser,
   Stethoscope,
   CalendarClock,
-  CreditCard,
+  Hammer,
 } from "lucide-react";
 
 type Submenu = {
@@ -91,18 +90,11 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "Settings",
       menus: [
         {
-          href: "/settings?tab=plan",
-          label: "Subscription",
-          active: pathname.includes("/settings?tab=plan"),
-          icon: CreditCard,
+          href: "/specializations",
+          label: "Specializations",
+          active: pathname.includes("/specializations"),
+          icon: Hammer,
           adminOnly: true,
-          submenus: [],
-        },
-        {
-          href: "/settings?tab=account",
-          label: "Account",
-          active: pathname.includes("/settings?tab=account"),
-          icon: Settings,
           submenus: [],
         },
       ],

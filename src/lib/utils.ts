@@ -125,6 +125,7 @@ export const routeTitles = {
   "/settings": "Settings",
   "/user": "User profile",
   "/profile": "Profile",
+  "/specializations": "Specializations",
 };
 
 export function getPageTitle(path: string) {
