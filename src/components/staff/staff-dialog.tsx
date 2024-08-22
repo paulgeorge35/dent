@@ -31,6 +31,7 @@ import Confirmation from "./forms/confirmation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { staffSchema } from "@/types/schema";
+import type { z } from "zod";
 
 type LogoutDialogProps = {
   children?: React.ReactNode;
@@ -63,7 +64,7 @@ type FormValues = z.infer<typeof staffSchema>;
 
 export default function StaffDialog({ children }: LogoutDialogProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const step = useNumber(0, {
     upperLimit: 3,
     lowerLimit: 0,

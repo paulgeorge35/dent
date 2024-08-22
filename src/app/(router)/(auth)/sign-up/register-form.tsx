@@ -13,7 +13,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { type County } from "@prisma/client";
 import { useTransition } from "react";
 // import { signUp } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
@@ -81,11 +80,7 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>;
 
-interface RegisterFormProps {
-  counties: County[];
-}
-
-export default function RegisterForm({ counties }: RegisterFormProps) {
+export default function RegisterForm() {
   const [pending, startTransition] = useTransition();
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),

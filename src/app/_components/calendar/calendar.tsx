@@ -26,7 +26,7 @@ import { showErrorToast } from "@/lib/handle-error";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import AppointmentDialog from "./appointment-dialog";
+// import AppointmentDialog from "./appointment-dialog";
 import { useBoolean } from "react-hanger";
 import { useStore } from "@/hooks/use-store";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
@@ -93,8 +93,7 @@ interface CalendarProps {
 export default function Calendar({ selected = "me" }: CalendarProps) {
   const calendarRef = useRef<FullCalendar>(null);
   const [period, setPeriod] = useState<"day" | "week">("day");
-  const [selectedUser, setSelectedUser] =
-    useState<z.infer<typeof selectedUserSchema>>(selected);
+  const [selectedUser] = useState<z.infer<typeof selectedUserSchema>>(selected);
   const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(
     null,
   );

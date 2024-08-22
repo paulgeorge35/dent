@@ -1,4 +1,3 @@
-import { api } from "@/trpc/server";
 import Link from "next/link";
 import RegisterForm from "./register-form";
 import { constructMetadata } from "@/lib/utils";
@@ -21,7 +20,6 @@ export interface SignUpPageProps {
 }
 export default async function SignUp({ searchParams }: SignUpPageProps) {
   const { error } = searchParamsSchema.parse(searchParams);
-  const counties = await api.utils.getCounties();
 
   return (
     <>
@@ -43,7 +41,7 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
         <Separator className="w-auto grow" />
       </span>
 
-      <RegisterForm counties={counties} />
+      <RegisterForm />
 
       <div className="mt-4 text-center text-sm">
         Already have an account?{" "}

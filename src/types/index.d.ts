@@ -1,4 +1,4 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
 
 export type SearchParams = Record<string, string | string[] | undefined>;
 

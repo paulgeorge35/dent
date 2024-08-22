@@ -1,5 +1,4 @@
 import Calendar from "@/app/_components/calendar/calendar";
-import { Shell } from "@/components/shell";
 import { constructMetadata } from "@/lib/utils";
 import { z } from "zod";
 

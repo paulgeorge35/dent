@@ -1,11 +1,9 @@
-// seed prisma schema with timezones form ./seedData/timezones.json
 import { type City, type County, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
 
 import { type PickAndFlatten } from "@/lib/utils";
 
 import countyData from "./seedData/counties.json";
-import { env } from "@/env";
 
 const prisma = new PrismaClient();
 
@@ -41,37 +39,10 @@ const counties: CountyData[] = (countyData as unknown as CountySeedData[]).map(
   },
 );
 
-const seedPlans = async () => {
-  const plans = await prisma.plan.findMany();
-  if (plans.length > 0) return;
-  await prisma.plan.createMany({
-    data: [
-      {
-        name: "Individual",
-        stripeProductId: env.INDIVIDUAL_PRICE_ID,
-        stripePriceId: env.INDIVIDUAL_PRICE_ID,
-        maxUsers: 1,
-      },
-      {
-        name: "Team",
-        stripeProductId: env.TEAM_PLAN_ID,
-        stripePriceId: env.TEAM_PRICE_ID,
-        maxUsers: 5,
-      },
-      {
-        name: "Enterprise",
-        stripeProductId: env.ENTERPRISE_PLAN_ID,
-        stripePriceId: env.ENTERPRISE_PRICE_ID,
-        maxUsers: 25,
-      },
-    ],
-  });
-};
-
 async function main() {
-  // const isProduction = process.env.NODE_ENV === "production";
+  const isProduction = process.env.NODE_ENV === "production";
   const user = await prisma.user.findFirst();
-  if (!user) return;
+  if (user ?? isProduction) return;
 
   await prisma.county.deleteMany();
   await prisma.city.deleteMany();
@@ -92,7 +63,6 @@ async function main() {
       },
     });
   }
-  await seedPlans();
 }
 
 main()

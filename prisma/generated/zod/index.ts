@@ -213,7 +213,7 @@ export const ProfileSchema = z.object({
   email: z.string(),
   phone: z.string().nullable(),
   avatar: z.string().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().nullable(),
   stripeFreeTrialUsed: z.boolean(),
   preferredTenantId: z.string().nullable(),
   createdAt: z.coerce.date(),
@@ -458,7 +458,7 @@ export type TreatmentPlan = z.infer<typeof TreatmentPlanSchema>
 /////////////////////////////////////////
 
 export const CountySchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date(),
@@ -472,7 +472,7 @@ export type County = z.infer<typeof CountySchema>
 /////////////////////////////////////////
 
 export const CitySchema = z.object({
-  id: z.string().uuid(),
+  id: z.string(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date(),
@@ -1502,7 +1502,7 @@ export const ProfileWhereInputSchema: z.ZodType<Prisma.ProfileWhereInput> = z.ob
   email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   phone: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   avatar: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   preferredTenantId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1520,7 +1520,7 @@ export const ProfileOrderByWithRelationInputSchema: z.ZodType<Prisma.ProfileOrde
   email: z.lazy(() => SortOrderSchema).optional(),
   phone: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   avatar: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
-  stripeCustomerId: z.lazy(() => SortOrderSchema).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   stripeFreeTrialUsed: z.lazy(() => SortOrderSchema).optional(),
   preferredTenantId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -1553,7 +1553,7 @@ export const ProfileWhereUniqueInputSchema: z.ZodType<Prisma.ProfileWhereUniqueI
   lastName: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   phone: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   avatar: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   preferredTenantId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -1571,7 +1571,7 @@ export const ProfileOrderByWithAggregationInputSchema: z.ZodType<Prisma.ProfileO
   email: z.lazy(() => SortOrderSchema).optional(),
   phone: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   avatar: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
-  stripeCustomerId: z.lazy(() => SortOrderSchema).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   stripeFreeTrialUsed: z.lazy(() => SortOrderSchema).optional(),
   preferredTenantId: z.union([ z.lazy(() => SortOrderSchema),z.lazy(() => SortOrderInputSchema) ]).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -1592,7 +1592,7 @@ export const ProfileScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Profi
   email: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   phone: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   avatar: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   preferredTenantId: z.union([ z.lazy(() => StringNullableWithAggregatesFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -2730,10 +2730,10 @@ export const CountyOrderByWithRelationInputSchema: z.ZodType<Prisma.CountyOrderB
 }).strict();
 
 export const CountyWhereUniqueInputSchema: z.ZodType<Prisma.CountyWhereUniqueInput> = z.object({
-  id: z.string().uuid()
+  id: z.string()
 })
 .and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   AND: z.union([ z.lazy(() => CountyWhereInputSchema),z.lazy(() => CountyWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CountyWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CountyWhereInputSchema),z.lazy(() => CountyWhereInputSchema).array() ]).optional(),
@@ -2788,10 +2788,10 @@ export const CityOrderByWithRelationInputSchema: z.ZodType<Prisma.CityOrderByWit
 }).strict();
 
 export const CityWhereUniqueInputSchema: z.ZodType<Prisma.CityWhereUniqueInput> = z.object({
-  id: z.string().uuid()
+  id: z.string()
 })
 .and(z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   AND: z.union([ z.lazy(() => CityWhereInputSchema),z.lazy(() => CityWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CityWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CityWhereInputSchema),z.lazy(() => CityWhereInputSchema).array() ]).optional(),
@@ -3184,7 +3184,7 @@ export const ProfileCreateInputSchema: z.ZodType<Prisma.ProfileCreateInput> = z.
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -3201,7 +3201,7 @@ export const ProfileUncheckedCreateInputSchema: z.ZodType<Prisma.ProfileUnchecke
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   preferredTenantId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -3218,7 +3218,7 @@ export const ProfileUpdateInputSchema: z.ZodType<Prisma.ProfileUpdateInput> = z.
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3235,7 +3235,7 @@ export const ProfileUncheckedUpdateInputSchema: z.ZodType<Prisma.ProfileUnchecke
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   preferredTenantId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3252,7 +3252,7 @@ export const ProfileCreateManyInputSchema: z.ZodType<Prisma.ProfileCreateManyInp
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   preferredTenantId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -3267,7 +3267,7 @@ export const ProfileUpdateManyMutationInputSchema: z.ZodType<Prisma.ProfileUpdat
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -3281,7 +3281,7 @@ export const ProfileUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ProfileUnch
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   preferredTenantId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4383,7 +4383,7 @@ export const TreatmentPlanUncheckedUpdateManyInputSchema: z.ZodType<Prisma.Treat
 }).strict();
 
 export const CountyCreateInputSchema: z.ZodType<Prisma.CountyCreateInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4392,7 +4392,7 @@ export const CountyCreateInputSchema: z.ZodType<Prisma.CountyCreateInput> = z.ob
 }).strict();
 
 export const CountyUncheckedCreateInputSchema: z.ZodType<Prisma.CountyUncheckedCreateInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4401,7 +4401,7 @@ export const CountyUncheckedCreateInputSchema: z.ZodType<Prisma.CountyUncheckedC
 }).strict();
 
 export const CountyUpdateInputSchema: z.ZodType<Prisma.CountyUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4410,7 +4410,7 @@ export const CountyUpdateInputSchema: z.ZodType<Prisma.CountyUpdateInput> = z.ob
 }).strict();
 
 export const CountyUncheckedUpdateInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4419,7 +4419,7 @@ export const CountyUncheckedUpdateInputSchema: z.ZodType<Prisma.CountyUncheckedU
 }).strict();
 
 export const CountyCreateManyInputSchema: z.ZodType<Prisma.CountyCreateManyInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4427,7 +4427,7 @@ export const CountyCreateManyInputSchema: z.ZodType<Prisma.CountyCreateManyInput
 }).strict();
 
 export const CountyUpdateManyMutationInputSchema: z.ZodType<Prisma.CountyUpdateManyMutationInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4435,7 +4435,7 @@ export const CountyUpdateManyMutationInputSchema: z.ZodType<Prisma.CountyUpdateM
 }).strict();
 
 export const CountyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4443,7 +4443,7 @@ export const CountyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CountyUnchec
 }).strict();
 
 export const CityCreateInputSchema: z.ZodType<Prisma.CityCreateInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -4451,7 +4451,7 @@ export const CityCreateInputSchema: z.ZodType<Prisma.CityCreateInput> = z.object
 }).strict();
 
 export const CityUncheckedCreateInputSchema: z.ZodType<Prisma.CityUncheckedCreateInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4459,7 +4459,7 @@ export const CityUncheckedCreateInputSchema: z.ZodType<Prisma.CityUncheckedCreat
 }).strict();
 
 export const CityUpdateInputSchema: z.ZodType<Prisma.CityUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4467,7 +4467,7 @@ export const CityUpdateInputSchema: z.ZodType<Prisma.CityUpdateInput> = z.object
 }).strict();
 
 export const CityUncheckedUpdateInputSchema: z.ZodType<Prisma.CityUncheckedUpdateInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   countyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -4475,7 +4475,7 @@ export const CityUncheckedUpdateInputSchema: z.ZodType<Prisma.CityUncheckedUpdat
 }).strict();
 
 export const CityCreateManyInputSchema: z.ZodType<Prisma.CityCreateManyInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4483,14 +4483,14 @@ export const CityCreateManyInputSchema: z.ZodType<Prisma.CityCreateManyInput> = 
 }).strict();
 
 export const CityUpdateManyMutationInputSchema: z.ZodType<Prisma.CityUpdateManyMutationInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   countyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -7879,7 +7879,7 @@ export const ProfileCreateWithoutPreferredTenantInputSchema: z.ZodType<Prisma.Pr
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -7895,7 +7895,7 @@ export const ProfileUncheckedCreateWithoutPreferredTenantInputSchema: z.ZodType<
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -8184,7 +8184,7 @@ export const ProfileScalarWhereInputSchema: z.ZodType<Prisma.ProfileScalarWhereI
   email: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   phone: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   avatar: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  stripeCustomerId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   preferredTenantId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -8466,7 +8466,7 @@ export const ProfileCreateWithoutUsersInputSchema: z.ZodType<Prisma.ProfileCreat
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -8482,7 +8482,7 @@ export const ProfileUncheckedCreateWithoutUsersInputSchema: z.ZodType<Prisma.Pro
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   preferredTenantId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -8815,7 +8815,7 @@ export const ProfileUpdateWithoutUsersInputSchema: z.ZodType<Prisma.ProfileUpdat
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -8831,7 +8831,7 @@ export const ProfileUncheckedUpdateWithoutUsersInputSchema: z.ZodType<Prisma.Pro
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   preferredTenantId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -9295,7 +9295,7 @@ export const ProfileCreateWithoutAuthInputSchema: z.ZodType<Prisma.ProfileCreate
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -9311,7 +9311,7 @@ export const ProfileUncheckedCreateWithoutAuthInputSchema: z.ZodType<Prisma.Prof
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   preferredTenantId: z.string().optional().nullable(),
   createdAt: z.coerce.date().optional(),
@@ -9343,7 +9343,7 @@ export const ProfileUpdateWithoutAuthInputSchema: z.ZodType<Prisma.ProfileUpdate
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -9359,7 +9359,7 @@ export const ProfileUncheckedUpdateWithoutAuthInputSchema: z.ZodType<Prisma.Prof
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   preferredTenantId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -11724,14 +11724,14 @@ export const UserUncheckedUpdateWithoutTreatmentPlansInputSchema: z.ZodType<Pris
 }).strict();
 
 export const CityCreateWithoutCountyInputSchema: z.ZodType<Prisma.CityCreateWithoutCountyInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
 
 export const CityUncheckedCreateWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedCreateWithoutCountyInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -11775,7 +11775,7 @@ export const CityScalarWhereInputSchema: z.ZodType<Prisma.CityScalarWhereInput> 
 }).strict();
 
 export const CountyCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyCreateWithoutCitiesInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -11783,7 +11783,7 @@ export const CountyCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyCreate
 }).strict();
 
 export const CountyUncheckedCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUncheckedCreateWithoutCitiesInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -11807,7 +11807,7 @@ export const CountyUpdateToOneWithWhereWithoutCitiesInputSchema: z.ZodType<Prism
 }).strict();
 
 export const CountyUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUpdateWithoutCitiesInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -11815,7 +11815,7 @@ export const CountyUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUpdate
 }).strict();
 
 export const CountyUncheckedUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateWithoutCitiesInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -11853,7 +11853,7 @@ export const ProfileCreateManyPreferredTenantInputSchema: z.ZodType<Prisma.Profi
   email: z.string(),
   phone: z.string().optional().nullable(),
   avatar: z.string().optional().nullable(),
-  stripeCustomerId: z.string(),
+  stripeCustomerId: z.string().optional().nullable(),
   stripeFreeTrialUsed: z.boolean().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -12000,7 +12000,7 @@ export const ProfileUpdateWithoutPreferredTenantInputSchema: z.ZodType<Prisma.Pr
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -12016,7 +12016,7 @@ export const ProfileUncheckedUpdateWithoutPreferredTenantInputSchema: z.ZodType<
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -12032,7 +12032,7 @@ export const ProfileUncheckedUpdateManyWithoutPreferredTenantInputSchema: z.ZodT
   email: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   phone: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   avatar: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
-  stripeCustomerId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  stripeCustomerId: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
   stripeFreeTrialUsed: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -13141,28 +13141,28 @@ export const TreatmentUncheckedUpdateManyWithoutTreatmentPlanInputSchema: z.ZodT
 }).strict();
 
 export const CityCreateManyCountyInputSchema: z.ZodType<Prisma.CityCreateManyCountyInput> = z.object({
-  id: z.string().uuid().optional(),
+  id: z.string().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
 
 export const CityUpdateWithoutCountyInputSchema: z.ZodType<Prisma.CityUpdateWithoutCountyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateWithoutCountyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateManyWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateManyWithoutCountyInput> = z.object({
-  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),

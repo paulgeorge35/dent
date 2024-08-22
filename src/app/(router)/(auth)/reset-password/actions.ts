@@ -11,7 +11,7 @@ export async function updatePassword(token: string, password: string) {
   const user = await consumeToken(token, "PASSWORD_RESET");
 
   const profile = await db.profile.findFirst({
-    where: { email: user.profile.email },
+    where: { email: user.email },
   });
 
   if (!profile) return;
@@ -33,10 +33,10 @@ export async function updatePassword(token: string, password: string) {
 
   void resend.emails.send({
     from: "MyDent <hello@mydent.one>",
-    to: user.profile.email,
+    to: user.email,
     subject: "MyDent - Password Recovery",
     react: PasswordChanged({
-      name: `${user.profile.firstName} ${user.profile.lastName}`,
+      name: `${user.firstName} ${user.lastName}`,
     }),
   });
 

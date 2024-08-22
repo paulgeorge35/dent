@@ -99,7 +99,7 @@ model Profile {
   email               String  @unique
   phone               String?
   avatar              String?
-  stripeCustomerId    String
+  stripeCustomerId    String?
   stripeFreeTrialUsed Boolean @default(false)
 
   preferredTenantId String?

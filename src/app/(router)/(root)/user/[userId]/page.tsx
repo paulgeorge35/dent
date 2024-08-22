@@ -36,9 +36,9 @@ export default async function User({ params: { userId } }: UserPageProps) {
     notFound();
   });
   if (!user) notFound();
-  // if (session!.user!.id === user.id) {
-  //   redirect("/profile");
-  // }
+  if (session!.user!.id === user.id) {
+    redirect("/profile");
+  }
 
   return (
     <Shell>

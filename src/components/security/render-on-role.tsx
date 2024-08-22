@@ -13,9 +13,9 @@ export default async function RenderOnRole({
   className,
   children,
 }: RenderOnRoleProps) {
-  const session = await auth();
+  const session = (await auth())!;
 
-  if (!roles.includes(session.role)) {
+  if (!session.user?.role || !roles.includes(session.user?.role as Role)) {
     return null;
   }
 

@@ -2,7 +2,6 @@
 
 import { encrypt } from "@/lib";
 import { db } from "@/server/db";
-import type { SessionUser } from "@/types/schema";
 import { DateTime } from "luxon";
 import { cookies } from "next/headers";
 import bcrypt from "bcryptjs";
