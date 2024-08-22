@@ -13,13 +13,14 @@ export const metadata = constructMetadata({
 
 const searchParamsSchema = z.object({
   error: z.string().optional(),
+  email: z.string().optional(),
 });
 
 export interface SignUpPageProps {
   searchParams: SearchParams;
 }
 export default async function SignUp({ searchParams }: SignUpPageProps) {
-  const { error } = searchParamsSchema.parse(searchParams);
+  const { error, email } = searchParamsSchema.parse(searchParams);
 
   return (
     <>
@@ -41,7 +42,7 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
         <Separator className="w-auto grow" />
       </span>
 
-      <RegisterForm />
+      <RegisterForm email={email} />
 
       <div className="mt-4 text-center text-sm">
         Already have an account?{" "}

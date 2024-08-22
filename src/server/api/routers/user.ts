@@ -9,6 +9,8 @@ import { RoleSchema } from "prisma/generated/zod";
 import { z } from "zod";
 import { DateTime } from "luxon";
 import { uploadFile } from "@/lib";
+import { Confirmation } from "@/components/emails/confirmation";
+import { v4 as uuidv4 } from "uuid";
 
 import {
   adminProcedure,
@@ -17,6 +19,8 @@ import {
   publicProcedure,
   tenantProcedure,
 } from "../trpc";
+import { env } from "@/env";
+import { resend } from "@/server/resend";
 
 const userComplete = Prisma.validator<Prisma.UserInclude>()({
   profile: true,
@@ -47,6 +51,106 @@ export type UserComplete = Prisma.UserGetPayload<{
 }>;
 
 export const userRouter = createTRPCRouter({
+  register: publicProcedure
+    .input(
+      z.object({
+        email: z.string().email(),
+        password: z.string().min(8).max(64),
+        confirm: z.string().min(8).max(64),
+        firstName: z.string().max(50),
+        lastName: z.string().max(50),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { email, password, confirm, firstName, lastName } = input;
+
+      const emailExists = await ctx.db.profile.findUnique({
+        where: { email },
+      });
+
+      if (emailExists) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Email already exists",
+        });
+      }
+
+      if (password !== confirm) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Passwords do not match",
+        });
+      }
+
+      const passwordHash = await bcrypt.hash(password, env.SALT_ROUNDS);
+
+      const token = uuidv4();
+
+      await ctx.db.profile.create({
+        data: {
+          email,
+          firstName,
+          lastName,
+          auth: {
+            create: {
+              provider: "credentials",
+              type: "password",
+              passwordHash,
+            },
+          },
+          authTokens: {
+            create: {
+              type: TokenType.ACTIVATION,
+              token,
+              expires: DateTime.now().plus({ minutes: 15 }).toJSDate(),
+            },
+          },
+        },
+      });
+
+      void resend.emails.send({
+        from: "MyDent <hello@mydent.one>",
+        to: email,
+        subject: "Confirm your email address",
+        react: Confirmation({
+          name: `${firstName} ${lastName}`,
+          url: `${env.URL}/activate/${token}`,
+        }),
+      });
+
+      return {
+        success: true,
+      };
+    }),
+
+  confirmAccount: publicProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const token = await ctx.db.authToken.findFirst({
+        where: { token: input, type: TokenType.ACTIVATION },
+        include: { profile: true },
+      });
+
+      if (!token) {
+        return {
+          success: false,
+        };
+      }
+
+      await ctx.db.profile.update({
+        where: { id: token.profile.id },
+        data: { activatedAt: new Date() },
+      });
+
+      await ctx.db.authToken.delete({
+        where: { id: token.id },
+      });
+
+      return {
+        success: true,
+      };
+    }),
+
   me: tenantProcedure.query(async ({ ctx }) => {
     const userId = ctx.session.user!.id;
 
@@ -390,10 +494,11 @@ export const userRouter = createTRPCRouter({
       where: {
         expires: { gt: now },
         email,
+        userId: null,
       },
       select: {
         token: true,
-        user: {
+        invitedBy: {
           select: {
             profile: {
               select: {

@@ -57,7 +57,7 @@ export const tenantAccountSchema = UserSchema.merge(
 
 export const invitationAccountSchema = z.object({
   token: z.string(),
-  user: z.object({
+  invitedBy: z.object({
     profile: ProfileSchema.pick({
       firstName: true,
       lastName: true,

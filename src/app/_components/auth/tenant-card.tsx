@@ -1,6 +1,7 @@
 "use client";
 
 import { toggleTenant } from "@/app/(router)/(tenant)/welcome/actions";
+import AvatarComponent from "@/components/avatar-component";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,7 @@ export default function TenantCard({ account }: TenantCardProps) {
     <div
       role="button"
       className={cn(
-        "vertical items-start px-6 py-2 [&:not(:last-child)]:border-b gap-2",
+        "vertical items-start gap-2 px-6 py-2 [&:not(:last-child)]:border-b",
         {
           "cursor-default bg-muted opacity-50": pending,
         },
@@ -49,21 +50,14 @@ export default function TenantCard({ account }: TenantCardProps) {
       onClick={() => handleTenantClick(account.tenantId)}
     >
       <span className="horizontal center-v w-full">
-        <Avatar className="size-12 rounded-sm">
-          {tenantAvatar ? (
-            <Image
-              src={tenantAvatar}
-              alt={account.tenant.profile.name}
-              width={48}
-              height={48}
-              className="bg-blue-600/10 object-cover"
-            />
-          ) : (
-            <AvatarFallback className="rounded-sm">
-              {account.tenant.profile.name.slice(0, 1)}
-            </AvatarFallback>
-          )}
-        </Avatar>
+        <AvatarComponent
+          src={tenantAvatar}
+          alt={account.tenant.profile.name}
+          fallback={account.tenant.profile.name}
+          width={48}
+          height={48}
+          className="size-12 rounded-sm"
+        />
         <div className="ml-4 flex flex-col">
           <h3 className="text-left font-semibold">
             {account.tenant.profile.name}

@@ -19,8 +19,8 @@ export async function updatePassword(token: string, password: string) {
   const auth = await db.accountAuth.findFirst({
     where: {
       profileId: profile.id,
-      type: "credentials",
-      provider: "database",
+      type: "password",
+      provider: "credentials",
     },
   });
 

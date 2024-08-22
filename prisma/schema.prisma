@@ -69,8 +69,8 @@ model User {
   workingHours Json   @default("[]")
 
   specializationId String?
-  specialization   Specialization? @relation(fields: [specializationId], references: [id])
-  profile          Profile         @relation(fields: [profileId], references: [id])
+  specialization   Specialization? @relation(fields: [specializationId], references: [id], onDelete: SetNull)
+  profile          Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
   profileId        String
   tenantId         String
   tenant           Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -92,21 +92,23 @@ model User {
 }
 
 model Profile {
-  id                  String  @id @default(cuid())
-  title               String? @default("Dr.")
+  id                  String    @id @default(cuid())
+  title               String?   @default("Dr.")
   firstName           String
   lastName            String
-  email               String  @unique
+  email               String    @unique
   phone               String?
   avatar              String?
+  activatedAt         DateTime?
   stripeCustomerId    String?
-  stripeFreeTrialUsed Boolean @default(false)
+  stripeFreeTrialUsed Boolean   @default(false)
 
   preferredTenantId String?
   preferredTenant   Tenant? @relation(fields: [preferredTenantId], references: [id])
 
-  users User[]
-  auth  AccountAuth[]
+  users      User[]
+  auth       AccountAuth[]
+  authTokens AuthToken[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -127,7 +129,7 @@ model AccountAuth {
   id_token                 String?   @map("idToken")
   session_state            String?   @map("sessionState")
 
-  profile Profile @relation(fields: [profileId], references: [id])
+  profile Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@index([profileId])
 }
@@ -156,6 +158,18 @@ model Token {
   userId String
 
   @@index([userId, token])
+}
+
+model AuthToken {
+  id      String    @id @default(cuid())
+  type    TokenType
+  token   String    @unique
+  expires DateTime
+
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId String
+
+  @@index([profileId, token])
 }
 
 model Invitation {

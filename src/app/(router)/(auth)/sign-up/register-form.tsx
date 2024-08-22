@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useTransition } from "react";
-// import { signUp } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
 import { PasswordInput } from "@/components/password-input";
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
 
 const schema = z
   .object({
@@ -80,23 +81,38 @@ const schema = z
 
 type FormValues = z.infer<typeof schema>;
 
-export default function RegisterForm() {
+type RegisterFormProps = {
+  email?: string;
+};
+
+export default function RegisterForm({ email }: RegisterFormProps) {
   const [pending, startTransition] = useTransition();
+  const { mutateAsync: register } = api.user.register.useMutation({
+    onSuccess: () => {
+      toast.success("Account created", {
+        description: "Please check your email to confirm your account",
+      });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
       firstName: "",
       lastName: "",
-      email: "",
+      email: email ?? "",
       password: "",
       confirm: "",
     },
   });
 
-  const onSubmit = form.handleSubmit(async (_values: FormValues) => {
+  const onSubmit = form.handleSubmit(async (values: FormValues) => {
     startTransition(async () => {
       try {
-        // await signUp(values);
+        await register(values);
       } catch (error) {
         if (error instanceof Error) {
           form.setError("root", {

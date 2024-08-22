@@ -6,6 +6,7 @@ import {
   adminProcedure,
   createTRPCRouter,
   protectedProcedure,
+  publicProcedure,
   tenantProcedure,
 } from "../trpc";
 import { DateTime } from "luxon";
@@ -169,6 +170,48 @@ export const tenantRouter = createTRPCRouter({
     });
   }),
 
+  invitation: publicProcedure
+    .input(z.string())
+    .query(async ({ ctx, input }) => {
+      const invitation = await ctx.db.invitation.findFirst({
+        where: { token: input, expires: { gt: DateTime.now().toJSDate() } },
+        select: {
+          id: true,
+          email: true,
+          invitedBy: {
+            select: {
+              profile: {
+                select: {
+                  email: true,
+                  firstName: true,
+                  lastName: true,
+                },
+              },
+              tenant: {
+                select: {
+                  profile: {
+                    select: {
+                      name: true,
+                      avatar: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      if (!invitation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invitation not found",
+        });
+      }
+
+      return invitation;
+    }),
+
   invite: adminProcedure
     .input(
       z.object({
@@ -282,6 +325,54 @@ export const tenantRouter = createTRPCRouter({
 
       return await ctx.db.invitation.delete({
         where: { id: invitation.id },
+      });
+    }),
+
+  join: protectedProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const profile = await ctx.db.profile.findFirst({
+        where: { email: ctx.session.email },
+      });
+
+      if (!profile) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Profile not found",
+        });
+      }
+
+      const invitation = await ctx.db.invitation.findFirst({
+        where: {
+          token: input,
+          email: ctx.session.email,
+          userId: null,
+          expires: { gt: DateTime.now().toJSDate() },
+        },
+        include: {
+          invitedBy: true,
+        },
+      });
+
+      if (!invitation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Invitation not found",
+        });
+      }
+
+      await ctx.db.invitation.update({
+        where: { id: invitation.id },
+        data: {
+          user: {
+            create: {
+              profileId: profile.id,
+              role: invitation.role,
+              tenantId: invitation.invitedBy.tenantId,
+              activatedAt: DateTime.now().toJSDate(),
+            },
+          },
+        },
       });
     }),
 
