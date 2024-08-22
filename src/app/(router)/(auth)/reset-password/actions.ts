@@ -10,21 +10,33 @@ import { PasswordChanged } from "@/components/emails/password-changed";
 export async function updatePassword(token: string, password: string) {
   const user = await consumeToken(token, "PASSWORD_RESET");
 
-  await db.user.update({
+  const profile = await db.profile.findFirst({
+    where: { email: user.profile.email },
+  });
+
+  if (!profile) return;
+
+  const auth = await db.accountAuth.findFirst({
     where: {
-      id: user.id,
+      profileId: profile.id,
+      type: "credentials",
+      provider: "database",
     },
-    data: {
-      passwordHash: await bcrypt.hash(password, 10),
-    },
+  });
+
+  if (!auth) return;
+
+  await db.accountAuth.update({
+    where: { id: auth.id },
+    data: { passwordHash: await bcrypt.hash(password, 10) },
   });
 
   void resend.emails.send({
     from: "MyDent <hello@mydent.one>",
-    to: user.email,
+    to: user.profile.email,
     subject: "MyDent - Password Recovery",
     react: PasswordChanged({
-      name: user.name,
+      name: `${user.profile.firstName} ${user.profile.lastName}`,
     }),
   });
 

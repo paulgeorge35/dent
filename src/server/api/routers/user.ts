@@ -1,23 +1,25 @@
-import { type UserComplete as zUserComplete } from "@/types/schema";
+import {
+  avatarSchema,
+  type UserComplete as zUserComplete,
+} from "@/types/schema";
 import { Prisma, type Role, TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { RoleSchema } from "prisma/generated/zod";
 import { z } from "zod";
+import { DateTime } from "luxon";
+import { uploadFile } from "@/lib";
 
 import {
   adminProcedure,
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
+  tenantProcedure,
 } from "../trpc";
 
 const userComplete = Prisma.validator<Prisma.UserInclude>()({
   profile: true,
-});
-
-const userHasAll = Prisma.validator<Prisma.UserWhereInput>()({
-  profile: { isNot: null },
 });
 
 const pagination = z.object({
@@ -45,10 +47,11 @@ export type UserComplete = Prisma.UserGetPayload<{
 }>;
 
 export const userRouter = createTRPCRouter({
-  me: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session.user.id;
+  me: tenantProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user!.id;
+
     const user = (await ctx.db.user.findUnique({
-      where: { id: userId, ...userHasAll },
+      where: { id: userId },
       include: userComplete,
     })) as zUserComplete | null;
 
@@ -103,23 +106,24 @@ export const userRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const { current, password } = input;
-      const userId = ctx.session.user.id;
+      const profileId = ctx.session.id;
 
       return await ctx.db.$transaction(async (tx) => {
-        const user = await tx.user.findUnique({
-          where: { id: userId },
+        const auth = await tx.accountAuth.findUnique({
+          where: { id: profileId, type: "credentials", provider: "database" },
+          include: {
+            profile: true,
+          },
         });
 
-        if (!user) {
+        if (!auth) {
           throw new TRPCError({
             code: "NOT_FOUND",
             message: "User not found",
           });
         }
 
-        const passwordMatch =
-          user.passwordHash &&
-          (await bcrypt.compare(current, user.passwordHash));
+        const passwordMatch = await bcrypt.compare(current, auth.passwordHash!);
 
         if (!passwordMatch) {
           throw new TRPCError({
@@ -135,11 +139,9 @@ export const userRouter = createTRPCRouter({
           });
         }
 
-        return await tx.user.update({
-          where: { id: userId },
-          data: {
-            passwordHash: await bcrypt.hash(password, 10),
-          },
+        return await tx.accountAuth.update({
+          where: { id: auth.id },
+          data: { passwordHash: await bcrypt.hash(password, 10) },
         });
       });
     }),
@@ -148,10 +150,10 @@ export const userRouter = createTRPCRouter({
     .input(z.string())
     .query(async ({ ctx, input }) => {
       const user = (await ctx.db.user.findUnique({
-        where: { id: input, ...userHasAll },
+        where: { id: input },
         select: {
           role: true,
-          banned: true,
+          bannedAt: true,
         },
       })) as zUserComplete | null;
 
@@ -164,13 +166,13 @@ export const userRouter = createTRPCRouter({
 
       return {
         isAdmin: user.role === "ADMIN",
-        isBanned: user.banned,
+        isBanned: user.bannedAt !== null,
       };
     }),
 
   get: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const user = (await ctx.db.user.findUnique({
-      where: { id: input, ...userHasAll },
+      where: { id: input },
       include: userComplete,
     })) as zUserComplete | null;
 
@@ -184,7 +186,7 @@ export const userRouter = createTRPCRouter({
     return user;
   }),
 
-  getAll: protectedProcedure
+  getAll: tenantProcedure
     .input(
       z
         .object({
@@ -199,6 +201,14 @@ export const userRouter = createTRPCRouter({
                     Object.values(RoleSchema.Values).includes(role as Role),
                   ) as Role[],
             ),
+          specialization: z
+            .string()
+            .optional()
+            .transform((val) => {
+              return val
+                ?.split(".")
+                .map((specialization) => specialization.trim());
+            }),
           search: z.string().optional(),
         })
         .merge(pagination)
@@ -209,33 +219,40 @@ export const userRouter = createTRPCRouter({
         ctx,
         input: {
           role,
+          specialization,
           search,
           page,
           per_page,
           sort: { order, orderBy },
         },
       }) => {
-        const content = (await ctx.db.user.findMany({
+        const tenantId = ctx.session.user!.tenantId;
+
+        const content = await ctx.db.user.findMany({
           where: {
             role: role ? { in: role } : undefined,
-            ...userHasAll,
+            specializationId: specialization
+              ? { in: specialization }
+              : undefined,
+            tenantId,
             OR: [
-              { email: { contains: search, mode: "insensitive" } },
-              { name: { contains: search, mode: "insensitive" } },
+              { profile: { email: { contains: search, mode: "insensitive" } } },
             ],
           },
-          include: userComplete,
+          include: {
+            profile: true,
+            specialization: true,
+          },
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
-        })) as zUserComplete[];
+        });
 
         const count = await ctx.db.user.count({
           where: {
             role: role ? { in: role } : undefined,
             OR: [
-              { email: { contains: search, mode: "insensitive" } },
-              { name: { contains: search, mode: "insensitive" } },
+              { profile: { email: { contains: search, mode: "insensitive" } } },
             ],
           },
         });
@@ -248,7 +265,7 @@ export const userRouter = createTRPCRouter({
       },
     ),
 
-  update: protectedProcedure
+  update: tenantProcedure
     .input(
       z.object({
         firstName: z.string().max(50).optional(),
@@ -265,21 +282,26 @@ export const userRouter = createTRPCRouter({
             return v;
           }),
         bio: z.string().max(500).optional(),
-        avatar: z.string().optional().nullable(),
+        avatar: avatarSchema.optional(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = ctx.session.user!.id;
+
+      const avatarUrl = input.avatar
+        ? typeof input.avatar === "string"
+          ? input.avatar
+          : await uploadFile(input.avatar)
+        : null;
 
       const user = await ctx.db.user.update({
         where: { id: userId },
         data: {
-          name: `${input.firstName} ${input.lastName}`,
-          email: input.email,
-          phone: input.phone,
           profile: {
             update: {
-              avatar: input.avatar,
+              email: input.email,
+              phone: input.phone,
+              avatar: avatarUrl,
               firstName: input.firstName,
               lastName: input.lastName,
             },
@@ -292,10 +314,10 @@ export const userRouter = createTRPCRouter({
       return user;
     }),
 
-  updateAvatar: protectedProcedure
+  updateAvatar: tenantProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = ctx.session.user!.id;
 
       return await ctx.db.user.update({
         where: { id: userId },
@@ -309,8 +331,8 @@ export const userRouter = createTRPCRouter({
       });
     }),
 
-  removeAvatar: protectedProcedure.mutation(async ({ ctx }) => {
-    const userId = ctx.session.user.id;
+  removeAvatar: tenantProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.session.user!.id;
 
     return await ctx.db.user.update({
       where: { id: userId },
@@ -342,9 +364,62 @@ export const userRouter = createTRPCRouter({
         return await tx.user.update({
           where: { id: input },
           data: {
-            banned: !targetUser.banned,
+            bannedAt: targetUser.bannedAt ? null : new Date(),
           },
         });
       });
     }),
+
+  invitations: protectedProcedure.query(async ({ ctx }) => {
+    const email = ctx.session.email;
+
+    const profile = await ctx.db.profile.findFirst({
+      where: { email },
+    });
+
+    if (!profile) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "Profile not found",
+      });
+    }
+
+    const now = DateTime.now().toJSDate();
+
+    return await ctx.db.invitation.findMany({
+      where: {
+        expires: { gt: now },
+        email,
+      },
+      select: {
+        token: true,
+        user: {
+          select: {
+            profile: {
+              select: {
+                firstName: true,
+                lastName: true,
+                email: true,
+              },
+            },
+            tenant: {
+              include: {
+                profile: true,
+                users: {
+                  select: {
+                    profile: {
+                      select: {
+                        firstName: true,
+                        avatar: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+  }),
 });

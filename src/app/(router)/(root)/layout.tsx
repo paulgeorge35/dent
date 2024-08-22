@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { Shell } from "@/components/shell";
-import NavBar from "@/components/navbar";
+import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
+import { api } from "@/trpc/server";
 
 export default async function RootLayout({
   children,
@@ -10,11 +10,15 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   if (!session) redirect("/sign-in");
+  if (!session.user?.tenantId) redirect("/welcome");
+  const accounts = await api.tenant.accounts();
+
+  const currentTenant = await api.tenant.currentTenant();
+  if (!currentTenant.profile.activeSubscription) redirect("/welcome");
 
   return (
-    <Shell variant="layout">
-      <NavBar />
+    <AdminPanelLayout session={session} accounts={accounts}>
       {children}
-    </Shell>
+    </AdminPanelLayout>
   );
 }

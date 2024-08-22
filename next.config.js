@@ -13,6 +13,22 @@ const config = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
       },
+      {
+        protocol: "https",
+        hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pravatar.cc",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-5acba8d208cc46e9a87820d842364d13.r2.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "files.stripe.com",
+      },
     ],
   },
 

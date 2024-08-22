@@ -2,6 +2,9 @@ import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { type EventChangeAction } from "@/types";
+import { type Prisma } from "@prisma/client";
+import { EventTypeSchema } from "prisma/generated/zod";
 
 const patientCreateInput = z.object({
   firstName: z.string(),
@@ -41,39 +44,27 @@ const appointmentUpdateInput = z.object({
 });
 
 export const appointmentRouter = createTRPCRouter({
-  getMany: protectedProcedure.query(async ({ ctx }) => {
-    const userId = ctx.session.user.id;
+  myEvents: protectedProcedure
+    .input(
+      z.object({
+        type: EventTypeSchema.optional().default("APPOINTMENT"),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user!.id;
 
-    const appointments = await ctx.db.event.findMany({
-      where: {
-        patient: {
+      const appointments = await ctx.db.event.findMany({
+        where: {
           userId,
+          type: input.type,
         },
-      },
-      include: {
-        patient: true,
-        proposedTimes: {
-          select: {
-            start: true,
-            end: true,
-            notified: true,
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          take: 1,
+        include: {
+          patient: true,
         },
-      },
-    });
+      });
 
-    return appointments
-      .filter((appointment) => appointment.patient !== null)
-      .map((appointment) => ({
-        ...appointment,
-        patient: appointment.patient!,
-        ...appointment.proposedTimes[0]!,
-      }));
-  }),
+      return appointments;
+    }),
 
   create: protectedProcedure
     .input(appointmentCreateInput)
@@ -82,7 +73,8 @@ export const appointmentRouter = createTRPCRouter({
         ctx,
         input: { patient, title, allDay, description, date, ...input },
       }) => {
-        const userId = ctx.session.user.id;
+        const userId = ctx.session.user!.id;
+        const tenantId = ctx.session.user!.tenantId;
 
         await ctx.db.$transaction(async (tx) => {
           return await tx.event.create({
@@ -91,13 +83,9 @@ export const appointmentRouter = createTRPCRouter({
               description,
               date,
               allDay,
+              user: { connect: { id: userId } },
+              tenant: { connect: { id: tenantId } },
               ...input,
-              proposedTimes: {
-                create: {
-                  date,
-                  ...input,
-                },
-              },
               patient: {
                 connect: "id" in patient ? { id: patient.id } : undefined,
                 create:
@@ -105,6 +93,7 @@ export const appointmentRouter = createTRPCRouter({
                     ? undefined
                     : {
                         ...patient,
+                        tenantId,
                         userId,
                       },
               },
@@ -117,17 +106,14 @@ export const appointmentRouter = createTRPCRouter({
   update: protectedProcedure
     .input(appointmentUpdateInput)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user.id;
+      const userId = ctx.session.user!.id;
 
       return await ctx.db.$transaction(async (tx) => {
+        const { id, date, description, start, end, allDay } = input;
+        const changes: EventChangeAction[] = [];
+
         const appointment = await tx.event.findFirst({
-          where: { id: input.id },
-          include: {
-            proposedTimes: {
-              orderBy: { createdAt: "desc" },
-              take: 1,
-            },
-          },
+          where: { id: id },
         });
 
         if (!appointment) {
@@ -137,45 +123,68 @@ export const appointmentRouter = createTRPCRouter({
           });
         }
 
-        const originalTime = appointment.proposedTimes[0];
+        if (date && date !== appointment.date) {
+          changes.push({
+            type: "date",
+            from: appointment.date,
+            to: date,
+          });
+        }
+
+        if (description && description !== appointment.description) {
+          changes.push({
+            type: "description",
+            from: appointment.description,
+            to: description,
+          });
+        }
+
+        if (start && start !== appointment.start) {
+          changes.push({
+            type: "start",
+            from: appointment.start,
+            to: start,
+          });
+        }
+
+        if (end && end !== appointment.end) {
+          changes.push({
+            type: "end",
+            from: appointment.end,
+            to: end,
+          });
+        }
+
+        if (allDay && allDay !== appointment.allDay) {
+          changes.push({
+            type: "allDay",
+            from: appointment.allDay,
+            to: allDay,
+          });
+        }
 
         const isReschedule =
-          originalTime &&
-          (originalTime.start !== input.start ||
-            // originalTime.end !== input.end ||
-            originalTime.date !== input.date);
-
-        if (isReschedule)
-          await tx.proposedTime.update({
-            where: { id: originalTime.id },
-            data: {
-              status: "RESCHEDULED",
-            },
-          });
+          changes.some((change) => change.type === "date") ||
+          changes.some((change) => change.type === "start");
 
         return await tx.event.update({
           where: {
-            id: input.id,
-            patient: {
-              userId,
-            },
+            id,
+            userId,
           },
           data: {
-            allDay: input.allDay,
-            date: input.date,
-            start: input.start,
-            end: input.end,
-            description: input.description,
+            allDay,
+            date,
+            start,
+            end,
+            description,
             status: isReschedule ? "CREATED" : undefined,
-            proposedTimes: isReschedule
-              ? {
-                  create: {
-                    date: input.date,
-                    start: input.start,
-                    end: input.end,
-                  },
-                }
-              : undefined,
+            actions: {
+              create: {
+                data: changes as Prisma.JsonArray,
+                userId,
+              },
+            },
           },
         });
       });

@@ -42,7 +42,6 @@ import {
   SunMedium,
   Ticket,
   Trash,
-  Twitter,
   User,
   Users,
   X,
@@ -52,51 +51,224 @@ import {
 export type Icon = LucideIcon;
 
 export const Icons = {
+  add: Plus,
+  arrowRight: ArrowRight,
   banknote: Banknote,
+  billing: CreditCard,
+  braces: ({ ...props }: LucideProps) => (
+    <svg
+      width="40"
+      height="40"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fab"
+      data-icon="braces"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 40 40"
+      {...props}
+    >
+      <path
+        d="M20 15C20 12.5838 18.0412 10.625 15.625 10.625C13.125 10.625 12.3848 11.875 11.25 11.875C10.1152 11.875 9.375 10.625 6.875 10.625C4.45875 10.625 2.5 12.5838 2.5 15C2.5 20.625 5.625 29.375 7.5 29.375C8.62672 29.375 8.75 25.625 11.25 25.625C13.75 25.625 13.8733 29.375 15 29.375C16.875 29.375 20 20.625 20 15Z"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M13.75 21.25H8.75V16.25H13.75V21.25Z"
+        fill="#A2D2FF"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M37.5 15C37.5 12.5838 35.5412 10.625 33.125 10.625C30.625 10.625 29.8848 11.875 28.75 11.875C27.6152 11.875 26.875 10.625 24.375 10.625C21.9587 10.625 20 12.5838 20 15C20 20.625 23.125 29.375 25 29.375C26.1267 29.375 26.25 25.625 28.75 25.625C31.25 25.625 31.3733 29.375 32.5 29.375C34.375 29.375 37.5 20.625 37.5 15Z"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M31.25 21.25H26.25V16.25H31.25V21.25Z"
+        fill="#A2D2FF"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M13.75 18.75H26.25"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M31.25 18.75H38.8281"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M1.17188 18.75H8.75"
+        stroke="#03045E"
+        stroke-miterlimit="10"
+        stroke-linejoin="round"
+      />
+    </svg>
+  ),
+  "calendar1": ({ ...props }) => (
+    <svg
+    width="40"
+    height="40"
+    fill="none"
+    aria-hidden="true"
+    focusable="false"
+    data-prefix="fab"
+    data-icon="calendar-1"
+    role="img"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 40 40"
+    {...props}
+    >
+      <g clip-path="url(#clip0_17001_1135)">
+        <path
+          d="M25.7812 32.5781H1.17188V9.14062H38.8281V27.3438"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M38.8281 9.14062H1.17188V4.21875H38.8281V9.14062Z"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M33.2697 35.4642L34.3236 38.8281H36.5543C36.5543 38.8281 38.8281 32.9283 38.8281 27.5641C38.8281 25.5909 38.16 23.1698 35.7439 23.2035C34.4217 23.2218 33.8437 23.8779 32.9693 24.727H31.1592C30.2849 23.8779 29.7068 23.2218 28.3846 23.2035C25.9685 23.1698 25.3004 25.5909 25.3004 27.5641C25.3004 32.9283 27.5742 38.8281 27.5742 38.8281H29.8049L30.8677 35.4616C31.033 34.9377 31.5189 34.5816 32.0683 34.5816C32.6186 34.5816 33.1052 34.939 33.2697 35.4642Z"
+          fill="#A2D2FF"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M6.09375 4.21875V0"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M15.3646 4.21875V0"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M24.6354 4.21875V0"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M33.9062 4.21875V0"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M6.52344 16.1719H8.86719"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.4453 16.1719H13.7891"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16.3672 16.1719H18.7109"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M21.2891 16.1719H23.6328"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M26.2109 16.1719H28.5547"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M31.1328 16.1719H33.4766"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M6.52344 20.8594H8.86719"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.4453 20.8594H13.7891"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16.3672 20.8594H18.7109"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M21.2891 20.8594H23.6328"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M6.52344 25.5469H8.86719"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M11.4453 25.5469H13.7891"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16.3672 25.5469H18.7109"
+          stroke="#03045E"
+          stroke-miterlimit="10"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_17001_1135">
+          <rect width="40" height="40" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
   calendarCheck: CalendarCheck,
-  home: Home,
-  email: Mail,
-  edit: Edit,
-  newspaper: Newspaper,
-  settings: Settings,
-  ticket: Ticket,
-  users: Users,
-  logo: Command,
-  close: X,
-  mic: Mic,
-  update: RotateCw,
-  save: Save,
-  publish: BookCheck,
-  more: MoreVerticalIcon,
-  heart: Heart,
-  heartOff: HeartOff,
-  react: SmilePlus,
-  reply: Reply,
-  enter: CornerDownLeft,
-  paperclip: Paperclip,
-  spinner: Loader2,
+  cancel: Ban,
+  check: Check,
   chevronLeft: ChevronLeft,
   chevronRight: ChevronRight,
-  trash: Trash,
-  post: FileText,
-  page: File,
-  media: Image,
-  billing: CreditCard,
+  close: X,
+  edit: Edit,
   ellipsis: MoreVertical,
-  add: Plus,
-  info: Info,
-  cancel: Ban,
-  warning: AlertTriangle,
-  user: User,
-  arrowRight: ArrowRight,
-  help: HelpCircle,
-  pizza: Pizza,
-  sun: SunMedium,
-  moon: Moon,
-  laptop: Laptop,
-  twitter: Twitter,
-  pin: Pin,
-  unpin: PinOff,
+  email: Mail,
+  enter: CornerDownLeft,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
@@ -131,22 +303,35 @@ export const Icons = {
       ></path>
     </svg>
   ),
-  x: ({ ...props }: LucideProps) => (
-    <svg
-      aria-hidden="true"
-      focusable="false"
-      data-prefix="fab"
-      data-icon="x"
-      role="img"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 496 512"
-      {...props}
-    >
-      <path
-        fill="currentColor"
-        d="M178.57 127.15 290.27 0h-26.46l-97.03 110.38L89.34 0H0l117.13 166.93L0 300.25h26.46l102.4-116.59 81.8 116.59h89.34M36.01 19.54H76.66l187.13 262.13h-40.66"
-      />
-    </svg>
-  ),
-  check: Check,
+  heart: Heart,
+  heartOff: HeartOff,
+  help: HelpCircle,
+  home: Home,
+  info: Info,
+  laptop: Laptop,
+  logo: Command,
+  media: Image,
+  mic: Mic,
+  moon: Moon,
+  more: MoreVerticalIcon,
+  newspaper: Newspaper,
+  page: File,
+  paperclip: Paperclip,
+  pin: Pin,
+  pizza: Pizza,
+  post: FileText,
+  publish: BookCheck,
+  react: SmilePlus,
+  reply: Reply,
+  save: Save,
+  settings: Settings,
+  spinner: Loader2,
+  sun: SunMedium,
+  ticket: Ticket,
+  trash: Trash,
+  unpin: PinOff,
+  update: RotateCw,
+  user: User,
+  users: Users,
+  warning: AlertTriangle,
 };

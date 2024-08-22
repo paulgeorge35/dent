@@ -23,3 +23,8 @@ export function showErrorToast(err: unknown) {
   const errorMessage = getErrorMessage(err);
   return toast.error(errorMessage);
 }
+
+export const defaultErrors = {
+  account_not_found: "Account not found",
+  email_exists: "Email already exists",
+};

@@ -8,28 +8,37 @@ import { resend } from "@/server/resend";
 
 export async function sendResetPasswordEmail(email: string) {
   await db.$transaction(async (tx) => {
-    const user = await tx.user.findFirst({
-      where: {
-        email: email,
+    const profile = await tx.profile.findFirst({
+      where: { email },
+      include: {
+        users: {
+          include: { tenant: true },
+        },
       },
     });
 
-    if (user) {
-      if (user.banned) {
-        throw new Error("Your account has been banned");
-      }
+    if (!profile) return;
 
-      const token = await generateToken(email, "PASSWORD_RESET");
+    const activeUser = profile.users.find(
+      (user) => !user.deletedAt && !user.bannedAt,
+    );
 
-      void resend.emails.send({
-        from: "MyDent <hello@mydent.one>",
-        to: email,
-        subject: "MyDent - Password Recovery",
-        react: PasswordRecovery({
-          name: user.name,
-          url: new URL(`/reset-password?token=${token}`, env.URL).toString(),
-        }),
-      });
-    }
+    if (!activeUser) return;
+
+    const token = await generateToken({
+      tenantId: activeUser.tenantId,
+      email,
+      type: "PASSWORD_RESET",
+    });
+
+    void resend.emails.send({
+      from: "MyDent <hello@mydent.one>",
+      to: email,
+      subject: "MyDent - Password Recovery",
+      react: PasswordRecovery({
+        name: `${profile.firstName} ${profile.lastName}`,
+        url: new URL(`/reset-password?token=${token}`, env.URL).toString(),
+      }),
+    });
   });
 }

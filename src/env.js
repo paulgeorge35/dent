@@ -22,18 +22,21 @@ export const env = createEnv({
       process.env.NODE_ENV === "production"
         ? z.string()
         : z.string().optional(),
-    NEXTAUTH_URL: z.preprocess(
-      // This makes Vercel deployments not fail if you don't set NEXTAUTH_URL
-      // Since NextAuth.js automatically uses the VERCEL_URL if present.
-      (str) => process.env.VERCEL_URL ?? str,
-      // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string() : z.string().url(),
-    ),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
-    GOOGLE_CALLBACK_URL: z.string(),
+    GOOGLE_REGISTER_CALLBACK_URL: z.string(),
+    GOOGLE_AUTH_CALLBACK_URL: z.string(),
     URL: z.string().url(),
     RESEND_API_KEY: z.string(),
+    STRIPE_SECRET_KEY: z.string(),
+    STRIPE_PUBLIC_KEY: z.string(),
+    STRIPE_WEBHOOK_SECRET: z.string(),
+    R2_ACCESS_KEY_ID: z.string(),
+    R2_SECRET_ACCESS_KEY: z.string(),
+    R2_REGION: z.string(),
+    R2_BUCKET_NAME: z.string(),
+    R2_ACCOUNT_ID: z.string(),
+    R2_PUBLIC_URL: z.string(),
   },
 
   /**
@@ -54,12 +57,21 @@ export const env = createEnv({
     DIRECT_DATABASE_URL: process.env.DIRECT_DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     URL: process.env.URL,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
+    GOOGLE_REGISTER_CALLBACK_URL: process.env.GOOGLE_REGISTER_CALLBACK_URL,
+    GOOGLE_AUTH_CALLBACK_URL: process.env.GOOGLE_AUTH_CALLBACK_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
+    STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+    STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
+    STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+    R2_ACCESS_KEY_ID: process.env.R2_ACCESS_KEY_ID,
+    R2_SECRET_ACCESS_KEY: process.env.R2_SECRET_ACCESS_KEY,
+    R2_REGION: process.env.R2_REGION,
+    R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
+    R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
+    R2_PUBLIC_URL: process.env.R2_PUBLIC_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

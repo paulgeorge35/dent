@@ -37,7 +37,7 @@ export default async function ForgotPassword({
   const session = await auth();
 
   if (session) {
-    redirect("/home");
+    redirect("/");
   }
 
   return (

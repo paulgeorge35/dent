@@ -9,7 +9,12 @@ export default async function AuthLayout({
 }) {
   const session = await auth();
 
-  if (session) redirect("/home", RedirectType.replace);
+  if (session) {
+    if (session.user?.tenantId) {
+      redirect("/", RedirectType.replace);
+    }
+    redirect("/welcome", RedirectType.replace);
+  }
 
   return (
     <>

@@ -1,4 +1,4 @@
-# [MyDent](https://dent.paulgeorge.dev)
+# [MyDent](https://app.mydent.one)
 
 MyDent is a web application (created using [T3 Stack](https://create.t3.gg/)) designed to help dentist offices manage patients appointments and documents.
 

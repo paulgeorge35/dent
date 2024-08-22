@@ -31,7 +31,7 @@ export default function NavLink({
         isDesktop
           ? buttonVariants({
               size: "sm",
-              variant: main ? "ghost" : "link",
+              variant: main ? "ghost" : "linkHover2",
             })
           : buttonVariants({
               size: "default",

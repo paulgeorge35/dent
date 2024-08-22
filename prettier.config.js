@@ -2,10 +2,18 @@
 const config = {
   plugins: [
     "prettier-plugin-tailwindcss",
-    "@trivago/prettier-plugin-sort-imports",
+    require.resolve("@trivago/prettier-plugin-sort-imports"),
   ],
-  importOrder: ['^@/server/(.*)$', '^@/contexts/(.*)$', '^@/components/ui/(.*)$', '^@/components/(.*)$', '^@/lib/(.*)$', '^[./]'],
-  importOrderParserPlugins: ['typescript', 'jsx'],
+  importOrder: [
+    "^@/server/(.*)$",
+    "^@/contexts/(.*)$",
+    "^@/_components/(.*)$",
+    "^@/components/ui/(.*)$",
+    "^@/components/(.*)$",
+    "^@/lib/(.*)$",
+    "^[./]",
+  ],
+  importOrderParserPlugins: ["typescript", "jsx"],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
 };

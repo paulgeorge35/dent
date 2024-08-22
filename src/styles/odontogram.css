@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tooth {
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  @apply cursor-pointer fill-background stroke-primary/40 transition-colors duration-300;
+}
+
+.tooth:hover .tooth-border:not(.tooth-treatment) {
+  stroke: #4f68eb;
+}
+
+.tooth:hover .tooth-misc {
+  stroke: #4f68eb;
+  fill: none;
+}
+
+.tooth:hover .tooth-number {
+  @apply fill-secondary-foreground;
+}
+
+#quadrant-2 .tooth-number {
+  transform: scale(-1, 1);
+  transform-origin: center;
+}
+
+#quadrant-3 .tooth-number {
+  transform: scale(-1, 1);
+  transform-origin: center;
+}
+
+.tooth-treatment .tooth-border {
+  stroke: #4f68eb;
+  fill: none;
+}
+.tooth-treatment .tooth-misc {
+  stroke: #4f68eb;
+  fill: none;
+}
+.tooth-treatment .tooth-number {
+  @apply fill-secondary-foreground;
+}
+.tooth-treatment .tooth-inner-border {
+  stroke: #ffffff;
+  fill: #b3c1f76f;
+}
+
+.tooth-inner-border {
+  stroke: transparent;
+  stroke-width: 50px;
+}
+
+.tooth-selected {
+  stroke: #4f68eb;
+  stroke-width: 16;
+}
+
+.tooth-selected .tooth-outer-border {
+  stroke-width: 100px;
+  stroke: #4f69eb3f;
+}
+.tooth-selected .tooth-border {
+  stroke-dasharray: 1000;
+  fill: #ffffff;
+}
+
+.tooth-selected .tooth-number {
+  @apply fill-secondary-foreground;
+}
+
+.tooth-selected .tooth-inner-border {
+  stroke: transparent;
+}
+
+.tooth-number {
+  font-size: 100px;
+  stroke-width: 0px;
+  font-weight: bold;
+  @apply fill-secondary-foreground/40;
+}
+
+#quadrant-2 {
+  transform: scale(-1, 1);
+  transform-origin: center;
+}
+
+#quadrant-3 {
+  transform: scale(-1, 1);
+  transform-origin: center;
+}
+
+#lower-jaw {
+  translate: 0 50%;
+}

@@ -12,6 +12,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 
 import { cn, constructMetadata } from "@/lib/utils";
+import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 
 // const Geist = localFont({
 //   src: [
@@ -121,6 +122,7 @@ export default function RootLayout({
             />
             <Sonner position="bottom-center" />
             <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TailwindIndicator />
           </TooltipProvider>
         </ThemeProvider>
         <Analytics />

@@ -20,11 +20,104 @@ datasource db {
   directUrl = env("DIRECT_DATABASE_URL")
 }
 
-model Account {
+model Tenant {
+  id    String @id @default(cuid())
+  email String
+
+  users     User[]
+  profileId String        @unique
+  profile   TenantProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  specializations    Specialization[]
+  preferedByProfiles Profile[]
+  patients           Patient[]
+  products           Product[]
+  events             Event[]
+
+  deletedAt      DateTime?
+  disabledAt     DateTime?
+  trialExpiresAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model TenantProfile {
+  id                   String  @id @default(cuid())
+  name                 String
+  county               String?
+  address              String?
+  zip                  String?
+  phone                String?
+  avatar               String?
+  size                 String?
+  stripeSubscriptionId String
+  activeSubscription   Boolean @default(false)
+
+  planId String
+  plan   Plan   @relation(fields: [planId], references: [id], onDelete: Restrict)
+
+  tenant Tenant?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id           String @id @default(cuid())
+  index        Int    @default(autoincrement())
+  role         Role   @default(USER)
+  workingHours Json   @default("[]")
+
+  specializationId String?
+  specialization   Specialization? @relation(fields: [specializationId], references: [id])
+  profile          Profile         @relation(fields: [profileId], references: [id])
+  profileId        String
+  tenantId         String
+  tenant           Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invitation       Invitation?     @relation(name: "InvitedToUser")
+
+  tokens         Token[]
+  patients       Patient[]
+  events         Event[]
+  eventActions   EventAction[]
+  treatmentPlans TreatmentPlan[]
+  invitations    Invitation[]    @relation(name: "InvitedByUser")
+
+  deletedAt   DateTime?
+  activatedAt DateTime?
+  lastLoginAt DateTime?
+  bannedAt    DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Profile {
+  id                  String  @id @default(cuid())
+  title               String? @default("Dr.")
+  firstName           String
+  lastName            String
+  email               String  @unique
+  phone               String?
+  avatar              String?
+  stripeCustomerId    String
+  stripeFreeTrialUsed Boolean @default(false)
+
+  preferredTenantId String?
+  preferredTenant   Tenant? @relation(fields: [preferredTenantId], references: [id])
+
+  users User[]
+  auth  AccountAuth[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AccountAuth {
   id                       String    @id @default(cuid())
-  userId                   String
+  profileId                String
   type                     String
   provider                 String
+  passwordHash             String?
   refresh_token            String?   @map("refreshToken")
   access_token             String?   @map("accessToken")
   expires_at               DateTime? @map("expiresAt")
@@ -34,40 +127,20 @@ model Account {
   id_token                 String?   @map("idToken")
   session_state            String?   @map("sessionState")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profile Profile @relation(fields: [profileId], references: [id])
 
-  @@index([userId])
+  @@index([profileId])
 }
 
-model User {
-  id            String    @id @default(cuid())
-  index         Int       @default(autoincrement())
-  name          String
-  email         String    @unique
-  emailVerified DateTime?
-  phone         String?
-  passwordHash  String?
-  role          Role      @default(USER)
-  banned        Boolean   @default(false)
+model Plan {
+  id              String @id @default(cuid())
+  stripeProductId String
+  stripePriceId   String @unique
 
-  profile Profile?
+  name     String
+  maxUsers Int
 
-  accounts Account[]
-  tokens   Token[]
-  patients Patient[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Profile {
-  id        String  @id @default(cuid())
-  firstName String
-  lastName  String
-  avatar    String?
-
-  userId String @unique
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantProfiles TenantProfile[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -85,6 +158,24 @@ model Token {
   @@index([userId, token])
 }
 
+model Invitation {
+  id      String   @id @default(cuid())
+  email   String
+  role    Role
+  token   String   @unique
+  expires DateTime
+
+  invitedById String
+  invitedBy   User    @relation(name: "InvitedByUser", fields: [invitedById], references: [id], onDelete: Cascade)
+  userId      String? @unique
+  user        User?   @relation(name: "InvitedToUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
 model Patient {
   id                 String    @id @default(cuid())
   firstName          String
@@ -99,15 +190,33 @@ model Patient {
   smsNotifications   Boolean   @default(false)
   emailNotifications Boolean   @default(false)
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 
-  appointments Event[]
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId String
+
+  appointments   Event[]
+  treatmentPlans TreatmentPlan[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
+}
+
+model Specialization {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+
+  users User[]
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Event {
@@ -121,11 +230,15 @@ model Event {
   type        EventType   @default(APPOINTMENT)
   status      EventStatus @default(CREATED)
 
-  proposedTimes ProposedTime[]
-  products      Product[]
+  actions    EventAction[]
+  treatments Treatment[]
 
   patientId String?
   patient   Patient? @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -133,16 +246,14 @@ model Event {
   @@index([patientId])
 }
 
-model ProposedTime {
-  id       String      @id @default(cuid())
-  date     DateTime
-  start    DateTime?
-  end      DateTime?
-  status   EventStatus @default(CREATED)
-  notified Boolean     @default(false)
+model EventAction {
+  id   String @id @default(cuid())
+  data Json
 
-  event   Event  @relation(fields: [eventId], references: [id])
+  userId  String
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -152,14 +263,77 @@ model Product {
   id          String   @id @default(cuid())
   name        String
   description String?
-  price       Float
-  priceMax    Float?
+  price       Int
   image       String?
   tags        String[]
+  isActive    Boolean  @default(true)
   isDeleted   Boolean  @default(false)
 
-  event   Event  @relation(fields: [eventId], references: [id])
-  eventId String
+  priceHistory Price[]
+  treatments   Treatment[]
+
+  categoryId String?
+  category   ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  tenantId   String
+  tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Price {
+  id    String @id @default(cuid())
+  value Int
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductCategory {
+  id   String @id @default(cuid())
+  name String
+
+  parentCategoryId String?
+  parentCategory   ProductCategory? @relation(name: "ProductCategoryToProductCategory", fields: [parentCategoryId], references: [id])
+
+  subcategories ProductCategory[] @relation(name: "ProductCategoryToProductCategory")
+  products      Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Treatment {
+  id          String          @id @default(cuid())
+  price       Int
+  toothNumber Int
+  status      TreatmentStatus @default(PLANNED)
+
+  productId       String
+  product         Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  treatmentPlanId String?
+  treatmentPlan   TreatmentPlan? @relation(fields: [treatmentPlanId], references: [id])
+  eventId         String?
+  event           Event?         @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TreatmentPlan {
+  id          String  @id @default(cuid())
+  description String?
+  isDone      Boolean @default(false)
+
+  treatments Treatment[]
+
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -184,6 +358,24 @@ model City {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum TreatmentStatus {
+  PLANNED
+  COMPLETED
+  CANCELLED
+}
+
+enum Currency {
+  RON
+  EUR
+  USD
+}
+
+enum ContractType {
+  FIXED
+  HOURLY
+  PERCENTAGE
 }
 
 enum Role {

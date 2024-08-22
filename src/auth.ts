@@ -8,14 +8,17 @@ import { resend } from "./server/resend";
 import { MagicLink } from "@/components/emails/magic-link";
 import { type SessionUser } from "./types/schema";
 import { db } from "./server/db";
-import Activation from "./components/emails/activation";
 import { type TokenType } from "@prisma/client";
 import crypto from "crypto";
 import { DateTime, type DurationLike } from "luxon";
 
-export async function sendMagicLink(email: string) {
+export async function sendMagicLink(email: string, tenantId: string) {
   "use server";
-  const token = await generateToken(email, "MAGIC_LINK");
+  const token = await generateToken({
+    tenantId,
+    email,
+    type: "MAGIC_LINK",
+  });
 
   void resend.emails.send({
     from: "MyDent <hello@mydent.one>",
@@ -27,32 +30,9 @@ export async function sendMagicLink(email: string) {
   });
 }
 
-export async function sendActivationLink(email: string, name: string) {
-  const token = await generateToken(email, "ACTIVATION");
-
-  void resend.emails.send({
-    from: "MyDent <hello@mydent.one>",
-    to: email,
-    subject: "MyDent - Account Activation",
-    react: Activation({
-      name,
-      url: `${env.URL}/api/auth/activate?token=${token}`,
-    }),
-  });
-}
-
-export async function activateAccount(email: string) {
-  await db.user.update({
-    where: { email },
-    data: {
-      emailVerified: DateTime.now().toJSDate(),
-    },
-  });
-}
-
 export async function auth() {
   const session = cookies().get("session")?.value;
-  return (await decrypt(session!)) as SessionUser;
+  return (await decrypt(session)) as SessionUser | null;
 }
 
 export async function logOut() {
@@ -78,7 +58,8 @@ export async function updateSession(request: NextRequest) {
     where: { id: parsed.id },
   });
 
-  if (!user || user.banned) return;
+  if (!user) return;
+  if (user.bannedAt ?? user.deletedAt ?? !user.activatedAt) return;
 
   const expires = DateTime.now().plus({ days: 30 }).toJSDate();
 
@@ -92,12 +73,19 @@ export async function updateSession(request: NextRequest) {
   return res;
 }
 
-export async function generateToken(
-  email: string,
-  type: TokenType,
+export async function generateToken({
+  tenantId,
+  email,
+  type,
   length = 64,
-  duration: DurationLike = { minutes: 15 },
-) {
+  duration = { minutes: 15 },
+}: {
+  tenantId: string;
+  email: string;
+  type: TokenType;
+  length?: number;
+  duration?: DurationLike;
+}) {
   const token = crypto
     .randomBytes(Math.ceil(length / 2))
     .toString("hex")
@@ -106,7 +94,7 @@ export async function generateToken(
   const expires = DateTime.now().plus(duration).toJSDate();
 
   const user = await db.user.findFirst({
-    where: { email },
+    where: { tenantId, profile: { email } },
   });
 
   if (!user) {
@@ -154,24 +142,25 @@ export async function consumeToken(
       throw new Error("Token expired");
     }
 
-    const user = (await tx.user.findFirst({
+    const user = await tx.user.findUnique({
       where: {
         id: existingToken.userId,
       },
       select: {
         id: true,
-        name: true,
-        email: true,
         role: true,
+        tenantId: true,
         profile: {
           select: {
+            id: true,
+            email: true,
+            avatar: true,
             firstName: true,
             lastName: true,
-            avatar: true,
           },
         },
       },
-    })) as SessionUser;
+    });
 
     await tx.token.delete({
       where: {
@@ -183,6 +172,13 @@ export async function consumeToken(
       throw new Error("User not found");
     }
 
-    return user;
+    return {
+      ...user.profile,
+      user: {
+        id: user.id,
+        role: user.role,
+        tenantId: user.tenantId,
+      },
+    };
   });
 }

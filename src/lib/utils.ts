@@ -115,3 +115,34 @@ export function constructMetadata({
     metadataBase: new URL("https://dent.paulgeorge.dev/"),
   };
 }
+
+export const routeTitles = {
+  "/dashboard": "Dashboard",
+  "/appointments": "Appointments",
+  "/staff": "Staff",
+  "/patients": "Patients",
+  "/treatments": "Treatments",
+  "/settings": "Settings",
+  "/user": "User profile",
+  "/profile": "Profile",
+};
+
+export function getPageTitle(path: string) {
+  const routeTitlesKeys = Object.keys(routeTitles);
+  const normalizedPath = path.endsWith("/") ? path.slice(0, -1) : path;
+
+  if (routeTitlesKeys.includes(normalizedPath)) {
+    return routeTitles[normalizedPath as keyof typeof routeTitles];
+  }
+
+  const segments = normalizedPath.split("/");
+  while (segments.length > 1) {
+    segments.pop();
+    const parentPath = segments.join("/");
+    if (routeTitlesKeys.includes(parentPath)) {
+      return routeTitles[parentPath as keyof typeof routeTitles];
+    }
+  }
+
+  return path.split("/").pop();
+}

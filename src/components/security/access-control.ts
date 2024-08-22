@@ -5,16 +5,14 @@ interface CheckAccess {
   adminsOnly?: boolean;
 }
 
-export default async function checkAccess({
-  adminsOnly,
-}: CheckAccess) {
+export default async function checkAccess({ adminsOnly }: CheckAccess) {
   const session = await auth();
 
-  if (session.role === "ADMIN") {
+  if (session?.user?.role === "ADMIN") {
     return;
   }
 
   if (adminsOnly) {
-    redirect("/home");
+    redirect("/");
   }
 }

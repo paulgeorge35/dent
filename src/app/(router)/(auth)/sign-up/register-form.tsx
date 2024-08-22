@@ -13,16 +13,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { type County } from "@prisma/client";
 import { useTransition } from "react";
-import { signUp } from "./actions";
+// import { signUp } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
 import { PasswordInput } from "@/components/password-input";
 
@@ -51,11 +44,6 @@ const schema = z
         description: "Email of the user",
       })
       .email("Invalid email"),
-    county: z.string({
-      required_error: "County is required",
-      invalid_type_error: "County must be a string",
-      description: "County of the user",
-    }),
     password: z
       .string({
         required_error: "Password is required",
@@ -105,16 +93,15 @@ export default function RegisterForm({ counties }: RegisterFormProps) {
       firstName: "",
       lastName: "",
       email: "",
-      county: "",
       password: "",
       confirm: "",
     },
   });
 
-  const onSubmit = form.handleSubmit(async (values: FormValues) => {
+  const onSubmit = form.handleSubmit(async (_values: FormValues) => {
     startTransition(async () => {
       try {
-        await signUp(values);
+        // await signUp(values);
       } catch (error) {
         if (error instanceof Error) {
           form.setError("root", {
@@ -161,31 +148,6 @@ export default function RegisterForm({ counties }: RegisterFormProps) {
               <FormItem className="col-span-1 w-full">
                 <FormLabel htmlFor={field.name}>Last name</FormLabel>
                 <Input id={field.name} {...field} placeholder="Doe" />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="county"
-            rules={{
-              required: "County is required",
-            }}
-            render={({ field }) => (
-              <FormItem className="col-span-2 w-full">
-                <FormLabel htmlFor={field.name}>County</FormLabel>
-                <Select onValueChange={field.onChange} required {...field}>
-                  <SelectTrigger>
-                    <SelectValue id="county" placeholder="Select a county" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {counties.map((county) => (
-                      <SelectItem key={county.id} value={county.name}>
-                        {county.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}

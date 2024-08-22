@@ -3,20 +3,22 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import interactionPlugin, {
   type EventResizeDoneArg,
   type DateClickArg,
 } from "@fullcalendar/interaction";
-import {
-  type EventContentArg,
-  type EventClickArg,
-  type DayHeaderContentArg,
-  type DateSelectArg,
-  type EventDropArg,
+import type {
+  EventContentArg,
+  EventClickArg,
+  DateSelectArg,
+  EventDropArg,
+  DatesSetArg,
+  EventSourceInput,
 } from "@fullcalendar/core/index.js";
 import { DateTime } from "luxon";
 import { cn } from "@/lib/utils";
-import type { Event, Patient } from "prisma/generated/zod";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -26,6 +28,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AppointmentDialog from "./appointment-dialog";
 import { useBoolean } from "react-hanger";
+import { useStore } from "@/hooks/use-store";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
+import {
+  renderEventContent,
+  formatDayHeader,
+  CalendarToolbar,
+  resourceLabelContent,
+} from "@/app/_components/calendar/util";
 
 const schema = z
   .object({
@@ -67,16 +79,49 @@ const schema = z
 
 export type AppointmentSchema = z.infer<typeof schema>;
 
+const selectedUserSchema = z.union([
+  z.string(),
+  z.literal("all"),
+  z.literal("me"),
+]);
+
 interface CalendarProps {
-  appointments: (Event & {
-    notified: boolean;
-    patient: Patient;
-  })[];
+  className?: string;
+  selected?: z.infer<typeof selectedUserSchema>;
 }
 
-export default function Calendar({ appointments }: CalendarProps) {
+export default function Calendar({ selected = "me" }: CalendarProps) {
+  const calendarRef = useRef<FullCalendar>(null);
+  const [period, setPeriod] = useState<"day" | "week">("day");
+  const [selectedUser, setSelectedUser] =
+    useState<z.infer<typeof selectedUserSchema>>(selected);
+  const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(
+    null,
+  );
+  const sidebar = useStore(useSidebarToggle, (state) => state);
+  const [, setRenderSeed] = useState(0);
+  const [initialView] = useState("timeGridWeek");
   const appoinmentDialog = useBoolean(false);
   const router = useRouter();
+  const { data: users } = api.tenant.calendar.useQuery({
+    selected: selectedUser,
+    dateRange,
+  });
+
+  useEffect(() => {
+    const calendar = calendarRef.current?.getApi();
+    if (!calendar) return;
+    if (selectedUser === "all") {
+      calendar.changeView("resourceTimelineDay");
+    } else {
+      calendar.changeView(period === "day" ? "timeGridDay" : "timeGridWeek");
+    }
+  }, [period, selectedUser]);
+
+  const appointments = useMemo(() => {
+    return users?.flatMap((user) => user.events) ?? [];
+  }, [users]);
+
   const { mutate } = api.appointment.update.useMutation({
     onMutate: (data) => {
       const appointment = appointments.find((app) => app.id === data.id);
@@ -142,10 +187,10 @@ export default function Calendar({ appointments }: CalendarProps) {
     const appointment = appointments.find((app) => app.id === arg.event.id);
     form.reset({
       id: arg.event.id,
-      patientId: appointment?.patient.id,
-      firstName: appointment?.patient.firstName,
-      lastName: appointment?.patient.lastName,
-      email: appointment?.patient.email ?? undefined,
+      patientId: appointment?.patient?.id,
+      firstName: appointment?.patient?.firstName,
+      lastName: appointment?.patient?.lastName,
+      email: appointment?.patient?.email ?? undefined,
       date: appointment?.date,
       allDay: arg.event.allDay,
       start: arg.event.start,
@@ -168,29 +213,6 @@ export default function Calendar({ appointments }: CalendarProps) {
     });
   };
 
-  const formatDayHeader = (arg: DayHeaderContentArg) => {
-    if (arg.view.type === "timeGridDay")
-      if (arg.isToday)
-        return <p className={cn("text-xs font-normal")}>Today</p>;
-      else
-        return (
-          <p className={cn("text-xs font-normal")}>
-            {DateTime.fromJSDate(arg.date).toFormat("ccc, LLL d")}
-          </p>
-        );
-    if (arg.view.type === "timeGridWeek")
-      return (
-        <p className={cn("text-xs font-normal", arg.isToday && "font-bold")}>
-          {DateTime.fromJSDate(arg.date).toFormat("ccc, LLL d")}
-        </p>
-      );
-    return (
-      <p className={cn("text-xs font-normal", arg.isToday && "font-bold")}>
-        {DateTime.fromJSDate(arg.date).toFormat("ccc")}
-      </p>
-    );
-  };
-
   const styleEvent = (arg: EventContentArg) => {
     const event = appointments.find((app) => app.id === arg.event.id);
     return cn(
@@ -198,27 +220,6 @@ export default function Calendar({ appointments }: CalendarProps) {
       "bg-teal-400 hover:bg-teal-600",
       (!event || !event.status) &&
         "bg-teal-400/20 hover:bg-teal-400/20 border-dashed border-border",
-    );
-  };
-
-  const renderEventContent = (arg: EventContentArg) => {
-    return (
-      <div>
-        <p className="font-semibold">{arg.event.title ?? "(New Event)"}</p>
-        {arg.event.allDay ? (
-          <p>All day</p>
-        ) : (
-          <p className="">
-            {arg.event.start
-              ? DateTime.fromJSDate(arg.event.start).toFormat("H:mm")
-              : null}
-            {arg.event.start && arg.event.end ? " - " : null}
-            {arg.event.end
-              ? DateTime.fromJSDate(arg.event.end).toFormat("H:mm")
-              : null}
-          </p>
-        )}
-      </div>
     );
   };
 
@@ -235,37 +236,104 @@ export default function Calendar({ appointments }: CalendarProps) {
     },
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderSeed(Math.random() * 1000000);
+    }, 300);
+  }, [sidebar?.isOpen, initialView]);
+
+  const memoizedAppointments: EventSourceInput = useMemo(() => {
+    return appointments.map((app) => ({
+      ...app,
+      title: app.patient?.firstName + " " + app.patient?.lastName,
+      start: app.start ?? undefined,
+      end: app.end ?? undefined,
+      resourceId: app.userId,
+      constraints: {
+        resourceIds: [app.userId],
+        businessHours: {
+          startTime: "18:00",
+          endTime: "10:00",
+        },
+      },
+    }));
+  }, [appointments]);
+
   return (
     <>
-      <AppointmentDialog
+      <CalendarToolbar
+        period={period}
+        selectedUser={selectedUser}
+        setPeriod={setPeriod}
+        calendarRef={calendarRef}
+        users={users}
+      />
+      {/* <AppointmentDialog
         open={appoinmentDialog.value}
         onOpenChange={(value) => appoinmentDialog.setValue(value)}
         form={form}
-      />
+      /> */}
       <FullCalendar
-        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+        ref={calendarRef}
+        schedulerLicenseKey="0654377132-fcs-1723569352"
+        plugins={[
+          dayGridPlugin,
+          timeGridPlugin,
+          interactionPlugin,
+          resourceTimeGridPlugin,
+          resourceTimelinePlugin,
+        ]}
         headerToolbar={{
-          left: "prev,next,today",
-          center: "title",
-          right: "dayGridMonth,timeGridWeek,timeGridDay",
+          left: "",
+          center: "",
+          right: "",
         }}
+        datesSet={useCallback((arg: DatesSetArg) => {
+          setDateRange((prevRange) => {
+            if (
+              prevRange?.start.getTime() === arg.start.getTime() &&
+              prevRange?.end.getTime() === arg.end.getTime()
+            ) {
+              return prevRange;
+            }
+            return { start: arg.start, end: arg.end };
+          });
+        }, [])}
+        datesAboveResources={true}
         dateClick={handleDateClick}
         select={handleSelect}
         eventDrop={handleDrop}
         eventClick={handleEventClick}
         eventResize={handleEventResize}
-        initialView="timeGridWeek"
+        initialView={initialView}
+        resources={users?.map((user) => ({
+          id: user.id,
+          title: user.profile.firstName + " " + user.profile.lastName,
+          businessHours: {
+            startTime: "10:00",
+            endTime: "18:00",
+            daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+          },
+          extendedProps: {
+            userId: user.id,
+            tenantId: user.tenantId,
+          },
+        }))}
+        resourceLabelContent={(arg) =>
+          resourceLabelContent(
+            users?.find(
+              (user) =>
+                user.id === (arg.resource.extendedProps.userId as string),
+            ),
+          )
+        }
         eventContent={renderEventContent}
         selectMirror
-        // unselectAuto={false}
+        unselectAuto={false}
         eventClassNames={styleEvent}
-        events={appointments.map((app) => ({
-          ...app,
-          title: app.patient.firstName + " " + app.patient.lastName,
-          start: app.start ?? undefined,
-          end: app.end ?? undefined,
-        }))}
+        events={memoizedAppointments}
         editable={true}
+        scrollTimeReset={false}
         slotDuration={{ minutes: 10 }}
         slotLabelInterval={{ hours: 1 }}
         slotLabelFormat={{
@@ -282,12 +350,14 @@ export default function Calendar({ appointments }: CalendarProps) {
           month: "numeric",
           day: "numeric",
         }}
-        buttonText={{
-          today: "Today",
-          month: "Month",
-          week: "Week",
-          day: "Day",
-        }}
+        // buttonText={{
+        //   today: "Today",
+        //   month: "Month",
+        //   week: "Week",
+        //   day: "Day",
+        //   resourceDayGridDay: "Room Day",
+        //   resourceTimelineDay: "All Dentists",
+        // }}
         dayCellClassNames={"hover:bg-blue-600/10"}
         navLinks={true}
         // locale={"ro-RO"}
@@ -298,12 +368,13 @@ export default function Calendar({ appointments }: CalendarProps) {
         nowIndicator={true}
         selectable={true}
         scrollTime={{ hour: DateTime.local().hour }}
-        // now={DateTime.local().toJSDate()}
-        views={{
-          dayGrid: {},
-          timeGrid: {},
-          week: {},
-          day: {},
+        now={DateTime.local().toJSDate()}
+        titleFormat={{
+          weekday: "short",
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+          omitCommas: true,
         }}
       />
     </>

@@ -12,7 +12,8 @@ import superjson from "superjson";
 import { ZodError } from "zod";
 
 import { db } from "@/server/db";
-import { auth } from "@/auth";
+import { auth, logOut } from "@/auth";
+import { redirect } from "next/navigation";
 
 /**
  * 1. CONTEXT
@@ -27,9 +28,7 @@ import { auth } from "@/auth";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = {
-    user: await auth(),
-  };
+  const session = await auth();
 
   return {
     db,
@@ -98,21 +97,55 @@ export const publicProcedure = t.procedure;
  * @see https://trpc.io/docs/procedures
  */
 
-const isAuthed = t.middleware(({ ctx, next }) => {
-  if (!ctx.session ?? !ctx.session.user) {
+const isAuthed = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+  const profile = await db.profile.findUnique({
+    where: { id: ctx.session.id },
+  });
+
+  if (!profile) {
+    void logOut();
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
   return next({
     ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session },
     },
   });
 });
 
 export const protectedProcedure = t.procedure.use(isAuthed);
 
+const isTenant = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  const user = await ctx.db.user.findUnique({
+    where: {
+      id: ctx.session.user.id,
+      deletedAt: null,
+      bannedAt: null,
+      activatedAt: { not: null },
+    },
+  });
+
+  if (!user) {
+    throw new TRPCError({ code: "FORBIDDEN" });
+  }
+  return next({
+    ctx: {
+      session: { ...ctx.session },
+    },
+  });
+});
+
+export const tenantProcedure = t.procedure.use(isAuthed).use(isTenant);
+
 const isAdmin = t.middleware(async ({ ctx, next }) => {
-  if (!ctx.session ?? !ctx.session.user) {
+  if (!ctx.session?.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   const user = await ctx.db.user.findUnique({
@@ -120,12 +153,12 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
   });
 
   if (!user) {
-    throw new TRPCError({ code: "FORBIDDEN" });
+    redirect("/");
   }
 
   return next({
     ctx: {
-      session: { ...ctx.session, user: ctx.session.user },
+      session: { ...ctx.session },
     },
   });
 });

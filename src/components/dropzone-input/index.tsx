@@ -1,11 +1,13 @@
-import { Upload } from "lucide-react";
+import { Trash2, Upload, UploadIcon } from "lucide-react";
 import Image from "next/image";
 import { type Accept, ErrorCode, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
+import { useState } from "react";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 import { cn, fileToBase64 } from "@/lib/utils";
+import type { Avatar } from "@/types/schema";
 
 const handlerFileUploadError = (error?: ErrorCode) => {
   switch (error) {
@@ -25,8 +27,8 @@ export interface DropzoneInputProps
     React.InputHTMLAttributes<HTMLInputElement>,
     "accept" | "value" | "onChange"
   > {
-  onChange: (value: string | null) => void;
-  value?: string | null;
+  onChange: (_value: Avatar) => void;
+  value?: Avatar;
   onClear?: () => void;
   accept?: Accept;
   maxFiles?: number;
@@ -34,7 +36,7 @@ export interface DropzoneInputProps
 }
 
 export default function DropzoneInput({
-  accept,
+  accept = { "image/*": [".jpeg", ".png"] },
   maxFiles = 1,
   maxSize = 5 * 1024 * 1024,
   value,
@@ -42,6 +44,11 @@ export default function DropzoneInput({
   onChange,
   ...rest
 }: DropzoneInputProps) {
+  const [fileInfo, setFileInfo] = useState<{
+    extension: string;
+    contentType: string;
+  } | null>(null);
+
   const {
     getRootProps,
     getInputProps,
@@ -58,10 +65,16 @@ export default function DropzoneInput({
           rejectedFiles[0]?.errors[0]?.code as ErrorCode | undefined,
         ),
       }),
-    onDrop: (acceptedFiles) => {
+    onDrop: (acceptedFiles: File[]) => {
       if (maxFiles === 1) {
         const file = acceptedFiles[0];
-        void fileToBase64(file as File).then((base64) => onChange(base64));
+        if (!file) return;
+        const extension = file.name.split(".").pop() ?? "";
+        const contentType = file.type;
+        setFileInfo({ extension, contentType });
+        void fileToBase64(file).then((base64) =>
+          onChange({ extension, contentType, base64 }),
+        );
         return;
       }
     },
@@ -87,22 +100,30 @@ export default function DropzoneInput({
           <div className=" flex flex-col items-center justify-center gap-4">
             <Image
               alt="Profile"
-              src={value}
+              src={typeof value === "string" ? value : value.base64}
               height={200}
               width={200}
               style={{ objectFit: "cover" }}
-              className="aspect-square rounded-full bg-cover bg-center"
+              className="aspect-square rounded-sm bg-cover bg-center"
             />
-            <div
-              className={cn(buttonVariants({}), "cursor-pointer")}
+            {fileInfo && (
+              <p className="text-xs text-muted-foreground">
+                {fileInfo.extension.toUpperCase()} - {fileInfo.contentType}
+              </p>
+            )}
+            <Button
+              variant="expandIcon"
+              Icon={Trash2}
+              iconPlacement="right"
               onClick={(e) => {
                 e.stopPropagation();
                 if (onClear) onClear();
                 else onChange(null);
+                setFileInfo(null);
               }}
             >
               Remove
-            </div>
+            </Button>
           </div>
         </div>
       </div>
@@ -157,7 +178,16 @@ export default function DropzoneInput({
           </p>
         </span>
       )}
-      <div className={buttonVariants({})}>Choose File</div>
+      <Button
+        variant="expandIcon"
+        Icon={UploadIcon}
+        iconPlacement="right"
+        onClick={(e) => {
+          e.preventDefault();
+        }}
+      >
+        Choose File
+      </Button>
     </div>
   );
 }

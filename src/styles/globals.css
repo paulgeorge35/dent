@@ -75,6 +75,9 @@
     --accent: 210 40% 96.1%;
     --accent-foreground: 222.2 47.4% 11.2%;
 
+    --link: 217 91% 53%;
+    --link-hover: 200 100% 43%;
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
@@ -107,6 +110,9 @@
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
 
+    --link: 217 91% 53%;
+    --link-hover: 200 100% 43%;
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
@@ -135,11 +141,30 @@
 }
 
 .fc-button {
-  @apply m-0 h-[36px] border-none bg-primary px-3 py-1 text-sm text-primary-foreground hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-0 !important;
+  @apply inline-flex h-10 items-center justify-center whitespace-nowrap rounded-md px-8 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none md:h-9 md:px-4 md:py-2 !important;
+}
+
+.fc-button-primary {
+  @apply border border-input bg-background text-secondary-foreground shadow-sm hover:bg-accent hover:text-accent-foreground !important;
 }
 
 .fc-button-group {
   @apply space-x-0 !important;
+}
+
+.fc-button-group .fc-button:not(:first-child) {
+  @apply rounded-l-none border-l-0 !important;
+}
+
+.fc-button-group .fc-button:not(:last-child) {
+  @apply rounded-r-none !important;
+}
+
+.fc-toolbar-chunk div {
+  @apply flex grow items-center justify-between !important;
+  .fc-toolbar-title {
+    @apply mr-4 !important;
+  }
 }
 
 .fc-toolbar-chunk {
@@ -147,19 +172,15 @@
 }
 
 .fc-day-today {
-  @apply bg-yellow-400/10 !important;
+  @apply bg-secondary !important;
 }
 
 .fc-timegrid-divider {
   @apply bg-border !important;
 }
 
-.fc-today-button:disabled {
-  @apply cursor-not-allowed bg-primary/90 !important;
-}
-
-.fc-today-button.fc-button-primary:not(.fc-today-button:disabled) {
-  @apply bg-primary transition-colors hover:bg-primary/90 !important;
+.fc-today-button {
+  @apply text-blue-600 disabled:cursor-not-allowed disabled:bg-muted !important;
 }
 
 .fc-theme-standard td,
@@ -169,7 +190,7 @@
 }
 
 .fc-button.fc-button-primary.fc-button-active {
-  @apply bg-primary/90 !important;
+  @apply bg-muted !important;
 }
 
 .fc-toolbar-title {
@@ -181,16 +202,16 @@
 }
 
 .fc.fc-media-screen.fc-direction-ltr.fc-theme-standard {
-  @apply w-full md:min-w-[450px] !important;
+  @apply w-full grow overflow-y-auto md:min-w-[450px] !important;
 }
 
 .fc-highlight {
   @apply bg-blue-600/10 !important;
 }
 
-.fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
+/* .fc-header-toolbar.fc-toolbar.fc-toolbar-ltr {
   @apply flex flex-col-reverse items-start justify-start gap-2 md:flex-row md:items-center md:justify-between !important;
-}
+} */
 
 /* Fullcalendar visualização em lista */
 .fc .fc-list-sticky .fc-list-day > th {
@@ -253,3 +274,19 @@
 .fc-popover-body {
   @apply bg-transparent !important;
 }
+
+.fc-header-toolbar,
+.fc-toolbar,
+.fc-toolbar-ltr {
+  @apply !hidden;
+}
+
+/* .fc-non-business {
+  @apply pattern-diagonal-lines pattern-blue-500 pattern-bg-white 
+  pattern-size-6 pattern-opacity-20 bg-red-200;
+} */
+
+/* .fc-timegrid-col,
+.fc-resource {
+  @apply w-[500px] !important;
+} */
