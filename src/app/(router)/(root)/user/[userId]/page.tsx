@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 
 import AvatarComponent from "@/components/avatar-component";
 import { Shell } from "@/components/shell";
+import { DateTime } from "luxon";
 
 export async function generateMetadata({
   params,
@@ -67,6 +68,11 @@ export default async function User({ params: { userId } }: UserPageProps) {
           <p className="text-center text-sm font-extralight text-muted-foreground">
             {user.profile.phone}
           </p>
+        )}
+        {user.lastLoginAt && (
+          <span className="text-xs">
+            Last active {DateTime.fromJSDate(user.lastLoginAt).toRelative()}
+          </span>
         )}
         <Separator className="my-4" />
       </section>

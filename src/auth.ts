@@ -44,6 +44,13 @@ export async function setSession(user: SessionUser, duration: DurationLike) {
   const expires = DateTime.now().plus(duration).toJSDate();
   const session = await encrypt(user, expires);
 
+  if (user.user?.id) {
+    await db.user.update({
+      where: { id: user.user.id },
+      data: { lastLoginAt: DateTime.now().toJSDate() },
+    });
+  }
+
   cookies().set("session", session, { expires, httpOnly: true });
 }
 
@@ -55,11 +62,16 @@ export async function updateSession(request: NextRequest) {
   if (!parsed) return;
 
   const user = await db.user.findFirst({
-    where: { id: parsed.id },
+    where: { profile: { id: parsed.id } },
   });
 
   if (!user) return;
   if (user.bannedAt ?? user.deletedAt ?? !user.activatedAt) return;
+
+  await db.user.update({
+    where: { id: user.id },
+    data: { lastLoginAt: DateTime.now().toJSDate() },
+  });
 
   const expires = DateTime.now().plus({ days: 30 }).toJSDate();
 
