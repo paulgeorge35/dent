@@ -91,7 +91,7 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
                 size: metadata.size,
                 avatar: metadata.avatar,
                 planId: plan.id,
-                activeSubscription: subscription.status === "active",
+                activeSubscription: subscription.status === "active" || subscription.status === "trialing",
                 stripeSubscriptionId: subscription.id,
               },
             },
@@ -153,7 +153,7 @@ const updateTenantSubscription = async (
       profile: {
         update: {
           planId: plan.id,
-          activeSubscription: subscription.status === "active",
+          activeSubscription: subscription.status === "active" || subscription.status === "trialing",
           stripeSubscriptionId: subscription.id,
         },
       },
