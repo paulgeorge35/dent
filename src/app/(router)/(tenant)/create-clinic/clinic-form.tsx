@@ -23,15 +23,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Info } from "lucide-react";
 import DropzoneInput from "@/components/dropzone-input";
-import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import type { StripePlan } from "@/types";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
+import { api } from "@/trpc/react";
 
 export const metadata = constructMetadata({
   page: "Create Clinic",
@@ -56,6 +57,8 @@ type FormValues = z.infer<typeof schema>;
 
 export default function ClinicForm() {
   const router = useRouter();
+  const { data: profile } = api.user.profile.useQuery();
+
   const [products, setProducts] = useState<StripePlan[]>([]);
   const [pending, startTransition] = useTransition();
 
@@ -259,6 +262,14 @@ export default function ClinicForm() {
             </FormItem>
           )}
         />
+        {profile?.stripeFreeTrialUsed === false && (
+          <p className="horizontal col-span-2 items-center justify-center text-xs text-muted-foreground">
+            <Info className="mr-2 size-4" />
+            Get started with a
+            <strong className="ml-[0.5em]">14 day free trial</strong>. Cancel
+            before the trial ends and you won&apos;t be charged.
+          </p>
+        )}
         <Button
           variant="expandIcon"
           Icon={ArrowRight}
@@ -268,6 +279,23 @@ export default function ClinicForm() {
         >
           Go to payment
         </Button>
+        <p className="col-span-2 text-center text-xs text-muted-foreground">
+          By clicking on <strong>Go to payment</strong>, you agree to our{" "}
+          <Link
+            className="font-medium hover:underline"
+            href="https://mydent.one/en/tos"
+          >
+            Terms of Service
+          </Link>{" "}
+          and{" "}
+          <Link
+            className="font-medium hover:underline"
+            href="https://mydent.one/en/privacy-policy"
+          >
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </form>
     </Form>
   );

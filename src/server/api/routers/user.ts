@@ -51,6 +51,15 @@ export type UserComplete = Prisma.UserGetPayload<{
 }>;
 
 export const userRouter = createTRPCRouter({
+  profile: protectedProcedure.query(async ({ ctx }) => {
+    const profile = await ctx.db.profile.findUnique({
+      where: { id: ctx.session.id },
+      cacheStrategy: {
+        ttl: 10,
+      },
+    });
+    return profile;
+  }),
   register: publicProcedure
     .input(
       z.object({
