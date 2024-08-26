@@ -263,11 +263,13 @@ export default function ClinicForm() {
           )}
         />
         {profile?.stripeFreeTrialUsed === false && (
-          <p className="horizontal col-span-2 items-center justify-center text-xs text-muted-foreground">
+          <p className="horizontal col-span-2 items-start justify-center text-xs text-muted-foreground bg-muted p-2 rounded-lg">
             <Info className="mr-2 size-4" />
-            Get started with a
-            <strong className="ml-[0.5em]">14 day free trial</strong>. Cancel
-            before the trial ends and you won&apos;t be charged.
+            <p>
+              Get started with a
+              <span className="ml-[0.5em] font-bold">14 day free trial</span>.
+              Cancel before the trial ends and you won&apos;t be charged.
+            </p>
           </p>
         )}
         <Button
@@ -279,7 +281,7 @@ export default function ClinicForm() {
         >
           Go to payment
         </Button>
-        <p className="col-span-2 text-center text-xs text-muted-foreground">
+        <p className="col-span-2 text-balance text-center text-xs text-muted-foreground">
           By clicking on <strong>Go to payment</strong>, you agree to our{" "}
           <Link
             className="font-medium hover:underline"
