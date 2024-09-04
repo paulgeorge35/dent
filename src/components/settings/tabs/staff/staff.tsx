@@ -102,7 +102,14 @@ const ActiveUsers = async ({ users }: ActiveUsersProps) => {
                     width={32}
                     height={32}
                   />
-                  {user.profile.firstName} {user.profile.lastName}
+                  <p>
+                    {user.profile.firstName} {user.profile.lastName}
+                  </p>
+                  {user.id === session.user!.id && (
+                    <span className="rounded-full border border-border bg-muted px-2 text-sm text-muted-foreground">
+                      You
+                    </span>
+                  )}
                 </TableCell>
                 <TableCell>{user.profile.email}</TableCell>
                 <TableCell>
