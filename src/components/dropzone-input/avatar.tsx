@@ -1,6 +1,4 @@
-import { Upload } from "lucide-react";
-import Image from "next/image";
-import { type Accept, ErrorCode, useDropzone } from "react-dropzone";
+import { ErrorCode, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
 import { useState, useRef } from "react";
 import { Separator } from "@/components/ui/separator";
@@ -9,7 +7,6 @@ import { api } from "@/trpc/react";
 import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
 import AvatarComponent from "../shared/avatar-component";
-import { s } from "node_modules/@fullcalendar/core/internal-common";
 
 const handlerFileUploadError = (error?: ErrorCode) => {
   switch (error) {
@@ -155,7 +152,7 @@ export function AvatarUpload({
           height={100}
           className="aspect-square size-[100px] bg-cover bg-center text-2xl"
           isLoading={isUploading || isFetching}
-          fixedColor
+          fixedColor={fixedColor}
         />
         <Separator orientation="vertical" className="h-8 shrink-0" />
         <Button

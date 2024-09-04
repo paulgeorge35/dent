@@ -78,7 +78,7 @@ export default function AvatarComponent({
         />
       ) : (
         <AvatarFallback
-          className={cn("text-center", { randomColor: !fixedColor })}
+          className={cn("text-center", !fixedColor ? randomColor : "")}
         >
           {initials(fallback)}
         </AvatarFallback>
