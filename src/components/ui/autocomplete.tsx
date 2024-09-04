@@ -12,34 +12,38 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-export type Option = Record<"value" | "label", string> & Record<string, string>;
+export type Option<T> = {
+  label: string;
+  value: T;
+};
 
-type AutoCompleteProps = {
-  options: Option[];
+type AutoCompleteProps<T> = {
+  search: string;
+  setSearch: (search: string) => void;
+  options: Option<T>[];
   emptyMessage: string;
-  value?: Option;
-  onValueChange?: (value: Option) => void;
+  value?: Option<T>;
+  onValueChange?: (value: Option<T>) => void;
   isLoading?: boolean;
   disabled?: boolean;
   placeholder?: string;
+  className?: string;
 };
 
-export const AutoComplete = ({
+export const AutoComplete = <T,>({
+  search,
+  setSearch,
   options,
   placeholder,
   emptyMessage,
   value,
   onValueChange,
-  disabled,
   isLoading = false,
-}: AutoCompleteProps) => {
+  className,
+}: AutoCompleteProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
-
   const [isOpen, setOpen] = useState(false);
-  const [selected, setSelected] = useState<Option | undefined>(value);
-  const [inputValue, setInputValue] = useState<string | undefined>(
-    value?.label ?? "",
-  );
+  const [selected, setSelected] = useState<Option<T> | undefined>(value);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLDivElement>) => {
@@ -73,13 +77,11 @@ export const AutoComplete = ({
 
   const handleBlur = useCallback(() => {
     setOpen(false);
-    setInputValue(selected?.label);
-  }, [selected]);
+    setSearch(selected?.label ?? "");
+  }, [selected, setSearch]);
 
   const handleSelectOption = useCallback(
-    (selectedOption: Option) => {
-      setInputValue(selectedOption.label);
-
+    (selectedOption: Option<T>) => {
       setSelected(selectedOption);
       onValueChange?.(selectedOption);
 
@@ -93,20 +95,23 @@ export const AutoComplete = ({
   );
 
   return (
-    <CommandPrimitive onKeyDown={handleKeyDown}>
+    <CommandPrimitive onKeyDown={handleKeyDown} className={cn("", className)}>
       <div>
         <CommandInput
           ref={inputRef}
-          value={inputValue}
-          onValueChange={isLoading ? undefined : setInputValue}
+          value={search}
+          onValueChange={setSearch}
           onBlur={handleBlur}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          disabled={disabled}
           className="text-base"
         />
       </div>
-      <div className="relative mt-1">
+      <div
+        className={cn("relative mt-1", {
+          "mt-0": !isOpen,
+        })}
+      >
         <div
           className={cn(
             "absolute top-0 z-10 w-full rounded-xl bg-white outline-none animate-in fade-in-0 zoom-in-95",
@@ -123,11 +128,11 @@ export const AutoComplete = ({
             ) : null}
             {options.length > 0 && !isLoading ? (
               <CommandGroup>
-                {options.map((option) => {
+                {options.map((option, index) => {
                   const isSelected = selected?.value === option.value;
                   return (
                     <CommandItem
-                      key={option.value}
+                      key={index}
                       value={option.label}
                       onMouseDown={(event) => {
                         event.preventDefault();

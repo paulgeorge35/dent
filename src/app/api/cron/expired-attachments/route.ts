@@ -7,8 +7,7 @@ import { DeleteObjectCommand, S3 } from "@aws-sdk/client-s3";
 
 export async function GET() {
   try {
-    console.log(`[${DateTime.now().toISO()}] - Starting cron job`);
-    const attachments = await db.attachment.findMany({
+    const files = await db.file.findMany({
       where: {
         confirmed: false,
         createdAt: {
@@ -27,16 +26,16 @@ export async function GET() {
     });
 
     await Promise.all(
-      attachments.map(async (attachment) => {
+      files.map(async (file) => {
         const command = new DeleteObjectCommand({
           Bucket: env.R2_BUCKET_NAME,
-          Key: attachment.key,
+          Key: file.key,
         });
         await s3.send(command);
       }),
     );
 
-    const deletedAttachments = await db.attachment.deleteMany({
+    const deletedAttachments = await db.file.deleteMany({
       where: {
         confirmed: false,
         createdAt: {
@@ -45,7 +44,7 @@ export async function GET() {
       },
     });
     console.log(
-      `[${DateTime.now().toISO()}] - Deleted ${deletedAttachments.count} expired attachments`,
+      `[${DateTime.now().toISO()}] - Deleted ${deletedAttachments.count} expired files`,
     );
     return new Response("OK", { status: 200 });
   } catch (error) {

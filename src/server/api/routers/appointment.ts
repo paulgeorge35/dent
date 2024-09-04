@@ -1,38 +1,12 @@
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, tenantProcedure } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { type EventChangeAction } from "@/types";
 import { type Prisma } from "@prisma/client";
-import { EventTypeSchema } from "prisma/generated/zod";
-
-const patientCreateInput = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string().email().nullish(),
-  phone: z.string().nullish(),
-  address: z.string().nullish(),
-  city: z.string().nullish(),
-  county: z.string().nullish(),
-  zipCode: z.string().nullish(),
-  smsNotifications: z.boolean().default(false),
-  emailNotifications: z.boolean().default(false),
-});
-
-const appointmentCreateInput = z.object({
-  title: z.string().default("Appointment"),
-  description: z.string().nullish(),
-  date: z.date(),
-  allDay: z.boolean().default(false),
-  start: z.date().nullish(),
-  end: z.date().nullish(),
-  patient: z.union([
-    z.object({
-      id: z.string(),
-    }),
-    patientCreateInput,
-  ]),
-});
+import quizJsonSchema from "@/lib/quiz-questions.json";
+import { appointmentCreateInput } from "@/types/schema";
+import { env } from "@/env";
 
 const appointmentUpdateInput = z.object({
   id: z.string(),
@@ -44,66 +18,137 @@ const appointmentUpdateInput = z.object({
 });
 
 export const appointmentRouter = createTRPCRouter({
-  myEvents: protectedProcedure
-    .input(
-      z.object({
-        type: EventTypeSchema.optional().default("APPOINTMENT"),
-      }),
-    )
-    .query(async ({ ctx, input }) => {
-      const userId = ctx.session.user!.id;
-
-      const appointments = await ctx.db.event.findMany({
-        where: {
-          userId,
-          type: input.type,
+  get: tenantProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const event = await ctx.db.event.findUnique({
+      where: { id: input },
+      include: {
+        patient: true,
+        visits: {
+          include: {
+            service: true,
+          },
         },
-        include: {
-          patient: true,
+        user: {
+          select: {
+            profile: {
+              select: {
+                title: true,
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
         },
-      });
+      },
+      cacheStrategy: {
+        ttl: 5,
+      },
+    });
 
-      return appointments;
-    }),
-
-  create: protectedProcedure
+    return event;
+  }),
+  create: tenantProcedure
     .input(appointmentCreateInput)
     .mutation(
       async ({
         ctx,
-        input: { patient, title, allDay, description, date, ...input },
+        input: { patient: patientInput, serviceId, quiz, files, ...input },
       }) => {
         const userId = ctx.session.user!.id;
         const tenantId = ctx.session.user!.tenantId;
 
-        await ctx.db.$transaction(async (tx) => {
-          return await tx.event.create({
+        const patientId = await ctx.db.$transaction(async (tx) => {
+          if (patientInput === undefined) return undefined;
+
+          if ("id" in patientInput) {
+            return patientInput.id;
+          }
+
+          const patient = await tx.patient.create({
             data: {
-              title,
-              description,
-              date,
-              allDay,
-              user: { connect: { id: userId } },
-              tenant: { connect: { id: tenantId } },
-              ...input,
-              patient: {
-                connect: "id" in patient ? { id: patient.id } : undefined,
-                create:
-                  "id" in patient
-                    ? undefined
-                    : {
-                        ...patient,
-                        tenantId,
-                        userId,
-                      },
-              },
+              ...patientInput,
+              tenantId,
+              userId,
             },
           });
+
+          return patient.id;
+        });
+
+        return await ctx.db.$transaction(async (tx) => {
+          const service = await tx.service.findUnique({
+            where: { id: serviceId },
+            cacheStrategy: {
+              ttl: env.DEFAULT_TTL,
+              swr: env.DEFAULT_SWR,
+            },
+          });
+
+          if (!service) {
+            throw new TRPCError({
+              code: "NOT_FOUND",
+              message: "Service not found",
+            });
+          }
+
+          const treatment = await tx.treatment.create({
+            data: {
+              price: service.unit_price,
+            },
+          });
+
+          const event = await tx.event.create({
+            data: {
+              ...input,
+              userId,
+              tenantId,
+              patientId,
+              initiator: "USER",
+              visits: {
+                create: {
+                  serviceId: service.id,
+                  treatmentId: treatment.id,
+                },
+              },
+              quiz: quiz
+                ? {
+                    create: {
+                      quiz: quizJsonSchema as unknown as Prisma.JsonObject,
+                      answers: quiz?.answers,
+                      patient: {
+                        connect: {
+                          id: patientId,
+                        },
+                      },
+                    },
+                  }
+                : undefined,
+            },
+          });
+
+          if (files) {
+            await tx.file.updateMany({
+              where: {
+                key: {
+                  in: files.map((file) => file.key),
+                },
+              },
+              data: {
+                eventId: event.id,
+                tenantId,
+                userId,
+                patientId,
+                confirmed: true,
+              },
+            });
+          }
+
+          return event;
         });
       },
     ),
 
-  update: protectedProcedure
+  update: tenantProcedure
     .input(appointmentUpdateInput)
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user!.id;
@@ -114,6 +159,10 @@ export const appointmentRouter = createTRPCRouter({
 
         const appointment = await tx.event.findFirst({
           where: { id: id },
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
+          },
         });
 
         if (!appointment) {
@@ -188,5 +237,32 @@ export const appointmentRouter = createTRPCRouter({
           },
         });
       });
+    }),
+
+  count: tenantProcedure
+    .input(
+      z.object({
+        date: z.date(),
+        userId: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { date, userId } = input;
+
+      const count = await ctx.db.event.count({
+        where: {
+          type: "APPOINTMENT",
+          status: "CONFIRMED",
+          patientId: {
+            not: null,
+          },
+          date: {
+            equals: date,
+          },
+          userId,
+        },
+      });
+
+      return count;
     }),
 });

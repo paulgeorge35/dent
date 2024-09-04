@@ -55,15 +55,21 @@ const Step = ({
           className={cn(
             "box-border flex size-10 items-center justify-center rounded-full border bg-white text-muted-foreground transition-[background-color,border-color] duration-300 ease-in-out",
             {
-              "my-1 size-8 bg-blue-500 text-white transition-[background-color,border-color] duration-300 ease-in-out": isActive,
-              "bg-green-600 text-white transition-[background-color,border-color] duration-300 ease-in-out": isCompleted,
+              "my-1 size-8 bg-blue-500 text-white transition-[background-color,border-color] duration-300 ease-in-out":
+                isActive,
+              "bg-green-600 text-white transition-[background-color,border-color] duration-300 ease-in-out":
+                isCompleted,
             },
           )}
         >
           {isCompleted ? (
             <Check className="size-5" />
           ) : (
-            <Icon className="size-5" />
+            <Icon
+              className={cn("size-5 stroke-muted-foreground stroke-2", {
+                "stroke-white": isActive,
+              })}
+            />
           )}
         </span>
         <span className="text-xs text-muted-foreground">

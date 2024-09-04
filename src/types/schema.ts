@@ -4,12 +4,21 @@ import {
   TenantSchema,
   TenantProfileSchema,
   SpecializationSchema,
+  EventTypeSchema,
+  EventStatusSchema,
+  EventInitiatorSchema,
+  StatusSchema,
+  AvatarSchema,
 } from "prisma/generated/zod";
 import { z } from "zod";
 
 export const userCompleteSchema = UserSchema.merge(
   z.object({
-    profile: ProfileSchema,
+    profile: ProfileSchema.merge(
+      z.object({
+        avatar: AvatarSchema.nullable(),
+      }),
+    ),
     specialization: SpecializationSchema.nullable(),
   }),
 );
@@ -41,13 +50,20 @@ export const tenantAccountSchema = UserSchema.merge(
   z.object({
     tenant: TenantSchema.merge(
       z.object({
-        profile: TenantProfileSchema,
+        profile: TenantProfileSchema.merge(
+          z.object({
+            avatar: AvatarSchema.nullable(),
+          }),
+        ),
         users: z.array(
           z.object({
             profile: ProfileSchema.pick({
               firstName: true,
-              avatar: true,
-            }),
+            }).merge(
+              z.object({
+                avatar: AvatarSchema.nullable(),
+              }),
+            ),
           }),
         ),
       }),
@@ -70,8 +86,11 @@ export const invitationAccountSchema = z.object({
           z.object({
             profile: ProfileSchema.pick({
               firstName: true,
-              avatar: true,
-            }),
+            }).merge(
+              z.object({
+                avatar: AvatarSchema.nullable(),
+              }),
+            ),
           }),
         ),
       }),
@@ -84,7 +103,7 @@ export const sessionUserSchema = z.object({
   email: z.string(),
   firstName: z.string(),
   lastName: z.string(),
-  avatar: z.string().nullable(),
+  avatar: AvatarSchema.nullable(),
   user: z
     .object({
       id: z.string(),
@@ -126,3 +145,91 @@ export const avatarSchema = z
   .nullable();
 
 export type Avatar = z.infer<typeof avatarSchema>;
+
+export const fileCreateInputSchema = z.object({
+  key: z.string(),
+  name: z.string(),
+  extension: z.string(),
+  contentType: z.string(),
+  size: z.number(),
+});
+
+export const patientSchema = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  gender: z.string().optional(),
+  dob: z.date().optional(),
+  email: emailSchema,
+  phone: z.string().optional(),
+  city: z.string().optional(),
+  county: z.string().optional(),
+  status: StatusSchema.optional().default("ACTIVE"),
+  smsNotifications: z.boolean().optional(),
+  emailNotifications: z.boolean().optional(),
+});
+
+const quizCreateInput = z
+  .object({
+    answers: z.array(z.number().nullish()).transform((val) => val ?? []),
+  })
+  .optional()
+  .transform((val) => ({
+    ...val,
+    answers: val?.answers.map((answer) => answer ?? -1),
+  }));
+
+const appointmentCreateInputBase = z.object({
+  title: z.string().default("Appointment"),
+  description: z
+    .string()
+    .max(255, "Description must be less than 255 characters")
+    .optional(),
+  date: z.date(),
+  allDay: z.boolean().default(false),
+  start: z.date().optional(),
+  end: z.date().optional(),
+  type: EventTypeSchema.optional().default("APPOINTMENT"),
+  status: EventStatusSchema.optional().default("CREATED"),
+  initiator: EventInitiatorSchema.optional().default("SYSTEM"),
+  serviceId: z.string({ required_error: "Service is required" }),
+  quiz: quizCreateInput,
+  files: z.array(fileCreateInputSchema).optional(),
+});
+
+export const appointmentCreateInput = z
+  .object({
+    ...appointmentCreateInputBase.shape,
+    patient: z.union([
+      z.object({
+        id: z.string(),
+      }),
+      patientSchema,
+    ]),
+  })
+  .superRefine(({ start, end, allDay }, ctx) => {
+    if (start && end && start >= end) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Event must end after it starts",
+        path: ["date"],
+      });
+    }
+    if (!allDay && !start) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Time is required",
+        path: ["date"],
+      });
+    }
+    if (!allDay && !end) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Time is required",
+        path: ["date"],
+      });
+    }
+  });
+
+export const medicalCheckupSchema = z.object({});
+
+export type MedicalCheckupSchema = z.infer<typeof medicalCheckupSchema>;

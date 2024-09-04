@@ -13,7 +13,7 @@ const firstPaymentMetadataSchema = z.union([
     userId: z.string({ required_error: "User ID is required" }),
     email: z.string({ required_error: "Email is required" }),
     name: z.string({ required_error: "Name is required" }),
-    avatar: z.string().nullish(),
+    avatarId: z.string().nullish(),
     planId: z.string({ required_error: "Plan ID is required" }),
     size: z.string().optional(),
   }),
@@ -89,9 +89,13 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
               create: {
                 name: metadata.name,
                 size: metadata.size,
-                avatar: metadata.avatar,
+                avatar: metadata.avatarId ? {
+                  connect: { id: metadata.avatarId },
+                } : undefined,
                 planId: plan.id,
-                activeSubscription: subscription.status === "active" || subscription.status === "trialing",
+                activeSubscription:
+                  subscription.status === "active" ||
+                  subscription.status === "trialing",
                 stripeSubscriptionId: subscription.id,
               },
             },
@@ -153,7 +157,9 @@ const updateTenantSubscription = async (
       profile: {
         update: {
           planId: plan.id,
-          activeSubscription: subscription.status === "active" || subscription.status === "trialing",
+          activeSubscription:
+            subscription.status === "active" ||
+            subscription.status === "trialing",
           stripeSubscriptionId: subscription.id,
         },
       },

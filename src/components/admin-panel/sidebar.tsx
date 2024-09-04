@@ -6,12 +6,12 @@ import { Menu } from "@/components/admin-panel/menu";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
 import Image from "next/image";
-import { Shell } from "../shell";
-import AccountButton from "../account-button";
+import { Shell } from "@/components/layout/shell";
+import AccountButton from "@/components/layout/account-button";
 import type { SessionUser, TenantAccount } from "@/types/schema";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { Plus } from "lucide-react";
-import { Separator } from "../ui/separator";
+import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 
 export function Sidebar({

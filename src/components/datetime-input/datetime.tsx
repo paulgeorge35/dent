@@ -380,7 +380,7 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        "flex items-center rounded-md border bg-background shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        "flex grow items-center rounded-md border bg-background shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
       )}
     >
       <Popover open={props.isOpen} onOpenChange={props.onOpenChange}>
@@ -389,7 +389,7 @@ const DateTimePicker = React.forwardRef<
             {...buttonProps}
             variant="ghost"
             color="default"
-            className="border-r"
+            className={cn("border-r", buttonProps.className)}
             disabled={props.isDisabled}
             onClick={() => {
               state.setOpen(true);

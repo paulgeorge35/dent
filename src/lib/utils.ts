@@ -79,7 +79,7 @@ export const fileToBase64 = (file: File): Promise<string> =>
   });
 
 export const initials = (name: string): string => {
-  const [first, last] = name.split(" ");
+  const [first, last] = name.toUpperCase().split(" ");
   return (first?.charAt(0) ?? "") + (last?.charAt(0) ?? "");
 };
 
@@ -126,6 +126,7 @@ export const routeTitles = {
   "/user": "User profile",
   "/profile": "Profile",
   "/specializations": "Specializations",
+  "/stocks": "Stocks",
 };
 
 export function getPageTitle(path: string) {
@@ -147,3 +148,7 @@ export function getPageTitle(path: string) {
 
   return path.split("/").pop();
 }
+
+export const zeroPad = (num: number, places = 4) => {
+  return String(num).padStart(places, "0");
+};

@@ -1,7 +1,7 @@
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
-import InvitePageContent from "@/components/InvitePageContent";
-import { Shell } from "@/components/shell";
+import InvitePageContent from "@/components/auth/invite-content";
+import { Shell } from "@/components/layout/shell";
 
 export default async function InvitePage({
   params,

@@ -166,6 +166,50 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = "FormMessage";
 
+const FormFieldCompact = <
+  TFieldValues extends FieldValues = FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
+  label,
+  description,
+  className,
+  render,
+  required,
+  ...props
+}: {
+  label?: React.ReactNode;
+  description?: React.ReactNode;
+  className?: string;
+  required?: boolean;
+} & ControllerProps<TFieldValues, TName>) => {
+  return (
+    <FormFieldContext.Provider value={{ name: props.name }}>
+      <Controller
+        {...props}
+        render={({ field, fieldState, formState }) => (
+          <FormItem className={className}>
+            {!!label && (
+              <FormLabel>
+                {label}
+                {required === false && (
+                  <span className="ml-1 font-light text-muted-foreground">
+                    (Optional)
+                  </span>
+                )}
+              </FormLabel>
+            )}
+            <FormControl>
+              {render({ field, fieldState, formState })}
+            </FormControl>
+            {!!description && <FormDescription>{description}</FormDescription>}
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </FormFieldContext.Provider>
+  );
+};
+
 export {
   useFormField,
   Form,
@@ -175,4 +219,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  FormFieldCompact,
 };

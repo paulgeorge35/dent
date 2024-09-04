@@ -15,6 +15,8 @@ export const env = createEnv({
         "You forgot to change the default URL",
       ),
     DIRECT_DATABASE_URL: z.string().url(),
+    DEFAULT_TTL: z.coerce.number().int().positive().default(30),
+    DEFAULT_SWR: z.coerce.number().int().positive().default(60),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -35,6 +37,7 @@ export const env = createEnv({
     R2_BUCKET_NAME: z.string(),
     R2_ACCOUNT_ID: z.string(),
     R2_PUBLIC_URL: z.string(),
+    R2_FILE_TTL: z.coerce.number().int().positive().default(15),
   },
 
   /**
@@ -53,6 +56,8 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     DIRECT_DATABASE_URL: process.env.DIRECT_DATABASE_URL,
+    DEFAULT_TTL: process.env.DEFAULT_TTL,
+    DEFAULT_SWR: process.env.DEFAULT_SWR,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
     SALT_ROUNDS: process.env.SALT_ROUNDS,
@@ -71,6 +76,7 @@ export const env = createEnv({
     R2_BUCKET_NAME: process.env.R2_BUCKET_NAME,
     R2_ACCOUNT_ID: process.env.R2_ACCOUNT_ID,
     R2_PUBLIC_URL: process.env.R2_PUBLIC_URL,
+    R2_FILE_TTL: process.env.R2_FILE_TTL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

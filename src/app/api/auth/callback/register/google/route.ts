@@ -74,7 +74,12 @@ export async function GET(request: Request): Promise<Response> {
         email: profile.email,
         firstName: profile.name.firstName ?? "",
         lastName: profile.name.lastName,
-        avatar: profile.picture,
+        avatar: {
+          create: {
+            url: profile.picture,
+            key: profile.picture,
+          },
+        },
         auth: {
           create: {
             type: "oauth",

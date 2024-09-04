@@ -42,6 +42,7 @@ export function DataTableViewOptions<TData>({
             (column) =>
               typeof column.accessorFn !== "undefined" && column.getCanHide(),
           )
+          .filter((column) => column.id !== "createdAt")
           .map((column) => {
             return (
               <DropdownMenuCheckboxItem

@@ -33,7 +33,6 @@ const schema = z.object({
   page: z.coerce.number().default(1),
   per_page: z.coerce.number().optional(),
   sort: z.string().optional(),
-  role: z.string().optional(),
 });
 
 export function useDataTable<TData, TValue>({

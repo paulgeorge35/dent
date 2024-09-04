@@ -6,6 +6,8 @@ import {
   Stethoscope,
   CalendarClock,
   Hammer,
+  type LucideProps,
+  Pill,
 } from "lucide-react";
 
 type Submenu = {
@@ -18,7 +20,7 @@ type Menu = {
   href: string;
   label: string;
   active: boolean;
-  icon: LucideIcon;
+  icon: LucideIcon | React.ComponentType<LucideProps>;
   submenus: Submenu[];
   adminOnly?: boolean;
 };
@@ -94,6 +96,14 @@ export function getMenuList(pathname: string): Group[] {
           label: "Specializations",
           active: pathname.includes("/specializations"),
           icon: Hammer,
+          adminOnly: true,
+          submenus: [],
+        },
+        {
+          href: "/stocks",
+          label: "Stocks",
+          active: pathname.includes("/stocks"),
+          icon: Pill,
           adminOnly: true,
           submenus: [],
         },

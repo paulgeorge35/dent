@@ -22,11 +22,19 @@ export const tenantRouter = createTRPCRouter({
       const tenantId = ctx.session.user!.tenantId;
       const profile = await ctx.db.profile.findFirst({
         where: { email: input },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
       const profileOnTenant = await ctx.db.profile.findFirst({
         where: {
           email: input,
           users: { some: { tenantId } },
+        },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
         },
       });
       return [profileOnTenant ? true : false, profile ? true : false];
@@ -37,6 +45,10 @@ export const tenantRouter = createTRPCRouter({
 
     const profile = await ctx.db.profile.findFirst({
       where: { email },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
+      },
     });
 
     if (!profile) {
@@ -51,7 +63,11 @@ export const tenantRouter = createTRPCRouter({
       include: {
         tenant: {
           include: {
-            profile: true,
+            profile: {
+              include: {
+                avatar: true,
+              },
+            },
             users: {
               select: {
                 profile: {
@@ -64,6 +80,10 @@ export const tenantRouter = createTRPCRouter({
             },
           },
         },
+      },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
       },
     });
   }),
@@ -81,6 +101,10 @@ export const tenantRouter = createTRPCRouter({
             plan: true,
           },
         },
+      },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
       },
     });
 
@@ -122,7 +146,11 @@ export const tenantRouter = createTRPCRouter({
       return await ctx.db.user.findMany({
         where,
         include: {
-          profile: true,
+          profile: {
+            include: {
+              avatar: true,
+            },
+          },
           events: {
             where: {
               type: EventType.APPOINTMENT,
@@ -136,6 +164,9 @@ export const tenantRouter = createTRPCRouter({
             },
           },
         },
+        cacheStrategy: {
+          ttl: 5,
+        },
       });
     }),
 
@@ -143,6 +174,10 @@ export const tenantRouter = createTRPCRouter({
     const tenantId = ctx.session.user!.tenantId;
     return await ctx.db.specialization.findMany({
       where: { tenantId },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
+      },
     });
   }),
 
@@ -151,7 +186,19 @@ export const tenantRouter = createTRPCRouter({
     return await ctx.db.user.findMany({
       where: { tenantId, deletedAt: null },
       include: {
-        profile: true,
+        profile: {
+          include: {
+            avatar: {
+              select: {
+                url: true,
+              },
+            },
+          },
+        },
+      },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
       },
     });
   }),
@@ -174,6 +221,10 @@ export const tenantRouter = createTRPCRouter({
       },
       include: {
         invitedBy: true,
+      },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
       },
     });
   }),
@@ -208,6 +259,10 @@ export const tenantRouter = createTRPCRouter({
             },
           },
         },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!invitation) {
@@ -233,6 +288,10 @@ export const tenantRouter = createTRPCRouter({
 
       const invitationExists = await ctx.db.invitation.findFirst({
         where: { email: input.email },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (invitationExists) {
@@ -244,6 +303,10 @@ export const tenantRouter = createTRPCRouter({
 
       const userExists = await ctx.db.user.findFirst({
         where: { profile: { email: input.email }, tenantId },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (userExists) {
@@ -258,6 +321,10 @@ export const tenantRouter = createTRPCRouter({
         include: {
           profile: true,
         },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       const tenant = await ctx.db.tenant.findFirstOrThrow({
@@ -269,6 +336,10 @@ export const tenantRouter = createTRPCRouter({
             },
           },
         },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       const activeInvitations = await ctx.db.invitation.findMany({
@@ -279,10 +350,18 @@ export const tenantRouter = createTRPCRouter({
         include: {
           invitedBy: true,
         },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       const activeUsers = await ctx.db.user.findMany({
         where: { tenantId, deletedAt: null },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       const totalUsers = activeInvitations.length + activeUsers.length;
@@ -327,6 +406,10 @@ export const tenantRouter = createTRPCRouter({
 
       const invitation = await ctx.db.invitation.findFirst({
         where: { id: input, invitedBy: { tenantId }, userId: null },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!invitation) return;
@@ -341,6 +424,10 @@ export const tenantRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const profile = await ctx.db.profile.findFirst({
         where: { email: ctx.session.email },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!profile) {
@@ -366,6 +453,10 @@ export const tenantRouter = createTRPCRouter({
         },
         include: {
           invitedBy: true,
+        },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
         },
       });
 
@@ -401,6 +492,10 @@ export const tenantRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.db.user.findUnique({
         where: { id: input.userId },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!user) {
@@ -422,6 +517,10 @@ export const tenantRouter = createTRPCRouter({
 
       const user = await ctx.db.user.findFirst({
         where: { id: input, tenantId },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!user) {

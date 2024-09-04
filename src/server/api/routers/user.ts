@@ -1,14 +1,10 @@
-import {
-  avatarSchema,
-  type UserComplete as zUserComplete,
-} from "@/types/schema";
+import { type UserComplete as zUserComplete } from "@/types/schema";
 import { Prisma, type Role, TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { RoleSchema } from "prisma/generated/zod";
 import { z } from "zod";
 import { DateTime } from "luxon";
-import { uploadFile } from "@/lib";
 import { Confirmation } from "@/components/emails/confirmation";
 import { v4 as uuidv4 } from "uuid";
 
@@ -23,7 +19,11 @@ import { env } from "@/env";
 import { resend } from "@/server/resend";
 
 const userComplete = Prisma.validator<Prisma.UserInclude>()({
-  profile: true,
+  profile: {
+    include: {
+      avatar: true,
+    },
+  },
 });
 
 const pagination = z.object({
@@ -75,6 +75,10 @@ export const userRouter = createTRPCRouter({
 
       const emailExists = await ctx.db.profile.findUnique({
         where: { email },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (emailExists) {
@@ -138,6 +142,10 @@ export const userRouter = createTRPCRouter({
       const token = await ctx.db.authToken.findFirst({
         where: { token: input, type: TokenType.ACTIVATION },
         include: { profile: true },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!token) {
@@ -166,6 +174,9 @@ export const userRouter = createTRPCRouter({
     const user = (await ctx.db.user.findUnique({
       where: { id: userId },
       include: userComplete,
+      cacheStrategy: {
+        ttl: 10,
+      },
     })) as zUserComplete | null;
 
     if (!user) {
@@ -190,6 +201,10 @@ export const userRouter = createTRPCRouter({
     .query(async ({ ctx, input: { token, type } }) => {
       const _token = await ctx.db.token.findFirst({
         where: { token, type },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       });
 
       if (!_token || _token.expires < new Date()) {
@@ -226,6 +241,10 @@ export const userRouter = createTRPCRouter({
           where: { id: profileId, type: "credentials", provider: "database" },
           include: {
             profile: true,
+          },
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
           },
         });
 
@@ -268,6 +287,10 @@ export const userRouter = createTRPCRouter({
           role: true,
           bannedAt: true,
         },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
+        },
       })) as zUserComplete | null;
 
       if (!user) {
@@ -287,6 +310,10 @@ export const userRouter = createTRPCRouter({
     const user = (await ctx.db.user.findUnique({
       where: { id: input },
       include: userComplete,
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
+      },
     })) as zUserComplete | null;
 
     if (!user) {
@@ -359,6 +386,10 @@ export const userRouter = createTRPCRouter({
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
+          },
         });
 
         const count = await ctx.db.user.count({
@@ -396,17 +427,24 @@ export const userRouter = createTRPCRouter({
             return v;
           }),
         bio: z.string().max(500).optional(),
-        avatar: avatarSchema.optional(),
+        avatarId: z.string().nullable(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user!.id;
 
-      const avatarUrl = input.avatar
-        ? typeof input.avatar === "string"
-          ? input.avatar
-          : await uploadFile(input.avatar)
-        : null;
+      if (input.avatarId === null) {
+        await ctx.db.avatar.updateMany({
+          where: {
+            profile: {
+              users: { some: { id: userId } },
+            },
+          },
+          data: {
+            profileId: null,
+          },
+        });
+      }
 
       const user = await ctx.db.user.update({
         where: { id: userId },
@@ -421,50 +459,28 @@ export const userRouter = createTRPCRouter({
               email: input.email,
               phone: input.phone,
               title: input.title,
-              avatar: avatarUrl,
               firstName: input.firstName,
               lastName: input.lastName,
+              avatar: input.avatarId
+                ? {
+                    connect: {
+                      id: input.avatarId,
+                    },
+                  }
+                : undefined,
             },
           },
         },
         include: {
-          profile: true,
-        },
-      });
-      return user;
-    }),
-
-  updateAvatar: tenantProcedure
-    .input(z.string())
-    .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user!.id;
-
-      return await ctx.db.user.update({
-        where: { id: userId },
-        data: {
           profile: {
-            update: {
-              avatar: input,
+            include: {
+              avatar: true,
             },
           },
         },
       });
+      return user;
     }),
-
-  removeAvatar: tenantProcedure.mutation(async ({ ctx }) => {
-    const userId = ctx.session.user!.id;
-
-    return await ctx.db.user.update({
-      where: { id: userId },
-      data: {
-        profile: {
-          update: {
-            avatar: null,
-          },
-        },
-      },
-    });
-  }),
 
   toggleBan: adminProcedure
     .input(z.string())
@@ -472,6 +488,10 @@ export const userRouter = createTRPCRouter({
       return await ctx.db.$transaction(async (tx) => {
         const targetUser = await tx.user.findUnique({
           where: { id: input },
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
+          },
         });
 
         if (!targetUser) {
@@ -540,6 +560,10 @@ export const userRouter = createTRPCRouter({
             },
           },
         },
+      },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
       },
     });
   }),

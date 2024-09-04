@@ -1,20 +1,24 @@
+import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { RedirectType, redirect } from "next/navigation";
+import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
+import { api } from "@/trpc/server";
 
-export default async function AuthLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const session = await auth();
+  if (!session) redirect("/sign-in");
+  if (!session.user?.tenantId) redirect("/welcome");
+  const accounts = await api.tenant.accounts();
 
-  if (!session) {
-    redirect("/sign-in", RedirectType.replace);
-  }
+  const currentTenant = await api.tenant.currentTenant();
+  if (!currentTenant.profile.activeSubscription) redirect("/welcome");
 
   return (
-    <div className="container relative flex h-[100dvh] flex-col items-center gap-4 md:h-screen lg:max-w-none lg:px-0">
+    <AdminPanelLayout session={session} accounts={accounts}>
       {children}
-    </div>
+    </AdminPanelLayout>
   );
 }

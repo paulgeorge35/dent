@@ -23,6 +23,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
     "@aws-sdk/client-s3": "^3.635.0",
+    "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -87,11 +88,12 @@
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "express": "^4.19.2",
+    "framer-motion": "^11.3.29",
     "jose": "^5.3.0",
     "libphonenumber-js": "^1.11.1",
     "lucide-react": "^0.365.0",
     "luxon": "^3.4.4",
-    "next": "14.2.3",
+    "next": "^14.2.6",
     "next-themes": "^0.3.0",
     "nextjs-toploader": "^1.6.12",
     "react": "18.2.0",
@@ -122,6 +124,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@total-typescript/ts-reset": "^0.6.0",
     "@types/cors": "^2.8.17",
     "@types/eslint": "^8.56.2",
     "@types/express": "^4.17.21",

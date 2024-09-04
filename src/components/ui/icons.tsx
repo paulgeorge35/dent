@@ -46,11 +46,14 @@ import {
   Users,
   X,
   Mail,
+  Activity,
+  FileIcon,
 } from "lucide-react";
 
 export type Icon = LucideIcon;
 
 export const Icons = {
+  activity: Activity,
   add: Plus,
   arrowRight: ArrowRight,
   banknote: Banknote,
@@ -115,145 +118,44 @@ export const Icons = {
       />
     </svg>
   ),
-  "calendar1": ({ ...props }) => (
+  dental: ({ ...props }) => (
     <svg
-    width="40"
-    height="40"
-    fill="none"
-    aria-hidden="true"
-    focusable="false"
-    data-prefix="fab"
-    data-icon="calendar-1"
-    role="img"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 40 40"
-    {...props}
+      width="40"
+      height="40"
+      fill="none"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fab"
+      data-icon="dental"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 40 40"
+      {...props}
     >
-      <g clip-path="url(#clip0_17001_1135)">
+      <g clip-path="url(#clip0_17001_1103)">
         <path
-          d="M25.7812 32.5781H1.17188V9.14062H38.8281V27.3438"
-          stroke="#03045E"
+          d="M28.7522 17.0078C27.978 19.8531 26.2178 22.4039 24.9209 24.0016C23.9248 25.2289 23.3725 26.7578 23.3725 28.3383V36.1875C23.3725 37.5914 22.2772 38.7844 20.8741 38.8266C20.2303 38.8461 19.6295 38.6281 19.1623 38.2461C18.7139 37.8789 18.3889 37.3625 18.267 36.7609L17.2795 31.8734C16.8131 29.5711 13.5225 29.5711 13.0561 31.8734L12.0686 36.7609C11.8248 37.9633 10.7678 38.8281 9.54047 38.8281C8.82797 38.8281 8.18344 38.5399 7.71703 38.0734C7.25141 37.607 6.96313 36.9625 6.96313 36.25V28.343C6.96313 26.7594 6.40766 25.2289 5.40766 24.0016C2.93969 20.9734 -1.19469 14.5242 2.90844 9.13047C6.57484 4.31016 11.9116 6.37813 15.1678 8.41563C17.3186 7.06954 20.385 5.70469 23.2702 6.32657"
           stroke-miterlimit="10"
           stroke-linejoin="round"
         />
         <path
-          d="M38.8281 9.14062H1.17188V4.21875H38.8281V9.14062Z"
-          stroke="#03045E"
+          d="M30.7811 17.2656C35.2253 17.2656 38.828 13.6629 38.828 9.21875C38.828 4.77458 35.2253 1.17188 30.7811 1.17188C26.3369 1.17188 22.7342 4.77458 22.7342 9.21875C22.7342 13.6629 26.3369 17.2656 30.7811 17.2656Z"
           stroke-miterlimit="10"
           stroke-linejoin="round"
         />
         <path
-          d="M33.2697 35.4642L34.3236 38.8281H36.5543C36.5543 38.8281 38.8281 32.9283 38.8281 27.5641C38.8281 25.5909 38.16 23.1698 35.7439 23.2035C34.4217 23.2218 33.8437 23.8779 32.9693 24.727H31.1592C30.2849 23.8779 29.7068 23.2218 28.3846 23.2035C25.9685 23.1698 25.3004 25.5909 25.3004 27.5641C25.3004 32.9283 27.5742 38.8281 27.5742 38.8281H29.8049L30.8677 35.4616C31.033 34.9377 31.5189 34.5816 32.0683 34.5816C32.6186 34.5816 33.1052 34.939 33.2697 35.4642Z"
-          fill="#A2D2FF"
-          stroke="#03045E"
+          d="M15.1678 8.41562C13.8819 9.27109 12.3827 10.5812 11.4842 12.2656"
           stroke-miterlimit="10"
           stroke-linejoin="round"
         />
         <path
-          d="M6.09375 4.21875V0"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M15.3646 4.21875V0"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M24.6354 4.21875V0"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M33.9062 4.21875V0"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M6.52344 16.1719H8.86719"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M11.4453 16.1719H13.7891"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M16.3672 16.1719H18.7109"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M21.2891 16.1719H23.6328"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M26.2109 16.1719H28.5547"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M31.1328 16.1719H33.4766"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M6.52344 20.8594H8.86719"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M11.4453 20.8594H13.7891"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M16.3672 20.8594H18.7109"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M21.2891 20.8594H23.6328"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M6.52344 25.5469H8.86719"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M11.4453 25.5469H13.7891"
-          stroke="#03045E"
-          stroke-miterlimit="10"
-          stroke-linejoin="round"
-        />
-        <path
-          d="M16.3672 25.5469H18.7109"
-          stroke="#03045E"
+          d="M30.7811 5.85938V9.21875H28.203"
           stroke-miterlimit="10"
           stroke-linejoin="round"
         />
       </g>
       <defs>
-        <clipPath id="clip0_17001_1135">
+        <clipPath id="clip0_17001_1103">
           <rect width="40" height="40" fill="white" />
         </clipPath>
       </defs>
@@ -269,6 +171,7 @@ export const Icons = {
   ellipsis: MoreVertical,
   email: Mail,
   enter: CornerDownLeft,
+  file: FileIcon,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"
@@ -317,6 +220,24 @@ export const Icons = {
   newspaper: Newspaper,
   page: File,
   paperclip: Paperclip,
+  pillBottle: ({ ...props }: LucideProps) => (
+    <svg
+      width="24"
+      height="24"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fab"
+      data-icon="pill-bottle"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path d="M18 11h-4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4" />
+      <path d="M6 7v13a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7" />
+      <rect width="16" height="5" x="4" y="2" rx="1" />
+    </svg>
+  ),
   pin: Pin,
   pizza: Pizza,
   post: FileText,

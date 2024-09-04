@@ -1,6 +1,7 @@
 import { TRPCError } from "@trpc/server";
 import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
 import { z } from "zod";
+import { env } from "@/env";
 
 export const specializationRouter = createTRPCRouter({
   list: tenantProcedure.query(async ({ ctx }) => {
@@ -17,6 +18,10 @@ export const specializationRouter = createTRPCRouter({
           },
         },
       },
+      cacheStrategy: {
+        ttl: env.DEFAULT_TTL,
+        swr: env.DEFAULT_SWR,
+      },
     });
     return specializations;
   }),
@@ -25,7 +30,11 @@ export const specializationRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string().trim(),
-        description: z.string().trim().transform(s => s === '' ? null : s).nullish()
+        description: z
+          .string()
+          .trim()
+          .transform((s) => (s === "" ? null : s))
+          .nullish(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -44,7 +53,11 @@ export const specializationRouter = createTRPCRouter({
       z.object({
         id: z.string(),
         name: z.string().trim(),
-        description: z.string().trim().transform(s => s === '' ? null : s).nullish()
+        description: z
+          .string()
+          .trim()
+          .transform((s) => (s === "" ? null : s))
+          .nullish(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -69,6 +82,10 @@ export const specializationRouter = createTRPCRouter({
               users: true,
             },
           },
+        },
+        cacheStrategy: {
+          ttl: env.DEFAULT_TTL,
+          swr: env.DEFAULT_SWR,
         },
       });
 

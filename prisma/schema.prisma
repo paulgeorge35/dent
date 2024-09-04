@@ -31,8 +31,10 @@ model Tenant {
   specializations    Specialization[]
   preferedByProfiles Profile[]
   patients           Patient[]
-  products           Product[]
+  services           Service[]
+  materials          Material[]
   events             Event[]
+  files              File[]
 
   deletedAt      DateTime?
   disabledAt     DateTime?
@@ -48,7 +50,7 @@ model TenantProfile {
   address              String?
   zip                  String?
   phone                String?
-  avatar               String?
+  avatar               Avatar?
   size                 String?
   stripeSubscriptionId String
   activeSubscription   Boolean @default(false)
@@ -82,6 +84,7 @@ model User {
   eventActions   EventAction[]
   treatmentPlans TreatmentPlan[]
   invitations    Invitation[]    @relation(name: "InvitedByUser")
+  files          File[]
 
   deletedAt   DateTime?
   activatedAt DateTime?
@@ -98,7 +101,7 @@ model Profile {
   lastName            String
   email               String    @unique
   phone               String?
-  avatar              String?
+  avatar              Avatar?
   activatedAt         DateTime?
   stripeCustomerId    String?
   stripeFreeTrialUsed Boolean   @default(false)
@@ -210,6 +213,8 @@ model Patient {
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   tenantId String
 
+  files          File[]
+  quizes         Quiz[]
   appointments   Event[]
   treatmentPlans TreatmentPlan[]
 
@@ -234,18 +239,22 @@ model Specialization {
 }
 
 model Event {
-  id          String      @id @default(cuid())
+  id          String         @id @default(cuid())
+  index       Int            @unique @default(autoincrement())
   title       String
   description String?
   date        DateTime
   start       DateTime?
   end         DateTime?
-  allDay      Boolean     @default(false)
-  type        EventType   @default(APPOINTMENT)
-  status      EventStatus @default(CREATED)
+  allDay      Boolean        @default(false)
+  type        EventType      @default(APPOINTMENT)
+  status      EventStatus    @default(CREATED)
+  initiator   EventInitiator @default(SYSTEM)
+  visits      Visit[]
+  quiz        Quiz?
 
-  actions    EventAction[]
-  treatments Treatment[]
+  actions EventAction[]
+  files   File[]
 
   patientId String?
   patient   Patient? @relation(fields: [patientId], references: [id], onDelete: Cascade)
@@ -273,65 +282,117 @@ model EventAction {
   updatedAt DateTime @updatedAt
 }
 
-model Product {
-  id          String   @id @default(cuid())
+model Material {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?
+  unit_price    Int
+  unit          String   @default("pcs")
+  image         String?
+  tags          String[] @default([])
+  isActive      Boolean  @default(true)
+  keepInventory Boolean  @default(false)
+  stock         Int      @default(0)
+
+  tenantId String
+  tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ServiceMaterial ServiceMaterial[]
+
+  @@index([name])
+}
+
+model Service {
+  id          String      @id @default(cuid())
   name        String
   description String?
-  price       Int
+  unit_price  Int
+  unit        ServiceUnit
+  duration    Int         @default(60)
   image       String?
-  tags        String[]
-  isActive    Boolean  @default(true)
-  isDeleted   Boolean  @default(false)
+  tags        String[]    @default([])
+  isActive    Boolean     @default(true)
 
-  priceHistory Price[]
-  treatments   Treatment[]
-
-  categoryId String?
-  category   ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   tenantId   String
   tenant     Tenant           @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  categoryId String?
+  category   ServiceCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  materials ServiceMaterial[]
+  visits    Visit[]
+  children  RelatedService[]  @relation("ParentService")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model RelatedService {
+  id         String @id @default(cuid())
+  quantity   Int    @default(1)
+  unit_price Int
+  service    Json
+
+  parentId String
+  parent   Service @relation("ParentService", fields: [parentId], references: [id])
+}
+
+model ServiceMaterial {
+  id         String @id @default(cuid())
+  quantity   Int
+  unit_price Int
+
+  serviceId  String
+  service    Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  materialId String
+  material   Material @relation(fields: [materialId], references: [id], onDelete: Cascade)
 }
 
 model Price {
-  id    String @id @default(cuid())
-  value Int
-
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
+  id         String    @id @default(cuid())
+  unit_price Int
+  entityId   String
+  type       PriceType
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model ProductCategory {
+model ServiceCategory {
   id   String @id @default(cuid())
   name String
 
-  parentCategoryId String?
-  parentCategory   ProductCategory? @relation(name: "ProductCategoryToProductCategory", fields: [parentCategoryId], references: [id])
-
-  subcategories ProductCategory[] @relation(name: "ProductCategoryToProductCategory")
-  products      Product[]
+  services Service[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Treatment {
-  id          String          @id @default(cuid())
-  price       Int
-  toothNumber Int
-  status      TreatmentStatus @default(PLANNED)
+  id     String          @id @default(cuid())
+  price  Int
+  target String?
+  status TreatmentStatus @default(PLANNED)
 
-  productId       String
-  product         Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
   treatmentPlanId String?
   treatmentPlan   TreatmentPlan? @relation(fields: [treatmentPlanId], references: [id])
-  eventId         String?
-  event           Event?         @relation(fields: [eventId], references: [id])
+
+  visits Visit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Visit {
+  id String @id @default(cuid())
+
+  serviceId   String
+  service     Service   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  treatmentId String
+  treatment   Treatment @relation(fields: [treatmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId     String?
+  event       Event?    @relation(fields: [eventId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -348,6 +409,68 @@ model TreatmentPlan {
   patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId    String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Quiz {
+  id String @id @default(cuid())
+
+  quiz    Json
+  answers Int[]
+
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  eventId   String? @unique
+  event     Event?  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id   String @id @default(cuid())
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id          String  @id @default(cuid())
+  url         String
+  key         String  @unique
+  name        String
+  extension   String
+  contentType String
+  size        Int
+  confirmed   Boolean @default(false)
+
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId   String?
+  event     Event?   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  patientId String?
+  patient   Patient? @relation(fields: [patientId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
+
+model Avatar {
+  id  String @id @default(cuid())
+  url String
+  key String @unique
+
+  profileId       String?        @unique
+  profile         Profile?       @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  tenantProfileId String?        @unique
+  tenantProfile   TenantProfile? @relation(fields: [tenantProfileId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -372,6 +495,14 @@ model City {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum ServiceUnit {
+  TOOTH
+  QUARTER
+  JAW
+  MOUTH
+  VISIT
 }
 
 enum TreatmentStatus {
@@ -418,4 +549,15 @@ enum EventStatus {
 
 enum EventType {
   APPOINTMENT
+}
+
+enum EventInitiator {
+  PATIENT
+  USER
+  SYSTEM
+}
+
+enum PriceType {
+  MATERIAL
+  SERVICE
 }

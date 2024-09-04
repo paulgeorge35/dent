@@ -8,7 +8,7 @@ import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 import { env } from "@/env";
 import type { PrismaClient } from "@prisma/client";
 import type { StripePlan } from "@/types";
-import { uploadFile } from "@/lib";
+import { fileCreateInputSchema } from "@/types/schema";
 
 const isSubscriptionUpdateAllowed = async (
   tenantId: string,
@@ -133,17 +133,11 @@ export const stripeRouter = createTRPCRouter({
       z.object({
         name: z.string(),
         size: z.string().optional(),
-        avatar: z
-          .object({
-            extension: z.string(),
-            contentType: z.string(),
-            base64: z.string(),
-          })
-          .nullish(),
+        avatarId: z.string().nullable(),
         planId: z.string(),
       }),
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ ctx, input: { avatarId, ...input } }) => {
       const email = ctx.session.email;
 
       const profile = await ctx.db.profile.findUniqueOrThrow({
@@ -155,8 +149,6 @@ export const stripeRouter = createTRPCRouter({
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
         apiVersion: "2024-06-20",
       });
-
-      const avatar = await uploadFile(input.avatar);
 
       const userId = uuidv4();
 
@@ -181,7 +173,7 @@ export const stripeRouter = createTRPCRouter({
           metadata: {
             ...input,
             email,
-            avatar: avatar ?? null,
+            avatarId,
             userId,
           },
         },

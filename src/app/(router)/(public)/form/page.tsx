@@ -1,4 +1,4 @@
-import { Shell } from "@/components/shell";
+import { Shell } from "@/components/layout/shell";
 import Image from "next/image";
 import PatientForm from "./patient-form";
 

@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/admin-panel/sidebar";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { usePathname } from "next/navigation";
-import { Shell } from "../shell";
+import { Shell } from "../layout/shell";
 
 export default function AdminPanelLayout({
   children,

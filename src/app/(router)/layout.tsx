@@ -9,7 +9,7 @@ import { Toaster as Sonner } from "sonner";
 
 import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/shared/theme-provider";
 
 import { cn, constructMetadata } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";

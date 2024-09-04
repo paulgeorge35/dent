@@ -5,6 +5,12 @@ import { appointmentRouter } from "./routers/appointment";
 import { tenantRouter } from "./routers/tenant";
 import { stripeRouter } from "./routers/stripe";
 import { specializationRouter } from "./routers/specialization";
+import { serviceRouter } from "./routers/service";
+import { materialRouter } from "./routers/material";
+import { treatmentRouter } from "./routers/treatment";
+import { treatmentPlanRouter } from "./routers/treatment-plan";
+import { patientRouter } from "./routers/patient";
+import { storageRouter } from "./routers/storage";
 
 /**
  * This is the primary router for your server.
@@ -14,10 +20,16 @@ import { specializationRouter } from "./routers/specialization";
 export const appRouter = createTRPCRouter({
   user: userRouter,
   utils: utilsRouter,
-  appointment: appointmentRouter,
   tenant: tenantRouter,
   stripe: stripeRouter,
   specialization: specializationRouter,
+  appointment: appointmentRouter,
+  service: serviceRouter,
+  material: materialRouter,
+  treatment: treatmentRouter,
+  treatmentPlan: treatmentPlanRouter,
+  patient: patientRouter,
+  storage: storageRouter,
 });
 
 // export type definition of API
