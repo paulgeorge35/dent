@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ChevronDown, Dot, type LucideIcon } from "lucide-react";
+import { ComponentType, useState } from "react";
+import { ChevronDown, Dot, LucideProps, type LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -34,7 +34,7 @@ type Submenu = {
 };
 
 interface CollapseMenuButtonProps {
-  icon: LucideIcon;
+  icon: LucideIcon | ComponentType<LucideProps>;
   label: string;
   active: boolean;
   submenus: Submenu[];
