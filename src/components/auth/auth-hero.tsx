@@ -9,7 +9,7 @@ export default function AuthHero() {
   return (
     <div className="relative hidden h-full flex-col p-10 text-white lg:flex">
       <motion.span
-        className="absolute inset-8 overflow-hidden rounded-3xl z-10"
+        className="absolute inset-8 overflow-hidden rounded-3xl z-10 bg-background"
         animate={{
           width: "calc(100% - 64px)",
           borderRadius: "1.5rem",
@@ -26,11 +26,12 @@ export default function AuthHero() {
           inset: 0,
         }}
       >
+        <span className="h-full w-full bg-red-200" />
         <Image
           src={background}
           alt="Login background"
           fill
-          className="object-cover"
+          className="object-cover dark:opacity-10"
           placeholder="blur"
           blurDataURL={background.blurDataURL}
         />

@@ -60,6 +60,10 @@
     "global": {
       "fallback": "Something went wrong, please try again later."
     },
+    "plan": {
+      "required": "Plan is required",
+      "not-found": "Plan not found"
+    },
     "account": {
       "invalid": "Invalid email or password",
       "inactive": "Account is not activated",

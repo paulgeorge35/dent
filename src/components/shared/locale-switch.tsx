@@ -14,7 +14,7 @@ export default function LocaleSwitch({ locale }: { locale: string }) {
 
   return (
     <button
-      className="horizontal center-v absolute bottom-2 right-2 z-[9999] gap-1 rounded-md border border-border bg-muted px-2 py-1 hover:bg-muted-foreground hover:text-muted uppercase text-xs font-semibold"
+      className="horizontal center-v fixed bottom-2 right-2 z-[9999] gap-1 rounded-md border border-border bg-muted px-2 py-1 hover:bg-muted-foreground hover:text-muted uppercase text-xs font-semibold"
       onClick={toggle}
     >
       <Languages className="size-4" />

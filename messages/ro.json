@@ -34,7 +34,6 @@
         "password": "Parolă",
         "confirm-password": "Confirmă parola",
         "button": "Înregistrare",
-        "login": "Ai deja un cont? Autentifică-te aici.",
         "already-have-account": "Ai deja un cont?",
         "sign-in": "Autentifică-te",
         "status": {
@@ -60,6 +59,10 @@
   "errors": {
     "global": {
       "fallback": "A apărut o eroare, încearcă din nou mai târziu"
+    },
+    "plan": {
+      "required": "Planul este obligatoriu",
+      "not-found": "Planul nu a fost găsit"
     },
     "account": {
       "invalid": "Email sau parolă invalidă",

@@ -38,7 +38,7 @@ const schema = z.object({
   size: z.string().optional(),
   avatarId: z.string().nullable(),
   planId: z.string({
-    required_error: "Plan is required",
+    required_error: "plan.required",
   }),
 });
 
@@ -200,23 +200,23 @@ export default function ClinicForm() {
                               />
                               <div className="my-4 w-full border-b border-border shadow-sm" />
                               <span className="flex">
-                                <p className="text-lg font-bold lg:text-xl">
+                                <p className="text-lg font-bold text-primary lg:text-xl">
                                   {plan.product.name}
                                 </p>
                               </span>
-                              <p className="text-balanced mt-1 h-[4.5em] overflow-hidden text-xs font-light">
+                              <p className="text-balanced mt-1 h-[4.5em] overflow-hidden text-xs font-light text-primary">
                                 {plan.product.description}
                               </p>
                             </div>
                           </div>
                           <div className="flex gap-2">
                             <p
-                              className={`text-5xl font-extrabold tracking-tight`}
+                              className={`text-5xl font-extrabold tracking-tight text-primary`}
                             >
                               {plan.product.default_price.unit_amount! / 100}
                             </p>
                             <div className="mb-[4px] flex items-end">
-                              <p className="text-xs font-semibold uppercase">
+                              <p className="text-xs font-semibold uppercase text-primary">
                                 RON
                               </p>
                               <p className="text-xs font-semibold text-muted-foreground">
@@ -224,7 +224,7 @@ export default function ClinicForm() {
                               </p>
                             </div>
                           </div>
-                          <ul className="flex-1 space-y-2.5 text-base leading-relaxed">
+                          <ul className="flex-1 space-y-2.5 text-base leading-relaxed text-primary">
                             {plan.product.marketing_features.map(
                               (feature, i) => (
                                 <li
