@@ -2,9 +2,11 @@
 
 import { Button } from "@/components/ui/button";
 import { BadgePlus } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export default function CreateTenant() {
+  const t = useTranslations("page.welcome.clinic");
   const router = useRouter();
   return (
     <Button
@@ -13,7 +15,7 @@ export default function CreateTenant() {
       iconPlacement="right"
       onClick={() => router.push("/create-clinic")}
     >
-      Start a new clinic
+      {t("create-clinic")}
     </Button>
   );
 }

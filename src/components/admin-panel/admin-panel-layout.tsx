@@ -7,6 +7,7 @@ import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { usePathname } from "next/navigation";
 import { Shell } from "../layout/shell";
+import { useTranslations } from "next-intl";
 
 export default function AdminPanelLayout({
   children,
@@ -17,6 +18,7 @@ export default function AdminPanelLayout({
   session: SessionUser;
   accounts: TenantAccount[];
 }) {
+  const t = useTranslations("page");
   const pathname = usePathname();
   const sidebar = useStore(useSidebarToggle, (state) => state);
   if (!sidebar) return null;
@@ -24,7 +26,7 @@ export default function AdminPanelLayout({
   return (
     <>
       <Sidebar
-        title={getPageTitle(pathname)}
+        title={t(`${getPageTitle(pathname)}.title`)}
         session={session}
         accounts={accounts}
       />

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { type InvitationAccount } from "@/types/schema";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useTransition } from "react";
 import { toast } from "sonner";
@@ -15,11 +16,12 @@ type InvitationCardProps = {
 };
 
 export default function InvitationCard({ invitation }: InvitationCardProps) {
+  const t = useTranslations("page.welcome.invitations");
   const [pending, startTransition] = useTransition();
   const { mutateAsync: joinTenant } = api.tenant.join.useMutation({
     onSuccess: () => {
-      toast.success("Joined clinic", {
-        description: "You can now access all the features of this clinic",
+      toast.success(t("status.success.title"), {
+        description: t("status.success.description"),
       });
       void toggleTenant(invitation.invitedBy.tenant.id);
     },
@@ -39,7 +41,7 @@ export default function InvitationCard({ invitation }: InvitationCardProps) {
       <Avatar className="size-12 rounded-sm">
         {tenantAvatar && (
           <Image
-            src={tenantAvatar}
+            src={tenantAvatar.url}
             alt={invitation.invitedBy.tenant.profile.name}
             width={48}
             height={48}
@@ -74,7 +76,9 @@ export default function InvitationCard({ invitation }: InvitationCardProps) {
           ))}
           <p className="text-sm text-muted-foreground">
             {invitation.invitedBy.tenant.users.length}{" "}
-            {invitation.invitedBy.tenant.users.length > 1 ? "users" : "user"}
+            {invitation.invitedBy.tenant.users.length > 1
+              ? t("user.plural")
+              : t("user.singular")}
           </p>
         </div>
       </div>
@@ -86,7 +90,7 @@ export default function InvitationCard({ invitation }: InvitationCardProps) {
           iconPlacement="right"
           onClick={handleTenantClick}
         >
-          Join
+          {t("join")}
         </Button>
       </div>
     </div>

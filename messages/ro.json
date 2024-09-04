@@ -1,4 +1,45 @@
 {
+  "layout": {
+    "sidebar": {
+      "search": {
+        "placeholder": "Caută aici..."
+      },
+      "controls": {
+        "my-clinics": "Clinicile mele",
+        "profile": "Profil",
+        "settings": "Setări",
+        "logout": "Deconectare"
+      },
+      "links": {
+        "sections": {
+          "dashboard": {
+            "title": "Administrare",
+            "items": {
+              "dashboard": "Administrare"
+            }
+          },
+          "clinic": {
+            "title": "Clinică",
+            "items": {
+              "appointments": "Programări",
+              "my-appointments": "Programările mele",
+              "all-appointments": "Toate programările",
+              "patients": "Pacienți",
+              "staff": "Personal",
+              "treatments": "Tratamente"
+            }
+          },
+          "settings": {
+            "title": "Setări",
+            "items": {
+              "specializations": "Specializări",
+              "stocks": "Stocuri"
+            }
+          }
+        }
+      }
+    }
+  },
   "page": {
     "auth": {
       "sign-in": {
@@ -52,8 +93,110 @@
         "login": "Înapoi la autentificare"
       }
     },
+    "welcome": {
+      "title": "Bine te-ai întors! Să revenim la treabă!",
+      "subtitle": "Alege una dintre clinicile de mai jos pentru a începe",
+      "clinic": {
+        "no-clinics": "Nicio clinică",
+        "suspended": "Suspendată",
+        "clinics-for": "Clinici pentru",
+        "want-to-create": "Vrei să creezi o clinică nouă?",
+        "create-clinic": "Creează clinică",
+        "open": "Deschide",
+        "reactivate": "Reactivează",
+        "user": {
+          "singular": "utilizator",
+          "plural": "utilizatori"
+        }
+      },
+      "invitations": {
+        "no-invitations": "Nu ai invitații în așteptare",
+        "no-invitations-description": "Nu ai nicio invitație în așteptare în acest moment.",
+        "invitations-for": "Invitații pentru",
+        "pending-invitations": "Invitații în așteptare",
+        "join": "Alătură-te",
+        "user": {
+          "singular": "utilizator",
+          "plural": "utilizatori"
+        },
+        "status": {
+          "success": {
+            "title": "Ai aderat la clinică",
+            "description": "Acum poți accesa toate funcționalitățile acestei clinici."
+          }
+        }
+      },
+      "sign-out": "Deconectare"
+    },
+    "create-clinic": {
+      "title": "Creează clinică",
+      "sizes": {
+        "only-me": "Doar eu",
+        "not-applicable": "Nu se aplică"
+      },
+      "optional": "opțional",
+      "fields": {
+        "name": {
+          "title": "Numele companiei sau al echipei",
+          "description": "Acesta este numele care va fi afișat pacienților."
+        },
+        "size": {
+          "title": "Mărimea echipei",
+          "description": "Câte persoane fac parte din echipa ta?",
+          "placeholder": "Selectează mărimea echipei"
+        },
+        "logo": {
+          "title": "Logo"
+        },
+        "plan": {
+          "title": "Plan de abonament",
+          "description": "Alege un plan de abonament pentru clinică"
+        }
+      },
+      "get-started-with": "Începe cu un",
+      "14-days-free-trial": "perioadă de 14 zile gratuită",
+      "cancel-anytime": "Anulează înainte de expirarea perioadei de probă și nu vei fi taxat",
+      "go-to-payment": "Mergi spre plată",
+      "tos": "Termeni și Condiții",
+      "privacy-policy": "Politica de Confidențialitate",
+      "by-continuing": "Continuând, ești de acord cu",
+      "and": "și",
+      "status": {
+        "success": {
+          "title": "Clinică creată",
+          "description": "Your clinic has been created successfully."
+        }
+      }
+    },
     "dashboard": {
       "title": "Administrare"
+    },
+    "appointments": {
+      "title": "Programări"
+    },
+    "staff": {
+      "title": "Personal"
+    },
+    "patients": {
+      "title": "Pacienți"
+    },
+    "treatments": {
+      "title": "Tratamente"
+    },
+    "specializations": {
+      "title": "Specializări"
+    },
+    "stocks": {
+      "title": "Stocuri"
+    },
+    "profile": {
+      "title": "Profil"
+    },
+    "settings": {
+      "title": "Setări"
+    },
+    "user-profile": {
+      "title": "Profil utilizator"
     }
   },
   "errors": {

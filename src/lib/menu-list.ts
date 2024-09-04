@@ -27,17 +27,19 @@ type Menu = {
 
 type Group = {
   groupLabel: string;
+  hideLabel?: boolean;
   menus: Menu[];
 };
 
 export function getMenuList(pathname: string): Group[] {
   return [
     {
-      groupLabel: "",
+      groupLabel: "dashboard",
+      hideLabel: true,
       menus: [
         {
           href: "/dashboard",
-          label: "Dashboard",
+          label: "dashboard",
           active: pathname.includes("/dashboard"),
           icon: LayoutGrid,
           submenus: [],
@@ -45,43 +47,43 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "Clinic",
+      groupLabel: "clinic",
       menus: [
         {
           href: "",
-          label: "Appointments",
+          label: "appointments",
           active: pathname.includes("/appointments"),
           icon: CalendarClock,
           submenus: [
             {
               href: "/appointments/me",
-              label: "My Appointments",
+              label: "my-appointments",
               active: pathname === "/appointments/me",
             },
             {
               href: "/appointments/all",
-              label: "All Appointments",
+              label: "all-appointments",
               active: pathname === "/appointments/all",
             },
           ],
         },
         {
           href: "/patients",
-          label: "Patients",
+          label: "patients",
           active: pathname.includes("/patients"),
           icon: SquareUser,
           submenus: [],
         },
         {
           href: "/staff",
-          label: "Staff",
+          label: "staff",
           active: pathname.includes("/staff"),
           icon: Users,
           submenus: [],
         },
         {
           href: "/treatments",
-          label: "Treatments",
+          label: "treatments",
           active: pathname.includes("/treatments"),
           icon: Stethoscope,
           submenus: [],
@@ -89,11 +91,11 @@ export function getMenuList(pathname: string): Group[] {
       ],
     },
     {
-      groupLabel: "Settings",
+      groupLabel: "settings",
       menus: [
         {
           href: "/specializations",
-          label: "Specializations",
+          label: "specializations",
           active: pathname.includes("/specializations"),
           icon: Hammer,
           adminOnly: true,
@@ -101,7 +103,7 @@ export function getMenuList(pathname: string): Group[] {
         },
         {
           href: "/stocks",
-          label: "Stocks",
+          label: "stocks",
           active: pathname.includes("/stocks"),
           icon: Pill,
           adminOnly: true,

@@ -18,6 +18,7 @@ import {
 import CurrentTenant from "./tenant-card";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { useMemo } from "react";
+import { useTranslations } from "next-intl";
 
 interface MenuProps {
   isOpen: boolean | undefined;
@@ -26,6 +27,7 @@ interface MenuProps {
 }
 
 export function Menu({ isOpen, accounts, session }: MenuProps) {
+  const t = useTranslations("layout.sidebar");
   const pathname = usePathname();
   const menuList = getMenuList(pathname);
 
@@ -41,13 +43,16 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
       <CurrentTenant tenant={tenant} isOpen={isOpen} />
       <nav className="mt-4 h-full w-full">
         <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 px-2 lg:min-h-[calc(100vh-96px-40px-32px)]">
-          {menuList.map(({ groupLabel, menus }, index: number) => (
+          {menuList.map(({ groupLabel, menus, hideLabel }, index: number) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
-              {(isOpen && groupLabel) ?? isOpen === undefined ? (
+              {(isOpen && groupLabel && !hideLabel) ?? isOpen === undefined ? (
                 <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground">
-                  {groupLabel}
+                  {t(`links.sections.${groupLabel}.title`)}
                 </p>
-              ) : !isOpen && isOpen !== undefined && groupLabel ? (
+              ) : !isOpen &&
+                isOpen !== undefined &&
+                groupLabel &&
+                !hideLabel ? (
                 <TooltipProvider>
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger className="w-full">
@@ -56,7 +61,7 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                       </div>
                     </TooltipTrigger>
                     <TooltipContent side="right">
-                      <p>{groupLabel}</p>
+                      <p>{t(`links.sections.${groupLabel}.title`)}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
@@ -89,14 +94,16 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                                       : "translate-x-0 opacity-100",
                                   )}
                                 >
-                                  {label}
+                                  {t(
+                                    `links.sections.${groupLabel}.items.${label}`,
+                                  )}
                                 </p>
                               </Link>
                             </Button>
                           </TooltipTrigger>
                           {isOpen === false && (
                             <TooltipContent side="right">
-                              {label}
+                              {t(`links.sections.${groupLabel}.items.${label}`)}
                             </TooltipContent>
                           )}
                         </Tooltip>
@@ -106,9 +113,14 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                     <div className="w-full" key={index}>
                       <CollapseMenuButton
                         icon={Icon}
-                        label={label}
+                        label={t(`links.sections.${groupLabel}.items.${label}`)}
                         active={active}
-                        submenus={submenus}
+                        submenus={submenus.map((submenu) => ({
+                          ...submenu,
+                          label: t(
+                            `links.sections.${groupLabel}.items.${submenu.label}`,
+                          ),
+                        }))}
                         isOpen={isOpen}
                       />
                     </div>

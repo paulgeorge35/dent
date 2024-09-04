@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Box, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function Sidebar({
   session,
@@ -23,6 +24,7 @@ export function Sidebar({
   session: SessionUser;
   accounts: TenantAccount[];
 }) {
+  const t = useTranslations("layout.sidebar");
   const sidebar = useStore(useSidebarToggle, (state) => state);
   const [isInputFocused, setIsInputFocused] = useState(false);
 
@@ -33,9 +35,9 @@ export function Sidebar({
       <Shell
         variant="nav"
         className={cn(
-          "w-[calc(100vw-90px)] justify-between pl-8 transition-[width] duration-300 ease-in-out",
+          "lg:w-[calc(100vw-90px)] justify-between pl-8 transition-[width] duration-300 ease-in-out w-full",
           {
-            "w-[calc(100vw-288px)]": sidebar?.isOpen,
+            "lg:w-[calc(100vw-288px)]": sidebar?.isOpen,
           },
         )}
       >
@@ -44,7 +46,7 @@ export function Sidebar({
         </h1>
         <Input
           type="text"
-          placeholder="Search for everything here..."
+          placeholder={t("search.placeholder")}
           search
           className="w-full text-base"
           searchClassName={cn(

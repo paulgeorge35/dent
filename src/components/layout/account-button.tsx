@@ -27,6 +27,7 @@ import {
   logoutTenant,
   toggleTenant,
 } from "@/app/(router)/(setup)/welcome/actions";
+import { useTranslations } from "next-intl";
 
 const DISPLAY_TENANTS_CUTOFF = 2;
 
@@ -41,6 +42,7 @@ export default function AccountButton({
   accounts,
   className,
 }: AccountButtonProps) {
+  const t = useTranslations("layout.sidebar.controls");
   const router = useRouter();
   const [pending, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
@@ -109,7 +111,7 @@ export default function AccountButton({
             }}
           >
             <SquareActivity className="size-4" />
-            My clinics
+            {t("my-clinics")}
           </Link>
           <Separator />
           <div>
@@ -162,7 +164,7 @@ export default function AccountButton({
             onClick={() => setOpen(false)}
           >
             <User className="size-4" />
-            Profile
+            {t("profile")}
           </Link>
           <Link
             href="/settings"
@@ -176,7 +178,7 @@ export default function AccountButton({
             onClick={() => setOpen(false)}
           >
             <Settings className="size-4" />
-            Settings
+            {t("settings")}
           </Link>
           <LogoutDialog>
             <Button
@@ -185,7 +187,7 @@ export default function AccountButton({
               className="flex flex-row items-center justify-start gap-4 text-xs text-red-500"
             >
               <DoorOpen className="size-4" />
-              Log out
+              {t("logout")}
             </Button>
           </LogoutDialog>
         </div>

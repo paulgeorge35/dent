@@ -117,16 +117,17 @@ export function constructMetadata({
 }
 
 export const routeTitles = {
-  "/dashboard": "Dashboard",
-  "/appointments": "Appointments",
-  "/staff": "Staff",
-  "/patients": "Patients",
-  "/treatments": "Treatments",
-  "/settings": "Settings",
-  "/user": "User profile",
-  "/profile": "Profile",
-  "/specializations": "Specializations",
-  "/stocks": "Stocks",
+  "": "dashboard",
+  "/dashboard": "dashboard",
+  "/appointments": "appointments",
+  "/staff": "staff",
+  "/patients": "patients",
+  "/treatments": "treatments",
+  "/settings": "settings",
+  "/user": "user profile",
+  "/profile": "profile",
+  "/specializations": "specializations",
+  "/stocks": "stocks",
 };
 
 export function getPageTitle(path: string) {

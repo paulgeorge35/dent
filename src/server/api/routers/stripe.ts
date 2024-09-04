@@ -9,6 +9,7 @@ import { env } from "@/env";
 import type { PrismaClient } from "@prisma/client";
 import type { StripePlan } from "@/types";
 import { fileCreateInputSchema } from "@/types/schema";
+import { getLocale } from "next-intl/server";
 
 const isSubscriptionUpdateAllowed = async (
   tenantId: string,
@@ -139,6 +140,7 @@ export const stripeRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input: { avatarId, ...input } }) => {
       const email = ctx.session.email;
+      const locale: "ro" | "en" = await getLocale() as "ro" | "en";
 
       const profile = await ctx.db.profile.findUniqueOrThrow({
         where: {
@@ -168,6 +170,7 @@ export const stripeRouter = createTRPCRouter({
         tax_id_collection: {
           enabled: true,
         },
+        locale: locale ?? "en",
         subscription_data: {
           trial_period_days: profile.stripeFreeTrialUsed ? undefined : 14,
           metadata: {

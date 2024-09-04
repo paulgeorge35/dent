@@ -7,6 +7,7 @@ import { LoadingSpinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { type TenantAccount } from "@/types/schema";
 import { ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
@@ -16,6 +17,7 @@ type TenantCardProps = {
 };
 
 export default function TenantCard({ account }: TenantCardProps) {
+  const t = useTranslations("page.welcome.clinic");
   const [pending, startTransition] = useTransition();
   const router = useRouter();
   const isAdmin = account.role === "ADMIN";
@@ -85,7 +87,9 @@ export default function TenantCard({ account }: TenantCardProps) {
             ))}
             <p className="text-sm text-muted-foreground">
               {account.tenant.users.length}{" "}
-              {account.tenant.users.length > 1 ? "users" : "user"}
+              {account.tenant.users.length > 1
+                ? t("user.plural")
+                : t("user.singular")}
             </p>
           </div>
         </div>
@@ -97,7 +101,7 @@ export default function TenantCard({ account }: TenantCardProps) {
           ) : (
             <div className="flex items-center gap-1">
               <p className="text-sm opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-                {isActive ? "Open" : "Reactivate"}
+                {isActive ? t("open") : t("reactivate")}
               </p>
               <ArrowRight className="size-4" />
             </div>
@@ -105,9 +109,7 @@ export default function TenantCard({ account }: TenantCardProps) {
         </div>
       </span>
       {!isActive && (
-        <p className="text-sm text-destructive">
-          Clinic suspended. Contact your administrator.
-        </p>
+        <p className="text-sm text-destructive">{t("suspended")}</p>
       )}
     </div>
   );

@@ -81,7 +81,11 @@ export const invitationAccountSchema = z.object({
     }),
     tenant: TenantSchema.merge(
       z.object({
-        profile: TenantProfileSchema,
+        profile: TenantProfileSchema.merge(
+          z.object({
+            avatar: AvatarSchema.nullable(),
+          }),
+        ),
         users: z.array(
           z.object({
             profile: ProfileSchema.pick({

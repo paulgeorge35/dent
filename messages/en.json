@@ -1,4 +1,45 @@
 {
+  "layout": {
+    "sidebar": {
+      "search": {
+        "placeholder": "Search for everything here..."
+      },
+      "controls": {
+        "my-clinics": "My clinics",
+        "profile": "Profile",
+        "settings": "Settings",
+        "logout": "Logout"
+      },
+      "links": {
+        "sections": {
+          "dashboard": {
+            "title": "Dashboard",
+            "items": {
+              "dashboard": "Dashboard"
+            }
+          },
+          "clinic": {
+            "title": "Clinic",
+            "items": {
+              "appointments": "Appointments",
+              "my-appointments": "My Appointments",
+              "all-appointments": "All Appointments",
+              "patients": "Patients",
+              "staff": "Staff",
+              "treatments": "Treatments"
+            }
+          },
+          "settings": {
+            "title": "Settings",
+            "items": {
+              "specializations": "Specializations",
+              "stocks": "Stocks"
+            }
+          }
+        }
+      }
+    }
+  },
   "page": {
     "auth": {
       "sign-in": {
@@ -52,8 +93,110 @@
         "login": "Back to login"
       }
     },
+    "welcome": {
+      "title": "Welcome back! Let's get you back to work!",
+      "subtitle": "Choose a clinic below to get back to working on your team.",
+      "clinic": {
+        "no-clinics": "You are not a member of any clinics",
+        "suspended": "Clinic suspended. Contact your administrator.",
+        "clinics-for": "Clinics for",
+        "want-to-create": "Want to create a new team?",
+        "create-clinic": "Start a new clinic",
+        "open": "Open",
+        "reactivate": "Reactivate",
+        "user": {
+          "singular": "user",
+          "plural": "users"
+        }
+      },
+      "invitations": {
+        "no-invitations": "No pending invitations",
+        "no-invitations-description": "You have no pending invitations at the moment.",
+        "invitations-for": "Invitations for",
+        "pending-invitations": "Pending invitations",
+        "join": "Join",
+        "user": {
+          "singular": "user",
+          "plural": "users"
+        },
+        "status": {
+          "success": {
+            "title": "Joined clinic",
+            "description": "You can now access all the features of this clinic."
+          }
+        }
+      },
+      "sign-out": "Sign out"
+    },
+    "create-clinic": {
+      "title": "Tell us about your team",
+      "sizes": {
+        "only-me": "Only me",
+        "not-applicable": "Not applicable"
+      },
+      "optional": "optional",
+      "fields": {
+        "name": {
+          "title": "Company or team name",
+          "description": "This is the name that will be displayed to your patients."
+        },
+        "size": {
+          "title": "Team size",
+          "description": "How many people are in your team?",
+          "placeholder": "Choose one"
+        },
+        "logo": {
+          "title": "Logo"
+        },
+        "plan": {
+          "title": "Subscription Plan",
+          "description": "Select your preferred subscription plan."
+        }
+      },
+      "get-started-with": "Get started with a",
+      "14-days-free-trial": "14 days free trial",
+      "cancel-anytime": "Cancel before the trial ends and you won't be charged.",
+      "go-to-payment": "Go to payment",
+      "tos": "Terms of Service",
+      "privacy-policy": "Privacy Policy",
+      "by-continuing": "By continuing, you agree to our",
+      "and": "and",
+      "status": {
+        "success": {
+          "title": "Clinic created",
+          "description": "Your clinic has been created successfully."
+        }
+      }
+    },
     "dashboard": {
       "title": "Dashboard"
+    },
+    "appointments": {
+      "title": "Appointments"
+    },
+    "staff": {
+      "title": "Staff"
+    },
+    "patients": {
+      "title": "Patients"
+    },
+    "treatments": {
+      "title": "Treatments"
+    },
+    "specializations": {
+      "title": "Specializations"
+    },
+    "stocks": {
+      "title": "Stocks"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "user-profile": {
+      "title": "User Profile"
     }
   },
   "errors": {

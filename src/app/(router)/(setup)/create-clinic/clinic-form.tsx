@@ -32,6 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
 import { api } from "@/trpc/react";
 import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   name: z.string().min(1, "name.required").max(50, "name.max-length"),
@@ -45,6 +46,7 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>;
 
 export default function ClinicForm() {
+  const t = useTranslations("page.create-clinic");
   const router = useRouter();
   const { data: profile } = api.user.profile.useQuery();
 
@@ -55,7 +57,9 @@ export default function ClinicForm() {
 
   const { mutateAsync, isPending } = api.stripe.checkout.useMutation({
     onSuccess: (data) => {
-      toast.success("Clinic created successfully");
+      toast.success(t("status.success.title"), {
+        description: t("status.success.description"),
+      });
       if (data.redirectUrl) router.push(data.redirectUrl);
     },
   });
@@ -84,13 +88,13 @@ export default function ClinicForm() {
   });
 
   const sizes = [
-    { value: "1", label: "Only me" },
+    { value: "1", label: t("sizes.only-me") },
     { value: "2-5", label: "2-5" },
     { value: "6-10", label: "6-10" },
     { value: "11-20", label: "11-20" },
     { value: "21-50", label: "21-50" },
     { value: "50+", label: "50+" },
-    { value: "N/A", label: "Not applicable" },
+    { value: "N/A", label: t("sizes.not-applicable") },
   ];
 
   return (
@@ -101,11 +105,11 @@ export default function ClinicForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Company or team name</FormLabel>
+              <FormLabel htmlFor={field.name}>
+                {t("fields.name.title")}
+              </FormLabel>
               <Input id={field.name} {...field} placeholder="Ex: Acme Clinic" />
-              <FormDescription>
-                This is the name that will be displayed to your patients.
-              </FormDescription>
+              <FormDescription>{t("fields.name.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -116,12 +120,12 @@ export default function ClinicForm() {
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>
-                Company size{" "}
-                <span className="text-muted-foreground">(optional)</span>
+                {t("fields.size.title")}{" "}
+                <span className="text-muted-foreground">({t("optional")})</span>
               </FormLabel>
               <Select onValueChange={(value) => field.onChange(value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Choose one" />
+                  <SelectValue placeholder={t("fields.size.placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {sizes.map((size, index) => (
@@ -131,6 +135,7 @@ export default function ClinicForm() {
                   ))}
                 </SelectContent>
               </Select>
+              <FormDescription>{t("fields.size.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -141,7 +146,8 @@ export default function ClinicForm() {
           render={({ field }) => (
             <FormItem className="vertical col-span-2 items-start">
               <FormLabel htmlFor={field.name}>
-                Logo <span className="text-muted-foreground">(optional)</span>
+                {t("fields.logo.title")}{" "}
+                <span className="text-muted-foreground">({t("optional")})</span>
               </FormLabel>
               <AvatarUpload
                 id={field.name}
@@ -163,10 +169,8 @@ export default function ClinicForm() {
           name="planId"
           render={({ field }) => (
             <FormItem className="col-span-2 space-y-1">
-              <FormLabel>Subscription Plan</FormLabel>
-              <FormDescription>
-                Select your preferred subscription plan.
-              </FormDescription>
+              <FormLabel>{t("fields.plan.title")}</FormLabel>
+              <FormDescription>{t("fields.plan.description")}</FormDescription>
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
@@ -262,9 +266,11 @@ export default function ClinicForm() {
           <p className="horizontal col-span-2 items-start justify-center rounded-lg bg-muted p-2 text-xs text-muted-foreground">
             <Info className="mr-2 size-4" />
             <p>
-              Get started with a
-              <span className="ml-[0.5em] font-bold">14 day free trial</span>.
-              Cancel before the trial ends and you won&apos;t be charged.
+              {t("get-started-with")}
+              <span className="ml-[0.5em] font-bold">
+                {t("14-days-free-trial")}
+              </span>
+              .{t("cancel-anytime")}
             </p>
           </p>
         )}
@@ -275,22 +281,22 @@ export default function ClinicForm() {
           className="col-span-2"
           isLoading={pending}
         >
-          Go to payment
+          {t("go-to-payment")}
         </Button>
         <p className="col-span-2 text-balance text-center text-xs text-muted-foreground">
-          By clicking on <strong>Go to payment</strong>, you agree to our{" "}
+          {t("by-continuing")}{" "}
           <Link
             className="font-medium hover:underline"
             href="https://mydent.one/en/tos"
           >
-            Terms of Service
+            {t("tos")}
           </Link>{" "}
-          and{" "}
+          {t("and")}{" "}
           <Link
             className="font-medium hover:underline"
             href="https://mydent.one/en/privacy-policy"
           >
-            Privacy Policy
+            {t("privacy-policy")}
           </Link>
           .
         </p>

@@ -3,8 +3,10 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { api } from "@/trpc/server";
 import { type InvitationAccount } from "@/types/schema";
 import InvitationCard from "./invitation-card";
+import { useTranslations } from "@/lib/translations";
 
 export default async function Invitations() {
+  const t = await useTranslations("page.welcome.invitations");
   const session = (await auth())!;
   const invitations = await api.user.invitations();
 
@@ -12,10 +14,10 @@ export default async function Invitations() {
     return (
       <div className="flex h-full flex-col items-center justify-center">
         <h1 className="text-center text-2xl font-semibold">
-          No pending invitations
+          {t("no-invitations")}
         </h1>
         <p className="text-center text-muted-foreground">
-          You have no pending invitations at the moment.
+          {t("no-invitations-description")}
         </p>
       </div>
     );
@@ -24,12 +26,12 @@ export default async function Invitations() {
   return (
     <>
       <h1 className="mb-[-16px] text-left font-semibold">
-        Pending invitations
+        {t("pending-invitations")}
       </h1>
       <Card className="rounded-sm">
         <CardHeader className="flex flex-row gap-1 border-b">
           <h2 className="text-sm text-muted-foreground">
-            Invitations for{" "}
+            {t("invitations-for")}{" "}
             <span className="font-bold text-secondary-foreground">
               {session.email}
             </span>
