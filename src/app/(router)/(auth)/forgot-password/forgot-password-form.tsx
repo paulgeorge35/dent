@@ -16,14 +16,16 @@ import { z } from "zod";
 import { sendResetPasswordEmail } from "./actions";
 import { useBoolean } from "react-hanger";
 import RootFormError from "@/components/ui/root-form-error";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  email: z.string().min(1, "email.required").email("email.invalid"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function ForgotPasswordForm() {
+  const t = useTranslations("page.auth.forgot-password");
   const emailSent = useBoolean(false);
   const [pending, startTransition] = useTransition();
 
@@ -55,7 +57,7 @@ export default function ForgotPasswordForm() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Email</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("email")}</FormLabel>
               <Input
                 id={field.name}
                 type="email"
@@ -75,7 +77,7 @@ export default function ForgotPasswordForm() {
           type="submit"
           className="col-span-2 w-full"
         >
-          {emailSent.value ? "Email sent" : "Send reset password email"}
+          {emailSent.value ? t("email-sent") : t("button")}
         </Button>
       </form>
     </Form>

@@ -3,7 +3,7 @@ import LogoutDialog from "@/components/auth/logout-dialog";
 import Tenants from "@/components/auth/tenants";
 import { Button } from "@/components/ui/button";
 import { constructMetadata } from "@/lib/utils";
-import Image from "next/image";
+import { Box } from "lucide-react";
 
 export const metadata = constructMetadata({
   page: "Sign In",
@@ -13,14 +13,8 @@ export default async function Welcome() {
   return (
     <div className="grid gap-6 text-center">
       <div>
-        <div className="flex items-center justify-center p-8 text-lg font-black">
-          <Image
-            height={40}
-            width={40}
-            alt="MyDent"
-            className="mr-2"
-            src="logo.svg"
-          />
+        <div className="relative z-20 flex items-center justify-center p-4 font-mono text-2xl font-medium text-primary">
+          <Box className="mr-2 size-10" />
           MyDent
         </div>
         <h1 className="text-3xl font-bold">
@@ -35,7 +29,7 @@ export default async function Welcome() {
       <LogoutDialog>
         <Button
           variant="destructive"
-          className="w-full bg-transparent border-destructive text-destructive border hover:bg-destructive hover:text-white"
+          className="w-full border border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-white"
         >
           Sign out
         </Button>

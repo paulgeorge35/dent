@@ -10,13 +10,15 @@ import { type SearchParams } from "@/types";
 import { z } from "zod";
 import RootFormError from "@/components/ui/root-form-error";
 import { constructMetadata } from "@/lib/utils";
+import { useTranslations } from "@/lib/translations";
+import { RectangleEllipsis } from "lucide-react";
 
 export const metadata = constructMetadata({
   page: "Sign In",
 });
 
 const searchParamsSchema = z.object({
-  banned: z.boolean().optional(),
+  error: z.string().optional(),
 });
 
 export interface SignInPageProps {
@@ -24,24 +26,23 @@ export interface SignInPageProps {
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const { banned } = searchParamsSchema.parse(searchParams);
+  const { error } = searchParamsSchema.parse(searchParams);
+  const t = await useTranslations("page.auth.sign-in.with-email");
 
   return (
     <>
       <div className="grid gap-2 text-center">
-        <h1 className="text-3xl font-bold">Sign In</h1>
-        <p className="text-balance text-muted-foreground">
-          Sign in to your account using one of the options below
-        </p>
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
+        <p className="text-balance text-muted-foreground">{t("subtitle")}</p>
       </div>
       <span className="vertical gap-4">
-        {banned && <RootFormError error="Your account has been banned" />}
+        <RootFormError error={error} />
         <GoogleSignIn />
       </span>
       <span className="horizontal center-v w-full gap-4">
         <Separator className="w-auto grow" />
-        <span className="text-xs text-muted-foreground">
-          OR SIGN IN WITH EMAIL
+        <span className="text-xs uppercase text-muted-foreground">
+          {t("or-email")}
         </span>
         <Separator className="w-auto grow" />
       </span>
@@ -50,7 +51,9 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
 
       <span className="horizontal center-v w-full gap-4">
         <Separator className="w-auto grow" />
-        <span className="text-xs text-muted-foreground">OTHER OPTIONS</span>
+        <span className="text-xs uppercase text-muted-foreground">
+          {t("other-options")}
+        </span>
         <Separator className="w-auto grow" />
       </span>
       <Link
@@ -61,8 +64,8 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           }),
         )}
       >
-        <Icons.email className="mr-2 size-5" />
-        Sign in with Email
+        <RectangleEllipsis className="mr-2 size-5" />
+        {t("sign-in-with-password")}
       </Link>
     </>
   );

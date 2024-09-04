@@ -13,6 +13,9 @@ import { ThemeProvider } from "@/components/shared/theme-provider";
 
 import { cn, constructMetadata } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import LocaleSwitch from "@/components/shared/locale-switch";
 
 const SFProExpanded = localFont({
   src: [
@@ -24,7 +27,7 @@ const SFProExpanded = localFont({
 
 export const metadata = constructMetadata();
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -37,6 +40,8 @@ export default function RootLayout({
   }
   const theme = getTheme();
 
+  const locale = await getLocale();
+  const messages = await getMessages();
   return (
     <html
       lang="en"
@@ -71,7 +76,12 @@ export default function RootLayout({
               showAtBottom={false}
             />
             <Sonner position="bottom-center" />
-            <TRPCReactProvider>{children}</TRPCReactProvider>
+            <TRPCReactProvider>
+              <NextIntlClientProvider messages={messages}>
+                <LocaleSwitch locale={locale} />
+                {children}
+              </NextIntlClientProvider>
+            </TRPCReactProvider>
             <TailwindIndicator />
           </TooltipProvider>
         </ThemeProvider>

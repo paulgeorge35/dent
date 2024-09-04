@@ -13,6 +13,7 @@ import {
 import { Label } from "@/components/ui/label";
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const Form = FormProvider;
 
@@ -148,6 +149,7 @@ const FormMessage = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const { error, formMessageId } = useFormField();
   const body = error ? String(error?.message) : children;
+  const t = useTranslations("errors");
 
   if (!body) {
     return null;
@@ -160,7 +162,7 @@ const FormMessage = React.forwardRef<
       className={cn("text-[0.8rem] font-medium text-destructive", className)}
       {...props}
     >
-      {body}
+      {t(body)}
     </p>
   );
 });

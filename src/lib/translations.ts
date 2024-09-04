@@ -19,3 +19,18 @@ export const translations = {
     },
   },
 };
+
+import { type NamespaceKeys, type NestedKeyOf } from "next-intl";
+import { getTranslations } from "next-intl/server";
+
+type IntlMessages = typeof import("../../messages/en.json");
+
+export async function useTranslations<
+  NestedKey extends NamespaceKeys<
+    IntlMessages,
+    NestedKeyOf<IntlMessages>
+  > = never,
+>(namespace?: NestedKey) {
+  const t = await getTranslations(namespace);
+  return t;
+}

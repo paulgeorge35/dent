@@ -65,10 +65,41 @@ export async function GET(request: Request): Promise<Response> {
     });
 
     if (!existingProfile) {
+      const newProfile = await db.profile.create({
+        data: {
+          email: profile.email,
+          firstName: profile.name.firstName ?? "",
+          lastName: profile.name.lastName,
+          avatar: {
+            create: {
+              url: profile.picture,
+              key: profile.picture,
+            },
+          },
+          auth: {
+            create: {
+              type: "oauth",
+              provider: "google",
+              access_token: accessToken.token.access_token as string,
+              refresh_token: accessToken.token.refresh_token as string,
+            },
+          },
+        },
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          avatar: true,
+        },
+      });
+
+      await setSession(newProfile as SessionUser, { days: 30 });
+
       return new Response(null, {
         status: 302,
         headers: {
-          Location: "/sign-in?error=account-not-found",
+          Location: "/",
         },
       });
     }

@@ -1,6 +1,5 @@
 "use client";
 
-import { initials } from "@/lib/utils";
 import { z } from "zod";
 import {
   Form,
@@ -35,7 +34,7 @@ import { api } from "@/trpc/react";
 import { AvatarUpload } from "@/components/dropzone-input/avatar";
 
 const schema = z.object({
-  name: z.string().min(1, "Name is required").max(50, "Name is too long"),
+  name: z.string().min(1, "name.required").max(50, "name.max-length"),
   size: z.string().optional(),
   avatarId: z.string().nullable(),
   planId: z.string({
@@ -65,6 +64,7 @@ export default function ClinicForm() {
     resolver: zodResolver(schema),
     defaultValues: {
       name: "",
+      avatarId: null,
     },
   });
 

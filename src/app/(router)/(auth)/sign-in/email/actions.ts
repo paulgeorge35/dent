@@ -18,6 +18,7 @@ export async function signIn(email: string, password: string) {
             provider: "credentials",
           },
         },
+        avatar: true,
       },
     });
 
@@ -56,22 +57,24 @@ export async function signIn(email: string, password: string) {
     return { profile };
   });
 
-  if (!user) return;
+  if (!user) {
+    throw new Error("account.invalid");
+  }
 
   const auth = user.profile.auth.find((a) => a.type === "password");
 
   if (!auth) {
-    throw new Error("Invalid email or password");
+    throw new Error("account.invalid");
   }
 
   const isPasswordValid = await bcrypt.compare(password, auth.passwordHash!);
 
   if (!isPasswordValid) {
-    throw new Error("Invalid email or password");
+    throw new Error("account.invalid");
   }
 
   if (!user.profile.activatedAt) {
-    throw new Error("Your account has not been activated");
+    throw new Error("account.inactive");
   }
 
   const expires = DateTime.now().plus({ days: 30 }).toJSDate();

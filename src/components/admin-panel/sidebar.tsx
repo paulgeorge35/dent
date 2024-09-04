@@ -10,7 +10,7 @@ import { Shell } from "@/components/layout/shell";
 import AccountButton from "@/components/layout/account-button";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Box, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 
@@ -84,10 +84,10 @@ export function Sidebar({
             asChild
           >
             <Link href="/dashboard" className="flex items-center gap-2">
-              <Image src="/logo.svg" alt="logo" width={30} height={30} />
+              <Box className="mr-2 size-7" />
               <h1
                 className={cn(
-                  "whitespace-nowrap text-lg font-bold transition-[transform,opacity,display] duration-300 ease-in-out",
+                  "whitespace-nowrap font-mono text-lg font-medium transition-[transform,opacity,display] duration-300 ease-in-out",
                   sidebar?.isOpen === false
                     ? "hidden -translate-x-96 opacity-0"
                     : "translate-x-0 opacity-100",

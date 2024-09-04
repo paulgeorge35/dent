@@ -1,0 +1,98 @@
+{
+  "page": {
+    "auth": {
+      "sign-in": {
+        "with-email": {
+          "title": "Sign In",
+          "subtitle": "Sign in to your account using one of the options below.",
+          "continue-with-google": "Continue with Google",
+          "email": "Email",
+          "sign-in-with-password": "Sign in with password",
+          "sign-in-with-magic-link": "Sign in with magic link",
+          "or-email": "Or sign in with email",
+          "other-options": "Other options"
+        },
+        "with-password": {
+          "title": "Sign In",
+          "subtitle": "Sign in to your account using your email address and password.",
+          "email": "Email",
+          "password": "Password",
+          "forgot-password": "Forgot password?",
+          "button": "Sign In",
+          "or": "Or",
+          "create-account": "Create an account"
+        }
+      },
+      "sign-up": {
+        "title": "Sign Up",
+        "subtitle": "Sign up using one of the options below",
+        "or-email": "Or sign up with email",
+        "continue-with-google": "Continue with Google",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "confirm-password": "Confirm password",
+        "button": "Create account",
+        "already-have-account": "Already have an account?",
+        "sign-in": "Sign in",
+        "status": {
+          "success": {
+            "title": "Account created",
+            "description": "We've sent you an email to activate your account."
+          }
+        }
+      },
+      "forgot-password": {
+        "title": "Forgot Password?",
+        "subtitle": "Enter your email address to receive a password reset link.",
+        "email": "Email",
+        "button": "Send reset password email",
+        "email-sent": "Email sent",
+        "login": "Back to login"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    }
+  },
+  "errors": {
+    "global": {
+      "fallback": "Something went wrong, please try again later."
+    },
+    "account": {
+      "invalid": "Invalid email or password",
+      "inactive": "Account is not activated",
+      "not-found": "Account not found",
+      "banned": "Account is banned"
+    },
+    "email": {
+      "required": "Email is required",
+      "invalid": "Email is invalid",
+      "already-exists": "Email already exists"
+    },
+    "password": {
+      "required": "Password is required",
+      "invalid": "Password is invalid",
+      "min-length": "Password must be at least 8 characters long",
+      "max-length": "Password must be at most 64 characters long",
+      "invalid-format": "Password must contain at least one uppercase letter, one lowercase letter and one digit",
+      "mismatch": "Passwords do not match"
+    },
+    "name": {
+      "required": "Name is required"
+    },
+    "firstName": {
+      "required": "First name is required",
+      "invalid": "First name is invalid",
+      "min-length": "First name must be at least 3 characters long",
+      "max-length": "First name must be at most 50 characters long"
+    },
+    "lastName": {
+      "required": "Last name is required",
+      "invalid": "Last name is invalid",
+      "min-length": "Last name must be at least 3 characters long",
+      "max-length": "Last name must be at most 50 characters long"
+    }
+  }
+}

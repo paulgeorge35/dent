@@ -84,14 +84,14 @@ export const userRouter = createTRPCRouter({
       if (emailExists) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Email already exists",
+          message: "email.already-exists",
         });
       }
 
       if (password !== confirm) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Passwords do not match",
+          message: "password.mismatch",
         });
       }
 
@@ -226,7 +226,7 @@ export const userRouter = createTRPCRouter({
           if (password !== confirm) {
             ctx.addIssue({
               code: z.ZodIssueCode.custom,
-              message: "Passwords do not match",
+              message: "password.mismatch",
               path: ["confirm"],
             });
           }

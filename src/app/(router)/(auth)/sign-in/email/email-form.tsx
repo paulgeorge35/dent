@@ -17,15 +17,17 @@ import { signIn } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
 import Link from "next/link";
 import { PasswordInput } from "@/components/password-input";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
-  password: z.string().min(1, "Password is required"),
+  email: z.string().min(1, "email.required").email("email.invalid"),
+  password: z.string().min(1, "password.required"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function EmailSignIn() {
+  const t = useTranslations("page.auth.sign-in.with-password");
   const [pending, startTransition] = useTransition();
 
   const form = useForm<FormValues>({
@@ -56,7 +58,7 @@ export default function EmailSignIn() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Email</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("email")}</FormLabel>
               <Input
                 id={field.name}
                 type="email"
@@ -72,14 +74,13 @@ export default function EmailSignIn() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              {/* <FormLabel htmlFor={field.name}>Password</FormLabel> */}
               <div className="flex items-center">
-                <FormLabel htmlFor="password">Password</FormLabel>
+                <FormLabel htmlFor="password">{t("password")}</FormLabel>
                 <Link
                   href="/forgot-password"
                   className="ml-auto inline-block text-sm underline"
                 >
-                  Forgot your password?
+                  {t("forgot-password")}
                 </Link>
               </div>
               <PasswordInput id={field.name} {...field} />
@@ -88,10 +89,10 @@ export default function EmailSignIn() {
           )}
         />
 
-        <RootFormError error={form.formState.errors?.root?.message} />
+        <RootFormError className="col-span-2" error={form.formState.errors?.root?.message} />
 
         <Button isLoading={pending} type="submit" className="col-span-2 w-full">
-          Sign In
+        {t("button")}
         </Button>
       </form>
     </Form>

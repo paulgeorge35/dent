@@ -1,7 +1,7 @@
 import { constructMetadata } from "@/lib/utils";
 import ClinicForm from "./clinic-form";
-import Image from "next/image";
 import { Shell } from "@/components/layout/shell";
+import { Box } from "lucide-react";
 
 export const metadata = constructMetadata({
   page: "Create Clinic",
@@ -10,14 +10,8 @@ export const metadata = constructMetadata({
 export default async function CreateClinic() {
   return (
     <Shell variant="center">
-      <div className="flex items-center justify-center p-8 text-lg font-black">
-        <Image
-          height={40}
-          width={40}
-          alt="MyDent"
-          className="mr-2"
-          src="logo.svg"
-        />
+      <div className="relative z-20 flex items-center p-4 font-mono text-lg font-medium text-primary justify-center">
+        <Box className="mr-2" />
         MyDent
       </div>
       <h1 className="text-center text-5xl font-bold">

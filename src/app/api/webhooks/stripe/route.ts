@@ -89,9 +89,11 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
               create: {
                 name: metadata.name,
                 size: metadata.size,
-                avatar: metadata.avatarId ? {
-                  connect: { id: metadata.avatarId },
-                } : undefined,
+                avatar: metadata.avatarId
+                  ? {
+                      connect: { id: metadata.avatarId },
+                    }
+                  : undefined,
                 planId: plan.id,
                 activeSubscription:
                   subscription.status === "active" ||

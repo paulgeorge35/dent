@@ -18,62 +18,58 @@ import RootFormError from "@/components/ui/root-form-error";
 import { PasswordInput } from "@/components/password-input";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
+import { showErrorToast } from "@/lib/handle-error";
 
 const schema = z
   .object({
     firstName: z
       .string({
-        required_error: "First name is required",
-        invalid_type_error: "First name must be a string",
+        required_error: "firstName.required",
+        invalid_type_error: "firstName.invalid",
         description: "First name of the user",
       })
-      .min(3, "First name must be at least 3 characters")
-      .max(50, "First name must be at most 64 characters"),
+      .min(3, "firstName.min-length")
+      .max(50, "firstName.max-length"),
     lastName: z
       .string({
-        required_error: "Last name is required",
-        invalid_type_error: "Last name must be a string",
+        required_error: "lastName.required",
+        invalid_type_error: "lastName.invalid",
         description: "Last name of the user",
       })
-      .min(3, "Last name must be at least 3 characters")
-      .max(50, "Last name must be at most 64 characters"),
+      .min(3, "lastName.min-length")
+      .max(50, "lastName.max-length"),
     email: z
       .string({
-        required_error: "Email is required",
-        invalid_type_error: "Email must be a string",
+        required_error: "email.required",
+        invalid_type_error: "email.invalid",
         description: "Email of the user",
       })
-      .email("Invalid email"),
+      .email("email.invalid"),
     password: z
       .string({
-        required_error: "Password is required",
-        invalid_type_error: "Password must be a string",
+        required_error: "password.required",
+        invalid_type_error: "password.invalid",
         description: "Password of the user",
       })
-      .min(8, "Password must be at least 8 characters")
-      .max(64, "Password must be at most 64 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        "Passwords must contain at least one lowercase letter, one uppercase letter, and one number.",
-      ),
+      .min(8, "password.min-length")
+      .max(64, "password.max-length")
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, "password.invalid-format"),
     confirm: z
       .string({
-        required_error: "Confirm password is required",
-        invalid_type_error: "Confirm password must be a string",
+        required_error: "password.required",
+        invalid_type_error: "password.invalid",
         description: "Confirm password of the user",
       })
-      .min(8, "Password must be at least 8 characters")
-      .max(64, "Password must be at most 64 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        "Passwords must contain at least one lowercase letter, one uppercase letter, and one number.",
-      ),
+      .min(8, "password.min-length")
+      .max(64, "password.max-length")
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, "password.invalid-format"),
   })
   .superRefine(({ confirm, password }, ctx) => {
     if (password !== confirm) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Passwords do not match",
+        message: "password.mismatch",
         path: ["confirm"],
       });
     }
@@ -86,17 +82,20 @@ type RegisterFormProps = {
 };
 
 export default function RegisterForm({ email }: RegisterFormProps) {
-  const [pending, startTransition] = useTransition();
-  const { mutateAsync: register } = api.user.register.useMutation({
-    onSuccess: () => {
-      toast.success("Account created", {
-        description: "Please check your email to confirm your account",
-      });
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+  const t = useTranslations("page.auth.sign-up");
+  const te = useTranslations("errors");
+
+  const { mutateAsync: register, isPending: pending } =
+    api.user.register.useMutation({
+      onSuccess: () => {
+        toast.success(t("status.success.title"), {
+          description: t("status.success.description"),
+        });
+      },
+      onError: (error) => {
+        showErrorToast(error, te);
+      },
+    });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
@@ -110,17 +109,7 @@ export default function RegisterForm({ email }: RegisterFormProps) {
   });
 
   const onSubmit = form.handleSubmit(async (values: FormValues) => {
-    startTransition(async () => {
-      try {
-        await register(values);
-      } catch (error) {
-        if (error instanceof Error) {
-          form.setError("root", {
-            message: error.message,
-          });
-        }
-      }
-    });
+    await register(values);
   });
 
   return (
@@ -130,16 +119,9 @@ export default function RegisterForm({ email }: RegisterFormProps) {
           <FormField
             control={form.control}
             name="firstName"
-            rules={{
-              required: "First name is required",
-              minLength: {
-                value: 2,
-                message: "First name must be at least 2 characters",
-              },
-            }}
             render={({ field }) => (
               <FormItem className="col-span-1 w-full">
-                <FormLabel htmlFor={field.name}>First name</FormLabel>
+                <FormLabel htmlFor={field.name}>{t("firstName")}</FormLabel>
                 <Input id={field.name} {...field} placeholder="John" />
                 <FormMessage />
               </FormItem>
@@ -148,16 +130,9 @@ export default function RegisterForm({ email }: RegisterFormProps) {
           <FormField
             control={form.control}
             name="lastName"
-            rules={{
-              required: "Last name is required",
-              minLength: {
-                value: 2,
-                message: "Last name must be at least 2 characters",
-              },
-            }}
             render={({ field }) => (
               <FormItem className="col-span-1 w-full">
-                <FormLabel htmlFor={field.name}>Last name</FormLabel>
+                <FormLabel htmlFor={field.name}>{t("lastName")}</FormLabel>
                 <Input id={field.name} {...field} placeholder="Doe" />
                 <FormMessage />
               </FormItem>
@@ -166,16 +141,9 @@ export default function RegisterForm({ email }: RegisterFormProps) {
           <FormField
             control={form.control}
             name="email"
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                message: "Invalid email address",
-              },
-            }}
             render={({ field }) => (
               <FormItem className="col-span-2 w-full">
-                <FormLabel htmlFor={field.name}>Email</FormLabel>
+                <FormLabel htmlFor={field.name}>{t("email")}</FormLabel>
                 <Input
                   id={field.name}
                   {...field}
@@ -189,16 +157,9 @@ export default function RegisterForm({ email }: RegisterFormProps) {
           <FormField
             control={form.control}
             name="password"
-            rules={{
-              required: "Password is required",
-              minLength: {
-                value: 8,
-                message: "Password must be at least 8 characters",
-              },
-            }}
             render={({ field }) => (
               <FormItem className="col-span-2 w-full">
-                <FormLabel htmlFor={field.name}>Password</FormLabel>
+                <FormLabel htmlFor={field.name}>{t("password")}</FormLabel>
                 <PasswordInput id={field.name} {...field} />
                 <FormMessage />
               </FormItem>
@@ -215,7 +176,9 @@ export default function RegisterForm({ email }: RegisterFormProps) {
             }}
             render={({ field }) => (
               <FormItem className="col-span-2 w-full">
-                <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
+                <FormLabel htmlFor={field.name}>
+                  {t("confirm-password")}
+                </FormLabel>
                 <PasswordInput id={field.name} {...field} />
                 <FormMessage />
               </FormItem>
@@ -226,7 +189,7 @@ export default function RegisterForm({ email }: RegisterFormProps) {
         <RootFormError error={form.formState.errors?.root?.message} />
 
         <Button isLoading={pending} type="submit" className="w-full">
-          Create an account
+          {t("button")}
         </Button>
       </form>
     </Form>

@@ -15,15 +15,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInMagicLink } from "./actions";
 import RootFormError from "@/components/ui/root-form-error";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
-  email: z.string().min(1, "Email is required").email("Invalid email address"),
+  email: z.string().min(1, "email.required").email("email.invalid"),
 });
 
 type FormValues = z.infer<typeof schema>;
 
 export default function MagicLinkSignIn() {
+  const t = useTranslations("page.auth.sign-in.with-email");
   const [pending, startTransition] = useTransition();
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -51,7 +54,7 @@ export default function MagicLinkSignIn() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Email</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("email")}</FormLabel>
               <Input
                 id={field.name}
                 type="email"
@@ -66,7 +69,7 @@ export default function MagicLinkSignIn() {
         <RootFormError error={form.formState.errors?.root?.message} />
 
         <Button isLoading={pending} type="submit" className="col-span-2 w-full">
-          Sign in with magic link
+          {t("sign-in-with-magic-link")}
         </Button>
       </form>
     </Form>

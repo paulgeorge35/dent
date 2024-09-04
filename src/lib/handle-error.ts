@@ -3,13 +3,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 export function getErrorMessage(err: unknown) {
-  const unknownError = "Something went wrong, please try again later.";
+  const unknownError = "global.fallback";
 
   if (err instanceof z.ZodError) {
-    const errors = err.issues.map((issue) => {
-      return issue.message;
-    });
-    return errors.join("\n");
+    const error = err.issues[0]?.message;
+    return error ?? unknownError;
   } else if (err instanceof Error) {
     return err.message;
   } else if (isRedirectError(err)) {
@@ -19,12 +17,7 @@ export function getErrorMessage(err: unknown) {
   }
 }
 
-export function showErrorToast(err: unknown) {
-  const errorMessage = getErrorMessage(err);
+export function showErrorToast(err: unknown, t?: (key: string) => string) {
+  const errorMessage = t ? t(getErrorMessage(err)) : getErrorMessage(err);
   return toast.error(errorMessage);
 }
-
-export const defaultErrors = {
-  account_not_found: "Account not found",
-  email_exists: "Email already exists",
-};

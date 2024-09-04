@@ -1,0 +1,99 @@
+{
+  "page": {
+    "auth": {
+      "sign-in": {
+        "with-email": {
+          "title": "Autentificare",
+          "subtitle": "Autentifică-te în contul tău folosind una dintre opțiunile de mai jos.",
+          "continue-with-google": "Continuă cu Google",
+          "email": "Email",
+          "sign-in-with-password": "Autentifică-te cu parolă",
+          "sign-in-with-magic-link": "Autentifică-te cu link magic",
+          "or-email": "Sau autentifică-te cu email",
+          "other-options": "Alte opțiuni"
+        },
+        "with-password": {
+          "title": "Autentificare",
+          "subtitle": "Autentifică-te în contul tău folosind adresa ta de email și parola.",
+          "email": "Email",
+          "password": "Parolă",
+          "forgot-password": "Ai uitat parola?",
+          "button": "Autentificare",
+          "or": "Sau",
+          "create-account": "Creează un cont"
+        }
+      },
+      "sign-up": {
+        "title": "Înregistrare",
+        "subtitle": "Înregistrează-te folosind una dintre opțiunile de mai jos",
+        "or-email": "Sau înregistrează-te cu email",
+        "continue-with-google": "Continuă cu Google",
+        "firstName": "Prenume",
+        "lastName": "Nume",
+        "email": "Email",
+        "password": "Parolă",
+        "confirm-password": "Confirmă parola",
+        "button": "Înregistrare",
+        "login": "Ai deja un cont? Autentifică-te aici.",
+        "already-have-account": "Ai deja un cont?",
+        "sign-in": "Autentifică-te",
+        "status": {
+          "success": {
+            "title": "Cont creat",
+            "description": "Ți-am trimis un email pentru a-ți activa contul."
+          }
+        }
+      },
+      "forgot-password": {
+        "title": "Ai uitat parola?",
+        "subtitle": "Introdu adresa de email pentru a primi un link de resetare a parolei.",
+        "email": "Email",
+        "button": "Trimite email de resetare a parolei",
+        "email-sent": "Email trimis",
+        "login": "Înapoi la autentificare"
+      }
+    },
+    "dashboard": {
+      "title": "Administrare"
+    }
+  },
+  "errors": {
+    "global": {
+      "fallback": "A apărut o eroare, încearcă din nou mai târziu"
+    },
+    "account": {
+      "invalid": "Email sau parolă invalidă",
+      "inactive": "Contul nu a fost activat",
+      "not-found": "Contul nu a fost găsit",
+      "banned": "Contul a fost suspendat"
+    },
+    "email": {
+      "required": "Adresa de email este obligatorie",
+      "invalid": "Adresa de email este invalidă",
+      "already-exists": "Adresa de email este deja folosită"
+    },
+    "password": {
+      "required": "Parola este obligatorie",
+      "invalid": "Parola trebuie să fie un șir de caractere",
+      "min-length": "Parola trebuie să aibă cel puțin 8 caractere",
+      "max-length": "Parola trebuie să aibă cel mult 64 de caractere",
+      "invalid-format": "Parola trebuie să conțină cel puțin o literă mică, o literă mare și un număr",
+      "mismatch": "Parolele nu se potrivesc"
+    },
+    "name": {
+      "required": "Numele este obligatoriu"
+    },
+    "firstName": {
+      "required": "Prenumele este obligatoriu",
+      "invalid": "Prenumele trebuie să fie un șir de caractere",
+      "min-length": "Prenumele trebuie să aibă cel puțin 3 caractere",
+      "max-length": "Prenumele trebuie să aibă cel mult 50 de caractere"
+    },
+    "lastName": {
+      "required": "Numele de familie este obligatoriu",
+      "invalid": "Numele de familie trebuie să fie un șir de caractere",
+      "min-length": "Numele de familie trebuie să aibă cel puțin 3 caractere",
+      "max-length": "Numele de familie trebuie să aibă cel mult 50 de caractere"
+    }
+  }
+}

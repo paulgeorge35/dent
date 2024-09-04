@@ -9,7 +9,7 @@ export default function AuthHero() {
   return (
     <div className="relative hidden h-full flex-col p-10 text-white lg:flex">
       <motion.span
-        className="absolute inset-8 overflow-hidden rounded-3xl"
+        className="absolute inset-8 overflow-hidden rounded-3xl z-10"
         animate={{
           width: "calc(100% - 64px)",
           borderRadius: "1.5rem",
@@ -36,7 +36,7 @@ export default function AuthHero() {
         />
       </motion.span>
       <motion.div
-        className="relative z-20 flex items-center p-4 font-mono text-lg font-medium text-black"
+        className="relative z-20 flex items-center p-4 font-mono text-lg font-medium text-primary"
         animate={{
           opacity: 1,
         }}
