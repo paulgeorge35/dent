@@ -3,9 +3,17 @@
 import { toggleLocale } from "@/app/(router)/actions";
 import { Languages } from "lucide-react";
 import { useTransition } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function LocaleSwitch({ locale }: { locale: string }) {
   const [, startTransition] = useTransition();
+
   const toggle = () => {
     startTransition(async () => {
       await toggleLocale();
@@ -13,12 +21,15 @@ export default function LocaleSwitch({ locale }: { locale: string }) {
   };
 
   return (
-    <button
-      className="horizontal center-v fixed bottom-2 right-2 z-[9999] gap-1 rounded-md border border-border bg-muted px-2 py-1 hover:bg-muted-foreground hover:text-muted uppercase text-xs font-semibold"
-      onClick={toggle}
-    >
-      <Languages className="size-4" />
-      {locale}
-    </button>
+    <Select value={locale} onValueChange={toggle}>
+      <SelectTrigger className="" aria-label="Select language">
+        <Languages className="mr-2 h-4 w-4" aria-hidden="true" />
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="en">English (EN)</SelectItem>
+        <SelectItem value="ro">Română (RO)</SelectItem>
+      </SelectContent>
+    </Select>
   );
 }

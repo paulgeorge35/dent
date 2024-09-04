@@ -14,15 +14,18 @@ import { Box, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import LocaleSwitch from "../shared/locale-switch";
 
 export function Sidebar({
   session,
   accounts,
   title,
+  locale,
 }: {
   title?: string;
   session: SessionUser;
   accounts: TenantAccount[];
+  locale: "en" | "ro";
 }) {
   const t = useTranslations("layout.sidebar");
   const sidebar = useStore(useSidebarToggle, (state) => state);
@@ -35,7 +38,7 @@ export function Sidebar({
       <Shell
         variant="nav"
         className={cn(
-          "lg:w-[calc(100vw-90px)] justify-between pl-8 transition-[width] duration-300 ease-in-out w-full",
+          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-90px)]",
           {
             "lg:w-[calc(100vw-288px)]": sidebar?.isOpen,
           },
@@ -104,6 +107,7 @@ export function Sidebar({
             accounts={accounts}
             session={session}
           />
+          <LocaleSwitch locale={locale} />
         </div>
       </aside>
     </>

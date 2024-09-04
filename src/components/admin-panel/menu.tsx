@@ -42,7 +42,7 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
     <ScrollArea className="mt-2 [&>div>div[style]]:!block">
       <CurrentTenant tenant={tenant} isOpen={isOpen} />
       <nav className="mt-4 h-full w-full">
-        <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px)] flex-col items-start space-y-1 px-2 lg:min-h-[calc(100vh-96px-40px-32px)]">
+        <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px-36px)] flex-col items-start space-y-1 px-2 lg:min-h-[calc(100vh-96px-40px-32px-36px)]">
           {menuList.map(({ groupLabel, menus, hideLabel }, index: number) => (
             <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
               {(isOpen && groupLabel && !hideLabel) ?? isOpen === undefined ? (

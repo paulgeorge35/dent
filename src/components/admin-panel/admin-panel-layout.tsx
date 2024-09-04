@@ -13,10 +13,12 @@ export default function AdminPanelLayout({
   children,
   session,
   accounts,
+  locale,
 }: {
   children: React.ReactNode;
   session: SessionUser;
   accounts: TenantAccount[];
+  locale: "en" | "ro";
 }) {
   const t = useTranslations("page");
   const pathname = usePathname();
@@ -29,6 +31,7 @@ export default function AdminPanelLayout({
         title={t(`${getPageTitle(pathname)}.title`)}
         session={session}
         accounts={accounts}
+        locale={locale}
       />
       <Shell
         className={cn(
