@@ -37,6 +37,13 @@ interface CalendarToolbarProps {
       patient: Patient | null;
     })[];
   })[];
+  activeUsers?: (User & {
+    profile: Profile & {
+      avatar: {
+        url: string;
+      } | null;
+    };
+  })[];
 }
 
 export default function CalendarToolbar({
@@ -45,6 +52,7 @@ export default function CalendarToolbar({
   setPeriod,
   calendarRef,
   users,
+  activeUsers,
 }: CalendarToolbarProps) {
   const calendar = calendarRef.current?.getApi();
   const router = useRouter();
@@ -137,7 +145,7 @@ export default function CalendarToolbar({
                   All dentists
                 </div>
               </SelectItem>
-              {users?.map((user) => (
+              {activeUsers?.map((user) => (
                 <SelectItem key={user.id} value={user.id}>
                   <div className="flex items-center gap-2">
                     <AvatarComponent

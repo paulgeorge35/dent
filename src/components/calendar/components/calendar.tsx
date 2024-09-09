@@ -68,6 +68,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
   const newAppointmentDialog = useBoolean(false);
   const openAppointmentDialog = useInput(undefined);
   const router = useRouter();
+  const { data: activeUsers } = api.tenant.activeUsers.useQuery();
   const { data: users, refetch: refetchCalendar } =
     api.tenant.calendar.useQuery({
       selected: selectedUser,
@@ -217,6 +218,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         setPeriod={setPeriod}
         calendarRef={calendarRef}
         users={users}
+        activeUsers={activeUsers?.filter((user) => user.id !== userId)}
       />
       <CreateAppointmentDialog
         open={newAppointmentDialog.value}
