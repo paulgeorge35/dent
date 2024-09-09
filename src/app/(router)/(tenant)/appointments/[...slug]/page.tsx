@@ -1,6 +1,6 @@
-import dynamic from "next/dynamic";
 import { auth } from "@/auth";
 import { constructMetadata } from "@/lib/utils";
+import dynamic from "next/dynamic";
 import { z } from "zod";
 const Calendar = dynamic(
   () => import("@/components/calendar/components/calendar"),
@@ -25,6 +25,9 @@ const paramsSchema = z
 
 export default async function Appointments({ params }: AppointmentsProps) {
   const selected = paramsSchema.parse(params.slug[0]);
-  const session = (await auth())!;
-  return <Calendar selected={selected} userId={session.user!.id} />;
+  const session = await auth();
+  if (!session || !session.user) {
+    return null;
+  }
+  return <Calendar selected={selected} userId={session.user.id} />;
 }

@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-import { createTRPCRouter, tenantProcedure } from "../trpc";
-import { StatusSchema } from "prisma/generated/zod";
 import { emailSchema } from "@/types/schema";
+import { StatusSchema } from "prisma/generated/zod";
+import { createTRPCRouter, tenantProcedure } from "../trpc";
 
 export const createInput = z.object({
   firstName: z.string(),

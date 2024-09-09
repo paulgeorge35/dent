@@ -1,7 +1,7 @@
 "use server";
 
-import { googleClient } from "@/oauth";
 import { env } from "@/env";
+import { googleClient } from "@/oauth";
 import { redirect } from "next/navigation";
 
 export async function signUpGoogle() {

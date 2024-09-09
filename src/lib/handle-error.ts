@@ -8,13 +8,14 @@ export function getErrorMessage(err: unknown) {
   if (err instanceof z.ZodError) {
     const error = err.issues[0]?.message;
     return error ?? unknownError;
-  } else if (err instanceof Error) {
-    return err.message;
-  } else if (isRedirectError(err)) {
-    throw err;
-  } else {
-    return unknownError;
   }
+  if (err instanceof Error) {
+    return err.message;
+  }
+  if (isRedirectError(err)) {
+    throw err;
+  }
+  return unknownError;
 }
 
 export function showErrorToast(err: unknown, t?: (key: string) => string) {

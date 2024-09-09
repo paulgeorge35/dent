@@ -1,10 +1,10 @@
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { useRef, useState } from "react";
 import { ErrorCode, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
-import { useState, useRef } from "react";
-import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { api } from "@/trpc/react";
-import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
 import AvatarComponent from "../shared/avatar-component";
 

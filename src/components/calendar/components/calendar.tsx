@@ -1,45 +1,44 @@
 "use client";
 
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
-import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
-import interactionPlugin, {
-  type EventResizeDoneArg,
-  type DateClickArg,
-} from "@fullcalendar/interaction";
-import type {
-  EventContentArg,
-  EventClickArg,
-  DateSelectArg,
-  EventDropArg,
-  DatesSetArg,
-  EventSourceInput,
-} from "@fullcalendar/core/index.js";
-import { DateTime } from "luxon";
-import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { showErrorToast } from "@/lib/handle-error";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import CreateAppointmentDialog from "./create-appointment-dialog";
-import { useBoolean, useInput } from "react-hanger";
-import { useStore } from "@/hooks/use-store";
-import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useMemo } from "react";
 import {
-  renderEventContent,
-  formatDayHeader,
   CalendarToolbar,
+  formatDayHeader,
+  renderEventContent,
   resourceLabelContent,
 } from "@/components/calendar/util";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { useStore } from "@/hooks/use-store";
+import { showErrorToast } from "@/lib/handle-error";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
 import { appointmentCreateInput } from "@/types/schema";
+import type {
+  DateSelectArg,
+  DatesSetArg,
+  EventClickArg,
+  EventContentArg,
+  EventDropArg,
+  EventSourceInput,
+} from "@fullcalendar/core/index.js";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin, {
+  type DateClickArg,
+  type EventResizeDoneArg,
+} from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
+import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useBoolean, useInput } from "react-hanger";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 import AppointmentDialog from "./appointment-dialog";
+import CreateAppointmentDialog from "./create-appointment-dialog";
 
 export type AppointmentSchema = z.infer<typeof appointmentCreateInput>;
 
@@ -69,10 +68,11 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
   const newAppointmentDialog = useBoolean(false);
   const openAppointmentDialog = useInput(undefined);
   const router = useRouter();
-  const { data: users, refetch: refetchCalendar } = api.tenant.calendar.useQuery({
-    selected: selectedUser,
-    dateRange,
-  });
+  const { data: users, refetch: refetchCalendar } =
+    api.tenant.calendar.useQuery({
+      selected: selectedUser,
+      dateRange,
+    });
 
   useEffect(() => {
     const calendar = calendarRef.current?.getApi();
@@ -195,7 +195,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
   const memoizedAppointments: EventSourceInput = useMemo(() => {
     return appointments.map((app) => ({
       ...app,
-      title: app.patient?.firstName + " " + app.patient?.lastName,
+      title: `${app.patient?.firstName} ${app.patient?.lastName}`,
       start: app.start ?? undefined,
       end: app.end ?? undefined,
       resourceId: app.userId,
@@ -265,7 +265,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         initialView={initialView}
         resources={users?.map((user) => ({
           id: user.id,
-          title: user.profile.firstName + " " + user.profile.lastName,
+          title: `${user.profile.firstName} ${user.profile.lastName}`,
           businessHours: {
             startTime: "10:00",
             endTime: "18:00",

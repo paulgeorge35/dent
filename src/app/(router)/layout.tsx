@@ -11,10 +11,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { ThemeProvider } from "@/components/shared/theme-provider";
 
-import { cn, constructMetadata } from "@/lib/utils";
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
-import { getLocale, getMessages } from "next-intl/server";
+import { cn, constructMetadata } from "@/lib/utils";
 import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
 
 const SFProExpanded = localFont({
   src: [

@@ -1,5 +1,5 @@
-import * as React from "react";
 import { Label } from "@/components/ui/label";
+import * as React from "react";
 import { TimePickerInput } from "./time-picker";
 
 interface TimePickerDemoProps {

@@ -1,7 +1,7 @@
-import { TRPCError } from "@trpc/server";
-import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
-import { z } from "zod";
 import { env } from "@/env";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
+import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
 
 export const specializationRouter = createTRPCRouter({
   list: tenantProcedure.query(async ({ ctx }) => {

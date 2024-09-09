@@ -5,8 +5,8 @@
  */
 import {
   Collapsible,
-  CollapsibleTrigger,
   CollapsibleContent,
+  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ChevronDownIcon } from "lucide-react";
 

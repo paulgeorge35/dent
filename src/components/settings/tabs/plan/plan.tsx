@@ -1,9 +1,9 @@
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
 import { TabsContent } from "@/components/ui/tabs";
 import CurrentMembership from "./components/current-plan";

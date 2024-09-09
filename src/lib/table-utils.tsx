@@ -5,7 +5,7 @@ import {
   MinusCircledIcon,
   StarIcon,
 } from "@radix-ui/react-icons";
-import { type RoleType, type StatusType } from "prisma/generated/zod";
+import type { RoleType, StatusType } from "prisma/generated/zod";
 
 export const getStatusIcon = (status: StatusType) => {
   const statusIcon = {

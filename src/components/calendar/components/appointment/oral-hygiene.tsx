@@ -1,14 +1,14 @@
-import type { UseFormReturn } from "react-hook-form";
-import type { AppointmentSchema } from "../calendar";
-import quiz from "@/lib/quiz-questions.json";
 import {
   FormControl,
-  FormLabel,
-  FormItem,
-  FormMessage,
   FormFieldCompact,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import quiz from "@/lib/quiz-questions.json";
+import type { UseFormReturn } from "react-hook-form";
+import type { AppointmentSchema } from "../calendar";
 
 type OralHygieneProps = {
   form: UseFormReturn<AppointmentSchema>;

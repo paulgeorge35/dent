@@ -1,8 +1,11 @@
 "use client";
 
-import type { UseFormReturn } from "react-hook-form";
-import type { AppointmentSchema } from "../calendar";
+import { DateTimePicker } from "@/components/datetime-input/datetime";
+import { TimePickerInput } from "@/components/datetime-input/time-picker";
+import { DropzoneFiles } from "@/components/dropzone-input";
+import AvatarComponent from "@/components/shared/avatar-component";
 import { FormFieldCompact } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,14 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { api } from "@/trpc/react";
-import { Textarea } from "@/components/ui/textarea";
-import AvatarComponent from "@/components/shared/avatar-component";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Label } from "@/components/ui/label";
-import { DateTimePicker } from "@/components/datetime-input/datetime";
-import { TimePickerInput } from "@/components/datetime-input/time-picker";
-import { DropzoneFiles } from "@/components/dropzone-input";
+import { Textarea } from "@/components/ui/textarea";
+import { api } from "@/trpc/react";
+import type { UseFormReturn } from "react-hook-form";
+import type { AppointmentSchema } from "../calendar";
 
 type TreatmentSpecialistProps = {
   form: UseFormReturn<AppointmentSchema>;

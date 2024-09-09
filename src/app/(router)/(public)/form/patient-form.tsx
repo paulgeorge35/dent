@@ -1,6 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { CitySelect } from "@/components/address-input/city-input";
+import { CountySelect } from "@/components/address-input/county-input";
+import { DateTimePicker } from "@/components/datetime-input/datetime";
+import { PhoneInput, getPhoneData } from "@/components/phone-input";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Form,
   FormControl,
@@ -10,22 +15,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { emailSchema } from "@/types/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Check } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { PhoneInput, getPhoneData } from "@/components/phone-input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { DateTimePicker } from "@/components/datetime-input/datetime";
-import { cn } from "@/lib/utils";
-import { CountySelect } from "@/components/address-input/county-input";
-import { api } from "@/trpc/react";
-import { CitySelect } from "@/components/address-input/city-input";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
-import Link from "next/link";
-import { emailSchema } from "@/types/schema";
 
 const PatientFormSchema = z.object({
   firstName: z.string({

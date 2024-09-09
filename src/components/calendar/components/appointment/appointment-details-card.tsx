@@ -45,7 +45,9 @@ function Section({ title, value, secondValue, Icon }: SectionProps) {
         <p className="text-xs uppercase text-muted-foreground">{title}</p>
         <p className="text-balance text-sm font-medium">
           {value}
-          {secondValue && <span className="!font-normal block">{secondValue}</span>}
+          {secondValue && (
+            <span className="!font-normal block">{secondValue}</span>
+          )}
         </p>
       </div>
     </span>

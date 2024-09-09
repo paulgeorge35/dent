@@ -1,7 +1,7 @@
+import { useTranslations } from "@/lib/translations";
+import { constructMetadata } from "@/lib/utils";
 import Link from "next/link";
 import ForgotPasswordForm from "./forgot-password-form";
-import { constructMetadata } from "@/lib/utils";
-import { useTranslations } from "@/lib/translations";
 
 export const metadata = constructMetadata({
   page: "Forgot Password",
@@ -19,7 +19,7 @@ export default async function ForgotPassword() {
       <ForgotPasswordForm />
 
       <Link href="/sign-in" className="text-center underline">
-      {t("login")}
+        {t("login")}
       </Link>
     </>
   );

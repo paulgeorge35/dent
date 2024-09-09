@@ -2,9 +2,9 @@
 
 import { encrypt } from "@/lib";
 import { db } from "@/server/db";
+import bcrypt from "bcryptjs";
 import { DateTime } from "luxon";
 import { cookies } from "next/headers";
-import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
 export async function signIn(email: string, password: string) {
@@ -67,7 +67,11 @@ export async function signIn(email: string, password: string) {
     throw new Error("account.invalid");
   }
 
-  const isPasswordValid = await bcrypt.compare(password, auth.passwordHash!);
+  if (!auth.passwordHash) {
+    throw new Error("account.invalid");
+  }
+
+  const isPasswordValid = await bcrypt.compare(password, auth.passwordHash);
 
   if (!isPasswordValid) {
     throw new Error("account.invalid");
@@ -78,13 +82,18 @@ export async function signIn(email: string, password: string) {
   }
 
   const expires = DateTime.now().plus({ days: 30 }).toJSDate();
+
+  if (!user.tenant?.users[0]) {
+    throw new Error("account.invalid");
+  }
+
   const session = await encrypt(
     {
       ...user.profile,
       user: user.tenant
         ? {
             id: user.tenant.id,
-            role: user.tenant.users[0]!.role,
+            role: user.tenant.users[0].role,
             tenantId: user.tenant.id,
           }
         : undefined,

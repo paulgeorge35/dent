@@ -1,13 +1,13 @@
 import {
-  Users,
-  LayoutGrid,
-  type LucideIcon,
-  SquareUser,
-  Stethoscope,
   CalendarClock,
   Hammer,
+  LayoutGrid,
+  type LucideIcon,
   type LucideProps,
   Pill,
+  SquareUser,
+  Stethoscope,
+  Users,
 } from "lucide-react";
 
 type Submenu = {

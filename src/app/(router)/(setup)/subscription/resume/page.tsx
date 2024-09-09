@@ -1,7 +1,7 @@
 import PlanSwitch from "@/components/auth/plan-switch";
 import { Shell } from "@/components/layout/shell";
-import { api } from "@/trpc/server";
 import { Card, CardContent } from "@/components/ui/card";
+import { api } from "@/trpc/server";
 
 export default async function ResumeSubscription() {
   const plans = await api.stripe.plans();

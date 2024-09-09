@@ -1,8 +1,6 @@
 "use client";
 
 import { toggleLocale } from "@/app/(router)/actions";
-import { Languages } from "lucide-react";
-import { useTransition } from "react";
 import {
   Select,
   SelectContent,
@@ -10,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Languages } from "lucide-react";
+import { useTransition } from "react";
 
 export default function LocaleSwitch({ locale }: { locale: string }) {
   const [, startTransition] = useTransition();

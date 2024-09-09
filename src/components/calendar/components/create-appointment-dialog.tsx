@@ -1,12 +1,6 @@
-import { type UseFormReturn } from "react-hook-form";
-import { type AppointmentSchema } from "@/components/calendar/components/calendar";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import type { AppointmentSchema } from "@/components/calendar/components/calendar";
+import ConfirmationDialog from "@/components/shared/confirmation-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
@@ -14,24 +8,30 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import useMediaQuery from "@/hooks/use-media-query";
-import { useBoolean, useNumber } from "react-hanger";
-import { useTransition, useRef } from "react";
-import { cn } from "@/lib/utils";
-import Steps from "@/components/ui/steps";
+import { Form } from "@/components/ui/form";
+import { Icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import TreatmentSpecialist from "./appointment/treatment-specialist";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import Steps from "@/components/ui/steps";
+import useMediaQuery from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Star } from "lucide-react";
+import { useRef, useTransition } from "react";
+import { useEffect, useState } from "react";
+import { useBoolean, useNumber } from "react-hanger";
+import type { UseFormReturn } from "react-hook-form";
+import { toast } from "sonner";
 import BasicInformation from "./appointment/basic-information";
 import OralHygiene from "./appointment/oral-hygiene";
-import { Star } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Icons } from "@/components/ui/icons";
-import ConfirmationDialog from "@/components/shared/confirmation-dialog";
-import { Form } from "@/components/ui/form";
-import { useState, useEffect } from "react";
-import { api } from "@/trpc/react";
-import { toast } from "sonner";
+import TreatmentSpecialist from "./appointment/treatment-specialist";
 
 interface CreateAppointmentDialogProps {
   open: boolean;

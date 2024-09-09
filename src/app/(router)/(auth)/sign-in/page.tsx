@@ -1,17 +1,15 @@
 import Link from "next/link";
 
-import MagicLinkSignIn from "./magic-link-form";
 import { buttonVariants } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Icons } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
-import GoogleSignIn from "./google";
-import { type SearchParams } from "@/types";
-import { z } from "zod";
 import RootFormError from "@/components/ui/root-form-error";
-import { constructMetadata } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/lib/translations";
+import { cn, constructMetadata } from "@/lib/utils";
+import type { SearchParams } from "@/types";
 import { RectangleEllipsis } from "lucide-react";
+import { z } from "zod";
+import GoogleSignIn from "./google";
+import MagicLinkSignIn from "./magic-link-form";
 
 export const metadata = constructMetadata({
   page: "Sign In",

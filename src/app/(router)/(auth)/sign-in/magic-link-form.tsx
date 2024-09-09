@@ -9,13 +9,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import RootFormError from "@/components/ui/root-form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signInMagicLink } from "./actions";
-import RootFormError from "@/components/ui/root-form-error";
-import { useTranslations } from "next-intl";
 
 const schema = z.object({
   email: z.string().min(1, "email.required").email("email.invalid"),

@@ -1,37 +1,37 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
-  DrawerTrigger,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
+  DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
-import { useTransition } from "react";
 import useMediaQuery from "@/hooks/use-media-query";
-import Steps from "../ui/steps";
-import { ReceiptText, Clock, Stethoscope, User } from "lucide-react";
-import { useNumber } from "react-hanger";
 import { cn } from "@/lib/utils";
+import { staffSchema } from "@/types/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Clock, ReceiptText, Stethoscope, User } from "lucide-react";
+import { useTransition } from "react";
+import { useNumber } from "react-hanger";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+import { ScrollArea } from "../ui/scroll-area";
 import {
   Sheet,
-  SheetTrigger,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
+  SheetTrigger,
 } from "../ui/sheet";
-import { ScrollArea } from "../ui/scroll-area";
-import PersonalInformation from "./forms/personal-info";
+import Steps from "../ui/steps";
 import AssignedServices from "./forms/assigned-services";
-import WorkingHours from "./forms/working-hours";
 import Confirmation from "./forms/confirmation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { staffSchema } from "@/types/schema";
-import type { z } from "zod";
+import PersonalInformation from "./forms/personal-info";
+import WorkingHours from "./forms/working-hours";
 
 type LogoutDialogProps = {
   children?: React.ReactNode;

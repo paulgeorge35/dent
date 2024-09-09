@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
-import background from "../../../public/background.avif";
 import { Box } from "lucide-react";
+import Image from "next/image";
+import background from "../../../public/background.avif";
 
 export default function AuthHero() {
   return (
@@ -13,12 +13,12 @@ export default function AuthHero() {
         animate={{
           width: "calc(100% - 64px)",
           borderRadius: "1.5rem",
-          inset: "32px"
+          inset: "32px",
         }}
         transition={{
           type: "spring",
           duration: 0.8,
-          delay: 0.15   ,
+          delay: 0.15,
         }}
         initial={{
           width: "100vw",

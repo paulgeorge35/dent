@@ -1,5 +1,6 @@
 "use client";
 
+import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -9,15 +10,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import RootFormError from "@/components/ui/root-form-error";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
+import Link from "next/link";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signIn } from "./actions";
-import RootFormError from "@/components/ui/root-form-error";
-import Link from "next/link";
-import { PasswordInput } from "@/components/password-input";
-import { useTranslations } from "next-intl";
 
 const schema = z.object({
   email: z.string().min(1, "email.required").email("email.invalid"),
@@ -89,10 +89,13 @@ export default function EmailSignIn() {
           )}
         />
 
-        <RootFormError className="col-span-2" error={form.formState.errors?.root?.message} />
+        <RootFormError
+          className="col-span-2"
+          error={form.formState.errors?.root?.message}
+        />
 
         <Button isLoading={pending} type="submit" className="col-span-2 w-full">
-        {t("button")}
+          {t("button")}
         </Button>
       </form>
     </Form>

@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
-import { adminProcedure, createTRPCRouter } from "../trpc";
 import { z } from "zod";
+import { adminProcedure, createTRPCRouter } from "../trpc";
 
 export const treatmentRouter = createTRPCRouter({
   create: adminProcedure

@@ -1,12 +1,12 @@
 import { z } from "zod";
 
-import { createTRPCRouter, tenantProcedure } from "../trpc";
-import { TRPCError } from "@trpc/server";
-import { type EventChangeAction } from "@/types";
-import { type Prisma } from "@prisma/client";
-import quizJsonSchema from "@/lib/quiz-questions.json";
-import { appointmentCreateInput } from "@/types/schema";
 import { env } from "@/env";
+import quizJsonSchema from "@/lib/quiz-questions.json";
+import type { EventChangeAction } from "@/types";
+import { appointmentCreateInput } from "@/types/schema";
+import type { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { createTRPCRouter, tenantProcedure } from "../trpc";
 
 const appointmentUpdateInput = z.object({
   id: z.string(),
@@ -54,8 +54,8 @@ export const appointmentRouter = createTRPCRouter({
         ctx,
         input: { patient: patientInput, serviceId, quiz, files, ...input },
       }) => {
-        const userId = ctx.session.user!.id;
-        const tenantId = ctx.session.user!.tenantId;
+        const userId = ctx.session.user.id;
+        const tenantId = ctx.session.user.tenantId;
 
         const patientId = await ctx.db.$transaction(async (tx) => {
           if (patientInput === undefined) return undefined;
@@ -151,7 +151,7 @@ export const appointmentRouter = createTRPCRouter({
   update: tenantProcedure
     .input(appointmentUpdateInput)
     .mutation(async ({ ctx, input }) => {
-      const userId = ctx.session.user!.id;
+      const userId = ctx.session.user.id;
 
       return await ctx.db.$transaction(async (tx) => {
         const { id, date, description, start, end, allDay } = input;

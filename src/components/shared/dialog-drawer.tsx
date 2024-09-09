@@ -1,12 +1,12 @@
 import {
   Credenza,
+  CredenzaBody,
+  CredenzaClose,
   CredenzaContent,
   CredenzaDescription,
   CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
-  CredenzaClose,
-  CredenzaBody,
   CredenzaTrigger,
 } from "@/components/ui/credenza";
 

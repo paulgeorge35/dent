@@ -1,8 +1,5 @@
 "use client";
 
-import * as React from "react";
-import { cn } from "@/lib/utils";
-import useMediaQuery from "@/hooks/use-media-query";
 import {
   Dialog,
   DialogClose,
@@ -23,6 +20,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import useMediaQuery from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
+import * as React from "react";
 import { createContext, useContext } from "react";
 
 interface BaseProps {
@@ -41,7 +41,9 @@ interface CredenzaProps extends BaseProps {
 
 const desktop = "(min-width: 768px)";
 
-const CredenzaContext = createContext<{ isDesktop: boolean }>({ isDesktop: true });
+const CredenzaContext = createContext<{ isDesktop: boolean }>({
+  isDesktop: true,
+});
 
 const Credenza = ({ children, ...props }: RootCredenzaProps) => {
   const isDesktop = useMediaQuery(desktop);

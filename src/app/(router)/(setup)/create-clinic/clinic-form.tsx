@@ -1,6 +1,7 @@
 "use client";
 
-import { z } from "zod";
+import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -10,6 +11,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -17,22 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/components/ui/input";
-import { useEffect, useState, useTransition } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Info } from "lucide-react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import type { StripePlan } from "@/types";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import Link from "next/link";
 import { api } from "@/trpc/react";
-import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import type { StripePlan } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowRight, Info } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
 
 const schema = z.object({
   name: z.string().min(1, "name.required").max(50, "name.max-length"),
@@ -199,7 +199,7 @@ export default function ClinicForm() {
                                 height={60}
                                 width={60}
                                 alt={plan.product.name}
-                                src={plan.product.images[0]!}
+                                src={plan.product.images[0] ?? ""}
                                 className="mx-auto h-[95px] w-auto"
                               />
                               <div className="my-4 w-full border-b border-border shadow-sm" />
@@ -215,9 +215,12 @@ export default function ClinicForm() {
                           </div>
                           <div className="flex gap-2">
                             <p
-                              className={`text-5xl font-extrabold tracking-tight text-primary`}
+                              className={
+                                "text-5xl font-extrabold tracking-tight text-primary"
+                              }
                             >
-                              {plan.product.default_price.unit_amount! / 100}
+                              {(plan.product.default_price.unit_amount ?? 0) /
+                                100}
                             </p>
                             <div className="mb-[4px] flex items-end">
                               <p className="text-xs font-semibold uppercase text-primary">
@@ -232,7 +235,7 @@ export default function ClinicForm() {
                             {plan.product.marketing_features.map(
                               (feature, i) => (
                                 <li
-                                  key={i}
+                                  key={feature.name}
                                   className="flex items-center gap-2 text-sm"
                                 >
                                   <svg
@@ -241,6 +244,7 @@ export default function ClinicForm() {
                                     fill="currentColor"
                                     className="h-[18px] w-[18px] shrink-0 opacity-80"
                                   >
+                                    <title>Check</title>
                                     <path
                                       fillRule="evenodd"
                                       d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"

@@ -1,8 +1,8 @@
-import { constructMetadata } from "@/lib/utils";
-import ClinicForm from "./clinic-form";
 import { Shell } from "@/components/layout/shell";
-import { Box } from "lucide-react";
 import { useTranslations } from "@/lib/translations";
+import { constructMetadata } from "@/lib/utils";
+import { Box } from "lucide-react";
+import ClinicForm from "./clinic-form";
 
 export const metadata = constructMetadata({
   page: "Create Clinic",

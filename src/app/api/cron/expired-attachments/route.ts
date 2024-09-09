@@ -1,9 +1,9 @@
 export const dynamic = "force-dynamic";
 
-import { db } from "@/server/db";
 import { env } from "@/env";
-import { DateTime } from "luxon";
+import { db } from "@/server/db";
 import { DeleteObjectCommand, S3 } from "@aws-sdk/client-s3";
+import { DateTime } from "luxon";
 
 export async function GET() {
   try {

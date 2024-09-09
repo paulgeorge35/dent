@@ -18,9 +18,9 @@ import {
 } from "@/components/ui/form";
 import RootFormError from "@/components/ui/root-form-error";
 
+import { PasswordInput } from "@/components/password-input";
 import { getErrorMessage } from "@/lib/handle-error";
 import { Save } from "lucide-react";
-import { PasswordInput } from "@/components/password-input";
 
 const schema = z
   .object({

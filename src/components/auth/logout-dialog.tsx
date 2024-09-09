@@ -1,28 +1,28 @@
 "use client";
 
+import { signOut } from "@/app/(router)/(tenant)/settings/actions";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogTrigger,
   DialogClose,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Drawer,
-  DrawerTrigger,
   DrawerClose,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
+  DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
+import useMediaQuery from "@/hooks/use-media-query";
 import { LogOut } from "lucide-react";
 import { useTransition } from "react";
-import useMediaQuery from "@/hooks/use-media-query";
-import { signOut } from "@/app/(router)/(tenant)/settings/actions";
 
 type LogoutDialogProps = {
   children?: React.ReactNode;

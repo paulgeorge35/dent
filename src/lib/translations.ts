@@ -20,7 +20,7 @@ export const translations = {
   },
 };
 
-import { type NamespaceKeys, type NestedKeyOf } from "next-intl";
+import type { NamespaceKeys, NestedKeyOf } from "next-intl";
 import { getTranslations } from "next-intl/server";
 
 type IntlMessages = typeof import("../../messages/en.json");

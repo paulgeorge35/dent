@@ -1,16 +1,16 @@
 "use server";
 
-import { env } from "./env";
-import { decrypt, encrypt } from "./lib";
+import crypto from "crypto";
+import { MagicLink } from "@/components/emails/magic-link";
+import type { TokenType } from "@prisma/client";
+import { DateTime, type DurationLike } from "luxon";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import { resend } from "./server/resend";
-import { MagicLink } from "@/components/emails/magic-link";
-import { type SessionUser } from "./types/schema";
+import { env } from "./env";
+import { decrypt, encrypt } from "./lib";
 import { db } from "./server/db";
-import { type TokenType } from "@prisma/client";
-import crypto from "crypto";
-import { DateTime, type DurationLike } from "luxon";
+import { resend } from "./server/resend";
+import type { SessionUser } from "./types/schema";
 
 export async function sendMagicLink(email: string, tenantId: string) {
   "use server";

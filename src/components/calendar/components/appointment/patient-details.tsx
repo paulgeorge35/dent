@@ -31,8 +31,24 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
       <span className="grid grid-cols-2 gap-4 p-4">
         <Field label="Phone" value={patient.phone} />
         <Field label="Gender" value={patient.gender} />
-        <Field label="Date of Birth" value={patient.dob ? DateTime.fromJSDate(patient.dob).toFormat("dd-MM-yyyy") : "-"} />
-        <Field label="Age" value={patient.dob ? DateTime.now().diff(DateTime.fromJSDate(patient.dob), "years").years.toFixed(0) : "-"} />
+        <Field
+          label="Date of Birth"
+          value={
+            patient.dob
+              ? DateTime.fromJSDate(patient.dob).toFormat("dd-MM-yyyy")
+              : "-"
+          }
+        />
+        <Field
+          label="Age"
+          value={
+            patient.dob
+              ? DateTime.now()
+                  .diff(DateTime.fromJSDate(patient.dob), "years")
+                  .years.toFixed(0)
+              : "-"
+          }
+        />
         <Field label="County" value={patient.county} />
         <Field label="City" value={patient.city} />
       </span>

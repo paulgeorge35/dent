@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,13 +14,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useTransition } from "react";
 import RootFormError from "@/components/ui/root-form-error";
-import { PasswordInput } from "@/components/password-input";
-import { api } from "@/trpc/react";
-import { toast } from "sonner";
-import { useTranslations } from "next-intl";
 import { showErrorToast } from "@/lib/handle-error";
+import { api } from "@/trpc/react";
+import { useTranslations } from "next-intl";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 const schema = z
   .object({

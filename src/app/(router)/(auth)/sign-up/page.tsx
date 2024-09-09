@@ -1,12 +1,12 @@
-import Link from "next/link";
-import RegisterForm from "./register-form";
-import { constructMetadata } from "@/lib/utils";
-import { z } from "zod";
 import RootFormError from "@/components/ui/root-form-error";
-import { type SearchParams } from "@/types";
-import GoogleSignUp from "./google";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/lib/translations";
+import { constructMetadata } from "@/lib/utils";
+import type { SearchParams } from "@/types";
+import Link from "next/link";
+import { z } from "zod";
+import GoogleSignUp from "./google";
+import RegisterForm from "./register-form";
 
 export const metadata = constructMetadata({
   page: "Sign Up",
@@ -37,7 +37,7 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
       <span className="horizontal center-v w-full gap-4">
         <Separator className="w-auto grow" />
         <span className="text-xs text-muted-foreground uppercase">
-        {t("or-email")}
+          {t("or-email")}
         </span>
         <Separator className="w-auto grow" />
       </span>
@@ -45,7 +45,7 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
       <RegisterForm email={email} />
 
       <div className="mt-4 text-center text-sm">
-        {t('already-have-account')}{" "}
+        {t("already-have-account")}{" "}
         <Link href="/sign-in" className="underline">
           {t("sign-in")}
         </Link>

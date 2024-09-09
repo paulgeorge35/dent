@@ -1,13 +1,13 @@
 import UserBadges from "@/components/auth/user-badges";
 import BackButton from "@/components/layout/back-button";
-import { api } from "@/trpc/server";
-import { type Metadata } from "next";
 import { constructMetadata } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import type { Metadata } from "next";
 
 import { Separator } from "@/components/ui/separator";
 
-import AvatarComponent from "@/components/shared/avatar-component";
 import { Shell } from "@/components/layout/shell";
+import AvatarComponent from "@/components/shared/avatar-component";
 
 export async function generateMetadata(): Promise<Metadata> {
   const user = await api.user.me();

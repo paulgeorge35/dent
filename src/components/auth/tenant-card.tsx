@@ -5,7 +5,7 @@ import AvatarComponent from "@/components/shared/avatar-component";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LoadingSpinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { type TenantAccount } from "@/types/schema";
+import type { TenantAccount } from "@/types/schema";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
@@ -28,7 +28,7 @@ export default function TenantCard({ account }: TenantCardProps) {
       startTransition(() => toggleTenant(tenantId));
     } else {
       if (isAdmin) {
-        router.push(`/subscription/resume`);
+        router.push("/subscription/resume");
       }
     }
   };
@@ -37,6 +37,11 @@ export default function TenantCard({ account }: TenantCardProps) {
   return (
     <div
       role="button"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleTenantClick(account.tenantId);
+        }
+      }}
       className={cn(
         "vertical items-start gap-2 px-6 py-2 [&:not(:last-child)]:border-b",
         {

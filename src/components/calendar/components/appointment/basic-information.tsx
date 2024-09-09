@@ -1,14 +1,14 @@
-import type { UseFormReturn } from "react-hook-form";
-import type { AppointmentSchema } from "../calendar";
+import { DateTimePicker } from "@/components/datetime-input/datetime";
+import { PhoneInput } from "@/components/phone-input";
+import { AutoComplete } from "@/components/ui/autocomplete";
+import { Button } from "@/components/ui/button";
 import {
+  FormControl,
   FormFieldCompact,
   FormItem,
-  FormControl,
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { PhoneInput } from "@/components/phone-input";
-import { DateTimePicker } from "@/components/datetime-input/datetime";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -18,12 +18,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { api } from "@/trpc/react";
-import { useInput } from "react-hanger";
 import type { Patient } from "@prisma/client";
-import { AutoComplete } from "@/components/ui/autocomplete";
-import { Controller } from "react-hook-form";
 import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useInput } from "react-hanger";
+import type { UseFormReturn } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import type { AppointmentSchema } from "../calendar";
 import PatientDetails from "./patient-details";
 
 type BasicInformationProps = {

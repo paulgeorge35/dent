@@ -1,16 +1,16 @@
-import { utilsRouter } from "./routers/utils";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
-import { userRouter } from "./routers/user";
 import { appointmentRouter } from "./routers/appointment";
-import { tenantRouter } from "./routers/tenant";
-import { stripeRouter } from "./routers/stripe";
-import { specializationRouter } from "./routers/specialization";
-import { serviceRouter } from "./routers/service";
 import { materialRouter } from "./routers/material";
+import { patientRouter } from "./routers/patient";
+import { serviceRouter } from "./routers/service";
+import { specializationRouter } from "./routers/specialization";
+import { storageRouter } from "./routers/storage";
+import { stripeRouter } from "./routers/stripe";
+import { tenantRouter } from "./routers/tenant";
 import { treatmentRouter } from "./routers/treatment";
 import { treatmentPlanRouter } from "./routers/treatment-plan";
-import { patientRouter } from "./routers/patient";
-import { storageRouter } from "./routers/storage";
+import { userRouter } from "./routers/user";
+import { utilsRouter } from "./routers/utils";
 
 /**
  * This is the primary router for your server.

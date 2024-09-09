@@ -1,8 +1,8 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { Copy } from "lucide-react";
 import { Button } from "./button";
-import { cn } from "@/lib/utils";
 
 type ClipboardProps = {
   text: string;

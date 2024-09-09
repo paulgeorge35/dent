@@ -1,6 +1,6 @@
 import { Shell } from "@/components/layout/shell";
-import PatientForm from "./patient-form";
 import { Box } from "lucide-react";
+import PatientForm from "./patient-form";
 
 export default async function PatientFormPage() {
   return (

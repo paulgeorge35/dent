@@ -16,8 +16,8 @@ import {
 } from "@/components/ui/popover";
 
 import { cn } from "@/lib/utils";
-import { type City } from "prisma/generated/zod";
 import { Check } from "lucide-react";
+import type { City } from "prisma/generated/zod";
 
 interface CitySelectProps {
   name: string;

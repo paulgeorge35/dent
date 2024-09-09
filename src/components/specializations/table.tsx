@@ -2,10 +2,10 @@ import {
   Table,
   TableBody,
   TableCaption,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
-  TableCell,
 } from "@/components/ui/table";
 import type { Specialization } from "@prisma/client";
 import ConfirmSpecializationDelete from "./confirm-delete";

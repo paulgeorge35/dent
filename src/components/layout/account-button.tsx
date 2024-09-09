@@ -1,13 +1,20 @@
 "use client";
 
+import {
+  logoutTenant,
+  toggleTenant,
+} from "@/app/(router)/(setup)/welcome/actions";
+import LogoutDialog from "@/components/auth/logout-dialog";
+import AvatarComponent from "@/components/shared/avatar-component";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { type SessionUser, type TenantAccount } from "@/types/schema";
-import AvatarComponent from "@/components/shared/avatar-component";
+import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import type { SessionUser, TenantAccount } from "@/types/schema";
 import {
   CheckIcon,
   ChevronDown,
@@ -17,17 +24,10 @@ import {
   SquareActivity,
   User,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
-import { useTransition, useState, useEffect } from "react";
-import LogoutDialog from "@/components/auth/logout-dialog";
-import Link from "next/link";
-import {
-  logoutTenant,
-  toggleTenant,
-} from "@/app/(router)/(setup)/welcome/actions";
 import { useTranslations } from "next-intl";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 
 const DISPLAY_TENANTS_CUTOFF = 2;
 
@@ -63,7 +63,7 @@ export default function AccountButton({
 
   useEffect(() => {
     setShowAllTenants(false);
-  }, [accounts, open]);
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -146,6 +146,7 @@ export default function AccountButton({
           {accounts.length > DISPLAY_TENANTS_CUTOFF && !showAllTenants && (
             <button
               className="horizontal center-h bg-muted text-xs text-muted-foreground"
+              type="button"
               onClick={() => setShowAllTenants(true)}
             >
               <Ellipsis className="size-4" />

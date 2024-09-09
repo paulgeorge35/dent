@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { DateTime } from "luxon";
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -45,13 +45,17 @@ export function getOS() {
 
   if (macosPlatforms.test(userAgent)) {
     return "macos";
-  } else if (iosPlatforms.test(userAgent)) {
+  }
+  if (iosPlatforms.test(userAgent)) {
     return "ios";
-  } else if (windowsPlatforms.test(userAgent)) {
+  }
+  if (windowsPlatforms.test(userAgent)) {
     return "windows";
-  } else if (/android/.test(userAgent)) {
+  }
+  if (/android/.test(userAgent)) {
     return "android";
-  } else if (/linux/.test(userAgent)) {
+  }
+  if (/linux/.test(userAgent)) {
     return "linux";
   }
 

@@ -1,8 +1,8 @@
 import { auth } from "@/auth";
-import { RedirectType, redirect } from "next/navigation";
 import AuthHero from "@/components/auth/auth-hero";
 import { Separator } from "@/components/ui/separator";
 import { Box } from "lucide-react";
+import { RedirectType, redirect } from "next/navigation";
 
 export default async function AuthLayout({
   children,

@@ -1,4 +1,4 @@
-import { type PlaceholderValue } from "next/dist/shared/lib/get-img-props";
+import type { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 
 import { cn, initials } from "@/lib/utils";

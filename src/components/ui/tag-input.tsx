@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
-import { X } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
+import type React from "react";
+import { useCallback, useState } from "react";
 
 interface TagInputProps {
   value?: string[];

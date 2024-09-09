@@ -11,8 +11,8 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { db } from "@/server/db";
 import { auth, logOut } from "@/auth";
+import { db } from "@/server/db";
 
 /**
  * 1. CONTEXT
@@ -136,7 +136,10 @@ const isTenant = t.middleware(async ({ ctx, next }) => {
   }
   return next({
     ctx: {
-      session: { ...ctx.session },
+      session: {
+        ...ctx.session,
+        user: { ...ctx.session.user },
+      },
     },
   });
 });
@@ -157,7 +160,10 @@ const isAdmin = t.middleware(async ({ ctx, next }) => {
 
   return next({
     ctx: {
-      session: { ...ctx.session },
+      session: {
+        ...ctx.session,
+        user: { ...ctx.session.user, role: Role.ADMIN },
+      },
     },
   });
 });

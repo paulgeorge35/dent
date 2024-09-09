@@ -1,6 +1,5 @@
-import React from "react";
-import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
+import { cva } from "class-variance-authority";
 
 const containerClasses = cva("relative", {
   variants: {
@@ -62,8 +61,9 @@ interface PulsingDotProps {
 const PulsingDot = ({ color, size, className }: PulsingDotProps) => {
   return (
     <div className={cn(containerClasses({ size }), className)}>
+      {/* biome-ignore lint/style/useSelfClosingElements: <explanation> */}
       <div className={ringClasses({ color, size })}></div>
-      <div className={circleClasses({ color, size })}></div>
+      <div className={circleClasses({ color, size })} />
     </div>
   );
 };

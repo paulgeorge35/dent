@@ -1,9 +1,9 @@
-import { constructMetadata } from "@/lib/utils";
-import { type SearchParams } from "@/types";
-import { z } from "zod";
-import { api } from "@/trpc/server";
 import { Shell } from "@/components/layout/shell";
 import { PatientTable } from "@/components/patient-table/table";
+import { constructMetadata } from "@/lib/utils";
+import { api } from "@/trpc/server";
+import type { SearchParams } from "@/types";
+import { z } from "zod";
 
 export const metadata = constructMetadata({
   page: "Patients",

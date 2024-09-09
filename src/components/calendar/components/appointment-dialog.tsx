@@ -1,20 +1,33 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
+import ConfirmationDialog from "@/components/shared/confirmation-dialog";
+import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerFooter,
 } from "@/components/ui/drawer";
+import { Form } from "@/components/ui/form";
+import { Icons } from "@/components/ui/icons";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import {
+  Sheet,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import Steps from "@/components/ui/steps";
 import useMediaQuery from "@/hooks/use-media-query";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { cn, zeroPad } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import {
+  type MedicalCheckupSchema,
+  medicalCheckupSchema,
+} from "@/types/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
   Check,
@@ -26,30 +39,16 @@ import {
   Monitor,
   PlusCircle,
 } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useBoolean, useNumber } from "react-hanger";
-import { api } from "@/trpc/react";
-import { zeroPad } from "@/lib/utils";
-import { Separator } from "@/components/ui/separator";
-import Steps from "@/components/ui/steps";
-import { AnimatePresence, motion } from "framer-motion";
+import { DateTime } from "luxon";
 import { useEffect, useRef, useState } from "react";
-import { Icons } from "@/components/ui/icons";
-import ConfirmationDialog from "@/components/shared/confirmation-dialog";
-import { Form } from "@/components/ui/form";
-import { useForm, type UseFormReturn } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useBoolean, useNumber } from "react-hanger";
+import { type UseFormReturn, useForm } from "react-hook-form";
+import AppointmentDetailsCard from "./appointment/appointment-details-card";
+import PatientCard from "./appointment/patient-card";
 import MedicalData from "./medical-checkup/medical-data";
-import TreatmentPlan from "./medical-checkup/treatment-plan";
 import OralCheck from "./medical-checkup/oral-check";
 import PlanAgreement from "./medical-checkup/plan-agreement";
-import {
-  type MedicalCheckupSchema,
-  medicalCheckupSchema,
-} from "@/types/schema";
-import PatientCard from "./appointment/patient-card";
-import AppointmentDetailsCard from "./appointment/appointment-details-card";
-import { DateTime } from "luxon";
+import TreatmentPlan from "./medical-checkup/treatment-plan";
 
 type AppointmentDialogProps = {
   open: boolean;
@@ -362,7 +361,7 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             </motion.div>
           </ScrollArea>
         </AnimatePresence>
-        <ScrollArea className="relative grow"></ScrollArea>
+        <ScrollArea className="relative grow">Test</ScrollArea>
         <FooterComponent className="p-6">
           <ConfirmationDialog
             open={confirmationDialog.value}

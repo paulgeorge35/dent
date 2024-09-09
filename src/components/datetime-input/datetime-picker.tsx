@@ -1,10 +1,9 @@
 "use client";
 
-import * as React from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { DateTime } from "luxon";
+import type * as React from "react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -12,6 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { TimePickerDemo } from "./time-picker-demo";
 
 interface DateTimePickerProps {

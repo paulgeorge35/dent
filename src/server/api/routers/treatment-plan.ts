@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
 import { z } from "zod";
+import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
 
 export const treatmentPlanRouter = createTRPCRouter({});

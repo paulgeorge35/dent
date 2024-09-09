@@ -1,9 +1,9 @@
-import { Shell } from "@/components/layout/shell";
-import { api } from "@/trpc/server";
-import { Card, CardContent } from "@/components/ui/card";
-import type Stripe from "stripe";
-import type { Plan } from "@prisma/client";
 import PlanSwitch from "@/components/auth/plan-switch";
+import { Shell } from "@/components/layout/shell";
+import { Card, CardContent } from "@/components/ui/card";
+import { api } from "@/trpc/server";
+import type { Plan } from "@prisma/client";
+import type Stripe from "stripe";
 
 interface PlanI {
   plan: Plan;

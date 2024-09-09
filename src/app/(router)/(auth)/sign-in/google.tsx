@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { signInGoogle } from "./actions";
-import { useTranslations } from "next-intl";
 
 export default function GoogleSignIn() {
   const [pending, startTransition] = useTransition();

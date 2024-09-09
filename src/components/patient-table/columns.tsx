@@ -1,14 +1,14 @@
 "use client";
 
-import { type Patient } from "prisma/generated/zod";
-import { type ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
+import type { Patient } from "prisma/generated/zod";
 import * as React from "react";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
+import Clipboard from "@/components/ui/clipboard";
+import { MailIcon, PhoneIcon } from "lucide-react";
 import { DateTime } from "luxon";
 import AvatarComponent from "../shared/avatar-component";
-import { MailIcon, PhoneIcon } from "lucide-react";
-import Clipboard from "@/components/ui/clipboard";
 
 export function getColumns(): ColumnDef<Patient>[] {
   return [
@@ -112,9 +112,7 @@ export function getColumns(): ColumnDef<Patient>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div>
-            {DateTime.fromJSDate(row.original.createdAt).toRelative()}
-          </div>
+          <div>{DateTime.fromJSDate(row.original.createdAt).toRelative()}</div>
         );
       },
       enableHiding: false,

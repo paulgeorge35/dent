@@ -1,14 +1,14 @@
+import { auth } from "@/auth";
+import { Shell } from "@/components/layout/shell";
+import SettingsTabs from "@/components/settings/settings-tabs";
 import Account from "@/components/settings/tabs/account/account";
 import Customization from "@/components/settings/tabs/customization/customization";
-import Staff from "@/components/settings/tabs/staff/staff";
-import SettingsTabs from "@/components/settings/settings-tabs";
-import { constructMetadata } from "@/lib/utils";
-import { type SearchParams } from "@/types";
-import { z } from "zod";
-import { Shell } from "@/components/layout/shell";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
 import Plan from "@/components/settings/tabs/plan/plan";
+import Staff from "@/components/settings/tabs/staff/staff";
+import { constructMetadata } from "@/lib/utils";
+import type { SearchParams } from "@/types";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
 export const metadata = constructMetadata({
   page: "Settings",

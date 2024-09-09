@@ -4,6 +4,8 @@ export const fetchCache = "force-no-store";
 
 import { Body } from "@react-email/body";
 import { Container } from "@react-email/container";
+import { Head } from "@react-email/head";
+import { Heading } from "@react-email/heading";
 import { Hr } from "@react-email/hr";
 import { Html } from "@react-email/html";
 import { Link } from "@react-email/link";
@@ -11,8 +13,6 @@ import { Preview } from "@react-email/preview";
 import { Row } from "@react-email/row";
 import { Section } from "@react-email/section";
 import { Text } from "@react-email/text";
-import { Head } from "@react-email/head";
-import { Heading } from "@react-email/heading";
 
 interface ConfirmationProps {
   name: string;
@@ -29,7 +29,8 @@ export const Confirmation = ({ name, url }: ConfirmationProps) => (
         <Section style={message}>
           <Heading style={global.heading}>Confirm your email address</Heading>
           <Text style={global.text}>
-            Hi {name}, please confirm your email address by clicking the button below:
+            Hi {name}, please confirm your email address by clicking the button
+            below:
           </Text>
           <Link style={{ ...marginY, ...global.link }} href={url}>
             Confirm Email
@@ -44,7 +45,8 @@ export const Confirmation = ({ name, url }: ConfirmationProps) => (
         <Section style={paddingY}>
           <Row>
             <Text style={footer.text}>
-              If you didn&apos;t create an account, you can safely ignore this email.
+              If you didn&apos;t create an account, you can safely ignore this
+              email.
             </Text>
           </Row>
           <Row>

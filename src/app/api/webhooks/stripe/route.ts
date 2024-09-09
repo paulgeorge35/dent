@@ -1,10 +1,10 @@
 import { env } from "@/env";
-import { type NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-import { z } from "zod";
 import { db } from "@/server/db";
 import type { Tenant, TenantProfile } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { type NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import { z } from "zod";
 
 const webhookSecret = env.STRIPE_WEBHOOK_SECRET;
 
@@ -178,9 +178,17 @@ export async function POST(request: NextRequest) {
     const payload = await request.text();
     const signature = request.headers.get("stripe-signature");
 
+    if (!signature) {
+      console.error("Signature not found");
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Signature not found",
+      });
+    }
+
     const event: Stripe.Event | null = stripe.webhooks.constructEvent(
       payload,
-      signature!,
+      signature,
       webhookSecret,
     );
 
@@ -204,7 +212,7 @@ export async function POST(request: NextRequest) {
       case "customer.subscription.deleted":
         await handleSubscriptionEvent(event.data.object.id);
         break;
-      case "invoice.paid":
+      case "invoice.paid": {
         const invoice = event.data.object;
         const subscriptionId = invoice.subscription as string;
         if (!subscriptionId) {
@@ -216,6 +224,7 @@ export async function POST(request: NextRequest) {
         }
         await handleSubscriptionEvent(subscriptionId);
         break;
+      }
     }
   } catch (err) {
     if (err instanceof Error) {

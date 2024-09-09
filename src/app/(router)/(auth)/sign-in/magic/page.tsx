@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { constructMetadata } from "@/lib/utils";
+import Link from "next/link";
 
 export const metadata = constructMetadata({
   page: "Sign In",

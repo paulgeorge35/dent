@@ -2,6 +2,11 @@ import { EventType, type Prisma, Role } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+import { Invitation } from "@/components/emails/invitation";
+import { env } from "@/env";
+import { resend } from "@/server/resend";
+import { DateTime } from "luxon";
+import { v4 as uuidv4 } from "uuid";
 import {
   adminProcedure,
   createTRPCRouter,
@@ -9,17 +14,12 @@ import {
   publicProcedure,
   tenantProcedure,
 } from "../trpc";
-import { DateTime } from "luxon";
-import { env } from "@/env";
-import { v4 as uuidv4 } from "uuid";
-import { resend } from "@/server/resend";
-import { Invitation } from "@/components/emails/invitation";
 
 export const tenantRouter = createTRPCRouter({
   userAlreadyExists: tenantProcedure
     .input(z.string())
     .query(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
+      const tenantId = ctx.session.user.tenantId;
       const profile = await ctx.db.profile.findFirst({
         where: { email: input },
         cacheStrategy: {
@@ -37,7 +37,7 @@ export const tenantRouter = createTRPCRouter({
           swr: env.DEFAULT_SWR,
         },
       });
-      return [profileOnTenant ? true : false, profile ? true : false];
+      return [!!profileOnTenant, !!profile];
     }),
 
   accounts: protectedProcedure.query(async ({ ctx }) => {
@@ -128,8 +128,8 @@ export const tenantRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input: { selected, dateRange } }) => {
-      const userId = ctx.session.user!.id;
-      const tenantId = ctx.session.user!.tenantId;
+      const userId = ctx.session.user.id;
+      const tenantId = ctx.session.user.tenantId;
 
       const where: Prisma.UserWhereInput = {
         tenantId,
@@ -171,7 +171,7 @@ export const tenantRouter = createTRPCRouter({
     }),
 
   specializations: tenantProcedure.query(async ({ ctx }) => {
-    const tenantId = ctx.session.user!.tenantId;
+    const tenantId = ctx.session.user.tenantId;
     return await ctx.db.specialization.findMany({
       where: { tenantId },
       cacheStrategy: {
@@ -182,7 +182,7 @@ export const tenantRouter = createTRPCRouter({
   }),
 
   activeUsers: tenantProcedure.query(async ({ ctx }) => {
-    const tenantId = ctx.session.user!.tenantId;
+    const tenantId = ctx.session.user.tenantId;
     return await ctx.db.user.findMany({
       where: { tenantId, deletedAt: null },
       include: {
@@ -204,7 +204,7 @@ export const tenantRouter = createTRPCRouter({
   }),
 
   invitations: adminProcedure.query(async ({ ctx }) => {
-    const tenantId = ctx.session.user!.tenantId;
+    const tenantId = ctx.session.user.tenantId;
 
     return await ctx.db.invitation.findMany({
       where: {
@@ -283,8 +283,8 @@ export const tenantRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
-      const userId = ctx.session.user!.id;
+      const tenantId = ctx.session.user.tenantId;
+      const userId = ctx.session.user.id;
 
       const invitationExists = await ctx.db.invitation.findFirst({
         where: { email: input.email },
@@ -402,7 +402,7 @@ export const tenantRouter = createTRPCRouter({
   deleteInvitation: adminProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
+      const tenantId = ctx.session.user.tenantId;
 
       const invitation = await ctx.db.invitation.findFirst({
         where: { id: input, invitedBy: { tenantId }, userId: null },
@@ -513,7 +513,7 @@ export const tenantRouter = createTRPCRouter({
   deleteUser: adminProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
+      const tenantId = ctx.session.user.tenantId;
 
       const user = await ctx.db.user.findFirst({
         where: { id: input, tenantId },

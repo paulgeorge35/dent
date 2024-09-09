@@ -1,12 +1,12 @@
 "use client";
 
-import { api } from "@/trpc/react";
-import { Button } from "@/components/ui/button";
-import { Trash2Icon } from "lucide-react";
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
-import { toast } from "sonner";
-import { useBoolean } from "react-hanger";
+import { Button } from "@/components/ui/button";
+import { api } from "@/trpc/react";
+import { Trash2Icon } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useBoolean } from "react-hanger";
+import { toast } from "sonner";
 
 export const ConfirmUserDelete = ({
   id,

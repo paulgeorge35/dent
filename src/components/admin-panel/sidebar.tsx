@@ -1,19 +1,19 @@
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { useStore } from "@/hooks/use-store";
-import { Button } from "@/components/ui/button";
 import { Menu } from "@/components/admin-panel/menu";
-import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
-import Image from "next/image";
-import { Shell } from "@/components/layout/shell";
 import AccountButton from "@/components/layout/account-button";
-import type { SessionUser, TenantAccount } from "@/types/schema";
+import { Shell } from "@/components/layout/shell";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Box, Plus } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { useState } from "react";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { useStore } from "@/hooks/use-store";
+import { cn } from "@/lib/utils";
+import type { SessionUser, TenantAccount } from "@/types/schema";
+import { Box, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
 import LocaleSwitch from "../shared/locale-switch";
 
 export function Sidebar({

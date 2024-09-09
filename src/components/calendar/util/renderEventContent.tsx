@@ -1,14 +1,14 @@
 "use client";
 
 import { Icons } from "@/components/ui/icons";
+import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { type EventContentArg } from "@fullcalendar/core";
+import type { EventContentArg } from "@fullcalendar/core";
 import type { EventStatus, Service } from "@prisma/client";
 import { ChevronRight } from "lucide-react";
 import { DateTime } from "luxon";
 import React from "react";
-import { translations } from "@/lib/translations";
 
 function EventDetails({ services }: { services: Service[] | undefined }) {
   return (

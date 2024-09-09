@@ -17,13 +17,16 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:generate": "prisma generate --no-engine",
     "local:reset": "bun --bun run prisma:generate && bun install && bun --bun run bootstrap && bunx prisma db seed",
-    "lint": "next lint",
-    "start": "next start"
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "fix": "biome check --fix .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.1.0",
     "@aws-sdk/client-s3": "^3.635.0",
     "@aws-sdk/s3-request-presigner": "^3.637.0",
+    "@biomejs/biome": "^1.8.3",
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -150,9 +153,7 @@
     "typescript": "^5.4.2"
   },
   "prettier": {
-    "plugins": [
-      "prettier-plugin-tailwindcss"
-    ]
+    "plugins": ["prettier-plugin-tailwindcss"]
   },
   "ct3aMetadata": {
     "initVersion": "7.30.0"

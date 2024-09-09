@@ -7,14 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import { type UserComplete } from "@/server/api/routers/user";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -26,12 +18,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { UserComplete } from "@/server/api/routers/user";
 
 import { PhoneInput, getPhoneData } from "@/components/phone-input";
 
-import { Save } from "lucide-react";
-import type { Specialization } from "@prisma/client";
 import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import type { Specialization } from "@prisma/client";
+import { Save } from "lucide-react";
 
 const schema = z.object({
   firstName: z.string().min(1, "First name is required"),

@@ -1,5 +1,3 @@
-import type { UseFormReturn } from "react-hook-form";
-import type { StaffSchema } from "@/types/schema";
 import {
   Form,
   FormField,
@@ -7,9 +5,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import RootFormError from "@/components/ui/root-form-error";
 import { Input } from "@/components/ui/input";
+import RootFormError from "@/components/ui/root-form-error";
 import { api } from "@/trpc/react";
+import type { StaffSchema } from "@/types/schema";
+import type { UseFormReturn } from "react-hook-form";
 
 type PersonalInfoFormProps = {
   form: UseFormReturn<StaffSchema>;

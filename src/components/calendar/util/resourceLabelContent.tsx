@@ -1,5 +1,5 @@
 import AvatarComponent from "@/components/shared/avatar-component";
-import type { Profile, User, Event, Avatar } from "@prisma/client";
+import type { Avatar, Event, Profile, User } from "@prisma/client";
 import Link from "next/link";
 
 export default function resourceLabelContent(

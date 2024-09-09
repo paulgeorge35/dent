@@ -1,16 +1,16 @@
-import React from "react";
-import { buttonVariants } from "@/components/ui/button";
 import AvatarComponent from "@/components/shared/avatar-component";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import type React from "react";
 
 interface Invitation {
   id: string;

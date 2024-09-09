@@ -1,6 +1,6 @@
 import { Shell } from "@/components/layout/shell";
 import { constructMetadata } from "@/lib/utils";
-import { type SearchParams } from "@/types";
+import type { SearchParams } from "@/types";
 import { z } from "zod";
 
 export const metadata = constructMetadata({

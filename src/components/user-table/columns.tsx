@@ -1,8 +1,8 @@
 "use client";
 
-import { type UserComplete } from "@/types/schema";
+import type { UserComplete } from "@/types/schema";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import { type ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 
@@ -15,10 +15,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import AvatarComponent from "@/components/shared/avatar-component";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
-import { WorkingHoursComponent } from "./working-hours";
+import AvatarComponent from "@/components/shared/avatar-component";
 import { translations } from "@/lib/translations";
+import { WorkingHoursComponent } from "./working-hours";
 
 export function getColumns(): ColumnDef<UserComplete>[] {
   return [

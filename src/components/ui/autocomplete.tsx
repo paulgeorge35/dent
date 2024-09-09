@@ -1,16 +1,16 @@
 import {
   CommandGroup,
+  CommandInput,
   CommandItem,
   CommandList,
-  CommandInput,
 } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
-import { useState, useRef, useCallback, type KeyboardEvent } from "react";
+import { type KeyboardEvent, useCallback, useRef, useState } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 
 export type Option<T> = {
   label: string;

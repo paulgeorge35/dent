@@ -3,15 +3,15 @@
 import { useDataTable } from "@/hooks/use-data-table";
 import { api } from "@/trpc/react";
 import type { DataTableFilterField } from "@/types";
-import { type ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 
 import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";
 
+import type { Patient } from "prisma/generated/zod";
 import { getColumns } from "./columns";
 import { PatientsTableToolbarActions } from "./toolbar-actions";
-import { type Patient } from "prisma/generated/zod";
 
 interface PatientsTableProps {
   patients: {

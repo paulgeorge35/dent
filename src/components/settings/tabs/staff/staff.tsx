@@ -1,11 +1,12 @@
+import { auth } from "@/auth";
+import AvatarComponent from "@/components/shared/avatar-component";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from "@/components/ui/card";
-import { TabsContent } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -15,17 +16,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TabsContent } from "@/components/ui/tabs";
 import { api } from "@/trpc/server";
-import AvatarComponent from "@/components/shared/avatar-component";
-import { RoleSelect } from "./components/role-select";
+import type { Invitation, Profile, User } from "@prisma/client";
 import { Users } from "lucide-react";
-import { auth } from "@/auth";
-import type { Invitation, User, Profile } from "@prisma/client";
-import InvitationDialog from "./components/invitation-dialog";
 import { DateTime } from "luxon";
+import Link from "next/link";
 import { ConfirmInvitationDelete } from "./components/confirm-invitation-delete";
 import { ConfirmUserDelete } from "./components/confirm-user-delete";
-import Link from "next/link";
+import InvitationDialog from "./components/invitation-dialog";
+import { RoleSelect } from "./components/role-select";
 
 export default async function Staff() {
   const users = await api.tenant.activeUsers();

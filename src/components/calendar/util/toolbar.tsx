@@ -1,17 +1,5 @@
-import type FullCalendar from "@fullcalendar/react";
-import { type RefObject } from "react";
+import AvatarComponent from "@/components/shared/avatar-component";
 import { Button } from "@/components/ui/button";
-import {
-  CalendarCheck,
-  ChevronLeft,
-  ChevronRight,
-  User as UserIcon,
-  Users,
-} from "lucide-react";
-import { DateTime } from "luxon";
-import renderTitle from "./renderTitle";
-import { Separator } from "@/components/ui/separator";
-import { SwitchView } from "@/components/ui/switch-enhanced";
 import {
   Select,
   SelectContent,
@@ -20,9 +8,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { User, Profile, Event, Patient, Avatar } from "@prisma/client";
-import AvatarComponent from "@/components/shared/avatar-component";
+import { Separator } from "@/components/ui/separator";
+import { SwitchView } from "@/components/ui/switch-enhanced";
+import type FullCalendar from "@fullcalendar/react";
+import type { Avatar, Event, Patient, Profile, User } from "@prisma/client";
+import {
+  CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
+  User as UserIcon,
+  Users,
+} from "lucide-react";
+import { DateTime } from "luxon";
 import { useRouter } from "next/navigation";
+import type { RefObject } from "react";
+import renderTitle from "./renderTitle";
 
 interface CalendarToolbarProps {
   period: "day" | "week";

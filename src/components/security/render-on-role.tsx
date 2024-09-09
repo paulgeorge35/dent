@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
-import { type Role } from "@prisma/client";
-import { type ReactNode } from "react";
+import type { Role } from "@prisma/client";
+import type { ReactNode } from "react";
 
 interface RenderOnRoleProps {
   roles: Role[];

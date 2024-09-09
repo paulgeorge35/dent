@@ -1,10 +1,10 @@
 import { auth } from "@/auth";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useTranslations } from "@/lib/translations";
 import { api } from "@/trpc/server";
-import { type TenantAccount } from "@/types/schema";
+import type { TenantAccount } from "@/types/schema";
 import CreateTenant from "./create-tenant-button";
 import TenantCard from "./tenant-card";
-import { useTranslations } from "@/lib/translations";
 
 export default async function Tenants() {
   const session = await auth();

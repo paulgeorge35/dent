@@ -1,13 +1,15 @@
-import { type UserComplete as zUserComplete } from "@/types/schema";
+import { Confirmation } from "@/components/emails/confirmation";
+import type { UserComplete as zUserComplete } from "@/types/schema";
 import { Prisma, type Role, TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
-import { RoleSchema } from "prisma/generated/zod";
-import { z } from "zod";
 import { DateTime } from "luxon";
-import { Confirmation } from "@/components/emails/confirmation";
+import { RoleSchema } from "prisma/generated/zod";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
+import { env } from "@/env";
+import { resend } from "@/server/resend";
 import {
   adminProcedure,
   createTRPCRouter,
@@ -15,8 +17,6 @@ import {
   publicProcedure,
   tenantProcedure,
 } from "../trpc";
-import { env } from "@/env";
-import { resend } from "@/server/resend";
 
 const userComplete = Prisma.validator<Prisma.UserInclude>()({
   profile: {

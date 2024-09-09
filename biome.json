@@ -1,0 +1,34 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "organizeImports": {
+    "enabled": true,
+    "ignore": ["node_modules", ".next"]
+  },
+  "files": {
+    "maxSize": 3000000
+  },
+  "linter": {
+    "ignore": ["node_modules", ".next"],
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off",
+        "useNodejsImportProtocol": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
+      }
+    }
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "ignore": ["node_modules", ".next"]
+  }
+}

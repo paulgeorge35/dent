@@ -34,7 +34,7 @@ export default function ConfirmSpecializationDelete({
   return (
     <ConfirmationDialog
       trigger={
-        <Button size="icon" variant='destructive' disabled={disabled}>
+        <Button size="icon" variant="destructive" disabled={disabled}>
           <Trash className="size-4" />
         </Button>
       }

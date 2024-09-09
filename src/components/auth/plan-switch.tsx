@@ -1,9 +1,10 @@
 "use client";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -13,17 +14,16 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Icons } from "@/components/ui/icons";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import type { StripePlan } from "@/types";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import { api } from "@/trpc/react";
+import type { StripePlan } from "@/types";
+import { ArrowRight, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { ArrowRight, ChevronDown } from "lucide-react";
-import { Icons } from "@/components/ui/icons";
-import { Button } from "@/components/ui/button";
 
 const planFormSchema = z.object({
   planId: z.string({
@@ -132,7 +132,9 @@ export default function PlanSwitch({
                           priceId === plan.product.default_price.id && (
                             <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
                               <span
-                                className={`badge rounded-lg border-0 bg-primary px-2 py-[2px] text-xs font-semibold text-secondary`}
+                                className={
+                                  "badge rounded-lg border-0 bg-primary px-2 py-[2px] text-xs font-semibold text-secondary"
+                                }
                               >
                                 Current
                               </span>
@@ -145,7 +147,7 @@ export default function PlanSwitch({
                                 height={60}
                                 width={60}
                                 alt={plan.product.name}
-                                src={plan.product.images[0]!}
+                                src={plan.product.images[0] ?? ""}
                                 className="mx-auto h-[95px] w-auto"
                               />
                               <div className="my-4 w-full border-b border-border shadow-sm" />
@@ -161,9 +163,12 @@ export default function PlanSwitch({
                           </div>
                           <div className="flex gap-2">
                             <p
-                              className={`text-5xl font-extrabold tracking-tight`}
+                              className={
+                                "text-5xl font-extrabold tracking-tight"
+                              }
                             >
-                              {plan.product.default_price.unit_amount! / 100}
+                              {(plan.product.default_price.unit_amount ?? 0) /
+                                100}
                             </p>
                             <div className="mb-[4px] flex items-end">
                               <p className="text-xs font-semibold uppercase">
@@ -175,29 +180,28 @@ export default function PlanSwitch({
                             </div>
                           </div>
                           <ul className="flex-1 space-y-2.5 text-base leading-relaxed">
-                            {plan.product.marketing_features.map(
-                              (feature, i) => (
-                                <li
-                                  key={i}
-                                  className="flex items-center gap-2 text-sm"
+                            {plan.product.marketing_features.map((feature) => (
+                              <li
+                                key={feature.name}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                  className="h-[18px] w-[18px] shrink-0 opacity-80"
                                 >
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    viewBox="0 0 20 20"
-                                    fill="currentColor"
-                                    className="h-[18px] w-[18px] shrink-0 opacity-80"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                                      clipRule="evenodd"
-                                    />
-                                  </svg>
+                                  <title>Check</title>
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
 
-                                  <span>{feature.name}</span>
-                                </li>
-                              ),
-                            )}
+                                <span>{feature.name}</span>
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </div>

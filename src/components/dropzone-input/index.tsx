@@ -1,14 +1,14 @@
-import { X, Trash2, Upload } from "lucide-react";
-import { type Accept, ErrorCode, useDropzone } from "react-dropzone";
-import { toast } from "sonner";
-import { useState } from "react";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { api } from "@/trpc/react";
+import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { Icons } from "../ui/icons";
+import { api } from "@/trpc/react";
+import { Trash2, Upload, X } from "lucide-react";
+import { useState } from "react";
+import { type Accept, ErrorCode, useDropzone } from "react-dropzone";
+import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
+import { Icons } from "../ui/icons";
 
 const handlerFileUploadError = (error?: ErrorCode) => {
   switch (error) {

@@ -1,7 +1,7 @@
 import { type City, type County, PrismaClient } from "@prisma/client";
 import { v4 as uuid } from "uuid";
 
-import { type PickAndFlatten } from "@/lib/utils";
+import type { PickAndFlatten } from "@/lib/utils";
 
 import countyData from "./seedData/counties.json";
 

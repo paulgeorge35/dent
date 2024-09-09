@@ -1,4 +1,5 @@
 import AvatarComponent from "@/components/shared/avatar-component";
+import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   Select,
@@ -7,15 +8,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Patient } from "@prisma/client";
-import { useMemo } from "react";
-import { EventStatusSchema } from "prisma/generated/zod";
-import type { z } from "zod";
-import { translations } from "@/lib/translations";
-import StatusBullet from "@/components/ui/status-bullet";
 import { Separator } from "@/components/ui/separator";
+import StatusBullet from "@/components/ui/status-bullet";
+import { translations } from "@/lib/translations";
+import type { Patient } from "@prisma/client";
 import { StickyNote } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { EventStatusSchema } from "prisma/generated/zod";
+import { useMemo } from "react";
+import type { z } from "zod";
 
 type PatientCardProps = {
   patient: Patient;
@@ -72,7 +72,10 @@ export default function PatientCard({
         <p className="text-sm">
           {description ? description : "No observations"}
         </p>
-        <Button variant="link" className="ml-auto text-link hover:text-link-hover">
+        <Button
+          variant="link"
+          className="ml-auto text-link hover:text-link-hover"
+        >
           Edit
         </Button>
       </CardFooter>

@@ -1,12 +1,12 @@
 import { api } from "@/trpc/server";
-import { type SearchParams } from "@/types";
+import type { SearchParams } from "@/types";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { auth } from "@/auth";
-import ChangePasswordForm from "./change-password-form";
 import { constructMetadata } from "@/lib/utils";
+import ChangePasswordForm from "./change-password-form";
 
 export const metadata = constructMetadata({
   page: "Reset Password",

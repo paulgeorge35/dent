@@ -1,14 +1,14 @@
 import {
-  ProfileSchema,
-  UserSchema,
-  TenantSchema,
-  TenantProfileSchema,
-  SpecializationSchema,
-  EventTypeSchema,
-  EventStatusSchema,
-  EventInitiatorSchema,
-  StatusSchema,
   AvatarSchema,
+  EventInitiatorSchema,
+  EventStatusSchema,
+  EventTypeSchema,
+  ProfileSchema,
+  SpecializationSchema,
+  StatusSchema,
+  TenantProfileSchema,
+  TenantSchema,
+  UserSchema,
 } from "prisma/generated/zod";
 import { z } from "zod";
 

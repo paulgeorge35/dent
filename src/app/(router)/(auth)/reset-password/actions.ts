@@ -1,11 +1,11 @@
 "use server";
 
-import bcrypt from "bcryptjs";
-import { db } from "@/server/db";
-import { redirect } from "next/navigation";
 import { consumeToken } from "@/auth";
-import { resend } from "@/server/resend";
 import { PasswordChanged } from "@/components/emails/password-changed";
+import { db } from "@/server/db";
+import { resend } from "@/server/resend";
+import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
 
 export async function updatePassword(token: string, password: string) {
   const user = await consumeToken(token, "PASSWORD_RESET");

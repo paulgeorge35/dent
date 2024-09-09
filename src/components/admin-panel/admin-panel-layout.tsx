@@ -1,13 +1,13 @@
 "use client";
 
-import { cn, getPageTitle } from "@/lib/utils";
-import { useStore } from "@/hooks/use-store";
 import { Sidebar } from "@/components/admin-panel/sidebar";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import { useStore } from "@/hooks/use-store";
+import { cn, getPageTitle } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Shell } from "../layout/shell";
-import { useTranslations } from "next-intl";
 
 export default function AdminPanelLayout({
   children,

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Progress } from "./progress";
 import { Check } from "lucide-react";
+import { Progress } from "./progress";
 
 type StepsProps = {
   steps: {

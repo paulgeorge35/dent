@@ -2,10 +2,9 @@ import Link from "next/link";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { cn } from "@/lib/utils";
-import EmailSignIn from "./email-form";
-import { constructMetadata } from "@/lib/utils";
 import { useTranslations } from "@/lib/translations";
+import { cn, constructMetadata } from "@/lib/utils";
+import EmailSignIn from "./email-form";
 
 export const metadata = constructMetadata({
   page: "Sign In",

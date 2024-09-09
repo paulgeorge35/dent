@@ -1,8 +1,6 @@
 import { type JWTPayload, SignJWT, jwtVerify } from "jose";
 import { env } from "./env";
-import { type SessionUser } from "./types/schema";
-import { PutObjectCommand, S3 } from "@aws-sdk/client-s3";
-import { DateTime } from "luxon";
+import type { SessionUser } from "./types/schema";
 
 const key = new TextEncoder().encode(env.AUTH_SECRET);
 

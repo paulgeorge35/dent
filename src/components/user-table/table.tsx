@@ -3,11 +3,11 @@
 import { useDataTable } from "@/hooks/use-data-table";
 import { api } from "@/trpc/react";
 import type { DataTableFilterField } from "@/types";
-import { type ColumnDef } from "@tanstack/react-table";
+import type { ColumnDef } from "@tanstack/react-table";
 import { RoleSchema } from "prisma/generated/zod";
 import * as React from "react";
 
-import { type UserComplete } from "@/server/api/routers/user";
+import type { UserComplete } from "@/server/api/routers/user";
 
 import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";

@@ -4,7 +4,7 @@ import { toggleTenant } from "@/app/(router)/(setup)/welcome/actions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
-import { type InvitationAccount } from "@/types/schema";
+import type { InvitationAccount } from "@/types/schema";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Image from "next/image";

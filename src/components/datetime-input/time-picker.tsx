@@ -1,7 +1,5 @@
 import { Input } from "@/components/ui/input";
 
-import { cn } from "@/lib/utils";
-import React from "react";
 import {
   type Period,
   type TimePickerType,
@@ -9,6 +7,8 @@ import {
   getDateByType,
   setDateByType,
 } from "@/lib/time-picker-utils";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export interface TimePickerInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -71,10 +71,10 @@ const TimePickerInput = React.forwardRef<
        */
       if (picker === "12hours") {
         if (flag && calculatedValue.slice(1, 2) === "1" && prevIntKey === "0")
-          return "0" + key;
+          return `0${key}`;
       }
 
-      return !flag ? "0" + key : calculatedValue.slice(1, 2) + key;
+      return !flag ? `0${key}` : calculatedValue.slice(1, 2) + key;
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

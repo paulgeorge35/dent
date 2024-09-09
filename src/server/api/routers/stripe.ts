@@ -1,15 +1,14 @@
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
-import Stripe from "stripe";
 import { DateTime } from "luxon";
+import Stripe from "stripe";
 import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
-import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 import { env } from "@/env";
-import type { PrismaClient } from "@prisma/client";
 import type { StripePlan } from "@/types";
-import { fileCreateInputSchema } from "@/types/schema";
+import type { PrismaClient } from "@prisma/client";
 import { getLocale } from "next-intl/server";
+import { adminProcedure, createTRPCRouter, protectedProcedure } from "../trpc";
 
 const isSubscriptionUpdateAllowed = async (
   tenantId: string,
@@ -98,7 +97,7 @@ export const stripeRouter = createTRPCRouter({
   }),
 
   subscription: adminProcedure.query(async ({ ctx }) => {
-    const tenantId = ctx.session.user!.tenantId;
+    const tenantId = ctx.session.user.tenantId;
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       apiVersion: "2024-06-20",
@@ -117,9 +116,16 @@ export const stripeRouter = createTRPCRouter({
       tenant.profile.stripeSubscriptionId,
     );
 
+    if (!subscription.items.data[0]) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Subscription item not found",
+      });
+    }
+
     const plan = await ctx.db.plan.findUniqueOrThrow({
       where: {
-        stripePriceId: subscription.items.data[0]!.price.id,
+        stripePriceId: subscription.items.data[0].price.id,
       },
     });
 
@@ -140,7 +146,7 @@ export const stripeRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input: { avatarId, ...input } }) => {
       const email = ctx.session.email;
-      const locale: "ro" | "en" = await getLocale() as "ro" | "en";
+      const locale: "ro" | "en" = (await getLocale()) as "ro" | "en";
 
       const profile = await ctx.db.profile.findUniqueOrThrow({
         where: {
@@ -202,8 +208,8 @@ export const stripeRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
-      const userId = ctx.session.user!.id;
+      const tenantId = ctx.session.user.tenantId;
+      const userId = ctx.session.user.id;
       const { priceId, prorationDate } = input;
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -281,40 +287,55 @@ export const stripeRouter = createTRPCRouter({
         return {
           redirectUrl: checkoutSession.url,
         };
-      } else {
-        const oldPrice = subscription.items.data[0]!.price.unit_amount;
-        const newPrice = stripePlan.amount;
-        const opperationType: "upgrade" | "downgrade" =
-          oldPrice! > newPrice! ? "downgrade" : "upgrade";
+      }
 
-        await isSubscriptionUpdateAllowed(
-          tenantId,
-          priceId,
-          ctx.db as unknown as PrismaClient,
-        );
-        if (opperationType === "downgrade") {
-          await stripe.subscriptions.update(subscription.id, {
-            items: [
-              {
-                id: subscription.items.data[0]!.id,
-                price: priceId,
-              },
-            ],
-          });
-        } else {
-          const proration_date = prorationDate ?? Math.floor(Date.now() / 1000);
-          const items = [
+      if (!subscription.items.data[0]) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Subscription item not found",
+        });
+      }
+
+      const oldPrice = subscription.items.data[0].price.unit_amount;
+      const newPrice = stripePlan.amount;
+
+      if (!oldPrice || !newPrice) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Price not found",
+        });
+      }
+
+      const opperationType: "upgrade" | "downgrade" =
+        oldPrice > newPrice ? "downgrade" : "upgrade";
+
+      await isSubscriptionUpdateAllowed(
+        tenantId,
+        priceId,
+        ctx.db as unknown as PrismaClient,
+      );
+      if (opperationType === "downgrade") {
+        await stripe.subscriptions.update(subscription.id, {
+          items: [
             {
-              id: subscription.items.data[0]!.id,
+              id: subscription.items.data[0].id,
               price: priceId,
             },
-          ];
+          ],
+        });
+      } else {
+        const proration_date = prorationDate ?? Math.floor(Date.now() / 1000);
+        const items = [
+          {
+            id: subscription.items.data[0].id,
+            price: priceId,
+          },
+        ];
 
-          await stripe.subscriptions.update(subscription.id, {
-            items,
-            proration_date,
-          });
-        }
+        await stripe.subscriptions.update(subscription.id, {
+          items,
+          proration_date,
+        });
       }
 
       return;
@@ -328,7 +349,7 @@ export const stripeRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const tenantId = ctx.session.user!.tenantId;
+      const tenantId = ctx.session.user.tenantId;
       const { priceId, prorationDate } = input;
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -357,11 +378,25 @@ export const stripeRouter = createTRPCRouter({
         tenant.profile.stripeSubscriptionId,
       );
 
-      const oldPrice = subscription.items.data[0]!.price.unit_amount;
+      if (!subscription.items.data[0]) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Subscription item not found",
+        });
+      }
+
+      const oldPrice = subscription.items.data[0].price.unit_amount;
       const newPrice = stripePlan.amount;
 
+      if (!oldPrice || !newPrice) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Price not found",
+        });
+      }
+
       const opperationType: "upgrade" | "downgrade" =
-        oldPrice! > newPrice! ? "downgrade" : "upgrade";
+        oldPrice > newPrice ? "downgrade" : "upgrade";
 
       const isAllowed = await isSubscriptionUpdateAllowed(
         tenantId,
@@ -372,7 +407,7 @@ export const stripeRouter = createTRPCRouter({
 
       const items = [
         {
-          id: subscription.items.data[0]!.id,
+          id: subscription.items.data[0].id,
           price: priceId,
         },
       ];
@@ -403,7 +438,7 @@ export const stripeRouter = createTRPCRouter({
     }),
 
   cancelSubscription: adminProcedure.mutation(async ({ ctx }) => {
-    const tenantId = ctx.session.user!.tenantId;
+    const tenantId = ctx.session.user.tenantId;
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
       apiVersion: "2024-06-20",
     });

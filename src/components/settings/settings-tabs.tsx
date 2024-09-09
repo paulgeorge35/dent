@@ -1,9 +1,9 @@
 "use client";
 
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Brush, CreditCard, LifeBuoy, User, Users } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export const tabs = [
   {

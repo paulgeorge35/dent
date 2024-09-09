@@ -1,8 +1,8 @@
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import AdminPanelLayout from "@/components/admin-panel/admin-panel-layout";
 import { api } from "@/trpc/server";
 import { getLocale } from "next-intl/server";
+import { redirect } from "next/navigation";
 
 export default async function RootLayout({
   children,
@@ -17,7 +17,7 @@ export default async function RootLayout({
   const currentTenant = await api.tenant.currentTenant();
   if (!currentTenant.profile.activeSubscription) redirect("/welcome");
 
-  const locale = await getLocale() as "en" | "ro";
+  const locale = (await getLocale()) as "en" | "ro";
 
   return (
     <AdminPanelLayout session={session} accounts={accounts} locale={locale}>

@@ -1,6 +1,6 @@
 import type FullCalendar from "@fullcalendar/react";
-import type { RefObject } from "react";
 import { DateTime } from "luxon";
+import type { RefObject } from "react";
 
 export default function renderTitle(calendarRef: RefObject<FullCalendar>) {
   const calendar = calendarRef.current?.getApi();

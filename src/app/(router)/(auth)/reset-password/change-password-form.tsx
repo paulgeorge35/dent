@@ -1,5 +1,6 @@
 "use client";
 
+import { PasswordInput } from "@/components/password-input";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -13,7 +14,6 @@ import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updatePassword } from "./actions";
-import { PasswordInput } from "@/components/password-input";
 
 const schema = z
   .object({

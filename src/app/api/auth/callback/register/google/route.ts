@@ -6,7 +6,7 @@ import { env } from "@/env";
 import { googleClient } from "@/oauth";
 import { db } from "@/server/db";
 import { resend } from "@/server/resend";
-import { type SessionUser } from "@/types/schema";
+import type { SessionUser } from "@/types/schema";
 import axios from "axios";
 import { z } from "zod";
 
