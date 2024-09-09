@@ -31,6 +31,7 @@ import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DateTime } from "luxon";
+import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBoolean, useInput } from "react-hanger";
@@ -55,12 +56,15 @@ interface CalendarProps {
 }
 
 export default function Calendar({ userId, selected = "me" }: CalendarProps) {
+  const locale = useLocale();
+  const t = useTranslations("page.appointments.calendar");
   const calendarRef = useRef<FullCalendar>(null);
   const [period, setPeriod] = useState<"day" | "week">("day");
   const [selectedUser] = useState<z.infer<typeof selectedUserSchema>>(selected);
   const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(
     null,
   );
+  const weekendToggle = useBoolean(false);
   const [resourceId, setResourceId] = useState<string>(userId);
   const sidebar = useStore(useSidebarToggle, (state) => state);
   const [, setRenderSeed] = useState(0);
@@ -135,6 +139,8 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
 
   const handleDateClick = (arg: DateClickArg) => {
     newAppointmentDialog.setValue(true);
+    const isSelectedId = !["me", "all"].includes(selected);
+    setResourceId(isSelectedId ? selected : arg.resource?.id ?? userId);
     form.reset({
       description: "",
       date: arg.date,
@@ -153,7 +159,8 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
 
   const handleSelect = (arg: DateSelectArg) => {
     newAppointmentDialog.setValue(true);
-    setResourceId(arg.resource?.id ?? userId);
+    const isSelectedId = !["me", "all"].includes(selected);
+    setResourceId(isSelectedId ? selected : arg.resource?.id ?? userId);
     form.reset({
       description: "",
       allDay: arg.allDay,
@@ -219,6 +226,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         calendarRef={calendarRef}
         users={users}
         activeUsers={activeUsers?.filter((user) => user.id !== userId)}
+        weekendToggle={weekendToggle}
       />
       <CreateAppointmentDialog
         open={newAppointmentDialog.value}
@@ -278,8 +286,10 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
             tenantId: user.tenantId,
           },
         }))}
+        resourceAreaHeaderContent={t("resources")}
         resourceLabelContent={(arg) =>
           resourceLabelContent(
+            t,
             users?.find(
               (user) =>
                 user.id === (arg.resource.extendedProps.userId as string),
@@ -301,7 +311,7 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
           omitZeroMinute: false,
           hour12: false,
         }}
-        allDayText="All Day"
+        allDayText={t("all-day")}
         allDaySlot={true}
         dayHeaders={true}
         dayHeaderFormat={{
@@ -311,10 +321,10 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         }}
         dayCellClassNames={"hover:bg-blue-600/10"}
         navLinks={true}
-        // locale={"ro-RO"}
+        locale={locale}
         dayMaxEventRows={1}
-        dayHeaderContent={formatDayHeader}
-        // weekends={false}
+        dayHeaderContent={(arg) => formatDayHeader(t, locale, arg)}
+        weekends={weekendToggle.value}
         firstDay={1}
         nowIndicator={true}
         selectable={true}

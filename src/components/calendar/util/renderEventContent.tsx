@@ -1,14 +1,13 @@
 "use client";
 
 import { Icons } from "@/components/ui/icons";
-import { translations } from "@/lib/translations";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { EventContentArg } from "@fullcalendar/core";
 import type { EventStatus, Service } from "@prisma/client";
 import { ChevronRight } from "lucide-react";
 import { DateTime } from "luxon";
-import React from "react";
+import { useTranslations } from "next-intl";
 
 function EventDetails({ services }: { services: Service[] | undefined }) {
   return (
@@ -26,10 +25,11 @@ function EventDetails({ services }: { services: Service[] | undefined }) {
 }
 
 function EventStatusComponent({ status }: { status: EventStatus }) {
+  const t = useTranslations("enums.event.status");
   return (
     <span className="horizontal ml-auto items-center gap-2 rounded-md bg-background/50 px-2 py-1 text-xs text-secondary-foreground">
       <span
-        className={cn("size-2 rounded-full", {
+        className={cn("size-2 rounded-full mb-[2px]", {
           "bg-teal-400": status === "CREATED",
           "bg-blue-400": status === "CONFIRMED",
           "bg-red-400": status === "CANCELLED",
@@ -37,7 +37,7 @@ function EventStatusComponent({ status }: { status: EventStatus }) {
           "bg-yellow-400": status === "RESCHEDULED",
         })}
       />
-      {translations.en.event.status[status]}
+      <p className="text-xs font-light">{t(status)}</p>
     </span>
   );
 }
@@ -74,6 +74,7 @@ function EventIcon({ status }: { status: EventStatus }) {
 }
 
 function EventContent({ arg }: { arg: EventContentArg }) {
+  const t = useTranslations("page.appointments.calendar");
   const { data: event } = api.appointment.get.useQuery(arg.event.id);
   const services = event?.visits.flatMap((visit) => visit.service);
 
@@ -83,7 +84,7 @@ function EventContent({ arg }: { arg: EventContentArg }) {
       <div className="vertical h-full items-start gap-1 text-secondary-foreground">
         <p>{arg.event.title ?? "(New Event)"}</p>
         {arg.event.allDay ? (
-          <p>All day</p>
+          <p>{t("all-day")}</p>
         ) : (
           <p className="flex items-center gap-1 font-light">
             {arg.event.start

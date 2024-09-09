@@ -6,12 +6,14 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface BackButtonProps {
   title?: string;
 }
 
 export default function BackButton({ title }: BackButtonProps) {
+  const t = useTranslations("layout.sidebar");
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
 
@@ -26,7 +28,7 @@ export default function BackButton({ title }: BackButtonProps) {
       variant={isDesktop ? "link" : "outline"}
     >
       <ChevronLeft className="h-4 w-4 md:mr-2" />
-      <span className="hidden md:block">{title ?? "Back"}</span>
+      <span className="hidden md:block">{title ?? t("back")}</span>
     </Button>
   );
 }

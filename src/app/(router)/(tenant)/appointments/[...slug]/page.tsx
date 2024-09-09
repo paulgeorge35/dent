@@ -29,5 +29,6 @@ export default async function Appointments({ params }: AppointmentsProps) {
   if (!session || !session.user) {
     return null;
   }
+  
   return <Calendar selected={selected} userId={session.user.id} />;
 }

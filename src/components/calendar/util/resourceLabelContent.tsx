@@ -1,8 +1,11 @@
+"use client";
+
 import AvatarComponent from "@/components/shared/avatar-component";
 import type { Avatar, Event, Profile, User } from "@prisma/client";
 import Link from "next/link";
 
 export default function resourceLabelContent(
+  t: (key: string) => string,
   user?: User & {
     profile: Profile & {
       avatar: Avatar | null;
@@ -31,8 +34,8 @@ export default function resourceLabelContent(
 
         <p className="h-5 text-sm text-muted-foreground">
           {user.events.length
-            ? `${user.events.length} patient${user.events.length > 1 ? "s" : ""}`
-            : "No patients"}
+            ? `${user.events.length} ${user.events.length > 1 ? t("patient.plural") : t("patient.singular")}`
+            : t("no-patients")}
         </p>
       </div>
     </Link>

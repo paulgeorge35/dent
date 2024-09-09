@@ -1,5 +1,6 @@
 import AvatarComponent from "@/components/shared/avatar-component";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -9,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 import { SwitchView } from "@/components/ui/switch-enhanced";
 import type FullCalendar from "@fullcalendar/react";
 import type { Avatar, Event, Patient, Profile, User } from "@prisma/client";
@@ -20,8 +22,10 @@ import {
   Users,
 } from "lucide-react";
 import { DateTime } from "luxon";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { RefObject } from "react";
+import type { UseBoolean } from "react-hanger";
 import renderTitle from "./renderTitle";
 
 interface CalendarToolbarProps {
@@ -44,6 +48,7 @@ interface CalendarToolbarProps {
       } | null;
     };
   })[];
+  weekendToggle: UseBoolean;
 }
 
 export default function CalendarToolbar({
@@ -53,7 +58,9 @@ export default function CalendarToolbar({
   calendarRef,
   users,
   activeUsers,
+  weekendToggle,
 }: CalendarToolbarProps) {
+  const t = useTranslations("page.appointments.calendar");
   const calendar = calendarRef.current?.getApi();
   const router = useRouter();
   if (!calendar) return;
@@ -67,8 +74,8 @@ export default function CalendarToolbar({
         <span className="text-3xl font-medium">
           {appointments?.length ?? "-"}
         </span>
-        <span className="text-lg text-muted-foreground/80">
-          total appointments
+        <span className="text-lg text-muted-foreground/80 lowercase">
+          {t("total-appointments")}
         </span>
       </div>
       <div className="flex items-center justify-center gap-4">
@@ -85,7 +92,7 @@ export default function CalendarToolbar({
               DateTime.local().toJSDate()
           }
         >
-          Today
+          {t("today")}
         </Button>
         <Button
           size="icon"
@@ -112,11 +119,11 @@ export default function CalendarToolbar({
             values={[
               {
                 value: "day",
-                label: "Day",
+                label: t("view-select.day"),
               },
               {
                 value: "week",
-                label: "Week",
+                label: t("view-select.week"),
               },
             ]}
             onCheckedChange={(value) => setPeriod(value ? "week" : "day")}
@@ -129,20 +136,20 @@ export default function CalendarToolbar({
           onValueChange={(value) => router.push(`/appointments/${value}`)}
         >
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select a fruit" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent className="max-h-[300px]">
             <SelectGroup>
               <SelectItem value="me">
                 <div className="flex items-center gap-2">
                   <UserIcon className="size-5" />
-                  Only me
+                  {t("user-select.only-me")}
                 </div>
               </SelectItem>
               <SelectItem value="all">
                 <div className="flex items-center gap-2">
                   <Users className="size-5" />
-                  All dentists
+                  {t("user-select.all-doctors")}
                 </div>
               </SelectItem>
               {activeUsers?.map((user) => (
@@ -163,6 +170,18 @@ export default function CalendarToolbar({
             </SelectGroup>
           </SelectContent>
         </Select>
+      </div>
+      <div />
+      <div />
+      <div className="flex items-center justify-end gap-2 py-2">
+        <Label className="text-sm text-muted-foreground" htmlFor="show-weekends">
+          {t("show-weekends")}
+        </Label>
+        <Switch
+          id="show-weekends"
+          checked={weekendToggle.value}
+          onCheckedChange={weekendToggle.setValue}
+        />
       </div>
     </section>
   );

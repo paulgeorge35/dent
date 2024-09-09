@@ -1,6 +1,7 @@
 {
   "layout": {
     "sidebar": {
+      "back": "Back",
       "search": {
         "placeholder": "Search for everything here..."
       },
@@ -172,7 +173,27 @@
       "title": "Dashboard"
     },
     "appointments": {
-      "title": "Appointments"
+      "title": "Appointments",
+      "calendar": {
+        "all-day": "All day",
+        "resources": "Doctors",
+        "no-patients": "No patients",
+        "patient": {
+          "singular": "patient",
+          "plural": "patients"
+        },
+        "show-weekends": "Show weekends",
+        "total-appointments": "Total appointments",
+        "today": "Today",
+        "view-select": {
+          "day": "Day",
+          "week": "Week"
+        },
+        "user-select": {
+          "only-me": "Only me",
+          "all-doctors": "All doctors"
+        }
+      }
     },
     "staff": {
       "title": "Staff"
@@ -197,6 +218,17 @@
     },
     "user-profile": {
       "title": "User Profile"
+    }
+  },
+  "enums": {
+    "event": {
+      "status": {
+        "CREATED": "Created",
+        "CONFIRMED": "Confirmed",
+        "CANCELLED": "Cancelled",
+        "COMPLETED": "Completed",
+        "RESCHEDULED": "Rescheduled"
+      }
     }
   },
   "errors": {

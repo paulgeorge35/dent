@@ -1,6 +1,7 @@
 {
   "layout": {
     "sidebar": {
+      "back": "Înapoi",
       "search": {
         "placeholder": "Caută aici..."
       },
@@ -172,7 +173,27 @@
       "title": "Administrare"
     },
     "appointments": {
-      "title": "Programări"
+      "title": "Programări",
+      "calendar": {
+        "all-day": "Toată ziua",
+        "resources": "Doctori",
+        "no-patients": "Nici un pacient",
+        "patient": {
+          "singular": "pacient",
+          "plural": "pacienți"
+        },
+        "show-weekends": "Afișează weekend-urile",
+        "total-appointments": "Total programări",
+        "today": "Azi",
+        "view-select": {
+          "day": "Zi",
+          "week": "Săptămână"
+        },
+        "user-select": {
+          "only-me": "Doar eu",
+          "all-doctors": "Toți doctorii"
+        }
+      }
     },
     "staff": {
       "title": "Personal"
@@ -197,6 +218,17 @@
     },
     "user-profile": {
       "title": "Profil utilizator"
+    }
+  },
+  "enums": {
+    "event": {
+      "status": {
+        "CREATED": "Creată",
+        "CONFIRMED": "Confirmată",
+        "CANCELLED": "Anulată",
+        "COMPLETED": "Finalizată",
+        "RESCHEDULED": "Reprogramată"
+      }
     }
   },
   "errors": {

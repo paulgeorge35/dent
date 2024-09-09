@@ -1,8 +1,11 @@
 import type FullCalendar from "@fullcalendar/react";
 import { DateTime } from "luxon";
+import { useLocale } from "next-intl";
 import type { RefObject } from "react";
 
 export default function renderTitle(calendarRef: RefObject<FullCalendar>) {
+  const locale = useLocale();
+
   const calendar = calendarRef.current?.getApi();
   if (!calendar) return;
 
@@ -15,10 +18,14 @@ export default function renderTitle(calendarRef: RefObject<FullCalendar>) {
       {isRange
         ? `${DateTime.fromJSDate(calendar.view.activeStart).toFormat(
             "EEE, d MMM yyyy",
+            { locale: locale },
           )} - ${DateTime.fromJSDate(calendar.view.activeEnd).toFormat(
             "EEE, d MMM yyyy",
+            { locale: locale },
           )}`
-        : DateTime.fromJSDate(calendar.getDate()).toFormat("EEE, d MMM yyyy")}
+        : DateTime.fromJSDate(calendar.getDate()).toFormat("EEE, d MMM yyyy", {
+            locale: locale,
+          })}
     </h1>
   );
 }
