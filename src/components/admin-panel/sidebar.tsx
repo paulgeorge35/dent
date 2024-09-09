@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { Box, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import LocaleSwitch from "../shared/locale-switch";
@@ -107,7 +106,7 @@ export function Sidebar({
             accounts={accounts}
             session={session}
           />
-          <LocaleSwitch locale={locale} />
+          <LocaleSwitch locale={locale} isOpen={sidebar?.isOpen} />
         </div>
       </aside>
     </>

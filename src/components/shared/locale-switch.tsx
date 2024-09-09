@@ -11,7 +11,12 @@ import {
 import { Languages } from "lucide-react";
 import { useTransition } from "react";
 
-export default function LocaleSwitch({ locale }: { locale: string }) {
+type LocaleSwitchProps = {
+  locale: string;
+  isOpen: boolean;
+};
+
+export default function LocaleSwitch({ locale, isOpen }: LocaleSwitchProps) {
   const [, startTransition] = useTransition();
 
   const toggle = () => {
@@ -20,15 +25,17 @@ export default function LocaleSwitch({ locale }: { locale: string }) {
     });
   };
 
+  const shortLocale = locale === "en" ? "EN" : "RO";
+
   return (
     <Select value={locale} onValueChange={toggle}>
       <SelectTrigger className="" aria-label="Select language">
-        <Languages className="mr-2 h-4 w-4" aria-hidden="true" />
-        <SelectValue />
+        {isOpen && <Languages className="mr-2 h-4 w-4" aria-hidden="true" />}
+        {isOpen ? <SelectValue /> : shortLocale}
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">English (EN)</SelectItem>
-        <SelectItem value="ro">Română (RO)</SelectItem>
+        <SelectItem value="en">English ({shortLocale})</SelectItem>
+        <SelectItem value="ro">Română ({shortLocale})</SelectItem>
       </SelectContent>
     </Select>
   );
