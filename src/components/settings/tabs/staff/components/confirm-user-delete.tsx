@@ -4,6 +4,7 @@ import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 import { Trash2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useBoolean } from "react-hanger";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ export const ConfirmUserDelete = ({
   id: string;
   disabled?: boolean;
 }) => {
+  const t = useTranslations("page.settings.tabs.staff.active-users.delete");
   const dialogOpen = useBoolean(false);
   const router = useRouter();
   const queryClient = api.useUtils();
@@ -41,11 +43,11 @@ export const ConfirmUserDelete = ({
 
   return (
     <ConfirmationDialog
-      title="Delete User"
-      description="Are you sure you want to delete this user?"
+      title={t("dialog.title")}
+      description={t("dialog.description")}
       open={dialogOpen.value}
-      onOpenChange={dialogOpen.toggle}
-      confirmButtonText="Delete"
+      onOpenChange={disabled ? dialogOpen.setFalse : dialogOpen.toggle}
+      confirmButtonText={t("dialog.confirm")}
       onConfirm={handleDelete}
       loading={isPending}
       trigger={

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TabsContent } from "@/components/ui/tabs";
+import { useTranslations } from "next-intl";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark", "system"], {
@@ -30,6 +31,7 @@ const defaultValues: Partial<AppearanceFormValues> = {
   theme: "light",
 };
 export default function Customization() {
+  const t = useTranslations("page.settings.tabs.customization");
   const theme = useTheme();
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -52,9 +54,9 @@ export default function Customization() {
                 name="theme"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel>Theme</FormLabel>
+                    <FormLabel>{t("theme.label")}</FormLabel>
                     <FormDescription>
-                      Select the theme for the dashboard.
+                      {t("theme.description")}
                     </FormDescription>
                     <FormMessage />
                     <RadioGroup
@@ -86,7 +88,7 @@ export default function Customization() {
                             </div>
                           </div>
                           <span className="block w-full p-2 text-center font-normal">
-                            Light
+                            {t("theme.options.light")}
                           </span>
                         </FormLabel>
                       </FormItem>
@@ -112,7 +114,7 @@ export default function Customization() {
                             </div>
                           </div>
                           <span className="block w-full p-2 text-center font-normal">
-                            Dark
+                            {t("theme.options.dark")}
                           </span>
                         </FormLabel>
                       </FormItem>
@@ -141,7 +143,7 @@ export default function Customization() {
                             </div>
                           </div>
                           <span className="block w-full p-2 text-center font-normal">
-                            System
+                            {t("theme.options.system")}
                           </span>
                         </FormLabel>
                       </FormItem>

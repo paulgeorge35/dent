@@ -22,6 +22,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
+import { useTranslations } from "next-intl";
 
 type ConfirmationDialogProps = {
   trigger: React.ReactNode;
@@ -44,6 +45,7 @@ export default function ConfirmationDialog({
   open,
   onOpenChange,
 }: ConfirmationDialogProps) {
+  const t = useTranslations("layout.confirmation-dialog");
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const Credenza = isDesktop ? Dialog : Drawer;
@@ -66,7 +68,7 @@ export default function ConfirmationDialog({
         <CredenzaFooter>
           {isDesktop && (
             <CredenzaClose>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("cancel")}</Button>
             </CredenzaClose>
           )}
           <Button onClick={onConfirm} isLoading={loading}>

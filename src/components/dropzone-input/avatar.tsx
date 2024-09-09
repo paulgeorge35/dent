@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 import { ErrorCode, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -45,6 +46,7 @@ export function AvatarUpload({
   onChange,
   ...rest
 }: AvatarUploadProps) {
+  const t = useTranslations("fields");
   const [isUploading, setIsUploading] = useState(false);
   const { data: avatar, isLoading: isFetching } = api.storage.avatar.useQuery(
     {
@@ -170,7 +172,7 @@ export function AvatarUpload({
             handleDelete();
           }}
         >
-          {value ? "Remove" : "Browse"}
+          {value ? t("avatar.remove") : t("avatar.browse")}
         </Button>
       </div>
       <div
@@ -178,7 +180,7 @@ export function AvatarUpload({
           "horizontal mt-2 w-full items-center justify-between text-xs text-muted-foreground",
         )}
       >
-        <p>Maximum upload file size: {maxSize}MB</p>
+        <p>{t("avatar.limit", { size: maxSize })}</p>
       </div>
     </div>
   );

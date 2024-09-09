@@ -2,39 +2,34 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Brush, CreditCard, LifeBuoy, User, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 
 export const tabs = [
   {
-    name: "Account",
     value: "account",
     icon: User,
   },
   {
-    name: "Plan",
     value: "plan",
     icon: CreditCard,
     adminsOnly: true,
   },
   {
-    name: "Staff",
     value: "staff",
     icon: Users,
     adminsOnly: true,
   },
   {
-    name: "Customization",
     value: "customization",
     icon: Brush,
   },
   {
-    name: "Notifications",
     value: "notifications",
     icon: Bell,
   },
   {
-    name: "Support",
     value: "support",
     icon: LifeBuoy,
   },
@@ -46,6 +41,7 @@ interface SettingsTabsProps {
 }
 
 export default function SettingsTabs({ children, isAdmin }: SettingsTabsProps) {
+  const t = useTranslations("page.settings.tabs");
   const searchParams = useSearchParams();
   const router = useRouter();
   const activeTab = useMemo(
@@ -71,7 +67,7 @@ export default function SettingsTabs({ children, isAdmin }: SettingsTabsProps) {
               onClick={() => onTabChange(tab.value)}
               className="flex-1"
             >
-              <p className="hidden md:block">{tab.name}</p>
+              <p className="hidden md:block">{t(`${tab.value}.title`)}</p>
               <tab.icon className="md:hidden" />
             </TabsTrigger>
           ))}

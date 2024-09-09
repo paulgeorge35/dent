@@ -21,44 +21,39 @@ import RootFormError from "@/components/ui/root-form-error";
 import { PasswordInput } from "@/components/password-input";
 import { getErrorMessage } from "@/lib/handle-error";
 import { Save } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const schema = z
   .object({
     current: z.string({
-      required_error: "Password is required",
-      invalid_type_error: "Password must be a string",
+      required_error: "password.required",
+      invalid_type_error: "password.invalid",
       description: "Password of the user",
     }),
     password: z
       .string({
-        required_error: "Confirm password is required",
-        invalid_type_error: "Confirm password must be a string",
+        required_error: "password.required",
+        invalid_type_error: "password.invalid",
         description: "Confirm password of the user",
       })
-      .min(8, "Password must be at least 8 characters")
-      .max(64, "Password must be at most 64 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        "Passwords must contain at least one lowercase letter, one uppercase letter, and one number.",
-      ),
+      .min(8, "password.min-length")
+      .max(64, "password.max-length")
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, "password.invalid-format"),
     confirm: z
       .string({
-        required_error: "Confirm password is required",
-        invalid_type_error: "Confirm password must be a string",
+        required_error: "password.required",
+        invalid_type_error: "password.invalid",
         description: "Confirm password of the user",
       })
-      .min(8, "Password must be at least 8 characters")
-      .max(64, "Password must be at most 64 characters")
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/,
-        "Passwords must contain at least one lowercase letter, one uppercase letter, and one number.",
-      ),
+      .min(8, "password.min-length")
+      .max(64, "password.max-length")
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, "password.invalid-format"),
   })
   .superRefine(({ password, confirm }, ctx) => {
     if (password !== confirm) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Passwords do not match",
+        message: "password.mismatch",
         path: ["confirm"],
       });
     }
@@ -67,10 +62,11 @@ const schema = z
 type FormValues = z.infer<typeof schema>;
 
 export default function PasswordForm() {
+  const t = useTranslations("page.settings.tabs.account.password");
   const router = useRouter();
   const { mutate, isPending } = api.user.changePassword.useMutation({
     onSuccess: () => {
-      toast.success("Password updated successfully.");
+      toast.success(t("status.success"));
       router.refresh();
       form.reset({
         current: "",
@@ -107,12 +103,11 @@ export default function PasswordForm() {
         <FormField
           control={form.control}
           name="current"
-          rules={{
-            required: "Password is required",
-          }}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Current Password</FormLabel>
+              <FormLabel htmlFor={field.name}>
+                {t("current-password")}
+              </FormLabel>
               <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
@@ -121,16 +116,9 @@ export default function PasswordForm() {
         <FormField
           control={form.control}
           name="password"
-          rules={{
-            required: "Password is required",
-            minLength: {
-              value: 8,
-              message: "Password must be at least 8 characters",
-            },
-          }}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>New Password</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("new-password")}</FormLabel>
               <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
@@ -139,25 +127,20 @@ export default function PasswordForm() {
         <FormField
           control={form.control}
           name="confirm"
-          rules={{
-            required: "Confirm password is required",
-            validate: (value) =>
-              value === form.getValues("password") || "Passwords do not match",
-          }}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>Confirm Password</FormLabel>
+              <FormLabel htmlFor={field.name}>
+                {t("confirm-password")}
+              </FormLabel>
               <PasswordInput id={field.name} {...field} />
               <FormMessage />
             </FormItem>
           )}
         />
-        {form.formState.errors.root?.message && (
-          <RootFormError
-            className="col-span-2"
-            error={form.formState.errors.root.message}
-          />
-        )}
+        <RootFormError
+          className="col-span-2"
+          error={form.formState.errors.root?.message}
+        />
         <Button
           isLoading={isPending}
           disabled={!form.formState.isDirty}
@@ -167,7 +150,7 @@ export default function PasswordForm() {
           type="submit"
           className="col-span-2 sm:w-fit"
         >
-          Update password
+          {t("button")}
         </Button>
       </form>
     </Form>

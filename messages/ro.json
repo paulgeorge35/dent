@@ -1,5 +1,8 @@
 {
   "layout": {
+    "confirmation-dialog": {
+      "cancel": "Anulează"
+    },
     "sidebar": {
       "back": "Înapoi",
       "search": {
@@ -9,7 +12,14 @@
         "my-clinics": "Clinicile mele",
         "profile": "Profil",
         "settings": "Setări",
-        "logout": "Deconectare"
+        "logout": {
+          "trigger": "Deconectare",
+          "dialog": {
+            "title": "Ești sigur că vrei să te deconectezi?",
+            "cancel": "Anulează",
+            "confirm": "Deconectare"
+          }
+        }
       },
       "links": {
         "sections": {
@@ -214,7 +224,175 @@
       "title": "Profil"
     },
     "settings": {
-      "title": "Setări"
+      "title": "Setări",
+      "tabs": {
+        "account": {
+          "title": "Cont",
+          "profile": {
+            "firstName": {
+              "label": "Prenume"
+            },
+            "lastName": {
+              "label": "Nume"
+            },
+            "title": {
+              "label": "Titlu"
+            },
+            "email": {
+              "label": "Email",
+              "description": "Adresa de email folosită pentru autentificare. Dacă dorești să o schimbi, contactează echipa de suport."
+            },
+            "phone": {
+              "label": "Telefon",
+              "description": "Introduce-te numărul de telefon. Acesta va fi vizibil pacienților."
+            },
+            "specialization": {
+              "label": "Specializare"
+            },
+            "status": {
+              "success": "Profilul a fost actualizat cu succes"
+            },
+            "button": "Actualizează profilul"
+          },
+          "password": {
+            "title": "Schimbă parola",
+            "current-password": "Parola curentă",
+            "new-password": "Parola nouă",
+            "confirm-password": "Confirmă parola nouă",
+            "button": "Actualizează parola",
+            "status": {
+              "success": "Parola a fost actualizată cu succes"
+            }
+          }
+        },
+        "plan": {
+          "title": "Abonament",
+          "subscription": {
+            "label": "Abonament",
+            "description": "Gestionează-ți abonamentul.",
+            "status": {
+              "active": "Activ",
+              "canceled": "Anulat",
+              "trialing": "Perioadă de probă"
+            },
+            "actions": {
+              "change": "Schimbă planul"
+            },
+            "per-month": "pe lună",
+            "trial-will-end": "Perioada de probă va expira pe",
+            "cancel-before": "Pentru a nu fi taxat, anulează înainte de expirarea perioadei de probă.",
+            "active-until": "Ai anulat abonamentul dar încă poți folosi MyDent până pe",
+            "cancel": {
+              "trigger": "Anulează abonamentul",
+              "dialog": {
+                "title": "Ești sigur că vrei să anulezi abonamentul?",
+                "cancel": "Înapoi",
+                "confirm": "Da, anulează"
+              }
+            }
+          }
+        },
+        "staff": {
+          "title": "Personal",
+          "upgrade": "Upgradează",
+          "to-increase-limit": "pentru a crește limita de utilizatori",
+          "users": "Utilizatori",
+          "invite": {
+            "trigger": "Invită",
+            "status": {
+              "success": {
+                "title": "Invitația a fost trimisă",
+                "description": "Invitația a fost trimisă utilizatorului."
+              }
+            },
+            "dialog": {
+              "title": "Invită",
+              "description": "Invită colegi de echipă să se alăture platformei.",
+              "email": {
+                "label": "Email",
+                "placeholder": "john@doe.com"
+              },
+              "role": {
+                "label": "Rol",
+                "placeholder": "Selectează rolul",
+                "options": {
+                  "admin": "Admin",
+                  "user": "User"
+                }
+              },
+              "cancel": "Anulează",
+              "confirm": "Trimite invitația",
+              "inviting": "Invitație în proces..."
+            }
+          },
+          "invitations": {
+            "title": "Invitații",
+            "description": "Invită colegi de echipă să se alăture echipei.",
+            "no-invitations": "Nici o invitație",
+            "total-invitations": "Total invitații",
+            "delete": {
+              "trigger": "Șterge",
+              "status": {
+                "success": {
+                  "title": "Invitația a fost ștearsă cu succes",
+                  "description": "Invitația a fost ștearsă și nu poate fi folosită"
+                }
+              },
+              "dialog": {
+                "title": "Șterge invitația",
+                "description": "Ești sigur că vrei să ștergi această invitație?",
+                "cancel": "Anulează",
+                "confirm": "Șterge"
+              }
+            },
+            "columns": {
+              "email": "Email",
+              "role": "Rol",
+              "sent": "Trimisă",
+              "expires": "Expiră"
+            }
+          },
+          "active-users": {
+            "title": "Utilizatori activi",
+            "description": "Gestionează utilizatorii activi.",
+            "you": "Tu",
+            "no-users": "Nici un utilizator activ",
+            "total-users": "Total utilizatori",
+            "columns": {
+              "name": "Nume",
+              "email": "Email",
+              "role": "Rol"
+            },
+            "delete": {
+              "trigger": "Șterge",
+              "dialog": {
+                "title": "Șterge utilizator",
+                "description": "Ești sigur că vrei să ștergi acest utilizator?",
+                "cancel": "Anulează",
+                "confirm": "Șterge"
+              }
+            }
+          }
+        },
+        "customization": {
+          "title": "Personalizare",
+          "theme": {
+            "label": "Temă",
+            "description": "Alege tema pentru platformă.",
+            "options": {
+              "light": "Deschisă",
+              "dark": "Întunecată",
+              "system": "Sistem"
+            }
+          }
+        },
+        "notifications": {
+          "title": "Notificări"
+        },
+        "support": {
+          "title": "Suport"
+        }
+      }
     },
     "user-profile": {
       "title": "Profil utilizator"
@@ -231,9 +409,21 @@
       }
     }
   },
+  "fields": {
+    "avatar": {
+      "browse": "Încarcă",
+      "remove": "Șterge",
+      "limit": "Dimensiunea maximă acceptată este: {size}MB."
+    }
+  },
   "errors": {
     "global": {
       "fallback": "A apărut o eroare, încearcă din nou mai târziu"
+    },
+    "invitation": {
+      "exists": "Invitația există deja",
+      "user-exists": "Utilizatorul există deja",
+      "limit-reached": "Ai atins limita de utilizatori pentru planul tău."
     },
     "plan": {
       "required": "Planul este obligatoriu",
@@ -244,6 +434,9 @@
       "inactive": "Contul nu a fost activat",
       "not-found": "Contul nu a fost găsit",
       "banned": "Contul a fost suspendat"
+    },
+    "phone": {
+      "error": "Numărul de telefon este invalid"
     },
     "email": {
       "required": "Adresa de email este obligatorie",

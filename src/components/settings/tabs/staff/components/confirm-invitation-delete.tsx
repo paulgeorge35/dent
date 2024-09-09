@@ -2,27 +2,32 @@
 
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
+import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
+import { TRPCClientError } from "@trpc/client";
 import { Trash2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useBoolean } from "react-hanger";
 import { toast } from "sonner";
 
 export const ConfirmInvitationDelete = ({ id }: { id: string }) => {
+  const t = useTranslations("page.settings.tabs.staff.invitations.delete");
   const dialogOpen = useBoolean(false);
   const router = useRouter();
   const queryClient = api.useUtils();
   const { mutate, isPending } = api.tenant.deleteInvitation.useMutation({
     onSuccess: () => {
-      toast.success("Invitation deleted successfully", {
-        description:
-          "The invitation has been deleted and can no longer be used",
+      toast.success(t("status.success.title"), {
+        description: t("status.success.description"),
       });
       dialogOpen.setFalse();
       router.refresh();
     },
-    onError: () => {
-      toast.error("Failed to delete invitation");
+    onError: (error) => {
+      if (error instanceof TRPCClientError) {
+        showErrorToast(error.message);
+      }
     },
     onSettled: () => {
       void queryClient.tenant.invitations.invalidate();
@@ -35,11 +40,11 @@ export const ConfirmInvitationDelete = ({ id }: { id: string }) => {
 
   return (
     <ConfirmationDialog
-      title="Delete Invitation"
-      description="Are you sure you want to delete this invitation?"
+      title={t("dialog.title")}
+      description={t("dialog.description")}
       open={dialogOpen.value}
       onOpenChange={dialogOpen.toggle}
-      confirmButtonText="Delete"
+      confirmButtonText={t("dialog.confirm")}
       onConfirm={handleDelete}
       loading={isPending}
       trigger={

@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
+import { useTranslations } from "next-intl";
 
 export default function CancelMembership() {
+  const t = useTranslations("page.settings.tabs.plan.subscription.cancel");
   const { mutate } = api.stripe.cancelSubscription.useMutation();
 
   return (
@@ -27,23 +29,21 @@ export default function CancelMembership() {
           iconPlacement="left"
           className="w-full md:w-auto"
         >
-          Cancel Membership
+          {t("trigger")}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>
-            Are you sure you want to cancel your membership?
-          </AlertDialogTitle>
+          <AlertDialogTitle>{t("dialog.title")}</AlertDialogTitle>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("dialog.cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               mutate();
             }}
           >
-            Yes
+            {t("dialog.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

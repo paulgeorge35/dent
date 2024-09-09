@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { LogOut } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTransition } from "react";
 
 type LogoutDialogProps = {
@@ -29,6 +30,7 @@ type LogoutDialogProps = {
 };
 
 export default function LogoutDialog({ children }: LogoutDialogProps) {
+  const t = useTranslations("layout.sidebar.controls.logout");
   const [pending, startTransition] = useTransition();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -57,18 +59,18 @@ export default function LogoutDialog({ children }: LogoutDialogProps) {
             iconPlacement="left"
             className="w-full sm:w-fit"
           >
-            Log Out
+            {t("trigger")}
           </Button>
         )}
       </TriggerComponent>
       <ContentComponent>
         <HeaderComponent>
-          <TitleComponent>Are you sure you want to sign out?</TitleComponent>
+          <TitleComponent>{t("dialog.title")}</TitleComponent>
         </HeaderComponent>
         <FooterComponent className="gap-4">
-          <CloseComponent>Cancel</CloseComponent>
+          <CloseComponent>{t("dialog.cancel")}</CloseComponent>
           <Button disabled={pending} color="destructive" onClick={handleClick}>
-            Log Out
+            {t("dialog.confirm")}
           </Button>
         </FooterComponent>
       </ContentComponent>

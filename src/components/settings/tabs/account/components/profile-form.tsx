@@ -30,8 +30,11 @@ import type { UserComplete } from "@/server/api/routers/user";
 import { PhoneInput, getPhoneData } from "@/components/phone-input";
 
 import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import { getErrorMessage } from "@/lib/handle-error";
 import type { Specialization } from "@prisma/client";
+import { TRPCClientError } from "@trpc/client";
 import { Save } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   firstName: z.string().min(1, "First name is required"),
@@ -51,10 +54,12 @@ interface ProfileFormProps {
 }
 
 export default function ProfileForm({ me, specializations }: ProfileFormProps) {
+  const t = useTranslations("page.settings.tabs.account.profile");
+  const te = useTranslations("errors");
   const router = useRouter();
   const { mutate, isPending } = api.user.update.useMutation({
     onSuccess: (data) => {
-      toast.success("Profile updated successfully");
+      toast.success(t("status.success"));
       router.refresh();
       form.reset({
         firstName: data.profile?.firstName ?? undefined,
@@ -66,8 +71,13 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
         avatarId: data.profile?.avatar?.id,
       });
     },
-    onError: () => {
-      toast.error("Something went wrong. Please try again.");
+    onError: (error) => {
+      if (error instanceof TRPCClientError) {
+        form.setError("root", {
+          type: "validate",
+          message: getErrorMessage(error),
+        });
+      }
     },
   });
 
@@ -92,7 +102,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
     if (!phoneData.isValid) {
       form.setError("phone", {
         type: "manual",
-        message: "Invalid phone number",
+        message: te("phone.error"),
       });
       return;
     }
@@ -132,7 +142,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           }}
           render={({ field }) => (
             <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>First name</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("firstName.label")}</FormLabel>
               <Input id={field.name} {...field} placeholder="First name" />
               <FormMessage />
             </FormItem>
@@ -147,7 +157,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           }}
           render={({ field }) => (
             <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>Last name</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("lastName.label")}</FormLabel>
               <Input id={field.name} {...field} placeholder="Last name" />
               <FormMessage />
             </FormItem>
@@ -158,7 +168,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           name="title"
           render={({ field }) => (
             <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>Title</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("title.label")}</FormLabel>
               <Input id={field.name} {...field} placeholder="e.g. Dr." />
               <FormMessage />
             </FormItem>
@@ -169,8 +179,13 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           name="specializationId"
           render={({ field }) => (
             <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>Specialization</FormLabel>
-              <Select onValueChange={(value) => field.onChange(value)}>
+              <FormLabel htmlFor={field.name}>
+                {t("specialization.label")}
+              </FormLabel>
+              <Select
+                onValueChange={(value) => field.onChange(value)}
+                value={form.watch(field.name)}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Choose specialization" />
                 </SelectTrigger>
@@ -197,18 +212,10 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           }}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>E-Mail</FormLabel>
-              <Input
-                id={field.name}
-                {...field}
-                placeholder="E-Mail"
-                disabled
-                type="email"
-                autoComplete="email"
-              />
+              <FormLabel htmlFor={field.name}>{t("email.label")}</FormLabel>
+              <Input id={field.name} {...field} disabled type="email" />
               <FormDescription>
-                This is the email address that will be used to log in. If you
-                wish to change it, please contact support.
+                {t("email.description")}
                 <FormMessage />
               </FormDescription>
             </FormItem>
@@ -219,7 +226,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           name="phone"
           render={({ field }) => (
             <FormItem className="col-span-2 sm:col-span-1">
-              <FormLabel htmlFor={field.name}>Phone</FormLabel>
+              <FormLabel htmlFor={field.name}>{t("phone.label")}</FormLabel>
               <FormControl>
                 <PhoneInput
                   id={field.name}
@@ -228,9 +235,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
                   required={false}
                 />
               </FormControl>
-              <FormDescription>
-                Enter a valid phone number with country
-              </FormDescription>
+              <FormDescription>{t("phone.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -245,7 +250,7 @@ export default function ProfileForm({ me, specializations }: ProfileFormProps) {
           type="submit"
           className="col-span-2 sm:w-fit"
         >
-          Update profile
+          {t("button")}
         </Button>
       </form>
     </Form>

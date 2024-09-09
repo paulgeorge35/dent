@@ -297,7 +297,7 @@ export const tenantRouter = createTRPCRouter({
       if (invitationExists) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Invitation already exists",
+          message: "invitation.exists",
         });
       }
 
@@ -312,7 +312,7 @@ export const tenantRouter = createTRPCRouter({
       if (userExists) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "User already exists",
+          message: "invitation.user-exists",
         });
       }
 
@@ -369,7 +369,7 @@ export const tenantRouter = createTRPCRouter({
       if (totalUsers >= tenant.profile.plan.maxUsers) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Maximum users reached",
+          message: "invitation.limit-reached",
         });
       }
 

@@ -188,7 +188,7 @@ export default function AccountButton({
               className="flex flex-row items-center justify-start gap-4 text-xs text-red-500"
             >
               <DoorOpen className="size-4" />
-              {t("logout")}
+              {t("logout.trigger")}
             </Button>
           </LogoutDialog>
         </div>

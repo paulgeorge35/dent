@@ -17,10 +17,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TabsContent } from "@/components/ui/tabs";
+import { useTranslations } from "@/lib/translations";
 import { api } from "@/trpc/server";
 import type { Invitation, Profile, User } from "@prisma/client";
 import { Users } from "lucide-react";
 import { DateTime } from "luxon";
+import { getLocale } from "next-intl/server";
 import Link from "next/link";
 import { ConfirmInvitationDelete } from "./components/confirm-invitation-delete";
 import { ConfirmUserDelete } from "./components/confirm-user-delete";
@@ -28,6 +30,7 @@ import InvitationDialog from "./components/invitation-dialog";
 import { RoleSelect } from "./components/role-select";
 
 export default async function Staff() {
+  const t = await useTranslations("page.settings.tabs.staff");
   const users = await api.tenant.activeUsers();
   const invitations = await api.tenant.invitations();
   const tenant = await api.tenant.currentTenant();
@@ -46,16 +49,16 @@ export default async function Staff() {
         <span className="horizontal center-v h-9 gap-2 rounded-md bg-muted pl-2 pr-1 text-sm text-muted-foreground">
           <Users className="size-4" />
           <p>
-            {spotsUsed} / {tenant.profile.plan.maxUsers} Users
+            {spotsUsed} / {tenant.profile.plan.maxUsers} {t("users")}
           </p>
           <span className="rounded-md border border-border bg-background/50 px-2 py-1 text-sm">
             <Link
               href="/subscription/update"
               className="text-link hover:text-link-hover hover:underline"
             >
-              Upgrade
+              {t("upgrade")}
             </Link>{" "}
-            to increase your user limit
+            {t("to-increase-limit")}
           </span>
         </span>
       </span>
@@ -70,22 +73,25 @@ type ActiveUsersProps = {
 };
 
 const ActiveUsers = async ({ users }: ActiveUsersProps) => {
+  const t = await useTranslations("page.settings.tabs.staff");
   const session = (await auth())!;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Active Users</CardTitle>
-        <CardDescription>Manage your team members.</CardDescription>
+        <CardTitle>{t("active-users.title")}</CardTitle>
+        <CardDescription>{t("active-users.description")}</CardDescription>
       </CardHeader>
       <CardContent className="pt-4">
         <Table>
-          <TableCaption>Total Users: {users.length}</TableCaption>
+          <TableCaption>
+            {t("active-users.total-users")}: {users.length}
+          </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
+              <TableHead>{t("active-users.columns.name")}</TableHead>
+              <TableHead>{t("active-users.columns.email")}</TableHead>
+              <TableHead>{t("active-users.columns.role")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -107,7 +113,7 @@ const ActiveUsers = async ({ users }: ActiveUsersProps) => {
                   </p>
                   {user.id === session.user!.id && (
                     <span className="rounded-full border border-border bg-muted px-2 text-sm text-muted-foreground">
-                      You
+                      {t("active-users.you")}
                     </span>
                   )}
                 </TableCell>
@@ -139,25 +145,27 @@ type InvitationsProps = {
 };
 
 const Invitations = async ({ invitations }: InvitationsProps) => {
+  const t = await useTranslations("page.settings.tabs.staff");
+  const locale = await getLocale();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invitations</CardTitle>
-        <CardDescription>
-          Invite your teammates to join your account.
-        </CardDescription>
+        <CardTitle>{t("invitations.title")}</CardTitle>
+        <CardDescription>{t("invitations.description")}</CardDescription>
       </CardHeader>
       <CardContent className="pt-4">
         <Table>
           {invitations.length > 0 && (
-            <TableCaption>Total Invitations: {invitations.length}</TableCaption>
+            <TableCaption>
+              {t("invitations.total-invitations")}: {invitations.length}
+            </TableCaption>
           )}
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Sent</TableHead>
-              <TableHead>Expires</TableHead>
+              <TableHead>{t("invitations.columns.email")}</TableHead>
+              <TableHead>{t("invitations.columns.role")}</TableHead>
+              <TableHead>{t("invitations.columns.sent")}</TableHead>
+              <TableHead>{t("invitations.columns.expires")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -167,7 +175,7 @@ const Invitations = async ({ invitations }: InvitationsProps) => {
                   colSpan={4}
                   className="text-center text-muted-foreground"
                 >
-                  No invitations
+                  {t("invitations.no-invitations")}
                 </TableCell>
               </TableRow>
             )}
@@ -181,10 +189,14 @@ const Invitations = async ({ invitations }: InvitationsProps) => {
                   {invitation.role === "ADMIN" ? "Admin" : "Staff"}
                 </TableCell>
                 <TableCell>
-                  {DateTime.fromJSDate(invitation.createdAt).toRelative()}
+                  {DateTime.fromJSDate(invitation.createdAt).toRelative({
+                    locale,
+                  })}
                 </TableCell>
                 <TableCell>
-                  {DateTime.fromJSDate(invitation.expires).toRelative()}
+                  {DateTime.fromJSDate(invitation.expires).toRelative({
+                    locale,
+                  })}
                 </TableCell>
                 <TableCell className="flex justify-end">
                   <ConfirmInvitationDelete id={invitation.id} />
