@@ -43,7 +43,7 @@
           "settings": {
             "title": "Settings",
             "items": {
-              "specializations": "Specializations",
+              "specializations": "Specialities",
               "stocks": "Stocks"
             }
           }
@@ -215,7 +215,7 @@
       "title": "Treatments"
     },
     "specializations": {
-      "title": "Specializations"
+      "title": "Specialities"
     },
     "stocks": {
       "title": "Stocks"
@@ -247,7 +247,7 @@
               "description": "This phone number will be visible to the patients."
             },
             "specialization": {
-              "label": "Specialization"
+              "label": "Specaility"
             },
             "status": {
               "success": "Profile updated successfully"
@@ -384,6 +384,50 @@
               "dark": "Dark",
               "system": "System"
             }
+          },
+          "calendar": {
+            "title": "Calendar",
+            "description": "Customize the calendar view.",
+            "first-day-of-week": {
+              "label": "First day of week",
+              "options": {
+                "monday": "Monday",
+                "sunday": "Sunday"
+              }
+            },
+            "show-weekends": {
+              "label": "Show weekends",
+              "description": "Show weekends on the calendar."
+            },
+            "status": {
+              "success": "Settings updated successfully"
+            },
+            "button": "Update"
+          }
+        },
+        "schedule": {
+          "title": "Schedule",
+          "working-hours": {
+            "title": "Working hours",
+            "description": "Manage your working hours.",
+            "not-working": "Not working on this day",
+            "days-of-week": {
+              "0": "Sunday",
+              "1": "Monday",
+              "2": "Tuesday",
+              "3": "Wednesday",
+              "4": "Thursday",
+              "5": "Friday",
+              "6": "Saturday"
+            },
+            "button": "Update working hours",
+            "status": {
+              "success": "Working hours updated successfully"
+            }
+          },
+          "days-off": {
+            "title": "Days off",
+            "description": "Manage your days off."
           }
         },
         "notifications": {

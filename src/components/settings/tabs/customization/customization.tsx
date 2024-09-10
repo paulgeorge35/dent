@@ -5,11 +5,16 @@ import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,6 +23,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TabsContent } from "@/components/ui/tabs";
 import { useTranslations } from "next-intl";
+import CalendarCustomization from "./components/calendar-customization";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark", "system"], {
@@ -46,6 +52,10 @@ export default function Customization() {
       className="flex flex-col gap-4 md:max-w-screen-md !mt-0"
     >
       <Card>
+        <CardHeader>
+          <CardTitle>{t("theme.label")}</CardTitle>
+          <CardDescription>{t("theme.description")}</CardDescription>
+        </CardHeader>
         <CardContent className="space-y-2 pt-4">
           <Form {...form}>
             <form className="space-y-8">
@@ -54,10 +64,6 @@ export default function Customization() {
                 name="theme"
                 render={({ field }) => (
                   <FormItem className="space-y-1">
-                    <FormLabel>{t("theme.label")}</FormLabel>
-                    <FormDescription>
-                      {t("theme.description")}
-                    </FormDescription>
                     <FormMessage />
                     <RadioGroup
                       onValueChange={(value: "light" | "dark" | "system") => {
@@ -155,6 +161,7 @@ export default function Customization() {
           </Form>
         </CardContent>
       </Card>
+      <CalendarCustomization />
     </TabsContent>
   );
 }

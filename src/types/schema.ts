@@ -24,8 +24,8 @@ export const userCompleteSchema = UserSchema.merge(
 );
 const workingHoursSchema = z.object({
   daysOfWeek: z.array(z.number()),
-  startTime: z.string().nullable(),
-  endTime: z.string().nullable(),
+  startTime: z.string(),
+  endTime: z.string(),
 });
 
 export const parseWorkingHours = (input: unknown) => {

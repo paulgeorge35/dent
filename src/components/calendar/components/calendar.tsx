@@ -18,6 +18,7 @@ import type {
   EventClickArg,
   EventContentArg,
   EventDropArg,
+  EventInput,
   EventSourceInput,
 } from "@fullcalendar/core/index.js";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -30,6 +31,7 @@ import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { DayOfWeek } from "@prisma/client";
 import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -53,9 +55,16 @@ interface CalendarProps {
   userId: string;
   className?: string;
   selected?: z.infer<typeof selectedUserSchema>;
+  firstDayOfWeek: DayOfWeek;
+  showWeekends: boolean;
 }
 
-export default function Calendar({ userId, selected = "me" }: CalendarProps) {
+export default function Calendar({
+  userId,
+  selected = "me",
+  firstDayOfWeek,
+  showWeekends,
+}: CalendarProps) {
   const locale = useLocale();
   const t = useTranslations("page.appointments.calendar");
   const calendarRef = useRef<FullCalendar>(null);
@@ -64,7 +73,6 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
   const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(
     null,
   );
-  const weekendToggle = useBoolean(false);
   const [resourceId, setResourceId] = useState<string>(userId);
   const sidebar = useStore(useSidebarToggle, (state) => state);
   const [, setRenderSeed] = useState(0);
@@ -226,7 +234,6 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         calendarRef={calendarRef}
         users={users}
         activeUsers={activeUsers?.filter((user) => user.id !== userId)}
-        weekendToggle={weekendToggle}
       />
       <CreateAppointmentDialog
         open={newAppointmentDialog.value}
@@ -276,11 +283,16 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         resources={users?.map((user) => ({
           id: user.id,
           title: `${user.profile.firstName} ${user.profile.lastName}`,
-          businessHours: {
-            startTime: "10:00",
-            endTime: "18:00",
-            daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-          },
+          businessHours:
+            (user.workingHours as EventInput[]).length > 0
+              ? (user.workingHours as EventInput[])
+              : [
+                  {
+                    startTime: "00:00",
+                    endTime: "00:00",
+                    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+                  },
+                ],
           extendedProps: {
             userId: user.id,
             tenantId: user.tenantId,
@@ -324,8 +336,8 @@ export default function Calendar({ userId, selected = "me" }: CalendarProps) {
         locale={locale}
         dayMaxEventRows={1}
         dayHeaderContent={(arg) => formatDayHeader(t, locale, arg)}
-        weekends={weekendToggle.value}
-        firstDay={1}
+        weekends={showWeekends}
+        firstDay={firstDayOfWeek === "MONDAY" ? 1 : 0}
         nowIndicator={true}
         selectable={true}
         scrollTime={{ hour: DateTime.local().hour }}

@@ -1,6 +1,5 @@
 import AvatarComponent from "@/components/shared/avatar-component";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,7 +9,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
 import { SwitchView } from "@/components/ui/switch-enhanced";
 import type FullCalendar from "@fullcalendar/react";
 import type { Avatar, Event, Patient, Profile, User } from "@prisma/client";
@@ -25,7 +23,6 @@ import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { RefObject } from "react";
-import type { UseBoolean } from "react-hanger";
 import renderTitle from "./renderTitle";
 
 interface CalendarToolbarProps {
@@ -48,7 +45,6 @@ interface CalendarToolbarProps {
       } | null;
     };
   })[];
-  weekendToggle: UseBoolean;
 }
 
 export default function CalendarToolbar({
@@ -58,7 +54,6 @@ export default function CalendarToolbar({
   calendarRef,
   users,
   activeUsers,
-  weekendToggle,
 }: CalendarToolbarProps) {
   const t = useTranslations("page.appointments.calendar");
   const calendar = calendarRef.current?.getApi();
@@ -173,16 +168,6 @@ export default function CalendarToolbar({
       </div>
       <div />
       <div />
-      <div className="flex items-center justify-end gap-2 py-2">
-        <Label className="text-sm text-muted-foreground" htmlFor="show-weekends">
-          {t("show-weekends")}
-        </Label>
-        <Switch
-          id="show-weekends"
-          checked={weekendToggle.value}
-          onCheckedChange={weekendToggle.setValue}
-        />
-      </div>
     </section>
   );
 }

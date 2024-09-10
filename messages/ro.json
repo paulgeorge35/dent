@@ -384,6 +384,50 @@
               "dark": "Întunecată",
               "system": "Sistem"
             }
+          },
+          "calendar": {
+            "title": "Calendar",
+            "description": "Personalizează aspectul calendarului.",
+            "first-day-of-week": {
+              "label": "Prima zi a săptămânii",
+              "options": {
+                "monday": "Luni",
+                "sunday": "Duminică"
+              }
+            },
+            "show-weekends": {
+              "label": "Afișează weekend-urile",
+              "description": "Afișează weekend-urile pe calendar."
+            },
+            "status": {
+              "success": "Setările au fost actualizate cu succes"
+            },
+            "button": "Actualizează"
+          }
+        },
+        "schedule": {
+          "title": "Program",
+          "working-hours": {
+            "title": "Program de lucru",
+            "description": "Gestionează programul de lucru.",
+            "not-working": "Nu lucrez în această zi",
+            "days-of-week": {
+              "0": "Duminică",
+              "1": "Luni",
+              "2": "Marți",
+              "3": "Miercuri",
+              "4": "Joi",
+              "5": "Vineri",
+              "6": "Sâmbătă"
+            },
+            "button": "Actualizează programul de lucru",
+            "status": {
+              "success": "Programul de lucru a fost actualizat cu succes"
+            }
+          },
+          "days-off": {
+            "title": "Zile libere",
+            "description": "Gestionează zilele libere."
           }
         },
         "notifications": {

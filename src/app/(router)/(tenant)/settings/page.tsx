@@ -4,6 +4,7 @@ import SettingsTabs from "@/components/settings/settings-tabs";
 import Account from "@/components/settings/tabs/account/account";
 import Customization from "@/components/settings/tabs/customization/customization";
 import Plan from "@/components/settings/tabs/plan/plan";
+import Schedule from "@/components/settings/tabs/schedule/schedule";
 import Staff from "@/components/settings/tabs/staff/staff";
 import { constructMetadata } from "@/lib/utils";
 import type { SearchParams } from "@/types";
@@ -35,6 +36,7 @@ export default async function Settings({ searchParams }: StaffPageProps) {
         {isAdmin && <Staff />}
         {isAdmin && <Plan />}
         <Customization />
+        <Schedule />
       </SettingsTabs>
     </Shell>
   );

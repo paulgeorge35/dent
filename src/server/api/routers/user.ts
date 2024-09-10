@@ -1,6 +1,6 @@
 import { Confirmation } from "@/components/emails/confirmation";
 import type { UserComplete as zUserComplete } from "@/types/schema";
-import { Prisma, type Role, TokenType } from "@prisma/client";
+import { DayOfWeek, Prisma, type Role, TokenType } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { DateTime } from "luxon";
@@ -567,4 +567,68 @@ export const userRouter = createTRPCRouter({
       },
     });
   }),
+
+  updateWorkingHours: tenantProcedure
+    .input(
+      z.array(
+        z.object({
+          daysOfWeek: z.array(z.number()),
+          startTime: z.string(),
+          endTime: z.string(),
+        }),
+      ),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user!.id;
+
+      return await ctx.db.$transaction(async (tx) => {
+        const targetUser = await tx.user.findUnique({
+          where: { id: userId },
+        });
+
+        if (!targetUser) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
+        }
+
+        return await tx.user.update({
+          where: { id: userId },
+          data: { workingHours: input },
+        });
+      });
+    }),
+
+  updateCalendarSettings: tenantProcedure
+    .input(
+      z.object({
+        firstDayOfWeek: z.nativeEnum(DayOfWeek),
+        showWeekends: z.boolean(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user!.id;
+
+      return await ctx.db.$transaction(async (tx) => {
+        const targetUser = await tx.user.findUnique({
+          where: { id: userId },
+        });
+
+        if (!targetUser) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "User not found",
+          });
+        }
+
+        return await tx.user.update({
+          where: { id: userId },
+          data: {
+            firstDayOfWeek: input.firstDayOfWeek,
+            showWeekends: input.showWeekends,
+          },
+        });
+      });
+    }),
 });

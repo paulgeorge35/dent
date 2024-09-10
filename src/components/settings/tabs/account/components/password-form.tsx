@@ -150,7 +150,7 @@ export default function PasswordForm() {
           type="submit"
           className="col-span-2 sm:w-fit"
         >
-          {t("button")}
+          Update password
         </Button>
       </form>
     </Form>

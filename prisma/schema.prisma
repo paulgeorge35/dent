@@ -65,10 +65,12 @@ model TenantProfile {
 }
 
 model User {
-  id           String @id @default(cuid())
-  index        Int    @default(autoincrement())
-  role         Role   @default(USER)
-  workingHours Json   @default("[]")
+  id             String    @id @default(cuid())
+  index          Int       @default(autoincrement())
+  role           Role      @default(USER)
+  workingHours   Json      @default("[]")
+  firstDayOfWeek DayOfWeek @default(MONDAY)
+  showWeekends   Boolean   @default(true)
 
   specializationId String?
   specialization   Specialization? @relation(fields: [specializationId], references: [id], onDelete: SetNull)
@@ -560,4 +562,14 @@ enum EventInitiator {
 enum PriceType {
   MATERIAL
   SERVICE
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }

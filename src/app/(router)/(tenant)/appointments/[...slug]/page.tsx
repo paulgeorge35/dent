@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { constructMetadata } from "@/lib/utils";
+import { api } from "@/trpc/server";
 import dynamic from "next/dynamic";
 import { z } from "zod";
 const Calendar = dynamic(
@@ -29,6 +30,14 @@ export default async function Appointments({ params }: AppointmentsProps) {
   if (!session || !session.user) {
     return null;
   }
-  
-  return <Calendar selected={selected} userId={session.user.id} />;
+  const me = await api.user.me();
+
+  return (
+    <Calendar
+      selected={selected}
+      userId={session.user.id}
+      firstDayOfWeek={me.firstDayOfWeek}
+      showWeekends={me.showWeekends}
+    />
+  );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, Brush, CreditCard, LifeBuoy, User, Users } from "lucide-react";
+import { Bell, Brush, Calendar, CreditCard, LifeBuoy, User, Users } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo } from "react";
@@ -26,6 +26,10 @@ export const tabs = [
     icon: Brush,
   },
   {
+    value: "schedule",
+    icon: Calendar,
+  },
+  {
     value: "notifications",
     icon: Bell,
   },
@@ -46,7 +50,7 @@ export default function SettingsTabs({ children, isAdmin }: SettingsTabsProps) {
   const router = useRouter();
   const activeTab = useMemo(
     () =>
-      tabs.find((tab) => tab.value === searchParams.get("tab"))?.value ??
+      tabs.find((tab) => tab.value === searchParams?.get("tab"))?.value ??
       tabs[0]!.value,
     [searchParams],
   );
