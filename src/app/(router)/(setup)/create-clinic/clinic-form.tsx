@@ -1,6 +1,6 @@
 "use client";
 
-import { AvatarUpload } from "@/components/dropzone-input/avatar";
+import AvatarInput from "@/components/dropzone-input/avatar-v2";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -31,7 +31,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
 
 const schema = z.object({
@@ -57,9 +56,6 @@ export default function ClinicForm() {
 
   const { mutateAsync, isPending } = api.stripe.checkout.useMutation({
     onSuccess: (data) => {
-      toast.success(t("status.success.title"), {
-        description: t("status.success.description"),
-      });
       if (data.redirectUrl) router.push(data.redirectUrl);
     },
   });
@@ -149,16 +145,14 @@ export default function ClinicForm() {
                 {t("fields.logo.title")}{" "}
                 <span className="text-muted-foreground">({t("optional")})</span>
               </FormLabel>
-              <AvatarUpload
+              <AvatarInput
                 id={field.name}
                 maxSize={10}
                 {...field}
                 value={form.watch(field.name)}
                 onChange={(value) => field.onChange(value)}
-                className="horizontal col-span-4 items-center justify-center gap-4 p-4"
                 fallback={form.watch("name")}
                 type="clinic-logo"
-                fixedColor
               />
               <FormMessage />
             </FormItem>

@@ -26,6 +26,14 @@ const userComplete = Prisma.validator<Prisma.UserInclude>()({
   },
 });
 
+const specialityUserCount = Prisma.validator<Prisma.SpecialityInclude>()({
+  _count: {
+    select: {
+      users: true,
+    },
+  },
+});
+
 const pagination = z.object({
   page: z.number().optional().default(1),
   per_page: z.number().optional().default(10),
@@ -49,6 +57,10 @@ const sort = z
 export type UserComplete = Prisma.UserGetPayload<{
   include: typeof userComplete;
 }>;
+
+export type SpecialityUserCount = Prisma.SpecialityGetPayload<{
+  include: typeof specialityUserCount;
+}>
 
 export const userRouter = createTRPCRouter({
   profile: protectedProcedure.query(async ({ ctx }) => {
@@ -341,13 +353,11 @@ export const userRouter = createTRPCRouter({
                     Object.values(RoleSchema.Values).includes(role as Role),
                   ) as Role[],
             ),
-          specialization: z
+          speciality: z
             .string()
             .optional()
             .transform((val) => {
-              return val
-                ?.split(".")
-                .map((specialization) => specialization.trim());
+              return val?.split(".").map((speciality) => speciality.trim());
             }),
           search: z.string().optional(),
         })
@@ -359,7 +369,7 @@ export const userRouter = createTRPCRouter({
         ctx,
         input: {
           role,
-          specialization,
+          speciality,
           search,
           page,
           per_page,
@@ -371,17 +381,19 @@ export const userRouter = createTRPCRouter({
         const content = await ctx.db.user.findMany({
           where: {
             role: role ? { in: role } : undefined,
-            specializationId: specialization
-              ? { in: specialization }
-              : undefined,
+            specialityId: speciality ? { in: speciality } : undefined,
             tenantId,
             OR: [
               { profile: { email: { contains: search, mode: "insensitive" } } },
             ],
           },
           include: {
-            profile: true,
-            specialization: true,
+            profile: {
+              include: {
+                avatar: true,
+              },
+            },
+            speciality: true,
           },
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
@@ -415,7 +427,7 @@ export const userRouter = createTRPCRouter({
         firstName: z.string().max(50).optional(),
         lastName: z.string().max(50).optional(),
         title: z.string().max(50).optional(),
-        specializationId: z.string().optional(),
+        specialityId: z.string().optional(),
         email: z.string().email().max(50).optional(),
         phone: z
           .string()
@@ -449,9 +461,9 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.update({
         where: { id: userId },
         data: {
-          specialization: {
+          speciality: {
             connect: {
-              id: input.specializationId,
+              id: input.specialityId,
             },
           },
           profile: {

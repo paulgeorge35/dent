@@ -11,7 +11,6 @@ import parsePhoneNumberFromString, {
   type NumberType,
 } from "libphonenumber-js";
 import { Check, ChevronsUpDown } from "lucide-react";
-import Image from "next/image";
 import * as React from "react";
 
 import { Button } from "@/components/ui/button";
@@ -167,13 +166,7 @@ export function PhoneInput({
           >
             {selectedCountry?.name ? (
               <span>
-                <Image
-                  src={`/flags/${selectedCountry.iso2}.svg`}
-                  alt={selectedCountry.name}
-                  width={0}
-                  height={0}
-                  className="h-auto w-6"
-                />
+                {selectedCountry.emoji}
               </span>
             ) : (
               "Select country"
@@ -215,15 +208,7 @@ export function PhoneInput({
                               : "opacity-0",
                           )}
                         />
-                        <Image
-                          src={`/flags/${country.iso2.toLowerCase()}.svg`}
-                          width={0}
-                          height={0}
-                          className="mr-2 h-auto w-4 object-cover"
-                          aria-labelledby={country.name}
-                          title={country.name}
-                          alt={country.name}
-                        />
+                        <span className="mr-2">{country.emoji}</span>
                         {country.name}
                         <span className="text-gray-11 ml-1">
                           (+{country.phone_code})

@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { StripePlan } from "@/types";
 import { ArrowRight, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
@@ -38,6 +39,8 @@ type PlanSwitchProps = {
   priceId?: string;
   hideLabels?: boolean;
   preview?: boolean;
+  redirect?: string;
+  update?: boolean;
 };
 
 export default function PlanSwitch({
@@ -45,20 +48,20 @@ export default function PlanSwitch({
   priceId,
   hideLabels = false,
   preview = false,
+  redirect = "/welcome",
+  update = false,
 }: PlanSwitchProps) {
+  const t = useTranslations(update ? "page.subscription.update" : "page.subscription.resume");
+  const tFields = useTranslations("fields.subscription");
   const [pending, startTransition] = useTransition();
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
   const { mutateAsync: updateSubscription, isPending } =
     api.stripe.updateSubscription.useMutation({
-      onSuccess: (data) => {
+      onSuccess: () => {
         toast.success("Subscription updated successfully");
-        if (data?.redirectUrl) {
-          router.push(data.redirectUrl);
-          return;
-        }
-        router.push("/welcome");
+        router.push(redirect);
       },
     });
   const form = useForm<PlanFormValues>({
@@ -105,14 +108,14 @@ export default function PlanSwitch({
                   "sr-only": hideLabels,
                 })}
               >
-                Subscription Plan
+                {tFields("title")}
               </FormLabel>
               <FormDescription
                 className={cn({
                   "sr-only": hideLabels,
                 })}
               >
-                Select your preferred subscription plan.
+                {tFields("description")}
               </FormDescription>
               <FormMessage />
               <RadioGroup
@@ -136,7 +139,7 @@ export default function PlanSwitch({
                                   "badge rounded-lg border-0 bg-primary px-2 py-[2px] text-xs font-semibold text-secondary"
                                 }
                               >
-                                Current
+                                {tFields("current-plan")}
                               </span>
                             </div>
                           )}
@@ -216,9 +219,7 @@ export default function PlanSwitch({
           <span className="horizontal gap-2 rounded-lg bg-muted px-2 py-1">
             <Icons.info className="h-5 w-5 text-primary" />
             <p className="text-sm text-muted-foreground">
-              You can&apos;t switch to this plan at the moment as it
-              doesn&apos;t allow for the current number of active users in your
-              account.
+              {t("tooltip.max-users")}
             </p>
           </span>
         )}
@@ -226,7 +227,14 @@ export default function PlanSwitch({
           <span className="horizontal items-start gap-2 rounded-lg bg-muted px-2 py-1">
             <Icons.info className="h-5 w-5 text-primary" />
             <p className="grow text-sm text-muted-foreground">
-              {`Your next invoice total amount will be ${(previewData.proration.reduce((acc, curr) => acc + curr.amount, 0) / 100).toFixed(2)} RON following this upgrade.`}
+              {t("tooltip.proration", {
+                amount: (
+                  previewData.proration.reduce(
+                    (acc, curr) => acc + curr.amount,
+                    0,
+                  ) / 100
+                ).toFixed(2),
+              })}
               <div>
                 {isOpen && (
                   <ul className="mt-2">
@@ -271,7 +279,7 @@ export default function PlanSwitch({
             disabled={!previewData?.isAllowed}
             type="submit"
           >
-            Submit
+            {t("button")}
           </Button>
         </span>
       </form>

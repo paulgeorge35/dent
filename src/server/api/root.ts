@@ -3,7 +3,7 @@ import { appointmentRouter } from "./routers/appointment";
 import { materialRouter } from "./routers/material";
 import { patientRouter } from "./routers/patient";
 import { serviceRouter } from "./routers/service";
-import { specializationRouter } from "./routers/specialization";
+import { specialityRouter } from "./routers/speciality";
 import { storageRouter } from "./routers/storage";
 import { stripeRouter } from "./routers/stripe";
 import { tenantRouter } from "./routers/tenant";
@@ -22,7 +22,7 @@ export const appRouter = createTRPCRouter({
   utils: utilsRouter,
   tenant: tenantRouter,
   stripe: stripeRouter,
-  specialization: specializationRouter,
+  speciality: specialityRouter,
   appointment: appointmentRouter,
   service: serviceRouter,
   material: materialRouter,

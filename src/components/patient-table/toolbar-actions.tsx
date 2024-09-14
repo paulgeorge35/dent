@@ -1,14 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import AddPatientDialog from "./add-dialog";
 
 export function PatientsTableToolbarActions() {
   return (
     <div className="flex items-center gap-2">
-      <Button>
-        <Plus className="mr-2 size-4" /> Add Patient
-      </Button>
+      <AddPatientDialog />
     </div>
   );
 }

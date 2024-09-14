@@ -14,7 +14,7 @@ import { translations } from "@/lib/translations";
 import type { Patient } from "@prisma/client";
 import { StickyNote } from "lucide-react";
 import { EventStatusSchema } from "prisma/generated/zod";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import type { z } from "zod";
 
 type PatientCardProps = {
@@ -31,6 +31,18 @@ export default function PatientCard({
   const fullName = useMemo(() => {
     return `${patient.firstName} ${patient.lastName}`;
   }, [patient]);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      console.log("Clicked element:", event.target);
+    };
+
+    document.addEventListener("click", handleClick);
+
+    return () => {
+      document.removeEventListener("click", handleClick);
+    };
+  }, []);
 
   return (
     <Card>
@@ -49,12 +61,9 @@ export default function PatientCard({
         <p className="ml-auto text-sm text-muted-foreground">Status</p>
         <Select value={eventStatus}>
           <SelectTrigger className="w-40">
-            <span className="horizontal center-v gap-2">
-              <StatusBullet status={eventStatus} />
-              <SelectValue />
-            </span>
+            <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-50">
             {Object.values(EventStatusSchema.Values).map((status) => (
               <SelectItem key={status} value={status}>
                 <span className="horizontal center-v gap-2">

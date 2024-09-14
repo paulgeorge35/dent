@@ -1,26 +1,10 @@
 import type { PlaceholderValue } from "next/dist/shared/lib/get-img-props";
 import Image from "next/image";
 
-import { cn, initials } from "@/lib/utils";
+import { cn, generateRandomTailwindColor, initials } from "@/lib/utils";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { useMemo } from "react";
 import { LoadingSpinner } from "../ui/spinner";
-
-const tailwindColors = [
-  "bg-red-500",
-  "bg-blue-500",
-  "bg-green-500",
-  "bg-yellow-500",
-  "bg-purple-500",
-  "bg-pink-500",
-  "bg-indigo-500",
-  "bg-teal-500",
-];
-
-function getRandomColor(seed: number) {
-  return tailwindColors[seed % tailwindColors.length];
-}
 
 interface AvatarComponentProps {
   src?: string | null;
@@ -32,7 +16,7 @@ interface AvatarComponentProps {
   width?: number;
   height?: number;
   isLoading?: boolean;
-  fixedColor?: boolean;
+  randomColor?: boolean;
 }
 
 export default function AvatarComponent({
@@ -42,22 +26,24 @@ export default function AvatarComponent({
   className,
   width = 20,
   height = 20,
-  fixedColor,
   isLoading,
+  randomColor,
   ...imageProps
 }: AvatarComponentProps) {
-  const randomColor = useMemo(
-    () => getRandomColor(fallback.length),
-    [fallback],
-  );
-
+  const backgroundColor = randomColor
+    ? generateRandomTailwindColor(fallback.length)
+    : "bg-muted";
   if (isLoading) {
     return (
       <Avatar
-        className={cn("size-5 items-center justify-center bg-muted", className)}
+        className={cn(
+          "size-5 items-center justify-center",
+          className,
+          backgroundColor,
+        )}
       >
-        <AvatarFallback className={cn("text-center")}>
-          <LoadingSpinner className="size-1/2 text-muted-foreground" />
+        <AvatarFallback className={cn("text-center bg-transparent")}>
+          <LoadingSpinner className="size-1/2 text-background" />
         </AvatarFallback>
       </Avatar>
     );
@@ -65,7 +51,11 @@ export default function AvatarComponent({
 
   return (
     <Avatar
-      className={cn("size-5 items-center justify-center bg-muted", className)}
+      className={cn(
+        "size-5 items-center justify-center",
+        className,
+        backgroundColor,
+      )}
     >
       {src ? (
         <Image
@@ -77,9 +67,7 @@ export default function AvatarComponent({
           height={height}
         />
       ) : (
-        <AvatarFallback
-          className={cn("text-center", !fixedColor ? randomColor : "")}
-        >
+        <AvatarFallback className={cn("text-center bg-transparent")}>
           {initials(fallback)}
         </AvatarFallback>
       )}

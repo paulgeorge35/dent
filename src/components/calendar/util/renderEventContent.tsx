@@ -24,10 +24,13 @@ function EventDetails({ services }: { services: Service[] | undefined }) {
   );
 }
 
-function EventStatusComponent({ status }: { status: EventStatus }) {
+function EventStatusComponent({
+  status,
+  isDraft,
+}: { status: EventStatus | "DRAFT"; isDraft: boolean }) {
   const t = useTranslations("enums.event.status");
   return (
-    <span className="horizontal ml-auto items-center gap-2 rounded-md bg-background/50 px-2 py-1 text-xs text-secondary-foreground">
+    <span className="horizontal border border-input items-center gap-2 rounded-md bg-background/50 px-2 py-1 text-xs text-secondary-foreground">
       <span
         className={cn("size-2 rounded-full mb-[2px]", {
           "bg-teal-400": status === "CREATED",
@@ -35,6 +38,7 @@ function EventStatusComponent({ status }: { status: EventStatus }) {
           "bg-red-400": status === "CANCELLED",
           "bg-green-400": status === "COMPLETED",
           "bg-yellow-400": status === "RESCHEDULED",
+          "bg-teal-200": isDraft,
         })}
       />
       <p className="text-xs font-light">{t(status)}</p>
@@ -42,7 +46,7 @@ function EventStatusComponent({ status }: { status: EventStatus }) {
   );
 }
 
-function EventIcon({ status }: { status: EventStatus }) {
+function EventIcon({ status }: { status: EventStatus | "DRAFT" }) {
   if (status === "CREATED") {
     return (
       <Icons.calendarCheck className="size-5 rounded-md bg-teal-400 p-1 text-primary-foreground" />
@@ -68,23 +72,31 @@ function EventIcon({ status }: { status: EventStatus }) {
       <Icons.calendarCheck className="size-5 rounded-md bg-yellow-400 p-1 text-primary-foreground" />
     );
   }
-  return (
-    <Icons.calendarCheck className="size-5 rounded-md bg-teal-400 p-1 text-primary-foreground" />
-  );
+  return;
 }
 
-function EventContent({ arg }: { arg: EventContentArg }) {
+function EventContent({
+  arg,
+  isDayOff,
+}: { arg: EventContentArg; isDayOff: boolean }) {
   const t = useTranslations("page.appointments.calendar");
   const { data: event } = api.appointment.get.useQuery(arg.event.id);
   const services = event?.visits.flatMap((visit) => visit.service);
 
   return (
-    <div className="horizontal h-full min-w-[500px] items-start gap-2">
-      <EventIcon status={event?.status ?? "CREATED"} />
-      <div className="vertical h-full items-start gap-1 text-secondary-foreground">
+    <div className="horizontal p-2 h-full min-w-[250px] w-full items-start gap-2">
+      {!isDayOff && <EventIcon status={event?.status ?? "DRAFT"} />}
+      <div className="vertical h-full w-full items-start gap-1 text-secondary-foreground">
+        {!isDayOff && (
+          <EventStatusComponent
+            status={event?.status ?? "DRAFT"}
+            isDraft={!arg.event.id}
+          />
+        )}
         <p>{arg.event.title ?? "(New Event)"}</p>
         {arg.event.allDay ? (
-          <p>{t("all-day")}</p>
+          <p>{
+            t("all-day")}</p>
         ) : (
           <p className="flex items-center gap-1 font-light">
             {arg.event.start
@@ -102,11 +114,15 @@ function EventContent({ arg }: { arg: EventContentArg }) {
           <EventDetails services={services} />
         </span>
       </div>
-      <EventStatusComponent status={event?.status ?? "CREATED"} />
     </div>
   );
 }
 
 export default function renderEventContent(arg: EventContentArg) {
-  return <EventContent arg={arg} />;
+  return (
+    <EventContent
+      arg={arg}
+      isDayOff={arg.event.extendedProps.isDayOff as boolean}
+    />
+  );
 }

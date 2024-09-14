@@ -2,10 +2,11 @@ import { auth } from "@/auth";
 import { Shell } from "@/components/layout/shell";
 import SettingsTabs from "@/components/settings/settings-tabs";
 import Account from "@/components/settings/tabs/account/account";
+import Clinic from "@/components/settings/tabs/clinic/clinic";
 import Customization from "@/components/settings/tabs/customization/customization";
-import Plan from "@/components/settings/tabs/plan/plan";
 import Schedule from "@/components/settings/tabs/schedule/schedule";
 import Staff from "@/components/settings/tabs/staff/staff";
+import Support from "@/components/settings/tabs/support/support";
 import { constructMetadata } from "@/lib/utils";
 import type { SearchParams } from "@/types";
 import { redirect } from "next/navigation";
@@ -31,12 +32,13 @@ export default async function Settings({ searchParams }: StaffPageProps) {
   if (tab && adminOnlyTabs.includes(tab) && !isAdmin) redirect("/settings");
   return (
     <Shell variant="center">
-      <SettingsTabs isAdmin={session!.user?.role === "ADMIN"}>
+      <SettingsTabs isAdmin={isAdmin} tab={tab}>
         <Account />
         {isAdmin && <Staff />}
-        {isAdmin && <Plan />}
+        {isAdmin && <Clinic />}
         <Customization />
         <Schedule />
+        <Support />
       </SettingsTabs>
     </Shell>
   );

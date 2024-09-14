@@ -2,20 +2,27 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 import type { Patient } from "prisma/generated/zod";
-import * as React from "react";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import Clipboard from "@/components/ui/clipboard";
-import { MailIcon, PhoneIcon } from "lucide-react";
+import { ArrowRight, MailIcon, PhoneIcon } from "lucide-react";
 import { DateTime } from "luxon";
+import { useLocale } from "next-intl";
+import Link from "next/link";
 import AvatarComponent from "../shared/avatar-component";
+import { Button } from "../ui/button";
 
-export function getColumns(): ColumnDef<Patient>[] {
+type GetColumnsProps = {
+  t: (v: string, options?: Record<string, string>) => string;
+};
+
+export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
+  const locale = useLocale();
   return [
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Name" />
+        <DataTableColumnHeader column={column} title={t("fields.name.label")} />
       ),
       cell: ({ row }) => {
         return (
@@ -27,6 +34,7 @@ export function getColumns(): ColumnDef<Patient>[] {
               className="size-8"
               width={40}
               height={40}
+              randomColor
             />
             {row.original.firstName} {row.original.lastName}
           </div>
@@ -37,7 +45,10 @@ export function getColumns(): ColumnDef<Patient>[] {
     {
       accessorKey: "phone",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Phone" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.phone.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -63,7 +74,10 @@ export function getColumns(): ColumnDef<Patient>[] {
     {
       accessorKey: "email",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Email" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.email.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -89,7 +103,7 @@ export function getColumns(): ColumnDef<Patient>[] {
     {
       accessorKey: "age",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Age" />
+        <DataTableColumnHeader column={column} title={t("fields.age.label")} />
       ),
       cell: ({ row }) => {
         return (
@@ -97,7 +111,7 @@ export function getColumns(): ColumnDef<Patient>[] {
             {row.original.dob
               ? `${DateTime.now()
                   .diff(DateTime.fromJSDate(row.original.dob), "years")
-                  .years.toFixed(0)} years`
+                  .years.toFixed(0)} ${t("fields.age.unit")}`
               : "-"}
           </div>
         );
@@ -108,15 +122,41 @@ export function getColumns(): ColumnDef<Patient>[] {
     {
       accessorKey: "createdAt",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Registered" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.createdAt.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
-          <div>{DateTime.fromJSDate(row.original.createdAt).toRelative()}</div>
+          <div>
+            {DateTime.fromJSDate(row.original.createdAt).toRelative({
+              locale,
+            })}
+          </div>
         );
       },
       enableHiding: false,
       enableSorting: true,
+    },
+    {
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
+        return (
+          <div>
+            <Link href={`/patient/${row.original.id}`}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="opacity-0 group-hover:opacity-100"
+              >
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+          </div>
+        );
+      },
     },
   ];
 }

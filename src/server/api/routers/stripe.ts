@@ -316,6 +316,7 @@ export const stripeRouter = createTRPCRouter({
       );
       if (opperationType === "downgrade") {
         await stripe.subscriptions.update(subscription.id, {
+          cancel_at_period_end: false,
           items: [
             {
               id: subscription.items.data[0].id,
@@ -333,6 +334,7 @@ export const stripeRouter = createTRPCRouter({
         ];
 
         await stripe.subscriptions.update(subscription.id, {
+          cancel_at_period_end: false,
           items,
           proration_date,
         });
@@ -340,6 +342,51 @@ export const stripeRouter = createTRPCRouter({
 
       return;
     }),
+
+  resumeSubscription: adminProcedure.mutation(async ({ ctx, input }) => {
+    const tenantId = ctx.session.user.tenantId;
+
+    const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
+      apiVersion: "2024-06-20",
+      typescript: true,
+    });
+
+    const tenant = await ctx.db.tenant.findFirst({
+      where: {
+        id: tenantId,
+      },
+      include: {
+        profile: true,
+      },
+    });
+
+    if (!tenant) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "Tenant not found",
+      });
+    }
+
+    const subscription = await stripe.subscriptions.retrieve(
+      tenant.profile.stripeSubscriptionId,
+    );
+
+    if (
+      !subscription ||
+      subscription.status === "canceled" ||
+      !subscription.cancel_at_period_end
+    ) {
+      throw new TRPCError({
+        code: "BAD_REQUEST",
+        message: "No active subscription found",
+      });
+    }
+
+    await stripe.subscriptions.update(subscription.id, {
+      cancel_at_period_end: false,
+    });
+    return;
+  }),
 
   previewUpdate: adminProcedure
     .input(

@@ -12,78 +12,81 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from "@/components/ui/credenza";
+import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Edit } from "lucide-react";
+import type { Speciality } from "@prisma/client";
+import { Edit2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import SpecializationForm, {
-  type FormValues,
-  specializationSchema,
-} from "./form";
+import SpecialityForm, { type FormValues, specialitySchema } from "./form";
 
-interface EditSpecializationDialogProps {
-  specialization: FormValues & { id: string };
+interface EditSpecialityDialogProps {
+  speciality: Speciality;
 }
 
-export default function EditSpecializationDialog({
-  specialization,
-}: EditSpecializationDialogProps) {
+export default function EditSpecialityDialog({
+  speciality,
+}: EditSpecialityDialogProps) {
+  const t = useTranslations("page.specialities.edit");
   const router = useRouter();
-  const { mutateAsync: updateSpecialization } =
-    api.specialization.update.useMutation({
-      onSuccess: () => {
-        toast.success("Specialization updated");
-        dialogOpen.setFalse();
-        router.refresh();
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+  const { mutateAsync: updateSpeciality } = api.speciality.update.useMutation({
+    onSuccess: () => {
+      toast.success("Speciality updated");
+      dialogOpen.setFalse();
+      router.refresh();
+    },
+    onError: (error) => {
+      showErrorToast(error);
+    },
+  });
 
   const dialogOpen = useBoolean(false);
   const form = useForm<FormValues>({
-    resolver: zodResolver(specializationSchema),
+    resolver: zodResolver(specialitySchema),
     defaultValues: {
-      name: specialization.name,
-      description: specialization.description ?? undefined,
+      name: speciality.name,
+      description: speciality.description ?? undefined,
+      color: speciality.color,
     },
   });
 
   const onSubmit = async (values: FormValues) => {
-    await updateSpecialization({ id: specialization.id, ...values });
+    await updateSpeciality({ id: speciality.id, ...values });
   };
 
   useEffect(() => {
     if (dialogOpen.value) {
-      form.reset(specialization);
+      form.reset({
+        name: speciality.name,
+        description: speciality.description ?? undefined,
+        color: speciality.color,
+      });
     }
-  }, [dialogOpen.value, form, specialization]);
+  }, [dialogOpen.value, form, speciality]);
 
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
       <CredenzaTrigger>
-        <Button size="icon" variant="secondary">
-          <Edit className="size-4" />
+        <Button variant="ghost" size="icon">
+          <Edit2 className="size-4" />
         </Button>
       </CredenzaTrigger>
       <CredenzaContent>
         <CredenzaHeader>
-          <CredenzaTitle>Edit Specialization</CredenzaTitle>
-          <CredenzaDescription>
-            Modify the specialization details
-          </CredenzaDescription>
+          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
+          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
           <CredenzaBody>
-            <SpecializationForm form={form} />
+            <SpecialityForm form={form} />
           </CredenzaBody>
         </CredenzaHeader>
         <CredenzaFooter>
           <CredenzaClose>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary">{t("dialog.cancel")}</Button>
           </CredenzaClose>
           <Button
             onClick={form.handleSubmit(onSubmit)}
@@ -94,7 +97,7 @@ export default function EditSpecializationDialog({
             }
             isLoading={form.formState.isSubmitting}
           >
-            Save Changes
+            {t("dialog.confirm")}
           </Button>
         </CredenzaFooter>
       </CredenzaContent>

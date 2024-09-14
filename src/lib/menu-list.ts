@@ -94,8 +94,8 @@ export function getMenuList(pathname: string): Group[] {
       groupLabel: "settings",
       menus: [
         {
-          href: "/specializations",
-          label: "specializations",
+          href: "/specialities",
+          label: "specialities",
           active: pathname.includes("/specializations"),
           icon: Hammer,
           adminOnly: true,

@@ -60,7 +60,9 @@ export default function CalendarToolbar({
   const router = useRouter();
   if (!calendar) return;
 
-  const appointments = users?.flatMap((user) => user.events);
+  const appointments = users
+    ?.flatMap((user) => user.events)
+    .filter((event) => event.type === "APPOINTMENT");
 
   return (
     <section className="grid grid-cols-[1fr_2fr_1fr] items-center gap-4">

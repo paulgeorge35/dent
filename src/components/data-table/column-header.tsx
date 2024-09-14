@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -31,6 +32,8 @@ export function DataTableColumnHeader<TData, TValue>({
   if (!column.getCanSort() && !column.getCanHide()) {
     return <div className={cn(className)}>{title}</div>;
   }
+
+  const t = useTranslations("table");
 
   return (
     <div className={cn("flex items-center space-x-2", className)}>
@@ -69,7 +72,7 @@ export function DataTableColumnHeader<TData, TValue>({
                   className="mr-2 size-3.5 text-muted-foreground/70"
                   aria-hidden="true"
                 />
-                Asc
+                {t("column-header.asc")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 aria-label="Sort descending"
@@ -79,7 +82,7 @@ export function DataTableColumnHeader<TData, TValue>({
                   className="mr-2 size-3.5 text-muted-foreground/70"
                   aria-hidden="true"
                 />
-                Desc
+                {t("column-header.desc")}
               </DropdownMenuItem>
             </>
           )}
@@ -95,7 +98,7 @@ export function DataTableColumnHeader<TData, TValue>({
                 className="mr-2 size-3.5 text-muted-foreground/70"
                 aria-hidden="true"
               />
-              Hide
+              {t("column-header.hide")}
             </DropdownMenuItem>
           )}
         </DropdownMenuContent>

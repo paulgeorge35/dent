@@ -3,11 +3,18 @@
 import { TimePickerInput } from "@/components/datetime-input/time-picker";
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormField,
-    FormFieldCompact,
-    FormItem,
-    FormLabel,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Form,
+  FormField,
+  FormFieldCompact,
+  FormItem,
+  FormLabel,
 } from "@/components/ui/form";
 import RootFormError from "@/components/ui/root-form-error";
 import { Switch } from "@/components/ui/switch";
@@ -108,31 +115,39 @@ export default function WorkingHoursComponent({
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        {fields.map((field, index) =>
-          !sunday && index === 0 ? null : (
-            <WorkingDay key={field.id} form={form} day={index} />
-          ),
-        )}
-        {!sunday && <WorkingDay key={0} form={form} day={0} />}
-        <RootFormError
-          className="col-span-2"
-          error={form.formState.errors.root?.message}
-        />
-        <Button
-          isLoading={updateWorkingHours.isPending}
-          disabled={!form.formState.isDirty || updateWorkingHours.isPending}
-          Icon={Save}
-          variant="expandIcon"
-          iconPlacement="left"
-          type="submit"
-          className="col-span-2 sm:w-fit"
-        >
-          {t("button")}
-        </Button>
-      </form>
-    </Form>
+    <Card>
+      <CardHeader>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            {fields.map((field, index) =>
+              !sunday && index === 0 ? null : (
+                <WorkingDay key={field.id} form={form} day={index} />
+              ),
+            )}
+            {!sunday && <WorkingDay key={fields[0]!.id} form={form} day={0} />}
+            <RootFormError
+              className="col-span-2"
+              error={form.formState.errors.root?.message}
+            />
+            <Button
+              isLoading={updateWorkingHours.isPending}
+              disabled={!form.formState.isDirty || updateWorkingHours.isPending}
+              Icon={Save}
+              variant="expandIcon"
+              iconPlacement="left"
+              type="submit"
+              className="col-span-2 sm:w-fit"
+            >
+              {t("button")}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -205,7 +220,9 @@ function WorkingDay({ day, form }: WorkingDayProps) {
               </span>
             )}
           />
-
+          <span className="h-10 flex items-center justify-center text-muted-foreground text-xs">
+            {t("to")}
+          </span>
           <FormFieldCompact
             control={form.control}
             name={`workingHours.${day}.endTime`}

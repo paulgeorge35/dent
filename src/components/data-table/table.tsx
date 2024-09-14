@@ -1,5 +1,4 @@
 import { type Table as TanstackTable, flexRender } from "@tanstack/react-table";
-import * as React from "react";
 
 import {
   Table,
@@ -10,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { useTranslations } from "next-intl";
 import { DataTablePagination } from "./pagination";
 
 interface DataTableProps<TData> {
@@ -17,6 +17,7 @@ interface DataTableProps<TData> {
 }
 
 export function DataTable<TData>({ table }: DataTableProps<TData>) {
+  const t = useTranslations("table");
   return (
     <div className="w-full space-y-2.5 h-auto">
       <div className="rounded-md border">
@@ -45,6 +46,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  className="group"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -62,7 +64,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                   colSpan={table.getAllColumns().length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  {t("no-results")}
                 </TableCell>
               </TableRow>
             )}

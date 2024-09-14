@@ -200,7 +200,7 @@ function CalendarCell({ state, date }: CalendarCellProps) {
         ref={ref}
         className={cn(
           buttonProps.className,
-          "h-9 w-9",
+          "size-8",
           isToday && "bg-accent text-accent-foreground",
           isSelected &&
             "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
@@ -260,7 +260,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        "inline-flex h-10 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "inline-flex h-8 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         props.isDisabled && "cursor-not-allowed opacity-50",
       )}
     >
@@ -380,7 +380,7 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        "flex grow items-center rounded-md border bg-background shadow-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2",
+        "p-1 h-9 flex grow items-center rounded-md border bg-background shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
       )}
     >
       <Popover open={props.isOpen} onOpenChange={props.onOpenChange}>
@@ -389,13 +389,13 @@ const DateTimePicker = React.forwardRef<
             {...buttonProps}
             variant="ghost"
             color="default"
-            className={cn("border-r", buttonProps.className)}
+            className={cn("border-r !h-7", buttonProps.className)}
             disabled={props.isDisabled}
             onClick={() => {
               state.setOpen(true);
             }}
           >
-            <CalendarIcon className="h-5 w-5" />
+            <CalendarIcon className="size-5" />
           </Button>
         </PopoverTrigger>
         <PopoverContent ref={contentRef} className="w-full">

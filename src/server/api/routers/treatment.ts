@@ -17,7 +17,7 @@ export const treatmentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const tenantId = ctx.session.user!.tenantId;
 
-      return await ctx.db.specialization.create({
+      return await ctx.db.speciality.create({
         data: {
           ...input,
           tenantId,
@@ -40,7 +40,7 @@ export const treatmentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const tenantId = ctx.session.user!.tenantId;
 
-      return await ctx.db.specialization.update({
+      return await ctx.db.speciality.update({
         where: { id: input.id, tenantId },
         data: input,
       });
@@ -51,7 +51,7 @@ export const treatmentRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const tenantId = ctx.session.user!.tenantId;
 
-      const specialization = await ctx.db.specialization.findUnique({
+      const speciality = await ctx.db.speciality.findUnique({
         where: { id: input.id, tenantId },
         include: {
           _count: {
@@ -62,21 +62,21 @@ export const treatmentRouter = createTRPCRouter({
         },
       });
 
-      if (!specialization) {
+      if (!speciality) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Specialization not found",
+          message: "Speciality not found",
         });
       }
 
-      if (specialization._count.users > 0) {
+      if (speciality._count.users > 0) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Specialization has users",
+          message: "Speciality has users",
         });
       }
 
-      return await ctx.db.specialization.delete({
+      return await ctx.db.speciality.delete({
         where: { id: input.id, tenantId },
       });
     }),

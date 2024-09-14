@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormField,
@@ -98,61 +99,70 @@ export default function PasswordForm() {
   });
 
   return (
-    <Form {...form}>
-      <form onSubmit={onSubmit} className="grid grid-cols-2 items-start gap-6">
-        <FormField
-          control={form.control}
-          name="current"
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>
-                {t("current-password")}
-              </FormLabel>
-              <PasswordInput id={field.name} {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>{t("new-password")}</FormLabel>
-              <PasswordInput id={field.name} {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="confirm"
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>
-                {t("confirm-password")}
-              </FormLabel>
-              <PasswordInput id={field.name} {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <RootFormError
-          className="col-span-2"
-          error={form.formState.errors.root?.message}
-        />
-        <Button
-          isLoading={isPending}
-          disabled={!form.formState.isDirty}
-          Icon={Save}
-          variant="expandIcon"
-          iconPlacement="left"
-          type="submit"
-          className="col-span-2 sm:w-fit"
-        >
-          Update password
-        </Button>
-      </form>
-    </Form>
+    <Card>
+      <CardContent className="p-6">
+        <Form {...form}>
+          <form
+            onSubmit={onSubmit}
+            className="grid grid-cols-2 items-start gap-6"
+          >
+            <FormField
+              control={form.control}
+              name="current"
+              render={({ field }) => (
+                <FormItem className="col-span-2 w-full">
+                  <FormLabel htmlFor={field.name}>
+                    {t("current-password")}
+                  </FormLabel>
+                  <PasswordInput id={field.name} {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="col-span-2 w-full">
+                  <FormLabel htmlFor={field.name}>
+                    {t("new-password")}
+                  </FormLabel>
+                  <PasswordInput id={field.name} {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="confirm"
+              render={({ field }) => (
+                <FormItem className="col-span-2 w-full">
+                  <FormLabel htmlFor={field.name}>
+                    {t("confirm-password")}
+                  </FormLabel>
+                  <PasswordInput id={field.name} {...field} />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <RootFormError
+              className="col-span-2"
+              error={form.formState.errors.root?.message}
+            />
+            <Button
+              isLoading={isPending}
+              disabled={!form.formState.isDirty}
+              Icon={Save}
+              variant="expandIcon"
+              iconPlacement="left"
+              type="submit"
+              className="col-span-2 sm:w-fit"
+            >
+              Update password
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }

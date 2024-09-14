@@ -9,7 +9,7 @@ import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
-import { Box, Plus } from "lucide-react";
+import { Box, Plus, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
@@ -61,6 +61,15 @@ export function Sidebar({
         <Button size="icon" className="flex-shrink-0 rounded-full">
           <Plus />
         </Button>
+        <Link href="/settings">
+          <Button
+            size="icon"
+            variant="ghost"
+            className="flex-shrink-0 rounded-full"
+          >
+            <Settings />
+          </Button>
+        </Link>
         <Separator orientation="vertical" />
         <AccountButton
           session={session}

@@ -63,7 +63,6 @@ export const Icons = {
       width="40"
       height="40"
       fill="none"
-      aria-hidden="true"
       focusable="false"
       data-prefix="fab"
       data-icon="braces"
@@ -123,7 +122,6 @@ export const Icons = {
       width="40"
       height="40"
       fill="none"
-      aria-hidden="true"
       focusable="false"
       data-prefix="fab"
       data-icon="dental"
@@ -174,7 +172,6 @@ export const Icons = {
   file: FileIcon,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
-      aria-hidden="true"
       focusable="false"
       data-prefix="fab"
       data-icon="github"
@@ -191,7 +188,6 @@ export const Icons = {
   ),
   google: ({ ...props }: LucideProps) => (
     <svg
-      aria-hidden="true"
       focusable="false"
       data-prefix="fab"
       data-icon="google"
@@ -224,7 +220,6 @@ export const Icons = {
     <svg
       width="24"
       height="24"
-      aria-hidden="true"
       focusable="false"
       data-prefix="fab"
       data-icon="pill-bottle"

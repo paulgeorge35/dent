@@ -47,7 +47,7 @@ export function CitySelect({
   }, [name]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger asChild>
         <Button
           disabled={disabled}
@@ -66,6 +66,7 @@ export function CitySelect({
         <Command className="max-h-[200px]">
           <CommandInput
             placeholder="Search city..."
+            autoFocus
             onValueChange={(search) => setValue(search)}
           />
           {loading ? (

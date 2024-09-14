@@ -239,6 +239,17 @@ export const appointmentRouter = createTRPCRouter({
       });
     }),
 
+  confirm: tenantProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      return await ctx.db.event.update({
+        where: { id: input, userId },
+        data: { status: "CONFIRMED" },
+      });
+    }),
+
   count: tenantProcedure
     .input(
       z.object({
@@ -265,4 +276,62 @@ export const appointmentRouter = createTRPCRouter({
 
       return count;
     }),
+
+  addDayOff: tenantProcedure
+    .input(z.object({ title: z.string(), start: z.date(), end: z.date() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const tenantId = ctx.session.user.tenantId;
+
+      return await ctx.db.event.create({
+        data: {
+          ...input,
+          date: input.start,
+          type: "DAY_OFF",
+          allDay: true,
+          initiator: "USER",
+          tenantId,
+          userId,
+        },
+      });
+    }),
+
+  updateDayOff: tenantProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        title: z.string().optional(),
+        start: z.date().optional(),
+        end: z.date().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      return await ctx.db.event.update({
+        where: { id: input.id, userId, type: "DAY_OFF" },
+        data: {
+          ...input,
+          date: input.start,
+        },
+      });
+    }),
+
+  removeDayOff: tenantProcedure
+    .input(z.string())
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+
+      return await ctx.db.event.delete({
+        where: { id: input, userId, type: "DAY_OFF" },
+      });
+    }),
+
+  getDayOffs: tenantProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    return await ctx.db.event.findMany({
+      where: { userId, type: "DAY_OFF" },
+    });
+  }),
 });

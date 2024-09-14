@@ -13,6 +13,7 @@ export default function resourceLabelContent(
     events: Event[];
   },
 ) {
+  const events = user?.events.filter((event) => event.type === "APPOINTMENT");
   if (!user) return null;
   return (
     <Link
@@ -33,8 +34,8 @@ export default function resourceLabelContent(
         </h1>
 
         <p className="h-5 text-sm text-muted-foreground">
-          {user.events.length
-            ? `${user.events.length} ${user.events.length > 1 ? t("patient.plural") : t("patient.singular")}`
+          {events?.length
+            ? `${events.length} ${events.length > 1 ? t("patient.plural") : t("patient.singular")}`
             : t("no-patients")}
         </p>
       </div>

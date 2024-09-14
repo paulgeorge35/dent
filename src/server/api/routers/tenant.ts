@@ -1,4 +1,4 @@
-import { EventType, type Prisma, Role } from "@prisma/client";
+import { type Prisma, Role } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
@@ -38,6 +38,48 @@ export const tenantRouter = createTRPCRouter({
         },
       });
       return [!!profileOnTenant, !!profile];
+    }),
+
+  updateClinic: adminProcedure
+    .input(
+      z.object({
+        name: z.string().min(1),
+        county: z.string().optional(),
+        address: z.string().optional(),
+        zip: z.string().optional(),
+        phone: z.string().optional(),
+        avatarId: z.string().nullable(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const tenantId = ctx.session.user.tenantId;
+
+      const avatar = input.avatarId
+        ? { connect: { id: input.avatarId } }
+        : undefined;
+
+      return await ctx.db.tenant.update({
+        where: { id: tenantId },
+        data: {
+          profile: {
+            update: {
+              name: input.name,
+              county: input.county,
+              address: input.address,
+              zip: input.zip,
+              phone: input.phone,
+              avatar,
+            },
+          },
+        },
+        include: {
+          profile: {
+            include: {
+              avatar: true,
+            },
+          },
+        },
+      });
     }),
 
   accounts: protectedProcedure.query(async ({ ctx }) => {
@@ -98,6 +140,7 @@ export const tenantRouter = createTRPCRouter({
       include: {
         profile: {
           include: {
+            avatar: true,
             plan: true,
           },
         },
@@ -153,11 +196,26 @@ export const tenantRouter = createTRPCRouter({
           },
           events: {
             where: {
-              type: EventType.APPOINTMENT,
-              date: {
-                gte: dateRange?.start,
-                lte: dateRange?.end,
-              },
+              OR: [
+                {
+                  date: {
+                    gte: dateRange?.start,
+                    lte: dateRange?.end,
+                  },
+                },
+                {
+                  start: {
+                    gte: dateRange?.start,
+                    lte: dateRange?.end,
+                  },
+                },
+                {
+                  end: {
+                    gte: dateRange?.start,
+                    lte: dateRange?.end,
+                  },
+                },
+              ],
             },
             include: {
               patient: true,
@@ -170,9 +228,9 @@ export const tenantRouter = createTRPCRouter({
       });
     }),
 
-  specializations: tenantProcedure.query(async ({ ctx }) => {
+  specialities: tenantProcedure.query(async ({ ctx }) => {
     const tenantId = ctx.session.user.tenantId;
-    return await ctx.db.specialization.findMany({
+    return await ctx.db.speciality.findMany({
       where: { tenantId },
       cacheStrategy: {
         ttl: env.DEFAULT_TTL,

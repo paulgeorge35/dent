@@ -130,7 +130,7 @@ export const routeTitles = {
   "/settings": "settings",
   "/user": "user profile",
   "/profile": "profile",
-  "/specializations": "specializations",
+  "/specialities": "specialities",
   "/stocks": "stocks",
 };
 
@@ -156,4 +156,24 @@ export function getPageTitle(path: string) {
 
 export const zeroPad = (num: number, places = 4) => {
   return String(num).padStart(places, "0");
+};
+
+const tailwindColors = [
+  "bg-red-500",
+  "bg-yellow-500",
+  "bg-green-500",
+  "bg-blue-500",
+  "bg-indigo-500",
+  "bg-purple-500",
+  "bg-pink-500",
+  "bg-orange-500",
+  "bg-teal-500",
+  "bg-cyan-500",
+];
+export const generateRandomTailwindColor = (seed?: number): string => {
+  if (!seed) {
+    return tailwindColors[Math.floor(Math.random() * tailwindColors.length)]!;
+  }
+
+  return tailwindColors[seed % tailwindColors.length]!;
 };

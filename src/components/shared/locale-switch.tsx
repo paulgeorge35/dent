@@ -34,8 +34,8 @@ export default function LocaleSwitch({ locale, isOpen }: LocaleSwitchProps) {
         {isOpen ? <SelectValue /> : shortLocale}
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="en">English ({shortLocale})</SelectItem>
-        <SelectItem value="ro">Română ({shortLocale})</SelectItem>
+        <SelectItem value="en">English (EN)</SelectItem>
+        <SelectItem value="ro">Română (RO)</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -43,7 +43,7 @@
           "settings": {
             "title": "Settings",
             "items": {
-              "specializations": "Specialities",
+              "specialities": "Specialities",
               "stocks": "Stocks"
             }
           }
@@ -179,6 +179,25 @@
         }
       }
     },
+    "subscription": {
+      "update": {
+        "title": "Change Plan",
+        "description": "In order to change your plan, select one of the plans below.",
+        "button": "Submit",
+        "tooltip": {
+          "max-users": "You can't switch to this plan at the moment as it doesn't allow for the current number of active users in your account.",
+          "proration": "Your next invoice total amount will be {amount} RON following this change."
+        }
+      },
+      "resume": {
+        "title": "Resume Subscription",
+        "description": "In order to resume your clinic's activity, reactivate one of the subscriptions plans below.",
+        "button": "Submit",
+        "tooltip": {
+          "max-users": "You can't switch to this plan at the moment as it doesn't allow for the current number of active users in your account."
+        }
+      }
+    },
     "dashboard": {
       "title": "Dashboard"
     },
@@ -206,16 +225,156 @@
       }
     },
     "staff": {
-      "title": "Staff"
+      "title": "Staff",
+      "manage-staff": "Manage staff",
+      "fields": {
+        "name": {
+          "label": "Name"
+        },
+        "speciality": {
+          "label": "Speciality"
+        },
+        "contact": {
+          "label": "Contact"
+        },
+        "workingHours": {
+          "label": "Working days"
+        },
+        "role": {
+          "label": "Role",
+          "options": {
+            "ADMIN": "Admin",
+            "USER": "User"
+          }
+        },
+        "actions": {
+          "label": "Actions"
+        }
+      }
     },
     "patients": {
-      "title": "Patients"
+      "title": "Patients",
+      "add": {
+        "trigger": "Add patient",
+        "status": {
+          "success": "Patient added successfully"
+        },
+        "dialog": {
+          "title": "Add patient",
+          "description": "Add a new patient to the system.",
+          "cancel": "Cancel",
+          "confirm": "Add"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Name"
+        },
+        "firstName": {
+          "label": "First name"
+        },
+        "lastName": {
+          "label": "Last name"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "phone": {
+          "label": "Phone"
+        },
+        "dob": {
+          "label": "Date of birth"
+        },
+        "age": {
+          "label": "Age",
+          "unit": "years"
+        },
+        "gender": {
+          "label": "Gender",
+          "options": {
+            "M": "Male",
+            "F": "Female"
+          }
+        },
+        "county": {
+          "label": "County"
+        },
+        "city": {
+          "label": "City"
+        },
+        "sector": {
+          "label": "Sector"
+        },
+        "createdAt": {
+          "label": "Registered"
+        },
+        "actions": {
+          "label": "Actions"
+        }
+      }
     },
     "treatments": {
       "title": "Treatments"
     },
-    "specializations": {
-      "title": "Specialities"
+    "specialities": {
+      "title": "Specialities",
+      "empty": "No specialities",
+      "add": {
+        "trigger": "Add speciality",
+        "status": {
+          "success": "Speciality added successfully"
+        },
+        "dialog": {
+          "title": "Add speciality",
+          "description": "Define a new speciality",
+          "cancel": "Cancel",
+          "confirm": "Add"
+        }
+      },
+      "edit": {
+        "trigger": "Edit speciality",
+        "status": {
+          "success": "Speciality updated successfully"
+        },
+        "dialog": {
+          "title": "Edit speciality",
+          "description": "Modify the speciality details",
+          "cancel": "Cancel",
+          "confirm": "Save"
+        }
+      },
+      "delete": {
+        "trigger": "Delete speciality",
+        "status": {
+          "success": "Speciality deleted successfully"
+        },
+        "dialog": {
+          "title": "Delete speciality",
+          "description": "Are you sure you want to delete this speciality?",
+          "cancel": "Cancel",
+          "confirm": "Delete"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Name",
+          "placeholder": "e.g. Orthodontics"
+        },
+        "description": {
+          "label": "Description",
+          "placeholder": "e.g. Orthodontics is the branch of dentistry that deals with the diagnosis and treatment of malocclusion and other dental problems."
+        },
+        "color": {
+          "label": "Color"
+        },
+        "users": {
+          "label": "Users",
+          "unit": "user(s)"
+        },
+        "actions": {
+          "label": "Actions"
+        }
+      }
     },
     "stocks": {
       "title": "Stocks"
@@ -246,7 +405,7 @@
               "label": "Phone",
               "description": "This phone number will be visible to the patients."
             },
-            "specialization": {
+            "speciality": {
               "label": "Specaility"
             },
             "status": {
@@ -265,8 +424,35 @@
             }
           }
         },
-        "plan": {
-          "title": "Plan",
+        "clinic": {
+          "title": "Clinic",
+          "details": {
+            "label": "Clinic details",
+            "description": "Manage your clinic details.",
+            "button": "Update",
+            "status": {
+              "success": "Clinic updated successfully"
+            },
+            "name": {
+              "label": "Name",
+              "description": "This is the name that will be displayed to your patients."
+            },
+            "county": {
+              "label": "County"
+            },
+            "address": {
+              "label": "Address"
+            },
+            "zip": {
+              "label": "Zip"
+            },
+            "phone": {
+              "label": "Phone"
+            },
+            "logo": {
+              "label": "Logo"
+            }
+          },
           "subscription": {
             "label": "Subscription",
             "description": "Manage your subscription plan.",
@@ -276,7 +462,8 @@
               "trialing": "Trial"
             },
             "actions": {
-              "change": "Change plan"
+              "change": "Change plan",
+              "resume": "Resume subscription"
             },
             "per-month": "per month",
             "trial-will-end": "Your trial will end on",
@@ -284,8 +471,22 @@
             "active-until": "You canceled your membership but you will still be able to use MyDent until",
             "cancel": {
               "trigger": "Cancel Membership",
+              "status": {
+                "success": "Membership canceled successfully"
+              },
               "dialog": {
                 "title": "Are you sure you want to cancel your membership?",
+                "cancel": "Cancel",
+                "confirm": "Yes"
+              }
+            },
+            "resume": {
+              "trigger": "Resume Membership",
+              "status": {
+                "success": "Membership resumed successfully"
+              },
+              "dialog": {
+                "title": "Are you sure you want to resume your membership?",
                 "cancel": "Cancel",
                 "confirm": "Yes"
               }
@@ -294,8 +495,10 @@
         },
         "staff": {
           "title": "Staff",
-          "upgrade": "Upgrade",
-          "to-increase-limit": "to increase user limit",
+          "modify": "Modify",
+          "your-plan-to-fit-needs": "your plan to fit your needs",
+          "tooltip": "You can invite up to {maxUsers} users to your clinic.",
+          "tooltip-modify": "You reached the maximum number of users ({maxUsers}) for your plan. Upgrade your plan to invite more users.",
           "users": "Users",
           "invite": {
             "trigger": "Invite",
@@ -411,6 +614,7 @@
             "title": "Working hours",
             "description": "Manage your working hours.",
             "not-working": "Not working on this day",
+            "to": "to",
             "days-of-week": {
               "0": "Sunday",
               "1": "Monday",
@@ -420,21 +624,71 @@
               "5": "Friday",
               "6": "Saturday"
             },
-            "button": "Update working hours",
+            "button": "Update",
             "status": {
               "success": "Working hours updated successfully"
             }
           },
           "days-off": {
             "title": "Days off",
-            "description": "Manage your days off."
+            "description": "Manage your days off.",
+            "empty": "No days off registered",
+            "actions": {
+              "add": {
+                "label": "Add day off",
+                "status": {
+                  "success": "Day off added successfully"
+                },
+                "to": "to",
+                "form": {
+                  "title": {
+                    "label": "Title",
+                    "placeholder": "e.g. Christmas Holiday"
+                  },
+                  "date": {
+                    "label": "Date"
+                  }
+                }
+              },
+              "edit": {
+                "label": "Edit day off",
+                "status": {
+                  "success": "Day off updated successfully"
+                }
+              },
+              "remove": {
+                "label": "Remove day off",
+                "status": {
+                  "success": "Day off removed successfully"
+                }
+              }
+            }
           }
         },
         "notifications": {
           "title": "Notifications"
         },
         "support": {
-          "title": "Suport"
+          "title": "Suport",
+          "description": "Get help from our support team.",
+          "form": {
+            "title": {
+              "label": "Title",
+              "placeholder": "Title"
+            },
+            "description": {
+              "label": "Description",
+              "placeholder": "Description"
+            },
+            "status": {
+              "success": "Support ticket submitted successfully"
+            },
+            "success-screen": {
+              "title": "Support ticket submitted successfully",
+              "description": "We will review your ticket and get back to you as soon as possible."
+            },
+            "button": "Submit"
+          }
         }
       }
     },
@@ -445,6 +699,7 @@
   "enums": {
     "event": {
       "status": {
+        "DRAFT": "Draft",
         "CREATED": "Created",
         "CONFIRMED": "Confirmed",
         "CANCELLED": "Cancelled",
@@ -457,12 +712,61 @@
     "avatar": {
       "browse": "Browse",
       "remove": "Remove",
-      "limit": "Maximum upload file size: {size}MB."
+      "limit": "Maximum upload file size: {size}MB.",
+      "crop": "Crop",
+      "confirm": "Upload",
+      "processing": "Processing..."
+    },
+    "subscription": {
+      "title": "Subscription Plan",
+      "description": "Select your preferred subscription plan.",
+      "current-plan": "Current"
+    },
+    "color": {
+      "label": "Color",
+      "placeholder": "Select a color",
+      "colors": "Colors",
+      "options": {
+        "blue": "blue",
+        "green": "green",
+        "red": "red",
+        "yellow": "yellow",
+        "purple": "purple",
+        "pink": "pink",
+        "orange": "orange",
+        "gray": "gray"
+      }
+    },
+    "county": {
+      "label": "County",
+      "placeholder": "Select county...",
+      "search": "Search county...",
+      "loading": "Loading...",
+      "no-results": "No results"
+    }
+  },
+  "table": {
+    "actions": "Actions",
+    "no-results": "No results",
+    "view-options": "View",
+    "toggle-columns": "Toggle columns",
+    "reset-filters": "Reset",
+    "pagination": {
+      "rows-per-page": "Rows per page",
+      "page": "Page",
+      "of": "of"
+    },
+    "column-header": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Hide"
     }
   },
   "errors": {
     "global": {
-      "fallback": "Something went wrong, please try again later."
+      "fallback": "Something went wrong, please try again later.",
+      "required": "Field is required.",
+      "max-length": "Maximum amount of characters exceeded."
     },
     "invitation": {
       "exists": "Invitation already exists",
@@ -496,7 +800,9 @@
       "mismatch": "Passwords do not match"
     },
     "name": {
-      "required": "Name is required"
+      "required": "Name is required",
+      "min-length": "First name must be at least 3 characters long",
+      "max-length": "First name must be at most 50 characters long"
     },
     "firstName": {
       "required": "First name is required",
@@ -509,6 +815,9 @@
       "invalid": "Last name is invalid",
       "min-length": "Last name must be at least 3 characters long",
       "max-length": "Last name must be at most 50 characters long"
+    },
+    "date": {
+      "start-after-end": "Start date must be before end date"
     }
   }
 }

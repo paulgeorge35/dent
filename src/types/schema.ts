@@ -4,7 +4,7 @@ import {
   EventStatusSchema,
   EventTypeSchema,
   ProfileSchema,
-  SpecializationSchema,
+  SpecialitySchema,
   StatusSchema,
   TenantProfileSchema,
   TenantSchema,
@@ -19,7 +19,7 @@ export const userCompleteSchema = UserSchema.merge(
         avatar: AvatarSchema.nullable(),
       }),
     ),
-    specialization: SpecializationSchema.nullable(),
+    speciality: SpecialitySchema.nullable(),
   }),
 );
 const workingHoursSchema = z.object({

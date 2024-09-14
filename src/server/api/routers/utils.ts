@@ -1,5 +1,7 @@
+import { SupportTicket } from "@/components/emails/support-ticket";
+import { resend } from "@/server/resend";
 import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, tenantProcedure } from "../trpc";
 
 export const utilsRouter = createTRPCRouter({
   getCounties: publicProcedure.query(async ({ ctx }) => {
@@ -23,5 +25,65 @@ export const utilsRouter = createTRPCRouter({
           },
         })
       )?.cities;
+    }),
+
+  submitSupportTicket: tenantProcedure
+    .input(
+      z.object({
+        title: z.string(),
+        description: z.string().max(1000),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const tenantId = ctx.session.user.tenantId;
+
+      const user = await ctx.db.user.findUnique({
+        where: { id: userId, tenantId },
+        select: {
+          id: true,
+          role: true,
+          tenant: {
+            select: {
+              profile: {
+                select: {
+                  name: true,
+                  phone: true,
+                  plan: {
+                    select: {
+                      name: true,
+                    },
+                  },
+                  createdAt: true,
+                },
+              },
+            },
+          },
+          profile: {
+            select: {
+              firstName: true,
+              lastName: true,
+              email: true,
+            },
+          },
+        },
+      });
+
+      if (!user) return;
+
+      await resend.emails.send({
+        from: "MyDent <hello@mydent.one>",
+        to: "paultibulca@gmail.com",
+        cc: user.profile.email,
+        subject: "MyDent - New Support Ticket",
+        react: SupportTicket({
+          user: {
+            ...user,
+            role: user.role.toString(),
+          },
+          title: input.title,
+          description: input.description,
+        }),
+      });
     }),
 });

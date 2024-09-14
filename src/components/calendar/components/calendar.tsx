@@ -6,12 +6,13 @@ import {
   renderEventContent,
   resourceLabelContent,
 } from "@/components/calendar/util";
+import { Button } from "@/components/ui/button";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { appointmentCreateInput } from "@/types/schema";
+import { appointmentCreateInput, type WorkingHours } from "@/types/schema";
 import type {
   DateSelectArg,
   DatesSetArg,
@@ -31,7 +32,8 @@ import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { DayOfWeek } from "@prisma/client";
+import { EventType, type DayOfWeek } from "@prisma/client";
+import { Bell } from "lucide-react";
 import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -57,6 +59,7 @@ interface CalendarProps {
   selected?: z.infer<typeof selectedUserSchema>;
   firstDayOfWeek: DayOfWeek;
   showWeekends: boolean;
+  workingHours: WorkingHours[];
 }
 
 export default function Calendar({
@@ -64,10 +67,12 @@ export default function Calendar({
   selected = "me",
   firstDayOfWeek,
   showWeekends,
+  workingHours,
 }: CalendarProps) {
   const locale = useLocale();
   const t = useTranslations("page.appointments.calendar");
   const calendarRef = useRef<FullCalendar>(null);
+  const calendar = calendarRef.current?.getApi();
   const [period, setPeriod] = useState<"day" | "week">("day");
   const [selectedUser] = useState<z.infer<typeof selectedUserSchema>>(selected);
   const [dateRange, setDateRange] = useState<{ start: Date; end: Date } | null>(
@@ -112,7 +117,21 @@ export default function Calendar({
       appointment.date = data.date;
     },
     onSuccess: () => {
-      toast.success("Appointment updated");
+      toast.custom((t) => (
+        <div className="bg-background shadow-md p-4 rounded-md horizontal center-v gap-2">
+          <p className="text-sm w-fit whitespace-nowrap">
+            Appointment rescheduled
+          </p>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => toast.loading("Sending confirmation email...")}
+          >
+            <Bell className="size-4 mr-2" />
+            Request confirmation
+          </Button>
+        </div>
+      ));
       router.refresh();
     },
     onError: (err) => {
@@ -148,7 +167,7 @@ export default function Calendar({
   const handleDateClick = (arg: DateClickArg) => {
     newAppointmentDialog.setValue(true);
     const isSelectedId = !["me", "all"].includes(selected);
-    setResourceId(isSelectedId ? selected : arg.resource?.id ?? userId);
+    setResourceId(isSelectedId ? selected : (arg.resource?.id ?? userId));
     form.reset({
       description: "",
       date: arg.date,
@@ -160,6 +179,7 @@ export default function Calendar({
   };
 
   const handleEventClick = (arg: EventClickArg) => {
+    if (arg.event.extendedProps.isDayOff) return;
     openAppointmentDialog.setValue(arg.event.id);
     const appointment = appointments.find((app) => app.id === arg.event.id);
     setResourceId(appointment?.userId ?? userId);
@@ -168,7 +188,7 @@ export default function Calendar({
   const handleSelect = (arg: DateSelectArg) => {
     newAppointmentDialog.setValue(true);
     const isSelectedId = !["me", "all"].includes(selected);
-    setResourceId(isSelectedId ? selected : arg.resource?.id ?? userId);
+    setResourceId(isSelectedId ? selected : (arg.resource?.id ?? userId));
     form.reset({
       description: "",
       allDay: arg.allDay,
@@ -182,13 +202,15 @@ export default function Calendar({
     const event = appointments.find((app) => app.id === arg.event.id);
     return cn(
       "rounded-lg overflow-hidden",
-      "bg-teal-400/40 hover:bg-teal-400",
       {
-        "bg-teal-200/40 hover:bg-teal-200": event?.status === "CREATED",
-        "bg-red-200/40 hover:bg-red-200": event?.status === "CANCELLED",
-        "bg-blue-200/40 hover:bg-blue-200": event?.status === "CONFIRMED",
-        "bg-green-200/40 hover:bg-green-200": event?.status === "COMPLETED",
-        "bg-yellow-200/40 hover:bg-yellow-200": event?.status === "RESCHEDULED",
+        "bg-teal-200/30 hover:bg-teal-200/50": event?.status === "CREATED",
+        "bg-red-200/30 hover:bg-red-200/50": event?.status === "CANCELLED",
+        "bg-blue-200/30 hover:bg-blue-200/50": event?.status === "CONFIRMED",
+        "bg-green-200/30 hover:bg-green-200/50": event?.status === "COMPLETED",
+        "bg-yellow-200/30 hover:bg-yellow-200/50": event?.status === "RESCHEDULED",
+        "bg-primary/10": !arg.event.id,
+        "bg-background/20 hover:bg-background/20 border-background/40 border-dashed":
+          event?.type === EventType.DAY_OFF,
       },
     );
   };
@@ -211,7 +233,11 @@ export default function Calendar({
   const memoizedAppointments: EventSourceInput = useMemo(() => {
     return appointments.map((app) => ({
       ...app,
-      title: `${app.patient?.firstName} ${app.patient?.lastName}`,
+      editable: app.type === EventType.APPOINTMENT,
+      title:
+        app.type === EventType.APPOINTMENT
+          ? `${app.patient?.firstName} ${app.patient?.lastName}`
+          : app.title,
       start: app.start ?? undefined,
       end: app.end ?? undefined,
       resourceId: app.userId,
@@ -221,6 +247,9 @@ export default function Calendar({
           startTime: "18:00",
           endTime: "10:00",
         },
+      },
+      extendedProps: {
+        isDayOff: app.type === EventType.DAY_OFF,
       },
     }));
   }, [appointments]);
@@ -238,7 +267,10 @@ export default function Calendar({
       <CreateAppointmentDialog
         open={newAppointmentDialog.value}
         resourceId={resourceId}
-        onOpenChange={(value) => newAppointmentDialog.setValue(value)}
+        onOpenChange={(value) => {
+          newAppointmentDialog.setValue(value);
+          calendar?.unselect();
+        }}
         form={form}
         refetch={refetchCalendar}
       />
@@ -310,7 +342,7 @@ export default function Calendar({
         }
         eventContent={renderEventContent}
         selectMirror
-        unselectAuto={true}
+        unselectAuto={false}
         eventClassNames={styleEvent}
         events={memoizedAppointments}
         editable={true}
@@ -331,10 +363,21 @@ export default function Calendar({
           month: "numeric",
           day: "numeric",
         }}
+        businessHours={
+          workingHours.length > 0
+            ? workingHours
+            : [
+                {
+                  startTime: "00:00",
+                  endTime: "00:00",
+                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+                },
+              ]
+        }
         dayCellClassNames={"hover:bg-blue-600/10"}
         navLinks={true}
         locale={locale}
-        dayMaxEventRows={1}
+        dayMaxEventRows={2}
         dayHeaderContent={(arg) => formatDayHeader(t, locale, arg)}
         weekends={showWeekends}
         firstDay={firstDayOfWeek === "MONDAY" ? 1 : 0}

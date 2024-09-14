@@ -43,7 +43,7 @@
           "settings": {
             "title": "Setări",
             "items": {
-              "specializations": "Specializări",
+              "specialities": "Specializări",
               "stocks": "Stocuri"
             }
           }
@@ -179,6 +179,25 @@
         }
       }
     },
+    "subscription": {
+      "update": {
+        "title": "Schimbă plan",
+        "description": "Pentru a schimba planul, selectează unul dintre planurile de mai jos.",
+        "button": "Confirmă",
+        "tooltip": {
+          "max-users": "Nu poți să treci la acest plan momentan deoarece nu permite numărul curent de utilizatori activi în echipa ta.",
+          "proration": "Următoarea factură va fi de {amount} RON ca urmare a acestei modificări."
+        }
+      },
+      "resume": {
+        "title": "Reactivează abonamentul",
+        "description": "Pentru a relua activitatea clinicii, reactivează unul dintre planurile de mai jos.",
+        "button": "Confirmă",
+        "tooltip": {
+          "max-users": "Nu poți să treci la acest plan momentan deoarece nu permite numărul curent de utilizatori activi în echipa ta."
+        }
+      }
+    },
     "dashboard": {
       "title": "Administrare"
     },
@@ -206,16 +225,156 @@
       }
     },
     "staff": {
-      "title": "Personal"
+      "title": "Doctori",
+      "manage-staff": "Gestionează personalul",
+      "fields": {
+        "name": {
+          "label": "Nume"
+        },
+        "speciality": {
+          "label": "Specialitate"
+        },
+        "contact": {
+          "label": "Contact"
+        },
+        "workingHours": {
+          "label": "Zile lucrătoare"
+        },
+        "role": {
+          "label": "Rol",
+          "options": {
+            "ADMIN": "Administrator",
+            "USER": "Doctor"
+          }
+        },
+        "actions": {
+          "label": "Acțiuni"
+        }
+      }
     },
     "patients": {
-      "title": "Pacienți"
+      "title": "Pacienți",
+      "add": {
+        "trigger": "Adaugă pacient",
+        "status": {
+          "success": "Pacient adăugat cu succes"
+        },
+        "dialog": {
+          "title": "Adaugă pacient",
+          "description": "Adaugă un nou pacient în sistem.",
+          "cancel": "Anulează",
+          "confirm": "Adaugă"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Nume"
+        },
+        "firstName": {
+          "label": "Prenume"
+        },
+        "lastName": {
+          "label": "Nume"
+        },
+        "email": {
+          "label": "Email"
+        },
+        "phone": {
+          "label": "Telefon"
+        },
+        "dob": {
+          "label": "Data nașterii"
+        },
+        "age": {
+          "label": "Vârstă",
+          "unit": "ani"
+        },
+        "gender": {
+          "label": "Gen",
+          "options": {
+            "M": "Masculin",
+            "F": "Feminin"
+          }
+        },
+        "county": {
+          "label": "Județ"
+        },
+        "city": {
+          "label": "Oraș"
+        },
+        "sector": {
+          "label": "Sector"
+        },
+        "createdAt": {
+          "label": "Înregistrat"
+        },
+        "actions": {
+          "label": "Acțiuni"
+        }
+      }
     },
     "treatments": {
       "title": "Tratamente"
     },
-    "specializations": {
-      "title": "Specializări"
+    "specialities": {
+      "title": "Specializări",
+      "empty": "Nici o specializare",
+      "add": {
+        "trigger": "Adaugă specializare",
+        "status": {
+          "success": "Specializarea a fost adăugată cu succes."
+        },
+        "dialog": {
+          "title": "Adaugă specializare",
+          "description": "Definește o nouă specializare",
+          "cancel": "Anulează",
+          "confirm": "Adaugă"
+        }
+      },
+      "edit": {
+        "trigger": "Editează specializare",
+        "status": {
+          "success": "Specializarea a fost actualizată cu succes."
+        },
+        "dialog": {
+          "title": "Editează specializare",
+          "description": "Modifică detaliile specializării",
+          "cancel": "Anulează",
+          "confirm": "Salvează"
+        }
+      },
+      "delete": {
+        "trigger": "Șterge specializare",
+        "status": {
+          "success": "Specializarea a fost ștearsă cu succes."
+        },
+        "dialog": {
+          "title": "Șterge specializare",
+          "description": "Ești sigur că vrei să ștergi această specializare?",
+          "cancel": "Anulează",
+          "confirm": "Șterge"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Nume",
+          "placeholder": "e.g. Ortodontie"
+        },
+        "description": {
+          "label": "Descriere",
+          "placeholder": "e.g. Ortodontie este ramura stomatologiei care se ocupă de alăturarea danturilor."
+        },
+        "color": {
+          "label": "Culoare"
+        },
+        "users": {
+          "label": "Utilizatori",
+          "unit": "utilizator(i)"
+        },
+        "actions": {
+          "label": "Acțiuni"
+        }
+      }
     },
     "stocks": {
       "title": "Stocuri"
@@ -246,7 +405,7 @@
               "label": "Telefon",
               "description": "Introduce-te numărul de telefon. Acesta va fi vizibil pacienților."
             },
-            "specialization": {
+            "speciality": {
               "label": "Specializare"
             },
             "status": {
@@ -265,8 +424,35 @@
             }
           }
         },
-        "plan": {
-          "title": "Abonament",
+        "clinic": {
+          "title": "Clinică",
+          "details": {
+            "label": "Detalii clinică",
+            "description": "Gestionează detaliile clinicii.",
+            "button": "Actualizează",
+            "status": {
+              "success": "Clinică actualizată cu succes"
+            },
+            "name": {
+              "label": "Nume",
+              "description": "Acesta este numele care va fi afișat pacienților."
+            },
+            "county": {
+              "label": "Județ"
+            },
+            "address": {
+              "label": "Adresă"
+            },
+            "zip": {
+              "label": "Cod poștal"
+            },
+            "phone": {
+              "label": "Telefon"
+            },
+            "avatar": {
+              "label": "Avatar"
+            }
+          },
           "subscription": {
             "label": "Abonament",
             "description": "Gestionează-ți abonamentul.",
@@ -276,7 +462,8 @@
               "trialing": "Perioadă de probă"
             },
             "actions": {
-              "change": "Schimbă planul"
+              "change": "Schimbă planul",
+              "resume": "Reactivează abonamentul"
             },
             "per-month": "pe lună",
             "trial-will-end": "Perioada de probă va expira pe",
@@ -284,18 +471,34 @@
             "active-until": "Ai anulat abonamentul dar încă poți folosi MyDent până pe",
             "cancel": {
               "trigger": "Anulează abonamentul",
+              "status": {
+                "success": "Abonamentul a fost anulat cu succes"
+              },
               "dialog": {
                 "title": "Ești sigur că vrei să anulezi abonamentul?",
                 "cancel": "Înapoi",
                 "confirm": "Da, anulează"
               }
+            },
+            "resume": {
+              "trigger": "Reactivează abonamentul",
+              "status": {
+                "success": "Abonamentul a fost reactiveat cu succes"
+              },
+              "dialog": {
+                "title": "Ești sigur că vrei să reactivezi abonamentul?",
+                "cancel": "Înapoi",
+                "confirm": "Da, reactivează"
+              }
             }
           }
         },
         "staff": {
-          "title": "Personal",
-          "upgrade": "Upgradează",
-          "to-increase-limit": "pentru a crește limita de utilizatori",
+          "title": "Doctori",
+          "modify": "Modifică",
+          "your-plan-to-fit-needs": "abonamentul conform nevoilor tale",
+          "tooltip": "Poți invita până la {maxUsers} doctori în cadrul acestui abonament.",
+          "tooltip-modify": "Ai atins limita de utilizatori ({maxUsers}) pentru planul tău. Modifică abonamentul pentru a invita mai mulți doctori.",
           "users": "Utilizatori",
           "invite": {
             "trigger": "Invită",
@@ -411,6 +614,7 @@
             "title": "Program de lucru",
             "description": "Gestionează programul de lucru.",
             "not-working": "Nu lucrez în această zi",
+            "to": "până la",
             "days-of-week": {
               "0": "Duminică",
               "1": "Luni",
@@ -420,21 +624,71 @@
               "5": "Vineri",
               "6": "Sâmbătă"
             },
-            "button": "Actualizează programul de lucru",
+            "button": "Actualizează",
             "status": {
               "success": "Programul de lucru a fost actualizat cu succes"
             }
           },
           "days-off": {
             "title": "Zile libere",
-            "description": "Gestionează zilele libere."
+            "description": "Gestionează zilele libere.",
+            "empty": "Nici o zi liberă înregistrată",
+            "actions": {
+              "add": {
+                "label": "Adaugă zi liberă",
+                "status": {
+                  "success": "Zi liberă adăugată cu succes"
+                },
+                "to": "până la",
+                "form": {
+                  "title": {
+                    "label": "Titlu",
+                    "placeholder": "e.g. Vacanță de Crăciun"
+                  },
+                  "date": {
+                    "label": "Dată"
+                  }
+                }
+              },
+              "edit": {
+                "label": "Editează zi liberă",
+                "status": {
+                  "success": "Zi liberă actualizată cu succes"
+                }
+              },
+              "remove": {
+                "label": "Șterge zi liberă",
+                "status": {
+                  "success": "Zi liberă ștearsă cu succes"
+                }
+              }
+            }
           }
         },
         "notifications": {
           "title": "Notificări"
         },
         "support": {
-          "title": "Suport"
+          "title": "Suport",
+          "description": "Obține ajutor de la echipa de suport.",
+          "form": {
+            "title": {
+              "label": "Titlu",
+              "placeholder": "Titlu"
+            },
+            "description": {
+              "label": "Descriere",
+              "placeholder": "Descriere"
+            }
+          },
+          "status": {
+            "success": "Ticket-ul a fost trimis cu succes"
+          },
+          "success-screen": {
+            "title": "Ticket-ul a fost trimis cu succes",
+            "description": "Vom revizui ticket-ul și vom reveni la tine cât mai rapid posibil."
+          },
+          "button": "Trimite"
         }
       }
     },
@@ -445,6 +699,7 @@
   "enums": {
     "event": {
       "status": {
+        "DRAFT": "Draft",
         "CREATED": "Creată",
         "CONFIRMED": "Confirmată",
         "CANCELLED": "Anulată",
@@ -457,12 +712,61 @@
     "avatar": {
       "browse": "Încarcă",
       "remove": "Șterge",
-      "limit": "Dimensiunea maximă acceptată este: {size}MB."
+      "limit": "Dimensiunea maximă acceptată este: {size}MB.",
+      "crop": "Selectează",
+      "confirm": "Încarcă",
+      "processing": "Se procesează..."
+    },
+    "subscription": {
+      "title": "Planul de abonament",
+      "description": "Selectează planul de abonament preferat.",
+      "current-plan": "Planul curent"
+    },
+    "color": {
+      "label": "Culoare",
+      "placeholder": "Selectează culoarea",
+      "colors": "Culori",
+      "options": {
+        "blue": "albastru",
+        "green": "verde",
+        "red": "roșu",
+        "yellow": "galben",
+        "purple": "mov",
+        "pink": "roz",
+        "orange": "portocaliu",
+        "gray": "gri"
+      }
+    },
+    "county": {
+      "label": "Județ",
+      "placeholder": "Selectează județul...",
+      "search": "Caută județ...",
+      "loading": "Se încarcă...",
+      "no-results": "Nici un rezultat"
+    }
+  },
+  "table": {
+    "actions": "Acțiuni",
+    "no-results": "Nici un rezultat",
+    "toggle-columns": "Afișează coloane",
+    "view-options": "Opțiuni de afișare",
+    "reset-filters": "Resetează",
+    "pagination": {
+      "rows-per-page": "Rezultate pe pagina",
+      "page": "Pagina",
+      "of": "din"
+    },
+    "column-header": {
+      "asc": "Asc",
+      "desc": "Desc",
+      "hide": "Ascunde"
     }
   },
   "errors": {
     "global": {
-      "fallback": "A apărut o eroare, încearcă din nou mai târziu"
+      "fallback": "A apărut o eroare, încearcă din nou mai târziu",
+      "required": "Câmpul este obligatoriu",
+      "max-length": "Numărul maxim de caractere depășit"
     },
     "invitation": {
       "exists": "Invitația există deja",
@@ -509,6 +813,9 @@
       "invalid": "Numele de familie trebuie să fie un șir de caractere",
       "min-length": "Numele de familie trebuie să aibă cel puțin 3 caractere",
       "max-length": "Numele de familie trebuie să aibă cel mult 50 de caractere"
+    },
+    "date": {
+      "start-after-end": "Data de început trebuie să fie înaintea datei de sfârșit"
     }
   }
 }

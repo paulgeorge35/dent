@@ -247,11 +247,11 @@
 }
 
 .fc-event {
-  @apply rounded-sm border border-primary px-1 text-xs text-primary-foreground transition-colors !important;
+  @apply rounded-sm border border-primary text-xs text-primary-foreground transition-colors !important;
 }
 
 .fc-event-main {
-  @apply p-2 !important;
+  @apply !important;
 }
 
 .fc-dayGridDay-view.fc-view.fc-daygrid

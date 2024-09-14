@@ -28,7 +28,7 @@ model Tenant {
   profileId String        @unique
   profile   TenantProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  specializations    Specialization[]
+  specialities    Speciality[]
   preferedByProfiles Profile[]
   patients           Patient[]
   services           Service[]
@@ -72,13 +72,13 @@ model User {
   firstDayOfWeek DayOfWeek @default(MONDAY)
   showWeekends   Boolean   @default(true)
 
-  specializationId String?
-  specialization   Specialization? @relation(fields: [specializationId], references: [id], onDelete: SetNull)
-  profile          Profile         @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId        String
-  tenantId         String
-  tenant           Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  invitation       Invitation?     @relation(name: "InvitedToUser")
+  specialityId String?
+  speciality   Speciality? @relation(fields: [specialityId], references: [id], onDelete: SetNull)
+  profile      Profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId    String
+  tenantId     String
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  invitation   Invitation? @relation(name: "InvitedToUser")
 
   tokens         Token[]
   patients       Patient[]
@@ -226,10 +226,11 @@ model Patient {
   @@index([userId])
 }
 
-model Specialization {
+model Speciality {
   id          String  @id @default(cuid())
   name        String
   description String?
+  color       String  @default("blue")
 
   users User[]
 
@@ -551,6 +552,7 @@ enum EventStatus {
 
 enum EventType {
   APPOINTMENT
+  DAY_OFF
 }
 
 enum EventInitiator {

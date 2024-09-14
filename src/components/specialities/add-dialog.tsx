@@ -12,49 +12,52 @@ import {
   CredenzaTitle,
   CredenzaTrigger,
 } from "@/components/ui/credenza";
+import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import SpecializationForm, {
+import SpecialityForm, {
   type FormValues,
-  specializationSchema,
+  specialitySchema,
 } from "./form";
 
-type AddSpecializationDialogProps = {
+type AddSpecialityDialogProps = {
   className?: string;
 };
 
-export default function AddSpecializationDialog({
+export default function AddSpecialityDialog({
   className,
-}: AddSpecializationDialogProps) {
+}: AddSpecialityDialogProps) {
+  const t = useTranslations("page.specialities.add");
   const router = useRouter();
-  const { mutateAsync: createSpecialization } =
-    api.specialization.create.useMutation({
+  const { mutateAsync: createSpeciality } =
+    api.speciality.create.useMutation({
       onSuccess: () => {
-        toast.success("Specialization created");
+        toast.success(t("status.success"));
         dialogOpen.setFalse();
         router.refresh();
       },
       onError: (error) => {
-        toast.error(error.message);
+        showErrorToast(error);
       },
     });
 
   const dialogOpen = useBoolean(false);
   const form = useForm<FormValues>({
-    resolver: zodResolver(specializationSchema),
+    resolver: zodResolver(specialitySchema),
     defaultValues: {
       name: "",
     },
   });
 
   const onSubmit = async (values: FormValues) => {
-    await createSpecialization(values);
+    await createSpeciality(values);
   };
 
   useEffect(() => {
@@ -72,20 +75,22 @@ export default function AddSpecializationDialog({
           iconPlacement="right"
           className={className}
         >
-          Add new
+          {t("trigger")}
         </Button>
       </CredenzaTrigger>
       <CredenzaContent>
         <CredenzaHeader>
-          <CredenzaTitle>Add Specialization</CredenzaTitle>
-          <CredenzaDescription>Define a new specialization</CredenzaDescription>
+          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
+          <CredenzaDescription>
+            {t("dialog.description")}
+          </CredenzaDescription>
           <CredenzaBody>
-            <SpecializationForm form={form} />
+            <SpecialityForm form={form} />
           </CredenzaBody>
         </CredenzaHeader>
         <CredenzaFooter>
           <CredenzaClose>
-            <Button variant="secondary">Cancel</Button>
+            <Button variant="secondary">{t("dialog.cancel")}</Button>
           </CredenzaClose>
           <Button
             onClick={form.handleSubmit(onSubmit)}
@@ -96,7 +101,7 @@ export default function AddSpecializationDialog({
             }
             isLoading={form.formState.isSubmitting}
           >
-            Save
+            {t("dialog.confirm")}
           </Button>
         </CredenzaFooter>
       </CredenzaContent>

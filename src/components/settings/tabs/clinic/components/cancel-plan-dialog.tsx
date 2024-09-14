@@ -15,10 +15,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CancelMembership() {
-  const t = useTranslations("page.settings.tabs.plan.subscription.cancel");
-  const { mutate } = api.stripe.cancelSubscription.useMutation();
+  const t = useTranslations("page.settings.tabs.clinic.subscription.cancel");
+  const router = useRouter();
+  const { mutate } = api.stripe.cancelSubscription.useMutation({
+    onSuccess: () => {
+      toast.success(t("status.success"));
+      router.refresh();
+    },
+  });
 
   return (
     <AlertDialog>

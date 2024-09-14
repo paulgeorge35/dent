@@ -3,19 +3,28 @@
 import { Button } from "@/components/ui/button";
 import { BadgePlus } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useState } from "react";
 
 export default function CreateTenant() {
   const t = useTranslations("page.welcome.clinic");
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = () => {
+    setIsLoading(true);
+  };
+
   return (
-    <Button
-      variant="expandIcon"
-      Icon={BadgePlus}
-      iconPlacement="right"
-      onClick={() => router.push("/create-clinic")}
-    >
-      {t("create-clinic")}
-    </Button>
+    <Link href="/create-clinic">
+      <Button
+        variant="expandIcon"
+        Icon={BadgePlus}
+        iconPlacement="right"
+        onClick={handleClick}
+        isLoading={isLoading}
+      >
+        {t("create-clinic")}
+      </Button>
+    </Link>
   );
 }

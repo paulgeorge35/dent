@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { WorkingHours } from "@/types/schema";
+import { useTranslations } from "next-intl";
 
 type WorkingHoursComponentProps = {
   workingHours: WorkingHours[];
@@ -51,6 +52,9 @@ const WorkingDayComponent = ({
   day,
   workingHours,
 }: WorkingDayComponentProps) => {
+  const t = useTranslations(
+    "page.settings.tabs.schedule.working-hours",
+  );
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -62,14 +66,14 @@ const WorkingDayComponent = ({
             },
           )}
         >
-          {DAYS_OF_WEEK[day]![0]}
+          {t(`days-of-week.${day}`).slice(0, 1)}
         </div>
       </TooltipTrigger>
       <TooltipContent>
         <span className="text-xs font-medium">
           {workingHours
             ? `${workingHours.startTime} - ${workingHours.endTime}`
-            : "Not working"}
+            : t("not-working")}
         </span>
       </TooltipContent>
     </Tooltip>

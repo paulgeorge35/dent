@@ -17,10 +17,16 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { TabsContent } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useTranslations } from "@/lib/translations";
+import { cn } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import type { Invitation, Profile, User } from "@prisma/client";
-import { Users } from "lucide-react";
+import { Info, TriangleAlert, Users } from "lucide-react";
 import { DateTime } from "luxon";
 import { getLocale } from "next-intl/server";
 import Link from "next/link";
@@ -34,8 +40,12 @@ export default async function Staff() {
   const users = await api.tenant.activeUsers();
   const invitations = await api.tenant.invitations();
   const tenant = await api.tenant.currentTenant();
+  const { subscription } = await api.stripe.subscription();
+
+  const isCanceled = subscription.cancel_at_period_end;
 
   const spotsUsed = users.length + invitations.length;
+  const noSpotsLeft = spotsUsed >= tenant.profile.plan.maxUsers;
 
   return (
     <TabsContent
@@ -43,22 +53,43 @@ export default async function Staff() {
       className="md:max-w-screen-5xl !mt-0 flex flex-col gap-4"
     >
       <span className="horizontal center-v gap-2">
-        <InvitationDialog
-          disabled={spotsUsed >= tenant.profile.plan.maxUsers}
-        />
+        <InvitationDialog disabled={noSpotsLeft} />
         <span className="horizontal center-v h-9 gap-2 rounded-md bg-muted pl-2 pr-1 text-sm text-muted-foreground">
           <Users className="size-4" />
           <p>
             {spotsUsed} / {tenant.profile.plan.maxUsers} {t("users")}
           </p>
-          <span className="rounded-md border border-border bg-background/50 px-2 py-1 text-sm">
+          <Tooltip>
+            <TooltipTrigger>
+              {noSpotsLeft ? (
+                <TriangleAlert className="size-4 text-red-500" />
+              ) : (
+                <Info className="size-4" />
+              )}
+            </TooltipTrigger>
+            <TooltipContent>
+              {noSpotsLeft
+                ? t("tooltip-modify", {
+                    maxUsers: tenant.profile.plan.maxUsers,
+                  })
+                : t("tooltip", { maxUsers: tenant.profile.plan.maxUsers })}
+            </TooltipContent>
+          </Tooltip>
+          <span
+            className={cn(
+              "rounded-md border border-border bg-background/50 px-2 py-1 text-sm",
+              {
+                hidden: isCanceled,
+              },
+            )}
+          >
             <Link
-              href="/subscription/update"
+              href={`/subscription/update?redirectUrl=${encodeURIComponent("/settings?tab=staff")}`}
               className="text-link hover:text-link-hover hover:underline"
             >
-              {t("upgrade")}
+              {t("modify")}
             </Link>{" "}
-            {t("to-increase-limit")}
+            {t("your-plan-to-fit-needs")}
           </span>
         </span>
       </span>

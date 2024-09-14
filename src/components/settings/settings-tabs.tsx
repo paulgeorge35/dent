@@ -1,10 +1,17 @@
 "use client";
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Bell, Brush, Calendar, CreditCard, LifeBuoy, User, Users } from "lucide-react";
+import {
+  Bell,
+  Brush,
+  Calendar,
+  Hospital,
+  LifeBuoy,
+  User,
+  Users,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 export const tabs = [
   {
@@ -12,8 +19,8 @@ export const tabs = [
     icon: User,
   },
   {
-    value: "plan",
-    icon: CreditCard,
+    value: "clinic",
+    icon: Hospital,
     adminsOnly: true,
   },
   {
@@ -40,20 +47,18 @@ export const tabs = [
 ];
 
 interface SettingsTabsProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   isAdmin?: boolean;
+  tab: string;
 }
 
-export default function SettingsTabs({ children, isAdmin }: SettingsTabsProps) {
+export default function SettingsTabs({
+  children,
+  isAdmin,
+  tab: activeTab,
+}: SettingsTabsProps) {
   const t = useTranslations("page.settings.tabs");
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const activeTab = useMemo(
-    () =>
-      tabs.find((tab) => tab.value === searchParams?.get("tab"))?.value ??
-      tabs[0]!.value,
-    [searchParams],
-  );
 
   const onTabChange = (value: string) => {
     router.replace(`/settings?tab=${value}`, { scroll: false });

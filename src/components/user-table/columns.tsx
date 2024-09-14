@@ -1,31 +1,32 @@
 "use client";
 
 import type { UserComplete } from "@/types/schema";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import type { ColumnDef } from "@tanstack/react-table";
-import { useRouter } from "next/navigation";
-import * as React from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import AvatarComponent from "@/components/shared/avatar-component";
 import { translations } from "@/lib/translations";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 import { WorkingHoursComponent } from "./working-hours";
 
-export function getColumns(): ColumnDef<UserComplete>[] {
+type GetColumnsProps = {
+  t: (v: string, options?: Record<string, string>) => string;
+};
+
+export function getColumns({ t }: GetColumnsProps): ColumnDef<UserComplete>[] {
   return [
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Name" className="ml-2" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.name.label")}
+          className="ml-2"
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -37,11 +38,12 @@ export function getColumns(): ColumnDef<UserComplete>[] {
               className="size-8"
               width={40}
               height={40}
+              randomColor
             />
             <span className="vertical items-start">
               {`${row.original.profile.firstName} ${row.original.profile.lastName}`}
               <span className="text-sm text-muted-foreground">
-                {row.original.specialization?.name}
+                {row.original.speciality?.name}
               </span>
             </span>
           </div>
@@ -50,19 +52,25 @@ export function getColumns(): ColumnDef<UserComplete>[] {
       enableSorting: true,
     },
     {
-      accessorKey: "specialization",
+      accessorKey: "speciality",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Specialization" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.speciality.label")}
+        />
       ),
       cell: ({ row }) => {
-        return <div>{row.original.specialization?.name}</div>;
+        return <div>{row.original.speciality?.name}</div>;
       },
       enableSorting: true,
     },
     {
       accessorKey: "contact",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Contact" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.contact.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -82,7 +90,10 @@ export function getColumns(): ColumnDef<UserComplete>[] {
     {
       accessorKey: "workingHours",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Working Days" />
+        <DataTableColumnHeader
+          column={column}
+          title={t("fields.workingHours.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -98,7 +109,7 @@ export function getColumns(): ColumnDef<UserComplete>[] {
     {
       accessorKey: "role",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title="Role" />
+        <DataTableColumnHeader column={column} title={t("fields.role.label")} />
       ),
       cell: ({ row }) => {
         return (
@@ -112,30 +123,17 @@ export function getColumns(): ColumnDef<UserComplete>[] {
       enableSorting: true,
     },
     {
-      id: "actions",
-      cell: function Cell({ row }) {
-        const router = useRouter();
+      accessorKey: "actions",
+      header: "",
+      cell: ({ row }) => {
         return (
-          <>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  aria-label="Open menu"
-                  variant="ghost"
-                  className="flex size-8 p-0 data-[state=open]:bg-muted"
-                >
-                  <DotsHorizontalIcon className="size-4" aria-hidden="true" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
-                <DropdownMenuItem
-                  onSelect={() => router.push(`user/${row.original.id}`)}
-                >
-                  View
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </>
+          <div>
+            <Link href={`/user/${row.original.id}`}>
+              <Button variant="ghost" size="icon" className="opacity-0 group-hover:opacity-100">
+                <ArrowRight className="size-4" />
+              </Button>
+            </Link>
+          </div>
         );
       },
     },

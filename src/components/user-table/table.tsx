@@ -14,6 +14,7 @@ import { DataTableToolbar } from "@/components/data-table/toolbar";
 
 import { getRoleIcon } from "@/lib/table-utils";
 
+import { useTranslations } from "next-intl";
 import { getColumns } from "./columns";
 import { UsersTableToolbarActions } from "./toolbar-actions";
 
@@ -26,30 +27,31 @@ interface UsersTableProps {
 }
 
 export function UserTable({ users }: UsersTableProps) {
+  const t = useTranslations("page.staff");
   const { content, pageCount } = users;
 
-  const { data: specializations } = api.tenant.specializations.useQuery();
+  const { data: specialities } = api.tenant.specialities.useQuery();
 
   const columns = React.useMemo<ColumnDef<UserComplete>[]>(
-    () => getColumns() as ColumnDef<UserComplete>[],
+    () => getColumns({ t }) as ColumnDef<UserComplete>[],
     [],
   );
 
   const filterFields: DataTableFilterField<UserComplete>[] = [
     {
-      label: "Specialization",
-      value: "specialization",
-      options: specializations?.map((specialization) => ({
-        label: specialization.name,
-        value: specialization.id,
+      label: t("fields.speciality.label"),
+      value: "speciality",
+      options: specialities?.map((speciality) => ({
+        label: speciality.name,
+        value: speciality.id,
         withCount: true,
       })),
     },
     {
-      label: "Role",
+      label: t("fields.role.label"),
       value: "role",
       options: Object.values(RoleSchema.Values).map((role) => ({
-        label: role[0]?.toUpperCase() + role.slice(1),
+        label: t(`fields.role.options.${role}`),
         value: role,
         icon: getRoleIcon(role),
         withCount: true,
@@ -68,8 +70,8 @@ export function UserTable({ users }: UsersTableProps) {
 
   return (
     <div className="w-full space-y-2.5 overflow-auto">
-      <DataTableToolbar table={table} filterFields={filterFields}>
-        <UsersTableToolbarActions table={table} />
+      <DataTableToolbar table={table} filterFields={filterFields} tColumns={t}>
+        <UsersTableToolbarActions />
       </DataTableToolbar>
       <DataTable table={table} />
     </div>

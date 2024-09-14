@@ -12,14 +12,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslations } from "next-intl";
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>;
+  tColumns?: (key: string, options?: Record<string, string>) => string;
 }
 
 export function DataTableViewOptions<TData>({
   table,
+  tColumns,
 }: DataTableViewOptionsProps<TData>) {
+  const t = useTranslations("table");
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,11 +34,11 @@ export function DataTableViewOptions<TData>({
           className="ml-auto hidden h-8 lg:flex"
         >
           <MixerHorizontalIcon className="mr-2 size-4" />
-          View
+          {t("view-options")}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-40">
-        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("toggle-columns")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {table
           .getAllColumns()
@@ -47,11 +51,13 @@ export function DataTableViewOptions<TData>({
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
-                className="capitalize"
+                className={!tColumns ? "capitalize" : ""}
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}
               >
-                <span className="truncate">{column.id}</span>
+                <span className="truncate">
+                  {tColumns ? tColumns(`fields.${column.id}.label`) : column.id}
+                </span>
               </DropdownMenuCheckboxItem>
             );
           })}

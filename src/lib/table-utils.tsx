@@ -1,10 +1,9 @@
 import {
-  AvatarIcon,
   CheckCircledIcon,
   CrossCircledIcon,
   MinusCircledIcon,
-  StarIcon,
 } from "@radix-ui/react-icons";
+import { Shield, UserCircle } from "lucide-react";
 import type { RoleType, StatusType } from "prisma/generated/zod";
 
 export const getStatusIcon = (status: StatusType) => {
@@ -18,9 +17,9 @@ export const getStatusIcon = (status: StatusType) => {
 
 export const getRoleIcon = (role: RoleType) => {
   const roleIcon = {
-    ADMIN: StarIcon,
-    USER: AvatarIcon,
+    ADMIN: Shield,
+    USER: UserCircle,
   };
 
-  return roleIcon[role] || AvatarIcon;
+  return roleIcon[role] || UserCircle;
 };

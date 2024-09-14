@@ -48,7 +48,7 @@ export function useDataTable<TData, TValue>({
   const searchParams = useSearchParams();
 
   // Search params
-  const search = schema.parse(Object.fromEntries(searchParams));
+  const search = schema.parse(Object.fromEntries(searchParams?.entries() ?? []));
   const page = search.page;
   const perPage = search.per_page ?? defaultPerPage;
   const sort = search.sort ?? defaultSort;
@@ -82,7 +82,7 @@ export function useDataTable<TData, TValue>({
 
   // Initial column filters
   const initialColumnFilters: ColumnFiltersState = React.useMemo(() => {
-    return Array.from(searchParams.entries()).reduce<ColumnFiltersState>(
+    return Array.from(searchParams?.entries() ?? []).reduce<ColumnFiltersState>(
       (filters, [key, value]) => {
         const filterableColumn = filterableColumns.find(
           (column) => column.value === key,
@@ -113,7 +113,7 @@ export function useDataTable<TData, TValue>({
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
-      specialization: false,
+      speciality: false,
     });
   const [columnFilters, setColumnFilters] =
     React.useState<ColumnFiltersState>(initialColumnFilters);
@@ -215,7 +215,7 @@ export function useDataTable<TData, TValue>({
     }
 
     // Remove deleted values
-    for (const key of searchParams.keys()) {
+    for (const key of searchParams?.keys() ?? []) {
       if (
         (searchableColumns.find((column) => column.value === key) &&
           !debouncedSearchableColumnFilters.find(

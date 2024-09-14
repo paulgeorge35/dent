@@ -154,7 +154,6 @@ export function AvatarUpload({
           height={100}
           className="aspect-square size-[100px] bg-cover bg-center text-2xl"
           isLoading={isUploading || isFetching}
-          fixedColor={fixedColor}
         />
         <Separator orientation="vertical" className="h-8 shrink-0" />
         <Button

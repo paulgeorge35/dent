@@ -1,15 +1,22 @@
 "use client";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
-import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
 export function UsersTableToolbarActions() {
+  const t = useTranslations("page.staff");
   return (
     <div className="flex items-center gap-2">
-      <Link href="/settings?tab=staff" className={cn(buttonVariants())}>
-        <Icons.settings className="mr-2 size-4" /> Manage Staff
+      <Link href="/settings?tab=staff">
+        <Button
+          Icon={Icons.settings}
+          iconPlacement="right"
+          variant="expandIcon"
+        >
+          {t("manage-staff")}
+        </Button>
       </Link>
     </div>
   );

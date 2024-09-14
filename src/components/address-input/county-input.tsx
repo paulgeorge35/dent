@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { County } from "prisma/generated/zod";
 
 interface CountySelectProps {
@@ -32,8 +33,10 @@ export function CountySelect({
   counties,
   loading,
 }: CountySelectProps) {
+  const t = useTranslations("fields.county");
   const [open, setOpen] = useState(false);
-  const [label, setLabel] = useState<string>("Select county...");
+  const [label, setLabel] = useState<string>(t("placeholder"));
+  const ref = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (name !== "") {
@@ -42,9 +45,10 @@ export function CountySelect({
   }, [name]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger asChild>
         <Button
+          ref={ref}
           variant="outline"
           role="combobox"
           aria-expanded={open}
@@ -56,13 +60,17 @@ export function CountySelect({
           {label}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" side="bottom">
+      <PopoverContent
+        className="w-[200px] p-0"
+        side="bottom"
+        style={{ width: ref.current?.clientWidth }}
+      >
         <Command className="max-h-[200px]">
-          <CommandInput placeholder="Search county..." />
+          <CommandInput placeholder={t("search")} autoFocus />
           {loading ? (
-            <CommandEmpty>Loading...</CommandEmpty>
+            <CommandEmpty>{t("loading")}</CommandEmpty>
           ) : (
-            <CommandEmpty>No results</CommandEmpty>
+            <CommandEmpty>{t("no-results")}</CommandEmpty>
           )}
           <CommandList>
             <CommandGroup>

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { constructMetadata } from "@/lib/utils";
 import { api } from "@/trpc/server";
+import type { WorkingHours } from "@/types/schema";
 import dynamic from "next/dynamic";
 import { z } from "zod";
 const Calendar = dynamic(
@@ -38,6 +39,7 @@ export default async function Appointments({ params }: AppointmentsProps) {
       userId={session.user.id}
       firstDayOfWeek={me.firstDayOfWeek}
       showWeekends={me.showWeekends}
+      workingHours={me.workingHours as WorkingHours[]}
     />
   );
 }
