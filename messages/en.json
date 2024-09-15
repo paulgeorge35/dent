@@ -442,6 +442,10 @@
           "label": "Quantity",
           "description": "Use the same unit as for pricing."
         },
+        "search": {
+          "label": "Search",
+          "placeholder": "Search for a material..."
+        },
         "actions": {
           "label": "Actions"
         }

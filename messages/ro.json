@@ -442,6 +442,10 @@
           "label": "Stoc",
           "description": "Folosește aceeași unitate ca pentru prețul unitar."
         },
+        "search": {
+          "label": "Căutare",
+          "placeholder": "Caută un material..."
+        },
         "actions": {
           "label": "Acțiuni"
         }

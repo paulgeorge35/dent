@@ -30,7 +30,13 @@ export function MaterialTable({ materials }: MaterialsTableProps) {
     [],
   );
 
-  const filterFields: DataTableFilterField<Material>[] = [];
+  const filterFields: DataTableFilterField<Material>[] = [
+    {
+      label: t("fields.search.label"),
+      value: "name",
+      placeholder: t("fields.search.placeholder"),
+    },
+  ];
 
   const { table } = useDataTable({
     data: content,

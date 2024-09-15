@@ -102,6 +102,12 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       enableSorting: false,
     },
     {
+      id: "search",
+      accessorKey: "search",
+      header: "",
+      enableColumnFilter: true,
+    },
+    {
       accessorKey: "actions",
       header: "",
       cell: ({ row }) => {

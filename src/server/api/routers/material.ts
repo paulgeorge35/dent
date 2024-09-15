@@ -47,6 +47,7 @@ export const materialRouter = createTRPCRouter({
       z
         .object({
           search: z.string().optional(),
+          name: z.string().optional(),
         })
         .merge(pagination)
         .merge(z.object({ sort: sort })),
@@ -56,6 +57,7 @@ export const materialRouter = createTRPCRouter({
         ctx,
         input: {
           search,
+          name,
           page,
           per_page,
           sort: { order, orderBy },
@@ -67,6 +69,11 @@ export const materialRouter = createTRPCRouter({
           where: {
             tenantId,
             isActive: true,
+            ...(name
+              ? {
+                  name: { contains: name, mode: "insensitive" },
+                }
+              : {}),
             ...(search
               ? {
                   OR: [
@@ -95,6 +102,12 @@ export const materialRouter = createTRPCRouter({
         const count = await ctx.db.material.count({
           where: {
             tenantId,
+            isActive: true,
+            ...(name
+              ? {
+                  name: { contains: name, mode: "insensitive" },
+                }
+              : {}),
             ...(search
               ? {
                   OR: [
