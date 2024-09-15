@@ -64,7 +64,7 @@ export default function MaterialForm({ form }: MaterialFormProps) {
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>
-                {t("description.label")}
+                {t("description.label")} <OptionalInputTag />
               </FormLabel>
               <Textarea
                 id={field.name}
