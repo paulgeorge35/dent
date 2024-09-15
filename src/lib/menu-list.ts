@@ -102,9 +102,9 @@ export function getMenuList(pathname: string): Group[] {
           submenus: [],
         },
         {
-          href: "/stocks",
-          label: "stocks",
-          active: pathname.includes("/stocks"),
+          href: "/materials",
+          label: "materials",
+          active: pathname.includes("/materials"),
           icon: Pill,
           adminOnly: true,
           submenus: [],

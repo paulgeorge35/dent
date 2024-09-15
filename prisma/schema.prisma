@@ -28,7 +28,7 @@ model Tenant {
   profileId String        @unique
   profile   TenantProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
-  specialities    Speciality[]
+  specialities       Speciality[]
   preferedByProfiles Profile[]
   patients           Patient[]
   services           Service[]
@@ -297,12 +297,13 @@ model Material {
   keepInventory Boolean  @default(false)
   stock         Int      @default(0)
 
+  services ServiceMaterial[]
+
   tenantId String
   tenant   Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
 
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
-  ServiceMaterial ServiceMaterial[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([name])
 }

@@ -16,7 +16,7 @@ export const env = createEnv({
       ),
     DIRECT_DATABASE_URL: z.string().url(),
     DEFAULT_TTL: z.coerce.number().int().positive().default(30),
-    DEFAULT_SWR: z.coerce.number().int().positive().default(60),
+    DEFAULT_SWR: z.coerce.number().int().default(60),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),

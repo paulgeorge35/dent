@@ -44,7 +44,7 @@
             "title": "Setări",
             "items": {
               "specialities": "Specializări",
-              "stocks": "Stocuri"
+              "materials": "Materiale"
             }
           }
         }
@@ -376,8 +376,76 @@
         }
       }
     },
-    "stocks": {
-      "title": "Stocuri"
+    "materials": {
+      "title": "Stocuri",
+      "no-inventory": "Fără inventar",
+      "add": {
+        "trigger": "Adaugă material",
+        "status": {
+          "success": "Material adăugat cu succes"
+        },
+        "dialog": {
+          "title": "Adaugă material",
+          "description": "Adaugă un nou material în sistem.",
+          "cancel": "Anulează",
+          "confirm": "Adaugă"
+        }
+      },
+      "edit": {
+        "trigger": "Editează material",
+        "status": {
+          "success": "Material actualizat cu succes"
+        },
+        "dialog": {
+          "title": "Editează material",
+          "description": "Modifică detaliile materialului",
+          "cancel": "Anulează",
+          "confirm": "Salvează"
+        }
+      },
+      "delete": {
+        "trigger": "Șterge material",
+        "status": {
+          "success": "Material șters cu succes"
+        },
+        "dialog": {
+          "title": "Șterge material",
+          "description": "Ești sigur că vrei să ștergi acest material?",
+          "cancel": "Anulează",
+          "confirm": "Șterge"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Nume"
+        },
+        "description": {
+          "label": "Descriere"
+        },
+        "unit": {
+          "label": "Unitate",
+          "placeholder": "e.g. buc"
+        },
+        "unit_price": {
+          "label": "Preț unitar"
+        },
+        "tags": {
+          "label": "Tag-uri",
+          "placeholder": "Apasă ENTER după fiecare tag sau separă-le cu virgulă...",
+          "description": "Folosește tag-uri pentru a categoriza materialul."
+        },
+        "keepInventory": {
+          "label": "Păstrează stoc",
+          "description": "Dacă nu păstrezi stocul, acesta nu va fi afișat sau folosit."
+        },
+        "stock": {
+          "label": "Stoc",
+          "description": "Folosește aceeași unitate ca pentru prețul unitar."
+        },
+        "actions": {
+          "label": "Acțiuni"
+        }
+      }
     },
     "profile": {
       "title": "Profil"
@@ -709,6 +777,7 @@
     }
   },
   "fields": {
+    "optional": "Opțional",
     "avatar": {
       "browse": "Încarcă",
       "remove": "Șterge",

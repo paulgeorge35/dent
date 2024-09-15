@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import OptionalInputTag from "@/components/ui/optional-input-tag";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
@@ -116,8 +117,7 @@ export default function ClinicForm() {
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
               <FormLabel htmlFor={field.name}>
-                {t("fields.size.title")}{" "}
-                <span className="text-muted-foreground">({t("optional")})</span>
+                {t("fields.size.title")} <OptionalInputTag />
               </FormLabel>
               <Select onValueChange={(value) => field.onChange(value)}>
                 <SelectTrigger>
@@ -142,8 +142,7 @@ export default function ClinicForm() {
           render={({ field }) => (
             <FormItem className="vertical col-span-2 items-start">
               <FormLabel htmlFor={field.name}>
-                {t("fields.logo.title")}{" "}
-                <span className="text-muted-foreground">({t("optional")})</span>
+                {t("fields.logo.title")} <OptionalInputTag />
               </FormLabel>
               <AvatarInput
                 id={field.name}

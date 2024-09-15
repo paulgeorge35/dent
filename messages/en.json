@@ -44,7 +44,7 @@
             "title": "Settings",
             "items": {
               "specialities": "Specialities",
-              "stocks": "Stocks"
+              "materials": "Materials"
             }
           }
         }
@@ -376,8 +376,76 @@
         }
       }
     },
-    "stocks": {
-      "title": "Stocks"
+    "materials": {
+      "title": "Materials",
+      "no-inventory": "No inventory",
+      "add": {
+        "trigger": "Add material",
+        "status": {
+          "success": "Material added successfully"
+        },
+        "dialog": {
+          "title": "Add material",
+          "description": "Add a new material to the system.",
+          "cancel": "Cancel",
+          "confirm": "Add"
+        }
+      },
+      "edit": {
+        "trigger": "Edit material",
+        "status": {
+          "success": "Material updated successfully"
+        },
+        "dialog": {
+          "title": "Edit material",
+          "description": "Modify the material details",
+          "cancel": "Cancel",
+          "confirm": "Save"
+        }
+      },
+      "delete": {
+        "trigger": "Delete material",
+        "status": {
+          "success": "Material deleted successfully"
+        },
+        "dialog": {
+          "title": "Delete material",
+          "description": "Are you sure you want to delete this material?",
+          "cancel": "Cancel",
+          "confirm": "Delete"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Name"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "unit": {
+          "label": "Unit",
+          "placeholder": "e.g. pc"
+        },
+        "unit_price": {
+          "label": "Unit price"
+        },
+        "tags": {
+          "label": "Tags",
+          "placeholder": "Press ENTER after each tag or separate them with commas...",
+          "description": "Use tags to categorize the material."
+        },
+        "keepInventory": {
+          "label": "Keep inventory",
+          "description": "If you don't keep inventory, the stock will not be displayed or used."
+        },
+        "stock": {
+          "label": "Quantity",
+          "description": "Use the same unit as for pricing."
+        },
+        "actions": {
+          "label": "Actions"
+        }
+      }
     },
     "profile": {
       "title": "Profile"
@@ -709,6 +777,7 @@
     }
   },
   "fields": {
+    "optional": "Optional",
     "avatar": {
       "browse": "Browse",
       "remove": "Remove",

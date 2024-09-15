@@ -8,50 +8,52 @@ import type React from "react";
 import { useCallback, useState } from "react";
 
 interface TagInputProps {
+  id: string;
   value?: string[];
   onChange: (value: string[]) => void;
-  separator: string;
+  separator?: string;
   placeholder?: string;
-  maxChars?: number;
+  charLimit?: number;
 }
 
 export function TagInput({
+  id,
   value = [],
   onChange,
-  separator,
-  placeholder = "Type and press Enter...",
-  maxChars,
+  separator = ",",
+  placeholder,
+  charLimit,
 }: TagInputProps) {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
-      if (maxChars && newValue.length > maxChars) return;
+      if (charLimit && newValue.length > charLimit) return;
       setInputValue(newValue);
 
       if (newValue.endsWith(separator)) {
         const trimmedValue = newValue.slice(0, -separator.length).trim();
-        if (trimmedValue && (!maxChars || trimmedValue.length <= maxChars)) {
+        if (trimmedValue && (!charLimit || trimmedValue.length <= charLimit)) {
           onChange([...value, trimmedValue]);
           setInputValue("");
         }
       }
     },
-    [value, onChange, separator, maxChars],
+    [value, onChange, separator, charLimit],
   );
 
   const handleInputKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key === "Enter" && inputValue.trim()) {
         e.preventDefault();
-        if (!maxChars || inputValue.trim().length <= maxChars) {
+        if (!charLimit || inputValue.trim().length <= charLimit) {
           onChange([...value, inputValue.trim()]);
           setInputValue("");
         }
       }
     },
-    [inputValue, value, onChange, maxChars],
+    [inputValue, value, onChange, charLimit],
   );
 
   const removeTag = useCallback(
@@ -61,10 +63,10 @@ export function TagInput({
     [value, onChange],
   );
 
-  const isAtMaxChars = maxChars && inputValue.length >= maxChars;
+  const isAtMaxChars = charLimit && inputValue.length >= charLimit;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 relative">
       <div className="flex flex-wrap gap-2 rounded-md border p-2 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         {value.map((tag, index) => (
           <Badge
@@ -80,6 +82,7 @@ export function TagInput({
           </Badge>
         ))}
         <Input
+          id={id}
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -91,15 +94,22 @@ export function TagInput({
           )}
         />
       </div>
-      {maxChars && (
-        <p
+      {charLimit && (
+        <div
           className={cn(
-            "text-sm text-muted-foreground",
-            isAtMaxChars && "text-destructive",
+            "absolute -top-7 right-0 rounded-md border border-input bg-background px-1 py-0.5 text-xs text-muted-foreground",
+            {
+              "border-red-500 text-red-500":
+                value?.toString().length &&
+                value?.toString().length > charLimit,
+              "border-green-500 text-green-500":
+                value?.toString().length &&
+                value?.toString().length <= charLimit,
+            },
           )}
         >
-          {inputValue.length}/{maxChars} characters
-        </p>
+          {value?.toString().length ?? 0} / {charLimit ?? "∞"}
+        </div>
       )}
     </div>
   );

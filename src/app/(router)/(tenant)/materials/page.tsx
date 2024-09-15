@@ -1,5 +1,7 @@
 import { Shell } from "@/components/layout/shell";
+import { MaterialTable } from "@/components/material-table/table";
 import { constructMetadata } from "@/lib/utils";
+import { api } from "@/trpc/server";
 import type { SearchParams } from "@/types";
 import { z } from "zod";
 
@@ -13,13 +15,17 @@ const searchParamsSchema = z.object({
   sort: z.string().optional().default("createdAt.desc"),
 });
 
-export interface StocksPageProps {
+export interface MaterialsPageProps {
   searchParams: SearchParams;
 }
 
-export default async function Stocks({ searchParams }: StocksPageProps) {
+export default async function Materials({ searchParams }: MaterialsPageProps) {
   const search = searchParamsSchema.parse(searchParams);
-  console.log(search);
+  const materials = await api.material.list(search);
 
-  return <Shell>Stocks</Shell>;
+  return (
+    <Shell>
+      <MaterialTable materials={materials} />
+    </Shell>
+  );
 }

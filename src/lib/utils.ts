@@ -131,7 +131,7 @@ export const routeTitles = {
   "/user": "user profile",
   "/profile": "profile",
   "/specialities": "specialities",
-  "/stocks": "stocks",
+  "/materials": "materials",
 };
 
 export function getPageTitle(path: string) {
