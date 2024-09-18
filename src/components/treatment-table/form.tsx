@@ -194,11 +194,13 @@ function ServicesSection({
 }: { onSetupMultivisit?: () => void; form: UseFormReturn<FormValues> }) {
   const t = useTranslations("page.treatments.fields");
   const listServices = api.service.listSimpleServices.useQuery({});
-  const services = listServices.data?.filter((service) =>
-    form
-      .watch("relatedServices")
-      ?.some((relatedService) => relatedService.serviceId === service.id),
-  );
+  const services = form
+    .watch("relatedServices")
+    ?.map((service) =>
+      listServices.data?.find((s) => s.id === service.serviceId),
+    )
+    .filter((s) => s !== undefined);
+
   if (!onSetupMultivisit) return null;
   const hasRelatedServices = form.watch("relatedServices")?.length > 0;
   return hasRelatedServices ? (

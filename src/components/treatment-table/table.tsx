@@ -9,7 +9,7 @@ import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";
 
 import { api } from "@/trpc/react";
-import type { Service } from "@prisma/client";
+import type { RelatedService, Service } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { useStateful } from "react-hanger";
 import { getColumns } from "./columns";
@@ -18,7 +18,7 @@ import { ServicesTableToolbarActions } from "./toolbar-actions";
 
 interface ServicesTableProps {
   services: {
-    content: Service[];
+    content: (Service & { children: RelatedService[] })[];
     count: number;
     pageCount: number;
   };
@@ -31,12 +31,13 @@ export function ServiceTable({ services }: ServicesTableProps) {
   const { content, pageCount } = services;
   const { data: tags } = api.service.listTags.useQuery();
 
-  const columns = React.useMemo<ColumnDef<Service>[]>(
-    () => getColumns({ t }),
-    [],
-  );
+  const columns = React.useMemo<
+    ColumnDef<Service & { children: RelatedService[] }>[]
+  >(() => getColumns({ t }), []);
 
-  const filterFields: DataTableFilterField<Service>[] = [
+  const filterFields: DataTableFilterField<
+    Service & { children: RelatedService[] }
+  >[] = [
     {
       label: tServices("fields.search.label"),
       value: "name",

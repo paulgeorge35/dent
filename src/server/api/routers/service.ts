@@ -106,6 +106,13 @@ export const serviceRouter = createTRPCRouter({
               tags: { hasEvery: tags },
             }),
           },
+          include: {
+            children: {
+              orderBy: {
+                order: "asc",
+              },
+            },
+          },
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
@@ -172,7 +179,11 @@ export const serviceRouter = createTRPCRouter({
         id: input,
       },
       include: {
-        children: true,
+        children: {
+          orderBy: {
+            order: "asc",
+          },
+        },
         materials: {
           include: {
             material: true,
@@ -213,8 +224,7 @@ export const serviceRouter = createTRPCRouter({
           children: {
             createMany: {
               data: relatedServices.map((service) => ({
-                quantity: service.quantity,
-                unit_price: service.unit_price,
+                ...service,
                 service: services.find(
                   (s) => s.id === service.serviceId,
                 ) as unknown as Prisma.JsonObject,

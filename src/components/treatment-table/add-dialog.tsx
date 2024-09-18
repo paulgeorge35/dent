@@ -57,6 +57,7 @@ import NumberInput from "../ui/number-input";
 import PriceInput from "../ui/price-input";
 import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
+import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
 import ServiceForm, {
   createRelatedServiceSchema,
@@ -254,6 +255,7 @@ function ComplexTreatmentDialog({
 
   useEffect(() => {
     if (open) {
+      setScrollTop(0);
       complexServicesForm.reset({
         relatedServices: form.watch("relatedServices"),
       });
@@ -309,15 +311,28 @@ function ComplexTreatmentDialog({
             )
             .reduce((acc, curr) => acc + curr.duration, 0) ?? 0;
 
-        // Update all values at once
-        form.reset({
-          ...form.getValues(),
-          relatedServices: values.relatedServices,
-          unit_price: unit_price,
-          duration: duration,
-        }, { keepDefaultValues: true, keepDirty: true });
+        form.reset(
+          {
+            ...form.getValues(),
+            relatedServices: values.relatedServices,
+            unit_price: unit_price,
+            duration: duration,
+          },
+          { keepDefaultValues: true, keepDirty: true },
+        );
 
-        console.log("Updated form values:", form.getValues());
+        // form.setValue("relatedServices", values.relatedServices, {
+        //   shouldDirty: true,
+        //   shouldTouch: true,
+        // });
+        // form.setValue("unit_price", unit_price, {
+        //   shouldDirty: true,
+        //   shouldTouch: true,
+        // });
+        // form.setValue("duration", duration, {
+        //   shouldDirty: true,
+        //   shouldTouch: true,
+        // });
 
         onOpenChange(false);
       })
@@ -474,27 +489,37 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
   const handleMoveUp = useMemo(() => {
     return () => {
       if (index === 0) return;
-      form.setValue(`relatedServices.${index}.order`, index - 1);
-      form.setValue(`relatedServices.${index - 1}.order`, index);
+      form.setValue(`relatedServices.${index}.order`, index - 1, {
+        shouldDirty: true,
+      });
+      form.setValue(`relatedServices.${index - 1}.order`, index, {
+        shouldDirty: true,
+      });
     };
   }, [form, index]);
 
   const handleMoveDown = useMemo(() => {
     return () => {
       if (index === length - 1) return;
-      form.setValue(`relatedServices.${index}.order`, index + 1);
-      form.setValue(`relatedServices.${index + 1}.order`, index);
+      form.setValue(`relatedServices.${index}.order`, index + 1, {
+        shouldDirty: true,
+      });
+      form.setValue(`relatedServices.${index + 1}.order`, index, {
+        shouldDirty: true,
+      });
     };
   }, [form, index, length]);
 
   const handleDelete = useMemo(() => {
     return () => {
-      form.setValue("relatedServices", [
-        ...form.getValues("relatedServices").filter((_, i) => i !== index),
-      ], {
-        shouldDirty: true,
-        shouldTouch: true,
-      });
+      form.setValue(
+        "relatedServices",
+        [...form.getValues("relatedServices").filter((_, i) => i !== index)],
+        {
+          shouldDirty: true,
+          shouldTouch: true,
+        },
+      );
     };
   }, [form, index]);
 
@@ -547,6 +572,15 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
                 isLoading={listServices.isLoading}
                 options={listServices.data ?? []}
               />
+              {serviceQuery.isLoading && (
+                <>
+                  <Label>Treatment Description</Label>
+                  <Skeleton className="h-14 w-full" />
+                  <Label>Treatment Price</Label>
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-4 w-full" />
+                </>
+              )}
               {serviceQuery.data && (
                 <>
                   <Label htmlFor="description">Treatment Description</Label>

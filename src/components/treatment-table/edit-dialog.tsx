@@ -118,7 +118,7 @@ export default function EditServiceDialog({
         relatedServices: service.children.map((service) => ({
           serviceId: (service.service as unknown as Service).id,
           unit_price: service.unit_price,
-          quantity: 1,
+          quantity: service.quantity,
           order: service.order,
         })),
         materials: service.materials.map((material) => ({
@@ -498,16 +498,24 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
   const handleMoveUp = useMemo(() => {
     return () => {
       if (index === 0) return;
-      form.setValue(`relatedServices.${index}.order`, index - 1);
-      form.setValue(`relatedServices.${index - 1}.order`, index);
+      form.setValue(`relatedServices.${index}.order`, index - 1, {
+        shouldDirty: true,
+      });
+      form.setValue(`relatedServices.${index - 1}.order`, index, {
+        shouldDirty: true,
+      });
     };
   }, [form, index]);
 
   const handleMoveDown = useMemo(() => {
     return () => {
       if (index === length - 1) return;
-      form.setValue(`relatedServices.${index}.order`, index + 1);
-      form.setValue(`relatedServices.${index + 1}.order`, index);
+      form.setValue(`relatedServices.${index}.order`, index + 1, {
+        shouldDirty: true,
+      });
+      form.setValue(`relatedServices.${index + 1}.order`, index, {
+        shouldDirty: true,
+      });
     };
   }, [form, index, length]);
 

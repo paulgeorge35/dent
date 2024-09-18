@@ -1,7 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Service } from "prisma/generated/zod";
+import type { RelatedService, Service } from "prisma/generated/zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import AvatarComponent from "../shared/avatar-component";
@@ -10,7 +10,11 @@ type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
 };
 
-export function getColumns({ t }: GetColumnsProps): ColumnDef<Service>[] {
+export function getColumns({ t }: GetColumnsProps): ColumnDef<
+  Service & {
+    children: RelatedService[];
+  }
+>[] {
   return [
     {
       accessorKey: "name",
@@ -97,7 +101,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Service>[] {
       cell: ({ row }) => {
         return (
           <div>
-            {row.original.unit === "VISIT" ? (
+            {row.original.children.length > 0 ? (
               <span className="bg-purple-500/20 px-2 py-1 rounded-full text-purple-800 font-medium uppercase text-xs">
                 {t("page.treatments.fields.type.options.MULTI_VISIT")}
               </span>

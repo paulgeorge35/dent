@@ -143,6 +143,10 @@
   }
 }
 
+.text-area {
+  field-sizing: content;
+}
+
 .fc-view-harness,
 .fc-view-harness-active,
 .fc-view,
