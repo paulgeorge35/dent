@@ -6,6 +6,7 @@ import type { EventChangeAction } from "@/types";
 import { appointmentCreateInput } from "@/types/schema";
 import type { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { DateTime } from "luxon";
 import { createTRPCRouter, tenantProcedure } from "../trpc";
 
 const appointmentUpdateInput = z.object({
@@ -52,7 +53,14 @@ export const appointmentRouter = createTRPCRouter({
     .mutation(
       async ({
         ctx,
-        input: { patient: patientInput, serviceId, quiz, files, userId: resourceId,...input },
+        input: {
+          patient: patientInput,
+          serviceId,
+          quiz,
+          files,
+          userId: resourceId,
+          ...input
+        },
       }) => {
         const userId = ctx.session.user.id;
         const tenantId = ctx.session.user.tenantId;
@@ -333,5 +341,143 @@ export const appointmentRouter = createTRPCRouter({
     return await ctx.db.event.findMany({
       where: { userId, type: "DAY_OFF" },
     });
+  }),
+
+  stats: tenantProcedure
+    .input(z.enum(["currentMonth", "lastWeek", "currentWeek", "today"]))
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const now = DateTime.now();
+      const startDate = (() => {
+        switch (input) {
+          case "currentMonth":
+            return now.startOf("month");
+          case "lastWeek":
+            return now.minus({ weeks: 1 }).startOf("week");
+          case "currentWeek":
+            return now.startOf("week");
+          case "today":
+            return now.startOf("day");
+          default:
+            return now.startOf("day");
+        }
+      })();
+      const endDate = (() => {
+        switch (input) {
+          case "currentMonth":
+            return now;
+          case "lastWeek":
+            return now.minus({ weeks: 1 }).endOf("week");
+          case "currentWeek":
+            return now.endOf("week");
+          case "today":
+            return now;
+          default:
+            return now;
+        }
+      })();
+
+      const appointments = await ctx.db.event.groupBy({
+        by: ["date"],
+        where: {
+          userId,
+          type: "APPOINTMENT",
+          date: {
+            gte: startDate.toJSDate(),
+            lt: endDate.toJSDate(),
+          },
+        },
+        _count: {
+          id: true,
+        },
+      });
+
+      const dailyCounts = [];
+      let currentDate = startDate;
+      while (currentDate <= endDate) {
+        const appointmentForDay = appointments.find(
+          (a) =>
+            a.date.toDateString() === currentDate.toJSDate().toDateString(),
+        );
+        dailyCounts.push({
+          date: currentDate.toJSDate(),
+          count: appointmentForDay ? appointmentForDay._count.id : 0,
+        });
+        currentDate = currentDate.plus({ days: 1 });
+      }
+
+      return {
+        period: input,
+        dailyStats: dailyCounts,
+        startDate: startDate.toJSDate(),
+        endDate: endDate.toJSDate(),
+        total: appointments.reduce((acc, curr) => acc + curr._count.id, 0),
+      };
+    }),
+
+  commonTreatments: tenantProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    const services = await ctx.db.service.findMany({
+      where: {
+        visits: {
+          every: {
+            event: {
+              userId,
+              type: "APPOINTMENT",
+            },
+          },
+        },
+      },
+      include: {
+        visits: true,
+      },
+    });
+
+    return services
+      .map((service) => ({
+        name: service.name,
+        count: service.visits.length,
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  }),
+
+  today: tenantProcedure.query(async ({ ctx }) => {
+    const userId = ctx.session.user.id;
+
+    return await ctx.db.event
+      .findMany({
+        where: {
+          userId,
+          type: "APPOINTMENT",
+          status: {
+            not: "CANCELLED",
+          },
+          start: {
+            gte: DateTime.now().startOf("day").toJSDate(),
+            lt: DateTime.now().endOf("day").toJSDate(),
+          },
+        },
+        include: {
+          patient: true,
+          visits: {
+            include: {
+              service: true,
+            },
+          },
+        },
+      })
+      .then((appointments) => {
+        return appointments.map((appointment) => {
+          return {
+            id: appointment.id,
+            date: appointment.start,
+            patient: `${appointment.patient!.firstName} ${appointment.patient!.lastName}`,
+            service: appointment.visits[0]?.service?.name,
+            duration: appointment.visits[0]?.service?.duration,
+          };
+        });
+      });
   }),
 });

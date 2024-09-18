@@ -113,6 +113,7 @@
     "react-hotkeys-hook": "^4.5.1",
     "react-qr-code": "^2.0.12",
     "react-stately": "^3.31.1",
+    "recharts": "^2.12.7",
     "resend": "^3.2.0",
     "server-only": "^0.0.1",
     "simple-oauth2": "^5.0.0",
