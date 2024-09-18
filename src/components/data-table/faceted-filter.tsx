@@ -21,6 +21,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -33,6 +34,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   title,
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+  const t = useTranslations("table");
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   return (
@@ -135,7 +137,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     onSelect={() => column?.setFilterValue(undefined)}
                     className="justify-center text-center"
                   >
-                    Clear filters
+                    {t("clear-filters")}
                   </CommandItem>
                 </CommandGroup>
               </>

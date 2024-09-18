@@ -22,17 +22,17 @@ const SwitchView = React.forwardRef<
     {...props}
     ref={ref}
   >
-    <span className="absolute left-0 z-10 flex w-[calc((100%-8px)/2)] items-center justify-center group-data-[state=checked]:opacity-30">
-      {values[0].label}
-    </span>
-    <span className="absolute right-0 z-10 flex w-[calc((100%-8px)/2)] items-center justify-center group-data-[state=unchecked]:opacity-30">
-      {values[1].label}
-    </span>
     <SwitchPrimitives.Thumb
       className={cn(
         "pointer-events-none block h-8 w-[calc((100%-8px)/2)] rounded-sm bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%+8px)] data-[state=unchecked]:translate-x-0",
       )}
     />
+    <span className="absolute left-0 flex w-[calc((100%-8px)/2)] items-center justify-center group-data-[state=checked]:opacity-30">
+      {values[0].label}
+    </span>
+    <span className="absolute right-0 flex w-[calc((100%-8px)/2)] items-center justify-center group-data-[state=unchecked]:opacity-30">
+      {values[1].label}
+    </span>
   </SwitchPrimitives.Root>
 ));
 SwitchView.displayName = SwitchPrimitives.Root.displayName;

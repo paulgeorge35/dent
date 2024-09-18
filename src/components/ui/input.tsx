@@ -2,16 +2,18 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { LoadingSpinner } from "./spinner";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   placehold?: "string";
   search?: boolean;
   searchClassName?: string;
+  loading?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, search, searchClassName, ...props }, ref) => {
+  ({ className, type, search, searchClassName, loading, ...props }, ref) => {
     return search ? (
       <span
         className={cn(
@@ -29,6 +31,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...props}
         />
+        {loading && <LoadingSpinner className="text-blue-500 m-3" />}
       </span>
     ) : (
       <input

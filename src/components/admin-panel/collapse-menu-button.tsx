@@ -31,11 +31,14 @@ import {
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
+import { useHotkeys } from "react-hotkeys-hook";
+import { ShortcutKeys } from "../ui/shortcut-key";
 
 type Submenu = {
   href: string;
   label: string;
   active: boolean;
+  shortcut?: string;
 };
 
 interface CollapseMenuButtonProps {
@@ -55,6 +58,14 @@ export function CollapseMenuButton({
 }: CollapseMenuButtonProps) {
   const isSubmenuActive = submenus.some((submenu) => submenu.active);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive);
+
+  for (const submenu of submenus) {
+    if (submenu.shortcut) {
+      useHotkeys(submenu.shortcut, () => {
+        document.getElementById(submenu.shortcut!)?.click();
+      });
+    }
+  }
 
   return isOpen ? (
     <Collapsible
@@ -103,8 +114,9 @@ export function CollapseMenuButton({
         </Button>
       </CollapsibleTrigger>
       <CollapsibleContent className="data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down overflow-hidden">
-        {submenus.map(({ href, label, active }, index) => (
+        {submenus.map(({ href, label, active, shortcut }, index) => (
           <Button
+            id={shortcut}
             key={index}
             variant={active ? "secondary" : "ghost"}
             className="mb-1 h-10 w-full justify-start"
@@ -124,6 +136,9 @@ export function CollapseMenuButton({
               >
                 {label}
               </p>
+              {shortcut && (
+                <ShortcutKeys shortcut={shortcut} className="ml-auto" />
+              )}
             </Link>
           </Button>
         ))}

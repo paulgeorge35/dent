@@ -14,7 +14,7 @@ export default function renderTitle(calendarRef: RefObject<FullCalendar>) {
   );
 
   return (
-    <h1 className="text-2xl font-semibold">
+    <h1 className="text-2xl font-semibold text-balance text-center">
       {isRange
         ? `${DateTime.fromJSDate(calendar.view.activeStart).toFormat(
             "EEE, d MMM yyyy",

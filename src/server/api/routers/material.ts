@@ -48,6 +48,10 @@ export const materialRouter = createTRPCRouter({
         .object({
           search: z.string().optional(),
           name: z.string().optional(),
+          tags: z
+            .string()
+            .optional()
+            .transform((val) => val?.split(".")),
         })
         .merge(pagination)
         .merge(z.object({ sort: sort })),
@@ -58,6 +62,7 @@ export const materialRouter = createTRPCRouter({
         input: {
           search,
           name,
+          tags,
           page,
           per_page,
           sort: { order, orderBy },
@@ -88,6 +93,9 @@ export const materialRouter = createTRPCRouter({
                   ],
                 }
               : {}),
+            ...(tags && {
+              tags: { hasEvery: tags },
+            }),
           },
 
           orderBy: { [orderBy]: order },
@@ -122,6 +130,9 @@ export const materialRouter = createTRPCRouter({
                   ],
                 }
               : {}),
+            ...(tags && {
+              tags: { hasEvery: tags },
+            }),
           },
         });
 
@@ -200,5 +211,19 @@ export const materialRouter = createTRPCRouter({
       where: { id: input },
       data: { isActive: false },
     });
+  }),
+
+  listTags: tenantProcedure.query(async ({ ctx }) => {
+    return await ctx.db.material
+      .findMany({
+        select: {
+          tags: true,
+        },
+      })
+      .then((materials) => {
+        return materials
+          .flatMap((material) => material.tags)
+          .filter((tag, index, self) => self.indexOf(tag) === index);
+      });
   }),
 });

@@ -1,10 +1,10 @@
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -179,6 +179,7 @@ export default function PatientForm({ form }: PatientFormProps) {
               <FormControl>
                 <CountySelect
                   name={field.value}
+                  value={field.value}
                   onSelect={(value) => {
                     field.onChange(value);
                     setCounty(value);
@@ -209,6 +210,7 @@ export default function PatientForm({ form }: PatientFormProps) {
                   onSelect={(value) => {
                     field.onChange(value);
                   }}
+                  value={field.value}
                   cities={cities ?? []}
                   loading={isFetchingCities}
                 />

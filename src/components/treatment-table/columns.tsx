@@ -1,26 +1,24 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { Material } from "prisma/generated/zod";
+import type { Service } from "prisma/generated/zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
-import { Info } from "lucide-react";
-import { useLocale } from "next-intl";
 import AvatarComponent from "../shared/avatar-component";
-import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import MaterialRowActions from "./row-actions";
 
 type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
 };
 
-export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
-  const locale = useLocale();
+export function getColumns({ t }: GetColumnsProps): ColumnDef<Service>[] {
   return [
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("fields.name.label")} />
+        <DataTableColumnHeader
+          column={column}
+          title={t("page.treatments.fields.name.label")}
+        />
       ),
       cell: ({ row }) => {
         return (
@@ -45,20 +43,43 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("fields.unit_price.label")}
+          title={t("page.treatments.fields.unit_price.label")}
         />
       ),
       cell: ({ row }) => {
         return (
-          <div className="horizontal center-v gap-2 group">
+          <div className="horizontal center-v gap-2">
             <span className="font-light px-1 rounded-full bg-muted border border-muted-foreground/20 text-xs text-muted-foreground">
               RON
             </span>
             <span className="font-medium">
               {Number((row.getValue("unit_price") as number) / 100).toFixed(2)}
             </span>
-            <span className="font-light text-muted-foreground">
-              per {row.original.unit}
+            {row.original.unit !== "VISIT" && (
+              <span className="font-light text-muted-foreground lowercase">
+                {`per ${t(`enums.serviceUnit.${row.original.unit}`)}`}
+              </span>
+            )}
+          </div>
+        );
+      },
+      enableSorting: true,
+    },
+    {
+      accessorKey: "duration",
+      header: ({ column }) => (
+        <DataTableColumnHeader
+          column={column}
+          title={t("page.treatments.fields.duration.label")}
+        />
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="horizontal items-baseline gap-1">
+            <span className="text-muted-foreground">~</span>
+            {(row.original.duration / 60).toFixed(1)}
+            <span className="text-xs text-muted-foreground">
+              {t("page.treatments.fields.duration.unit")}
             </span>
           </div>
         );
@@ -66,29 +87,25 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       enableSorting: true,
     },
     {
-      accessorKey: "stock",
+      accessorKey: "type",
       header: ({ column }) => (
         <DataTableColumnHeader
           column={column}
-          title={t("fields.stock.label")}
+          title={t("page.treatments.fields.type.label")}
         />
       ),
       cell: ({ row }) => {
-        return row.original.keepInventory ? (
-          <div className="horizontal center-v gap-2 group">
-            {`${row.original.stock} ${row.original.unit}`}
-          </div>
-        ) : (
+        return (
           <div>
-            <Tooltip>
-              <TooltipTrigger className="italic text-muted-foreground horizontal center-v gap-2">
-                {t("no-inventory")}
-                <Info className="size-4" />
-              </TooltipTrigger>
-              <TooltipContent>
-                {t("fields.keepInventory.description")}
-              </TooltipContent>
-            </Tooltip>
+            {row.original.unit === "VISIT" ? (
+              <span className="bg-purple-500/20 px-2 py-1 rounded-full text-purple-800 font-medium uppercase text-xs">
+                {t("page.treatments.fields.type.options.MULTI_VISIT")}
+              </span>
+            ) : (
+              <span className="bg-teal-500/20 px-2 py-1 rounded-full text-teal-800 font-medium uppercase text-xs">
+                {t("page.treatments.fields.type.options.SINGLE_VISIT")}
+              </span>
+            )}
           </div>
         );
       },
@@ -97,7 +114,10 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
     {
       accessorKey: "tags",
       header: ({ column }) => (
-        <DataTableColumnHeader column={column} title={t("fields.tags.label")} />
+        <DataTableColumnHeader
+          column={column}
+          title={t("page.treatments.fields.tags.label")}
+        />
       ),
       cell: ({ row }) => {
         const tags = row.original.tags;
@@ -127,17 +147,6 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       },
       enableSorting: false,
       enableColumnFilter: true,
-    },
-    {
-      accessorKey: "actions",
-      header: "",
-      cell: ({ row }) => {
-        return (
-          <div>
-            <MaterialRowActions material={row.original} disabled={false} />
-          </div>
-        );
-      },
     },
   ];
 }

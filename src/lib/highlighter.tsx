@@ -7,10 +7,8 @@ export function highlightText(text: string, highlight: string) {
         <span
           key={i}
           style={
-            part.toLowerCase() === highlight.toLowerCase()
+            part.replace(/\s/g, "").toLowerCase() === highlight.toLowerCase()
               ? {
-                  // fontWeight: 'bold',
-                  // textDecoration: 'underline',
                   backgroundColor: "#ffdf43",
                   color: "#020817",
                 }

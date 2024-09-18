@@ -14,6 +14,7 @@ type Submenu = {
   href: string;
   label: string;
   active: boolean;
+  shortcut?: string;
 };
 
 type Menu = {
@@ -23,6 +24,7 @@ type Menu = {
   icon: LucideIcon | React.ComponentType<LucideProps>;
   submenus: Submenu[];
   adminOnly?: boolean;
+  shortcut?: string;
 };
 
 type Group = {
@@ -43,6 +45,7 @@ export function getMenuList(pathname: string): Group[] {
           active: pathname.includes("/dashboard"),
           icon: LayoutGrid,
           submenus: [],
+          shortcut: "D",
         },
       ],
     },
@@ -59,6 +62,7 @@ export function getMenuList(pathname: string): Group[] {
               href: "/appointments/me",
               label: "my-appointments",
               active: pathname === "/appointments/me",
+              shortcut: "A",
             },
             {
               href: "/appointments/all",
@@ -73,6 +77,7 @@ export function getMenuList(pathname: string): Group[] {
           active: pathname.includes("/patients"),
           icon: SquareUser,
           submenus: [],
+          shortcut: "P",
         },
         {
           href: "/staff",
@@ -80,6 +85,7 @@ export function getMenuList(pathname: string): Group[] {
           active: pathname.includes("/staff"),
           icon: Users,
           submenus: [],
+          shortcut: "S",
         },
         {
           href: "/treatments",
@@ -87,6 +93,7 @@ export function getMenuList(pathname: string): Group[] {
           active: pathname.includes("/treatments"),
           icon: Stethoscope,
           submenus: [],
+          shortcut: "T",
         },
       ],
     },
@@ -100,6 +107,7 @@ export function getMenuList(pathname: string): Group[] {
           icon: Hammer,
           adminOnly: true,
           submenus: [],
+          shortcut: "H",
         },
         {
           href: "/materials",
@@ -108,6 +116,7 @@ export function getMenuList(pathname: string): Group[] {
           icon: Pill,
           adminOnly: true,
           submenus: [],
+          shortcut: "M",
         },
       ],
     },

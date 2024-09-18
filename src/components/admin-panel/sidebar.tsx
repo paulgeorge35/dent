@@ -3,16 +3,14 @@ import { SidebarToggle } from "@/components/admin-panel/sidebar-toggle";
 import AccountButton from "@/components/layout/account-button";
 import { Shell } from "@/components/layout/shell";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { Box, Plus, Settings } from "lucide-react";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import GlobalSearch from "../global-search";
 import LocaleSwitch from "../shared/locale-switch";
 
 export function Sidebar({
@@ -26,9 +24,7 @@ export function Sidebar({
   accounts: TenantAccount[];
   locale: "en" | "ro";
 }) {
-  const t = useTranslations("layout.sidebar");
   const sidebar = useStore(useSidebarToggle, (state) => state);
-  const [isInputFocused, setIsInputFocused] = useState(false);
 
   if (!sidebar) return null;
 
@@ -37,27 +33,20 @@ export function Sidebar({
       <Shell
         variant="nav"
         className={cn(
-          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-90px)]",
+          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[50]", // Add z-index here
           {
-            "lg:w-[calc(100vw-288px)]": sidebar?.isOpen,
+            "lg:w-[calc(100vw-289px)]": sidebar?.isOpen,
           },
         )}
       >
+        <SidebarToggle
+          isOpen={sidebar?.isOpen}
+          setIsOpen={sidebar?.setIsOpen}
+        />
         <h1 className="mr-auto flex-shrink-0 text-3xl font-bold tracking-tight">
           {title}
         </h1>
-        <Input
-          type="text"
-          placeholder={t("search.placeholder")}
-          search
-          className="w-full text-base"
-          searchClassName={cn(
-            "rounded-full bg-muted h-10 debug transition-[width] duration-300 ease-in-out",
-            isInputFocused ? "w-[calc(100%-200px)]" : "w-80",
-          )}
-          onFocus={() => setIsInputFocused(true)}
-          onBlur={() => setIsInputFocused(false)}
-        />
+        <GlobalSearch />
         <Button size="icon" className="flex-shrink-0 rounded-full">
           <Plus />
         </Button>
@@ -79,14 +68,10 @@ export function Sidebar({
       </Shell>
       <aside
         className={cn(
-          "fixed left-0 top-0 z-20 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0",
+          "fixed left-0 top-0 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0 z-[40]", // Lower z-index here
           sidebar?.isOpen === false ? "w-[90px]" : "w-72",
         )}
       >
-        <SidebarToggle
-          isOpen={sidebar?.isOpen}
-          setIsOpen={sidebar?.setIsOpen}
-        />
         <div className="relative flex h-full flex-col overflow-y-auto bg-background px-3 py-4 shadow-md dark:shadow-zinc-800">
           <Button
             className={cn(

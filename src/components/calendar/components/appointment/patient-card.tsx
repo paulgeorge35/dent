@@ -65,7 +65,7 @@ export default function PatientCard({
           </SelectTrigger>
           <SelectContent className="z-50">
             {Object.values(EventStatusSchema.Values).map((status) => (
-              <SelectItem key={status} value={status}>
+              <SelectItem key={status} value={status} className="cursor-pointer hover:bg-muted">
                 <span className="horizontal center-v gap-2">
                   <StatusBullet status={status} />
                   {translations.en.event.status[status]}

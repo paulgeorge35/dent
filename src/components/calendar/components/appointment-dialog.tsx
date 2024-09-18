@@ -108,7 +108,7 @@ export default function AppointmentDialog({
           </HeaderComponent>
           {event && (
             <ScrollArea className="relative my-4 grow">
-              <span className="vertical gap-8">
+              <span className="vertical gap-8 bg-red-200 h-[2000px]">
                 {event?.patient && (
                   <PatientCard
                     patient={event.patient}
@@ -361,7 +361,6 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             </motion.div>
           </ScrollArea>
         </AnimatePresence>
-        <ScrollArea className="relative grow">Test</ScrollArea>
         <FooterComponent className="p-6">
           <ConfirmationDialog
             open={confirmationDialog.value}

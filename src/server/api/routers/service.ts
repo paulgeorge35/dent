@@ -11,6 +11,7 @@ const createMaterialSchema = z.object({
 });
 
 const createRelatedServiceSchema = z.object({
+  order: z.number(),
   quantity: z.number(),
   unit_price: z.number(),
   serviceId: z.string(),
@@ -29,69 +30,154 @@ const createSchema = z.object({
   relatedServices: z.array(createRelatedServiceSchema),
 });
 
-const updateSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  description: z.string().optional(),
-  unit_price: z.number(),
-  unit: ServiceUnitSchema,
-  duration: z.number().optional(),
-  image: z.string().optional(),
-  tags: z.array(z.string()),
-  isActive: z.boolean().optional(),
-  categoryId: z.string().optional().nullable(),
-  materials: z
-    .array(
-      z.object({
-        id: z.string(),
-        quantity: z.number(),
-        unit_price: z.number(),
-      }),
-    )
-    .optional(),
-  relatedServices: z
-    .array(
-      z.object({
-        id: z.string(),
-        quantity: z.number(),
-        unit_price: z.number(),
-        serviceId: z.string(),
-      }),
-    )
-    .optional(),
+const updateSchema = createSchema.merge(z.object({ id: z.string() }));
+
+const pagination = z.object({
+  page: z.number().optional().default(1),
+  per_page: z.number().optional(),
 });
+
+const sort = z
+  .string()
+  .default("createdAt.asc")
+  .transform((str) => {
+    const [orderBy, order] = str.split(".");
+    const validOrderBy = [
+      "id",
+      "name",
+      "unit_price",
+      "duration",
+      "createdAt",
+      "updatedAt",
+    ];
+    const validOrder = ["asc", "desc"];
+
+    return {
+      orderBy:
+        orderBy && validOrderBy.includes(orderBy) ? orderBy : "createdAt",
+      order: order && validOrder.includes(order) ? order : "asc",
+    };
+  });
 
 export const serviceRouter = createTRPCRouter({
   list: tenantProcedure
     .input(
+      z
+        .object({
+          search: z.string().optional(),
+          name: z.string().optional(),
+          tags: z
+            .string()
+            .optional()
+            .transform((val) => val?.split(".")),
+        })
+        .merge(pagination)
+        .merge(z.object({ sort: sort })),
+    )
+    .query(
+      async ({
+        ctx,
+        input: {
+          search,
+          name,
+          tags,
+          page,
+          per_page,
+          sort: { order, orderBy },
+        },
+      }) => {
+        const tenantId = ctx.session.user!.tenantId;
+
+        const content = await ctx.db.service.findMany({
+          where: {
+            tenantId,
+            ...(name
+              ? {
+                  name: { contains: name, mode: "insensitive" },
+                }
+              : {}),
+            ...(search && {
+              OR: [
+                { name: { contains: search } },
+                { description: { contains: search } },
+              ],
+            }),
+            ...(tags && {
+              tags: { hasEvery: tags },
+            }),
+          },
+          orderBy: { [orderBy]: order },
+          skip: page && per_page ? (page - 1) * per_page : undefined,
+          take: per_page,
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
+          },
+        });
+
+        const count = await ctx.db.service.count({
+          where: {
+            tenantId,
+            ...(name
+              ? {
+                  name: { contains: name, mode: "insensitive" },
+                }
+              : {}),
+            ...(search && {
+              OR: [
+                { name: { contains: search } },
+                { description: { contains: search } },
+              ],
+            }),
+            ...(tags && {
+              tags: { hasEvery: tags },
+            }),
+          },
+        });
+
+        return {
+          content,
+          count,
+          pageCount: Math.ceil(count / (per_page ?? 1)),
+        };
+      },
+    ),
+
+  listSimpleServices: tenantProcedure
+    .input(
       z.object({
-        type: z.enum(["SINGLE", "MULTI"]).optional().default("SINGLE"),
+        search: z.string().optional(),
       }),
     )
-    .query(async ({ ctx, input: { type } }) => {
+    .query(async ({ ctx, input }) => {
       const tenantId = ctx.session.user!.tenantId;
 
-      const services = await ctx.db.service.findMany({
+      return ctx.db.service.findMany({
         where: {
           tenantId,
-          ...(type === "SINGLE" && {
-            children: {
-              none: {},
-            },
+          isActive: true,
+          children: {
+            none: {},
+          },
+          ...(input.search && {
+            name: { contains: input.search },
           }),
         },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
-        },
       });
-      return services;
     }),
 
   get: tenantProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const service = await ctx.db.service.findUnique({
       where: {
         id: input,
+      },
+      include: {
+        children: true,
+        materials: {
+          include: {
+            material: true,
+          },
+        },
       },
       cacheStrategy: {
         ttl: env.DEFAULT_TTL,
@@ -143,58 +229,54 @@ export const serviceRouter = createTRPCRouter({
   update: adminProcedure
     .input(updateSchema)
     .mutation(async ({ ctx, input }) => {
-      const { id, materials, relatedServices, ...data } = input;
+      const { relatedServices, materials, id, ...rest } = input;
       const tenantId = ctx.session.user!.tenantId;
 
-      const serviceUpdateData = {
-        ...data,
-        tenantId,
-      };
-
       return await ctx.db.$transaction(async (tx) => {
-        if (materials) {
-          for (const material of materials) {
-            await tx.service.update({
-              where: { id },
-              data: {
-                materials: {
-                  updateMany: {
-                    where: { id: material.id },
-                    data: {
-                      quantity: material.quantity,
-                      unit_price: material.unit_price,
-                    },
-                  },
-                },
-              },
-            });
-          }
-        }
-
-        if (relatedServices) {
-          for (const relatedService of relatedServices) {
-            await tx.service.update({
-              where: { id },
-              data: {
-                children: {
-                  updateMany: {
-                    where: { id: relatedService.id },
-                    data: {
-                      quantity: relatedService.quantity,
-                      unit_price: relatedService.unit_price,
-                      service: { connect: { id: relatedService.serviceId } },
-                    },
-                  },
-                },
-              },
-            });
-          }
-        }
-
-        return await tx.service.update({
-          where: { id },
-          data: serviceUpdateData,
+        const services = await tx.service.findMany({
+          where: {
+            id: { in: relatedServices.map((service) => service.serviceId) },
+          },
+          cacheStrategy: {
+            ttl: env.DEFAULT_TTL,
+            swr: env.DEFAULT_SWR,
+          },
         });
+
+        const service = await tx.service.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            tenantId,
+            ...rest,
+            materials: {
+              createMany: { data: materials },
+            },
+            children: {
+              createMany: {
+                data: relatedServices.map((service) => ({
+                  quantity: service.quantity,
+                  unit_price: service.unit_price,
+                  service: services.find(
+                    (s) => s.id === service.serviceId,
+                  ) as unknown as Prisma.JsonObject,
+                })),
+              },
+            },
+          },
+        });
+
+        await tx.service.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            isActive: false,
+          },
+        });
+
+        return service;
       });
     }),
 
@@ -208,5 +290,29 @@ export const serviceRouter = createTRPCRouter({
       },
     });
     return service;
+  }),
+
+  createCategory: adminProcedure
+    .input(z.object({ name: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.db.serviceCategory.create({
+        data: {
+          name: input.name,
+        },
+      });
+    }),
+
+  listTags: tenantProcedure.query(async ({ ctx }) => {
+    return ctx.db.service
+      .findMany({
+        select: {
+          tags: true,
+        },
+      })
+      .then((services) => {
+        return services
+          .flatMap((service) => service.tags)
+          .filter((tag, index, self) => self.indexOf(tag) === index);
+      });
   }),
 });

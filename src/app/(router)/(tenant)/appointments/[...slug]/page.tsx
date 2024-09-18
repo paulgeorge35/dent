@@ -40,6 +40,7 @@ export default async function Appointments({ params }: AppointmentsProps) {
       firstDayOfWeek={me.firstDayOfWeek}
       showWeekends={me.showWeekends}
       workingHours={me.workingHours as WorkingHours[]}
+      isAdmin={session.user.role === "ADMIN"}
     />
   );
 }

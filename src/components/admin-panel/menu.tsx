@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
+import { useHotkeys } from "react-hotkeys-hook";
+import { ShortcutKeys } from "../ui/shortcut-key";
 import CurrentTenant from "./tenant-card";
 
 interface MenuProps {
@@ -29,7 +31,7 @@ interface MenuProps {
 export function Menu({ isOpen, accounts, session }: MenuProps) {
   const t = useTranslations("layout.sidebar");
   const pathname = usePathname();
-  const menuList = getMenuList(pathname);
+  const menuList = getMenuList(pathname ?? "");
 
   const tenant = useMemo(
     () =>
@@ -37,6 +39,16 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
         ?.tenant,
     [accounts, session.user?.tenantId],
   );
+
+  for (const group of menuList) {
+    for (const menu of group.menus) {
+      if (menu.shortcut && menu.href) {
+        useHotkeys(menu.shortcut, () => {
+          document.getElementById(menu.shortcut!)?.click();
+        });
+      }
+    }
+  }
 
   return (
     <ScrollArea className="mt-2 [&>div>div[style]]:!block">
@@ -69,13 +81,17 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                 <p className="pb-2" />
               )}
               {menus.map(
-                ({ href, label, icon: Icon, active, submenus }, index) =>
+                (
+                  { href, label, icon: Icon, active, submenus, shortcut },
+                  index,
+                ) =>
                   submenus.length === 0 ? (
                     <div className="w-full" key={index}>
                       <TooltipProvider disableHoverableContent>
                         <Tooltip delayDuration={100}>
                           <TooltipTrigger asChild>
                             <Button
+                              id={shortcut}
                               variant={active ? "secondary" : "ghost"}
                               className="mb-1 h-10 w-full justify-start"
                               asChild
@@ -98,12 +114,22 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                                     `links.sections.${groupLabel}.items.${label}`,
                                   )}
                                 </p>
+                                {shortcut && isOpen && (
+                                  <ShortcutKeys
+                                    shortcut={shortcut}
+                                    className="ml-auto"
+                                  />
+                                )}
                               </Link>
                             </Button>
                           </TooltipTrigger>
                           {isOpen === false && (
-                            <TooltipContent side="right">
+                            <TooltipContent
+                              side="right"
+                              className="horizontal gap-2 center-v"
+                            >
                               {t(`links.sections.${groupLabel}.items.${label}`)}
+                              {shortcut && <ShortcutKeys shortcut={shortcut} />}
                             </TooltipContent>
                           )}
                         </Tooltip>

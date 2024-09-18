@@ -224,6 +224,9 @@
         }
       }
     },
+    "user": {
+      "title": "User Profile"
+    },
     "staff": {
       "title": "Staff",
       "manage-staff": "Manage staff",
@@ -251,6 +254,9 @@
           "label": "Actions"
         }
       }
+    },
+    "patient": {
+      "title": "Patient Profile"
     },
     "patients": {
       "title": "Patients",
@@ -314,7 +320,85 @@
       }
     },
     "treatments": {
-      "title": "Treatments"
+      "title": "Treatments",
+      "multiple-visits": {
+        "title": "Setup multiple visits",
+        "cancel": "Cancel",
+        "confirm": "Save"
+      },
+      "close": {
+        "trigger": "Cancel",
+        "confirmation": {
+          "title": "Are you sure you want to close this dialog?",
+          "description": "This action cannot be undone and all changes will be lost.",
+          "confirm": "Yes"
+        }
+      },
+      "add": {
+        "trigger": "Add treatment",
+        "status": {
+          "success": "Treatment added successfully"
+        },
+        "dialog": {
+          "title": "Add treatment",
+          "description": "Add a new treatment to the system.",
+          "cancel": "Cancel",
+          "confirm": "Create"
+        }
+      },
+      "edit": {
+        "trigger": "Edit treatment",
+        "status": {
+          "success": "Treatment updated successfully"
+        },
+        "dialog": {
+          "title": "Edit treatment",
+          "description": "Modify the treatment details",
+          "cancel": "Cancel",
+          "confirm": "Save"
+        }
+      },
+      "fields": {
+        "name": {
+          "label": "Name"
+        },
+        "description": {
+          "label": "Description"
+        },
+        "unit_price": {
+          "label": "Price"
+        },
+        "unit": {
+          "label": "Scope",
+          "placeholder": "Select a scope"
+        },
+        "duration": {
+          "label": "Estimated duration",
+          "description": "In minutes",
+          "unit": "hour(s)"
+        },
+        "tags": {
+          "label": "Tags",
+          "placeholder": "Press ENTER after each tag or separate them with commas...",
+          "description": "Use tags to categorize the treatment."
+        },
+        "type": {
+          "label": "Type",
+          "options": {
+            "SINGLE_VISIT": "Single visit",
+            "MULTI_VISIT": "Multiple visits"
+          }
+        },
+        "search": {
+          "label": "Search",
+          "placeholder": "Search for a treatment..."
+        },
+        "setup-multivisit": {
+          "label": "Setup multiple visits",
+          "description": "If required, setup multiple visits for this treatment.",
+          "button": "Setup"
+        }
+      }
     },
     "specialities": {
       "title": "Specialities",
@@ -778,6 +862,158 @@
         "COMPLETED": "Completed",
         "RESCHEDULED": "Rescheduled"
       }
+    },
+    "serviceUnit": {
+      "TOOTH": "Tooth",
+      "QUAD": "Quadrant",
+      "ARCH": "Arch",
+      "VISIT": "Visit"
+    },
+    "tooth": {
+      "upper": {
+        "q1": {
+          "11": {
+            "label": "11",
+            "description": "Upper central incisor"
+          },
+          "12": {
+            "label": "12",
+            "description": "Upper lateral incisor"
+          },
+          "13": {
+            "label": "13",
+            "description": "Upper canine"
+          },
+          "14": {
+            "label": "14",
+            "description": "Upper first premolar"
+          },
+          "15": {
+            "label": "15",
+            "description": "Upper second premolar"
+          },
+          "16": {
+            "label": "16",
+            "description": "Upper first molar"
+          },
+          "17": {
+            "label": "17",
+            "description": "Upper second molar"
+          },
+          "18": {
+            "label": "18",
+            "description": "Upper third molar",
+            "aux": "Wisdom tooth"
+          }
+        },
+        "q2": {
+          "21": {
+            "label": "21",
+            "description": "Upper central incisor"
+          },
+          "22": {
+            "label": "22",
+            "description": "Upper lateral incisor"
+          },
+          "23": {
+            "label": "23",
+            "description": "Upper canine"
+          },
+          "24": {
+            "label": "24",
+            "description": "Upper first premolar"
+          },
+          "25": {
+            "label": "25",
+            "description": "Upper second premolar"
+          },
+          "26": {
+            "label": "26",
+            "description": "Upper first molar"
+          },
+          "27": {
+            "label": "27",
+            "description": "Upper second molar"
+          },
+          "28": {
+            "label": "28",
+            "description": "Upper third molar",
+            "aux": "Wisdom tooth"
+          }
+        }
+      },
+      "lower": {
+        "q3": {
+          "31": {
+            "label": "31",
+            "description": "Lower central incisor"
+          },
+          "32": {
+            "label": "32",
+            "description": "Lower lateral incisor"
+          },
+          "33": {
+            "label": "33",
+            "description": "Lower canine"
+          },
+          "34": {
+            "label": "34",
+            "description": "Lower first premolar"
+          },
+          "35": {
+            "label": "35",
+            "description": "Lower second premolar"
+          },
+          "36": {
+            "label": "36",
+            "description": "Lower first molar"
+          },
+          "37": {
+            "label": "37",
+            "description": "Lower second molar"
+          },
+          "38": {
+            "label": "38",
+            "description": "Lower third molar",
+            "aux": "Wisdom tooth"
+          }
+        },
+        "q4": {
+          "41": {
+            "label": "41",
+            "description": "Lower central incisor"
+          },
+          "42": {
+            "label": "42",
+            "description": "Lower lateral incisor"
+          },
+          "43": {
+            "label": "43",
+            "description": "Lower canine"
+          },
+          "44": {
+            "label": "44",
+            "description": "Lower first premolar"
+          },
+          "45": {
+            "label": "45",
+            "description": "Lower second premolar"
+          },
+          "46": {
+            "label": "46",
+            "description": "Lower first molar"
+          },
+          "47": {
+            "label": "47",
+            "description": "Lower second molar"
+          },
+          "48": {
+            "label": "48",
+            "description": "Lower third molar",
+            "aux": "Wisdom tooth"
+          }
+        }
+      }
     }
   },
   "fields": {
@@ -816,6 +1052,13 @@
       "search": "Search county...",
       "loading": "Loading...",
       "no-results": "No results"
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Select city...",
+      "search": "Search city...",
+      "loading": "Loading...",
+      "no-results": "No results"
     }
   },
   "table": {
@@ -824,6 +1067,7 @@
     "view-options": "View",
     "toggle-columns": "Toggle columns",
     "reset-filters": "Reset",
+    "clear-filters": "Clear filters",
     "pagination": {
       "rows-per-page": "Rows per page",
       "page": "Page",

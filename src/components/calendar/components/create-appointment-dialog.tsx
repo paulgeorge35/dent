@@ -24,8 +24,7 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { useRef, useTransition } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useBoolean, useNumber } from "react-hanger";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -131,6 +130,7 @@ export default function CreateAppointmentDialog({
       try {
         await createAppointment({
           ...values,
+          userId: resourceId,
           quiz: {
             answers: values.quiz.answers ?? [],
           },

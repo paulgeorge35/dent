@@ -25,7 +25,7 @@ import useMediaQuery from "@/hooks/use-media-query";
 import { useTranslations } from "next-intl";
 
 type ConfirmationDialogProps = {
-  trigger: React.ReactNode;
+  trigger?: React.ReactNode;
   title: string;
   description: string;
   confirmButtonText: string;
@@ -59,7 +59,7 @@ export default function ConfirmationDialog({
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
-      <CredenzaTrigger>{trigger}</CredenzaTrigger>
+      {trigger && <CredenzaTrigger>{trigger}</CredenzaTrigger>}
       <CredenzaContent>
         <CredenzaHeader>
           <CredenzaTitle>{title}</CredenzaTitle>

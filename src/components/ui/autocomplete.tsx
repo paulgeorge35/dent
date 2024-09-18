@@ -18,6 +18,7 @@ export type Option<T> = {
 };
 
 type AutoCompleteProps<T> = {
+  id?: string;
   search: string;
   setSearch: (search: string) => void;
   options: Option<T>[];
@@ -31,6 +32,7 @@ type AutoCompleteProps<T> = {
 };
 
 export const AutoComplete = <T,>({
+  id,
   search,
   setSearch,
   options,
@@ -95,16 +97,17 @@ export const AutoComplete = <T,>({
   );
 
   return (
-    <CommandPrimitive onKeyDown={handleKeyDown} className={cn("", className)}>
+    <CommandPrimitive onKeyDown={handleKeyDown} className={cn("shadow-sm", className)}>
       <div>
         <CommandInput
+          id={id}
           ref={inputRef}
           value={search}
           onValueChange={setSearch}
           onBlur={handleBlur}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="text-base"
+          className="text-sm h-9"
         />
       </div>
       <div

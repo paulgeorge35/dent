@@ -23,6 +23,7 @@ import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import type { RefObject } from "react";
+import AnimatedNumber from "react-animated-numbers";
 import renderTitle from "./renderTitle";
 
 interface CalendarToolbarProps {
@@ -69,7 +70,11 @@ export default function CalendarToolbar({
       <div className="flex items-center justify-start gap-2">
         <CalendarCheck className="size-14 rounded-lg bg-muted p-3 text-muted-foreground" />
         <span className="text-3xl font-medium">
-          {appointments?.length ?? "-"}
+          {appointments ? (
+            <AnimatedNumber animateToNumber={appointments.length} />
+          ) : (
+            "-"
+          )}
         </span>
         <span className="text-lg text-muted-foreground/80 lowercase">
           {t("total-appointments")}
@@ -94,7 +99,7 @@ export default function CalendarToolbar({
         <Button
           size="icon"
           variant="ghost"
-          className="mr-[-12px] rounded-full text-muted-foreground"
+          className="mr-[-12px] rounded-full text-muted-foreground shrink-0"
           onClick={() => calendarRef.current?.getApi().prev()}
         >
           <ChevronLeft />
@@ -102,7 +107,7 @@ export default function CalendarToolbar({
         <Button
           size="icon"
           variant="ghost"
-          className="rounded-full text-muted-foreground"
+          className="rounded-full text-muted-foreground shrink-0"
           onClick={() => calendarRef.current?.getApi().next()}
         >
           <ChevronRight />

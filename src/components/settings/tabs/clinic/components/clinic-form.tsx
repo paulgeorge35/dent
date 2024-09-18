@@ -2,7 +2,7 @@
 
 import { CountySelect } from "@/components/address-input/county-input";
 import AvatarInput from "@/components/dropzone-input/avatar-v2";
-import { getPhoneData, PhoneInput } from "@/components/phone-input";
+import { PhoneInput, getPhoneData } from "@/components/phone-input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -188,6 +188,7 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
                       onSelect={(value) => {
                         field.onChange(value);
                       }}
+                      value={field.value ?? ""}
                       counties={counties ?? []}
                       loading={isFetchingCounties}
                     />

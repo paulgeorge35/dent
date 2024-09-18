@@ -8,6 +8,7 @@ import * as React from "react";
 import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";
 
+import { api } from "@/trpc/react";
 import type { Material } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { getColumns } from "./columns";
@@ -24,6 +25,7 @@ interface MaterialsTableProps {
 export function MaterialTable({ materials }: MaterialsTableProps) {
   const t = useTranslations("page.materials");
   const { content, pageCount } = materials;
+  const { data: tags } = api.material.listTags.useQuery();
 
   const columns = React.useMemo<ColumnDef<Material>[]>(
     () => getColumns({ t }),
@@ -35,6 +37,15 @@ export function MaterialTable({ materials }: MaterialsTableProps) {
       label: t("fields.search.label"),
       value: "name",
       placeholder: t("fields.search.placeholder"),
+    },
+    {
+      label: t("fields.tags.label"),
+      value: "tags",
+      placeholder: t("fields.tags.placeholder"),
+      options: tags?.map((tag) => ({
+        label: tag,
+        value: tag,
+      })),
     },
   ];
 

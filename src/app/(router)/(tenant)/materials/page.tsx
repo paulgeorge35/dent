@@ -14,6 +14,7 @@ const searchParamsSchema = z.object({
   per_page: z.coerce.number().default(10),
   sort: z.string().optional().default("createdAt.desc"),
   name: z.string().optional(),
+  tags: z.string().optional(),
 });
 
 export interface MaterialsPageProps {

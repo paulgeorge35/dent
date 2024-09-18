@@ -74,7 +74,7 @@ export const AuthTokenScalarFieldEnumSchema = z.enum(['id','type','token','expir
 
 export const InvitationScalarFieldEnumSchema = z.enum(['id','email','role','token','expires','invitedById','userId','createdAt','updatedAt']);
 
-export const PatientScalarFieldEnumSchema = z.enum(['id','firstName','lastName','gender','dob','email','phone','city','county','status','smsNotifications','emailNotifications','userId','tenantId','createdAt','updatedAt']);
+export const PatientScalarFieldEnumSchema = z.enum(['id','firstName','lastName','gender','dob','email','phone','city','county','status','smsNotifications','emailNotifications','filters','userId','tenantId','createdAt','updatedAt']);
 
 export const SpecialityScalarFieldEnumSchema = z.enum(['id','name','description','color','tenantId','createdAt','updatedAt']);
 
@@ -86,7 +86,7 @@ export const MaterialScalarFieldEnumSchema = z.enum(['id','name','description','
 
 export const ServiceScalarFieldEnumSchema = z.enum(['id','name','description','unit_price','unit','duration','image','tags','isActive','tenantId','categoryId','createdAt','updatedAt']);
 
-export const RelatedServiceScalarFieldEnumSchema = z.enum(['id','quantity','unit_price','service','parentId']);
+export const RelatedServiceScalarFieldEnumSchema = z.enum(['id','order','quantity','unit_price','service','parentId']);
 
 export const ServiceMaterialScalarFieldEnumSchema = z.enum(['id','quantity','unit_price','serviceId','materialId']);
 
@@ -122,7 +122,7 @@ export const NullsOrderSchema = z.enum(['first','last']);
 
 export const JsonNullValueFilterSchema = z.enum(['DbNull','JsonNull','AnyNull',]).transform((value) => value === 'JsonNull' ? Prisma.JsonNull : value === 'DbNull' ? Prisma.JsonNull : value === 'AnyNull' ? Prisma.AnyNull : value);
 
-export const ServiceUnitSchema = z.enum(['TOOTH','QUARTER','JAW','MOUTH','VISIT']);
+export const ServiceUnitSchema = z.enum(['TOOTH','QUAD','ARCH','VISIT']);
 
 export type ServiceUnitType = `${z.infer<typeof ServiceUnitSchema>}`
 
@@ -358,6 +358,7 @@ export const PatientSchema = z.object({
   county: z.string().nullable(),
   smsNotifications: z.boolean(),
   emailNotifications: z.boolean(),
+  filters: JsonValueSchema,
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date(),
@@ -472,6 +473,7 @@ export type Service = z.infer<typeof ServiceSchema>
 
 export const RelatedServiceSchema = z.object({
   id: z.string().cuid(),
+  order: z.number().int(),
   quantity: z.number().int(),
   unit_price: z.number().int(),
   service: JsonValueSchema,
@@ -1046,6 +1048,7 @@ export const PatientSelectSchema: z.ZodType<Prisma.PatientSelect> = z.object({
   status: z.boolean().optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.boolean().optional(),
   userId: z.boolean().optional(),
   tenantId: z.boolean().optional(),
   createdAt: z.boolean().optional(),
@@ -1178,8 +1181,8 @@ export const EventActionSelectSchema: z.ZodType<Prisma.EventActionSelect> = z.ob
 //------------------------------------------------------
 
 export const MaterialIncludeSchema: z.ZodType<Prisma.MaterialInclude> = z.object({
+  services: z.union([z.boolean(),z.lazy(() => ServiceMaterialFindManyArgsSchema)]).optional(),
   tenant: z.union([z.boolean(),z.lazy(() => TenantArgsSchema)]).optional(),
-  ServiceMaterial: z.union([z.boolean(),z.lazy(() => ServiceMaterialFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => MaterialCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -1193,7 +1196,7 @@ export const MaterialCountOutputTypeArgsSchema: z.ZodType<Prisma.MaterialCountOu
 }).strict();
 
 export const MaterialCountOutputTypeSelectSchema: z.ZodType<Prisma.MaterialCountOutputTypeSelect> = z.object({
-  ServiceMaterial: z.boolean().optional(),
+  services: z.boolean().optional(),
 }).strict();
 
 export const MaterialSelectSchema: z.ZodType<Prisma.MaterialSelect> = z.object({
@@ -1210,8 +1213,8 @@ export const MaterialSelectSchema: z.ZodType<Prisma.MaterialSelect> = z.object({
   tenantId: z.boolean().optional(),
   createdAt: z.boolean().optional(),
   updatedAt: z.boolean().optional(),
+  services: z.union([z.boolean(),z.lazy(() => ServiceMaterialFindManyArgsSchema)]).optional(),
   tenant: z.union([z.boolean(),z.lazy(() => TenantArgsSchema)]).optional(),
-  ServiceMaterial: z.union([z.boolean(),z.lazy(() => ServiceMaterialFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => MaterialCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -1278,6 +1281,7 @@ export const RelatedServiceArgsSchema: z.ZodType<Prisma.RelatedServiceDefaultArg
 
 export const RelatedServiceSelectSchema: z.ZodType<Prisma.RelatedServiceSelect> = z.object({
   id: z.boolean().optional(),
+  order: z.boolean().optional(),
   quantity: z.boolean().optional(),
   unit_price: z.boolean().optional(),
   service: z.boolean().optional(),
@@ -2495,6 +2499,7 @@ export const PatientWhereInputSchema: z.ZodType<Prisma.PatientWhereInput> = z.ob
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   smsNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   emailNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  filters: z.lazy(() => JsonFilterSchema).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   tenantId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -2520,6 +2525,7 @@ export const PatientOrderByWithRelationInputSchema: z.ZodType<Prisma.PatientOrde
   status: z.lazy(() => SortOrderSchema).optional(),
   smsNotifications: z.lazy(() => SortOrderSchema).optional(),
   emailNotifications: z.lazy(() => SortOrderSchema).optional(),
+  filters: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   tenantId: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -2551,6 +2557,7 @@ export const PatientWhereUniqueInputSchema: z.ZodType<Prisma.PatientWhereUniqueI
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   smsNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   emailNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  filters: z.lazy(() => JsonFilterSchema).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   tenantId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -2576,6 +2583,7 @@ export const PatientOrderByWithAggregationInputSchema: z.ZodType<Prisma.PatientO
   status: z.lazy(() => SortOrderSchema).optional(),
   smsNotifications: z.lazy(() => SortOrderSchema).optional(),
   emailNotifications: z.lazy(() => SortOrderSchema).optional(),
+  filters: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   tenantId: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -2601,6 +2609,7 @@ export const PatientScalarWhereWithAggregatesInputSchema: z.ZodType<Prisma.Patie
   status: z.union([ z.lazy(() => EnumStatusWithAggregatesFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   smsNotifications: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
   emailNotifications: z.union([ z.lazy(() => BoolWithAggregatesFilterSchema),z.boolean() ]).optional(),
+  filters: z.lazy(() => JsonWithAggregatesFilterSchema).optional(),
   userId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   tenantId: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeWithAggregatesFilterSchema),z.coerce.date() ]).optional(),
@@ -2903,8 +2912,8 @@ export const MaterialWhereInputSchema: z.ZodType<Prisma.MaterialWhereInput> = z.
   tenantId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  services: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
   tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional()
 }).strict();
 
 export const MaterialOrderByWithRelationInputSchema: z.ZodType<Prisma.MaterialOrderByWithRelationInput> = z.object({
@@ -2921,8 +2930,8 @@ export const MaterialOrderByWithRelationInputSchema: z.ZodType<Prisma.MaterialOr
   tenantId: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
   updatedAt: z.lazy(() => SortOrderSchema).optional(),
-  tenant: z.lazy(() => TenantOrderByWithRelationInputSchema).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialOrderByRelationAggregateInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialOrderByRelationAggregateInputSchema).optional(),
+  tenant: z.lazy(() => TenantOrderByWithRelationInputSchema).optional()
 }).strict();
 
 export const MaterialWhereUniqueInputSchema: z.ZodType<Prisma.MaterialWhereUniqueInput> = z.object({
@@ -2945,8 +2954,8 @@ export const MaterialWhereUniqueInputSchema: z.ZodType<Prisma.MaterialWhereUniqu
   tenantId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
+  services: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
   tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional()
 }).strict());
 
 export const MaterialOrderByWithAggregationInputSchema: z.ZodType<Prisma.MaterialOrderByWithAggregationInput> = z.object({
@@ -3106,6 +3115,7 @@ export const RelatedServiceWhereInputSchema: z.ZodType<Prisma.RelatedServiceWher
   OR: z.lazy(() => RelatedServiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RelatedServiceWhereInputSchema),z.lazy(() => RelatedServiceWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  order: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   quantity: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   service: z.lazy(() => JsonFilterSchema).optional(),
@@ -3115,6 +3125,7 @@ export const RelatedServiceWhereInputSchema: z.ZodType<Prisma.RelatedServiceWher
 
 export const RelatedServiceOrderByWithRelationInputSchema: z.ZodType<Prisma.RelatedServiceOrderByWithRelationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional(),
   service: z.lazy(() => SortOrderSchema).optional(),
@@ -3130,6 +3141,7 @@ export const RelatedServiceWhereUniqueInputSchema: z.ZodType<Prisma.RelatedServi
   AND: z.union([ z.lazy(() => RelatedServiceWhereInputSchema),z.lazy(() => RelatedServiceWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => RelatedServiceWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RelatedServiceWhereInputSchema),z.lazy(() => RelatedServiceWhereInputSchema).array() ]).optional(),
+  order: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   quantity: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   service: z.lazy(() => JsonFilterSchema).optional(),
@@ -3139,6 +3151,7 @@ export const RelatedServiceWhereUniqueInputSchema: z.ZodType<Prisma.RelatedServi
 
 export const RelatedServiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.RelatedServiceOrderByWithAggregationInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional(),
   service: z.lazy(() => SortOrderSchema).optional(),
@@ -3155,6 +3168,7 @@ export const RelatedServiceScalarWhereWithAggregatesInputSchema: z.ZodType<Prism
   OR: z.lazy(() => RelatedServiceScalarWhereWithAggregatesInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RelatedServiceScalarWhereWithAggregatesInputSchema),z.lazy(() => RelatedServiceScalarWhereWithAggregatesInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringWithAggregatesFilterSchema),z.string() ]).optional(),
+  order: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   quantity: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   unit_price: z.union([ z.lazy(() => IntWithAggregatesFilterSchema),z.number() ]).optional(),
   service: z.lazy(() => JsonWithAggregatesFilterSchema).optional(),
@@ -4943,6 +4957,7 @@ export const PatientCreateInputSchema: z.ZodType<Prisma.PatientCreateInput> = z.
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -4966,6 +4981,7 @@ export const PatientUncheckedCreateInputSchema: z.ZodType<Prisma.PatientUnchecke
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -4989,6 +5005,7 @@ export const PatientUpdateInputSchema: z.ZodType<Prisma.PatientUpdateInput> = z.
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -5012,6 +5029,7 @@ export const PatientUncheckedUpdateInputSchema: z.ZodType<Prisma.PatientUnchecke
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5035,6 +5053,7 @@ export const PatientCreateManyInputSchema: z.ZodType<Prisma.PatientCreateManyInp
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -5054,6 +5073,7 @@ export const PatientUpdateManyMutationInputSchema: z.ZodType<Prisma.PatientUpdat
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
@@ -5071,6 +5091,7 @@ export const PatientUncheckedUpdateManyInputSchema: z.ZodType<Prisma.PatientUnch
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -5368,8 +5389,8 @@ export const MaterialCreateInputSchema: z.ZodType<Prisma.MaterialCreateInput> = 
   stock: z.number().int().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  tenant: z.lazy(() => TenantCreateNestedOneWithoutMaterialsInputSchema),
-  ServiceMaterial: z.lazy(() => ServiceMaterialCreateNestedManyWithoutMaterialInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialCreateNestedManyWithoutMaterialInputSchema).optional(),
+  tenant: z.lazy(() => TenantCreateNestedOneWithoutMaterialsInputSchema)
 }).strict();
 
 export const MaterialUncheckedCreateInputSchema: z.ZodType<Prisma.MaterialUncheckedCreateInput> = z.object({
@@ -5386,7 +5407,7 @@ export const MaterialUncheckedCreateInputSchema: z.ZodType<Prisma.MaterialUnchec
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInputSchema).optional()
 }).strict();
 
 export const MaterialUpdateInputSchema: z.ZodType<Prisma.MaterialUpdateInput> = z.object({
@@ -5402,8 +5423,8 @@ export const MaterialUpdateInputSchema: z.ZodType<Prisma.MaterialUpdateInput> = 
   stock: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  tenant: z.lazy(() => TenantUpdateOneRequiredWithoutMaterialsNestedInputSchema).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema).optional(),
+  tenant: z.lazy(() => TenantUpdateOneRequiredWithoutMaterialsNestedInputSchema).optional()
 }).strict();
 
 export const MaterialUncheckedUpdateInputSchema: z.ZodType<Prisma.MaterialUncheckedUpdateInput> = z.object({
@@ -5420,7 +5441,7 @@ export const MaterialUncheckedUpdateInputSchema: z.ZodType<Prisma.MaterialUnchec
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInputSchema).optional()
 }).strict();
 
 export const MaterialCreateManyInputSchema: z.ZodType<Prisma.MaterialCreateManyInput> = z.object({
@@ -5594,6 +5615,7 @@ export const ServiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.ServiceUnch
 
 export const RelatedServiceCreateInputSchema: z.ZodType<Prisma.RelatedServiceCreateInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -5602,6 +5624,7 @@ export const RelatedServiceCreateInputSchema: z.ZodType<Prisma.RelatedServiceCre
 
 export const RelatedServiceUncheckedCreateInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -5610,6 +5633,7 @@ export const RelatedServiceUncheckedCreateInputSchema: z.ZodType<Prisma.RelatedS
 
 export const RelatedServiceUpdateInputSchema: z.ZodType<Prisma.RelatedServiceUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -5618,6 +5642,7 @@ export const RelatedServiceUpdateInputSchema: z.ZodType<Prisma.RelatedServiceUpd
 
 export const RelatedServiceUncheckedUpdateInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -5626,6 +5651,7 @@ export const RelatedServiceUncheckedUpdateInputSchema: z.ZodType<Prisma.RelatedS
 
 export const RelatedServiceCreateManyInputSchema: z.ZodType<Prisma.RelatedServiceCreateManyInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -5634,6 +5660,7 @@ export const RelatedServiceCreateManyInputSchema: z.ZodType<Prisma.RelatedServic
 
 export const RelatedServiceUpdateManyMutationInputSchema: z.ZodType<Prisma.RelatedServiceUpdateManyMutationInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -5641,6 +5668,7 @@ export const RelatedServiceUpdateManyMutationInputSchema: z.ZodType<Prisma.Relat
 
 export const RelatedServiceUncheckedUpdateManyInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedUpdateManyInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -5652,7 +5680,7 @@ export const ServiceMaterialCreateInputSchema: z.ZodType<Prisma.ServiceMaterialC
   quantity: z.number().int(),
   unit_price: z.number().int(),
   service: z.lazy(() => ServiceCreateNestedOneWithoutMaterialsInputSchema),
-  material: z.lazy(() => MaterialCreateNestedOneWithoutServiceMaterialInputSchema)
+  material: z.lazy(() => MaterialCreateNestedOneWithoutServicesInputSchema)
 }).strict();
 
 export const ServiceMaterialUncheckedCreateInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedCreateInput> = z.object({
@@ -5668,7 +5696,7 @@ export const ServiceMaterialUpdateInputSchema: z.ZodType<Prisma.ServiceMaterialU
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.lazy(() => ServiceUpdateOneRequiredWithoutMaterialsNestedInputSchema).optional(),
-  material: z.lazy(() => MaterialUpdateOneRequiredWithoutServiceMaterialNestedInputSchema).optional()
+  material: z.lazy(() => MaterialUpdateOneRequiredWithoutServicesNestedInputSchema).optional()
 }).strict();
 
 export const ServiceMaterialUncheckedUpdateInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedUpdateInput> = z.object({
@@ -7302,6 +7330,7 @@ export const PatientCountOrderByAggregateInputSchema: z.ZodType<Prisma.PatientCo
   status: z.lazy(() => SortOrderSchema).optional(),
   smsNotifications: z.lazy(() => SortOrderSchema).optional(),
   emailNotifications: z.lazy(() => SortOrderSchema).optional(),
+  filters: z.lazy(() => SortOrderSchema).optional(),
   userId: z.lazy(() => SortOrderSchema).optional(),
   tenantId: z.lazy(() => SortOrderSchema).optional(),
   createdAt: z.lazy(() => SortOrderSchema).optional(),
@@ -7721,6 +7750,7 @@ export const ServiceRelationFilterSchema: z.ZodType<Prisma.ServiceRelationFilter
 
 export const RelatedServiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.RelatedServiceCountOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional(),
   service: z.lazy(() => SortOrderSchema).optional(),
@@ -7728,12 +7758,14 @@ export const RelatedServiceCountOrderByAggregateInputSchema: z.ZodType<Prisma.Re
 }).strict();
 
 export const RelatedServiceAvgOrderByAggregateInputSchema: z.ZodType<Prisma.RelatedServiceAvgOrderByAggregateInput> = z.object({
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const RelatedServiceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.RelatedServiceMaxOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.lazy(() => SortOrderSchema).optional()
@@ -7741,12 +7773,14 @@ export const RelatedServiceMaxOrderByAggregateInputSchema: z.ZodType<Prisma.Rela
 
 export const RelatedServiceMinOrderByAggregateInputSchema: z.ZodType<Prisma.RelatedServiceMinOrderByAggregateInput> = z.object({
   id: z.lazy(() => SortOrderSchema).optional(),
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional(),
   parentId: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
 export const RelatedServiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.RelatedServiceSumOrderByAggregateInput> = z.object({
+  order: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   unit_price: z.lazy(() => SortOrderSchema).optional()
 }).strict();
@@ -9866,17 +9900,17 @@ export const MaterialCreatetagsInputSchema: z.ZodType<Prisma.MaterialCreatetagsI
   set: z.string().array()
 }).strict();
 
-export const TenantCreateNestedOneWithoutMaterialsInputSchema: z.ZodType<Prisma.TenantCreateNestedOneWithoutMaterialsInput> = z.object({
-  create: z.union([ z.lazy(() => TenantCreateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedCreateWithoutMaterialsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => TenantCreateOrConnectWithoutMaterialsInputSchema).optional(),
-  connect: z.lazy(() => TenantWhereUniqueInputSchema).optional()
-}).strict();
-
 export const ServiceMaterialCreateNestedManyWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialCreateNestedManyWithoutMaterialInput> = z.object({
   create: z.union([ z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema).array(),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => ServiceMaterialCreateOrConnectWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialCreateOrConnectWithoutMaterialInputSchema).array() ]).optional(),
   createMany: z.lazy(() => ServiceMaterialCreateManyMaterialInputEnvelopeSchema).optional(),
   connect: z.union([ z.lazy(() => ServiceMaterialWhereUniqueInputSchema),z.lazy(() => ServiceMaterialWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const TenantCreateNestedOneWithoutMaterialsInputSchema: z.ZodType<Prisma.TenantCreateNestedOneWithoutMaterialsInput> = z.object({
+  create: z.union([ z.lazy(() => TenantCreateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedCreateWithoutMaterialsInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => TenantCreateOrConnectWithoutMaterialsInputSchema).optional(),
+  connect: z.lazy(() => TenantWhereUniqueInputSchema).optional()
 }).strict();
 
 export const ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInput> = z.object({
@@ -9891,14 +9925,6 @@ export const MaterialUpdatetagsInputSchema: z.ZodType<Prisma.MaterialUpdatetagsI
   push: z.union([ z.string(),z.string().array() ]).optional(),
 }).strict();
 
-export const TenantUpdateOneRequiredWithoutMaterialsNestedInputSchema: z.ZodType<Prisma.TenantUpdateOneRequiredWithoutMaterialsNestedInput> = z.object({
-  create: z.union([ z.lazy(() => TenantCreateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedCreateWithoutMaterialsInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => TenantCreateOrConnectWithoutMaterialsInputSchema).optional(),
-  upsert: z.lazy(() => TenantUpsertWithoutMaterialsInputSchema).optional(),
-  connect: z.lazy(() => TenantWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => TenantUpdateToOneWithWhereWithoutMaterialsInputSchema),z.lazy(() => TenantUpdateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedUpdateWithoutMaterialsInputSchema) ]).optional(),
-}).strict();
-
 export const ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema: z.ZodType<Prisma.ServiceMaterialUpdateManyWithoutMaterialNestedInput> = z.object({
   create: z.union([ z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema).array(),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => ServiceMaterialCreateOrConnectWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialCreateOrConnectWithoutMaterialInputSchema).array() ]).optional(),
@@ -9911,6 +9937,14 @@ export const ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema: z.ZodTyp
   update: z.union([ z.lazy(() => ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => ServiceMaterialUpdateManyWithWhereWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUpdateManyWithWhereWithoutMaterialInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => ServiceMaterialScalarWhereInputSchema),z.lazy(() => ServiceMaterialScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const TenantUpdateOneRequiredWithoutMaterialsNestedInputSchema: z.ZodType<Prisma.TenantUpdateOneRequiredWithoutMaterialsNestedInput> = z.object({
+  create: z.union([ z.lazy(() => TenantCreateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedCreateWithoutMaterialsInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => TenantCreateOrConnectWithoutMaterialsInputSchema).optional(),
+  upsert: z.lazy(() => TenantUpsertWithoutMaterialsInputSchema).optional(),
+  connect: z.lazy(() => TenantWhereUniqueInputSchema).optional(),
+  update: z.union([ z.lazy(() => TenantUpdateToOneWithWhereWithoutMaterialsInputSchema),z.lazy(() => TenantUpdateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedUpdateWithoutMaterialsInputSchema) ]).optional(),
 }).strict();
 
 export const ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInput> = z.object({
@@ -10116,9 +10150,9 @@ export const ServiceCreateNestedOneWithoutMaterialsInputSchema: z.ZodType<Prisma
   connect: z.lazy(() => ServiceWhereUniqueInputSchema).optional()
 }).strict();
 
-export const MaterialCreateNestedOneWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialCreateNestedOneWithoutServiceMaterialInput> = z.object({
-  create: z.union([ z.lazy(() => MaterialCreateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServiceMaterialInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => MaterialCreateOrConnectWithoutServiceMaterialInputSchema).optional(),
+export const MaterialCreateNestedOneWithoutServicesInputSchema: z.ZodType<Prisma.MaterialCreateNestedOneWithoutServicesInput> = z.object({
+  create: z.union([ z.lazy(() => MaterialCreateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServicesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => MaterialCreateOrConnectWithoutServicesInputSchema).optional(),
   connect: z.lazy(() => MaterialWhereUniqueInputSchema).optional()
 }).strict();
 
@@ -10130,12 +10164,12 @@ export const ServiceUpdateOneRequiredWithoutMaterialsNestedInputSchema: z.ZodTyp
   update: z.union([ z.lazy(() => ServiceUpdateToOneWithWhereWithoutMaterialsInputSchema),z.lazy(() => ServiceUpdateWithoutMaterialsInputSchema),z.lazy(() => ServiceUncheckedUpdateWithoutMaterialsInputSchema) ]).optional(),
 }).strict();
 
-export const MaterialUpdateOneRequiredWithoutServiceMaterialNestedInputSchema: z.ZodType<Prisma.MaterialUpdateOneRequiredWithoutServiceMaterialNestedInput> = z.object({
-  create: z.union([ z.lazy(() => MaterialCreateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServiceMaterialInputSchema) ]).optional(),
-  connectOrCreate: z.lazy(() => MaterialCreateOrConnectWithoutServiceMaterialInputSchema).optional(),
-  upsert: z.lazy(() => MaterialUpsertWithoutServiceMaterialInputSchema).optional(),
+export const MaterialUpdateOneRequiredWithoutServicesNestedInputSchema: z.ZodType<Prisma.MaterialUpdateOneRequiredWithoutServicesNestedInput> = z.object({
+  create: z.union([ z.lazy(() => MaterialCreateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServicesInputSchema) ]).optional(),
+  connectOrCreate: z.lazy(() => MaterialCreateOrConnectWithoutServicesInputSchema).optional(),
+  upsert: z.lazy(() => MaterialUpsertWithoutServicesInputSchema).optional(),
   connect: z.lazy(() => MaterialWhereUniqueInputSchema).optional(),
-  update: z.union([ z.lazy(() => MaterialUpdateToOneWithWhereWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUpdateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServiceMaterialInputSchema) ]).optional(),
+  update: z.union([ z.lazy(() => MaterialUpdateToOneWithWhereWithoutServicesInputSchema),z.lazy(() => MaterialUpdateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServicesInputSchema) ]).optional(),
 }).strict();
 
 export const EnumPriceTypeFieldUpdateOperationsInputSchema: z.ZodType<Prisma.EnumPriceTypeFieldUpdateOperationsInput> = z.object({
@@ -11120,6 +11154,7 @@ export const PatientCreateWithoutTenantInputSchema: z.ZodType<Prisma.PatientCrea
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -11142,6 +11177,7 @@ export const PatientUncheckedCreateWithoutTenantInputSchema: z.ZodType<Prisma.Pa
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -11220,7 +11256,7 @@ export const MaterialCreateWithoutTenantInputSchema: z.ZodType<Prisma.MaterialCr
   stock: z.number().int().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialCreateNestedManyWithoutMaterialInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialCreateNestedManyWithoutMaterialInputSchema).optional()
 }).strict();
 
 export const MaterialUncheckedCreateWithoutTenantInputSchema: z.ZodType<Prisma.MaterialUncheckedCreateWithoutTenantInput> = z.object({
@@ -11236,7 +11272,7 @@ export const MaterialUncheckedCreateWithoutTenantInputSchema: z.ZodType<Prisma.M
   stock: z.number().int().optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUncheckedCreateNestedManyWithoutMaterialInputSchema).optional()
 }).strict();
 
 export const MaterialCreateOrConnectWithoutTenantInputSchema: z.ZodType<Prisma.MaterialCreateOrConnectWithoutTenantInput> = z.object({
@@ -11520,6 +11556,7 @@ export const PatientScalarWhereInputSchema: z.ZodType<Prisma.PatientScalarWhereI
   status: z.union([ z.lazy(() => EnumStatusFilterSchema),z.lazy(() => StatusSchema) ]).optional(),
   smsNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   emailNotifications: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
+  filters: z.lazy(() => JsonFilterSchema).optional(),
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   tenantId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
@@ -12037,6 +12074,7 @@ export const PatientCreateWithoutUserInputSchema: z.ZodType<Prisma.PatientCreate
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   tenant: z.lazy(() => TenantCreateNestedOneWithoutPatientsInputSchema),
@@ -12059,6 +12097,7 @@ export const PatientUncheckedCreateWithoutUserInputSchema: z.ZodType<Prisma.Pati
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -14254,6 +14293,7 @@ export const PatientCreateWithoutAppointmentsInputSchema: z.ZodType<Prisma.Patie
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -14276,6 +14316,7 @@ export const PatientUncheckedCreateWithoutAppointmentsInputSchema: z.ZodType<Pri
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -14499,6 +14540,7 @@ export const PatientUpdateWithoutAppointmentsInputSchema: z.ZodType<Prisma.Patie
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -14521,6 +14563,7 @@ export const PatientUncheckedUpdateWithoutAppointmentsInputSchema: z.ZodType<Pri
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -14857,6 +14900,30 @@ export const EventUncheckedUpdateWithoutActionsInputSchema: z.ZodType<Prisma.Eve
   files: z.lazy(() => FileUncheckedUpdateManyWithoutEventNestedInputSchema).optional()
 }).strict();
 
+export const ServiceMaterialCreateWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialCreateWithoutMaterialInput> = z.object({
+  id: z.string().cuid().optional(),
+  quantity: z.number().int(),
+  unit_price: z.number().int(),
+  service: z.lazy(() => ServiceCreateNestedOneWithoutMaterialsInputSchema)
+}).strict();
+
+export const ServiceMaterialUncheckedCreateWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedCreateWithoutMaterialInput> = z.object({
+  id: z.string().cuid().optional(),
+  quantity: z.number().int(),
+  unit_price: z.number().int(),
+  serviceId: z.string()
+}).strict();
+
+export const ServiceMaterialCreateOrConnectWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialCreateOrConnectWithoutMaterialInput> = z.object({
+  where: z.lazy(() => ServiceMaterialWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema) ]),
+}).strict();
+
+export const ServiceMaterialCreateManyMaterialInputEnvelopeSchema: z.ZodType<Prisma.ServiceMaterialCreateManyMaterialInputEnvelope> = z.object({
+  data: z.union([ z.lazy(() => ServiceMaterialCreateManyMaterialInputSchema),z.lazy(() => ServiceMaterialCreateManyMaterialInputSchema).array() ]),
+  skipDuplicates: z.boolean().optional()
+}).strict();
+
 export const TenantCreateWithoutMaterialsInputSchema: z.ZodType<Prisma.TenantCreateWithoutMaterialsInput> = z.object({
   id: z.string().cuid().optional(),
   email: z.string(),
@@ -14898,28 +14965,31 @@ export const TenantCreateOrConnectWithoutMaterialsInputSchema: z.ZodType<Prisma.
   create: z.union([ z.lazy(() => TenantCreateWithoutMaterialsInputSchema),z.lazy(() => TenantUncheckedCreateWithoutMaterialsInputSchema) ]),
 }).strict();
 
-export const ServiceMaterialCreateWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialCreateWithoutMaterialInput> = z.object({
-  id: z.string().cuid().optional(),
-  quantity: z.number().int(),
-  unit_price: z.number().int(),
-  service: z.lazy(() => ServiceCreateNestedOneWithoutMaterialsInputSchema)
-}).strict();
-
-export const ServiceMaterialUncheckedCreateWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedCreateWithoutMaterialInput> = z.object({
-  id: z.string().cuid().optional(),
-  quantity: z.number().int(),
-  unit_price: z.number().int(),
-  serviceId: z.string()
-}).strict();
-
-export const ServiceMaterialCreateOrConnectWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialCreateOrConnectWithoutMaterialInput> = z.object({
+export const ServiceMaterialUpsertWithWhereUniqueWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpsertWithWhereUniqueWithoutMaterialInput> = z.object({
   where: z.lazy(() => ServiceMaterialWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => ServiceMaterialUpdateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateWithoutMaterialInputSchema) ]),
   create: z.union([ z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema) ]),
 }).strict();
 
-export const ServiceMaterialCreateManyMaterialInputEnvelopeSchema: z.ZodType<Prisma.ServiceMaterialCreateManyMaterialInputEnvelope> = z.object({
-  data: z.union([ z.lazy(() => ServiceMaterialCreateManyMaterialInputSchema),z.lazy(() => ServiceMaterialCreateManyMaterialInputSchema).array() ]),
-  skipDuplicates: z.boolean().optional()
+export const ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInput> = z.object({
+  where: z.lazy(() => ServiceMaterialWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => ServiceMaterialUpdateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateWithoutMaterialInputSchema) ]),
+}).strict();
+
+export const ServiceMaterialUpdateManyWithWhereWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpdateManyWithWhereWithoutMaterialInput> = z.object({
+  where: z.lazy(() => ServiceMaterialScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => ServiceMaterialUpdateManyMutationInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialInputSchema) ]),
+}).strict();
+
+export const ServiceMaterialScalarWhereInputSchema: z.ZodType<Prisma.ServiceMaterialScalarWhereInput> = z.object({
+  AND: z.union([ z.lazy(() => ServiceMaterialScalarWhereInputSchema),z.lazy(() => ServiceMaterialScalarWhereInputSchema).array() ]).optional(),
+  OR: z.lazy(() => ServiceMaterialScalarWhereInputSchema).array().optional(),
+  NOT: z.union([ z.lazy(() => ServiceMaterialScalarWhereInputSchema),z.lazy(() => ServiceMaterialScalarWhereInputSchema).array() ]).optional(),
+  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  quantity: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
+  serviceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  materialId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const TenantUpsertWithoutMaterialsInputSchema: z.ZodType<Prisma.TenantUpsertWithoutMaterialsInput> = z.object({
@@ -14967,33 +15037,6 @@ export const TenantUncheckedUpdateWithoutMaterialsInputSchema: z.ZodType<Prisma.
   services: z.lazy(() => ServiceUncheckedUpdateManyWithoutTenantNestedInputSchema).optional(),
   events: z.lazy(() => EventUncheckedUpdateManyWithoutTenantNestedInputSchema).optional(),
   files: z.lazy(() => FileUncheckedUpdateManyWithoutTenantNestedInputSchema).optional()
-}).strict();
-
-export const ServiceMaterialUpsertWithWhereUniqueWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpsertWithWhereUniqueWithoutMaterialInput> = z.object({
-  where: z.lazy(() => ServiceMaterialWhereUniqueInputSchema),
-  update: z.union([ z.lazy(() => ServiceMaterialUpdateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateWithoutMaterialInputSchema) ]),
-  create: z.union([ z.lazy(() => ServiceMaterialCreateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedCreateWithoutMaterialInputSchema) ]),
-}).strict();
-
-export const ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpdateWithWhereUniqueWithoutMaterialInput> = z.object({
-  where: z.lazy(() => ServiceMaterialWhereUniqueInputSchema),
-  data: z.union([ z.lazy(() => ServiceMaterialUpdateWithoutMaterialInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateWithoutMaterialInputSchema) ]),
-}).strict();
-
-export const ServiceMaterialUpdateManyWithWhereWithoutMaterialInputSchema: z.ZodType<Prisma.ServiceMaterialUpdateManyWithWhereWithoutMaterialInput> = z.object({
-  where: z.lazy(() => ServiceMaterialScalarWhereInputSchema),
-  data: z.union([ z.lazy(() => ServiceMaterialUpdateManyMutationInputSchema),z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialInputSchema) ]),
-}).strict();
-
-export const ServiceMaterialScalarWhereInputSchema: z.ZodType<Prisma.ServiceMaterialScalarWhereInput> = z.object({
-  AND: z.union([ z.lazy(() => ServiceMaterialScalarWhereInputSchema),z.lazy(() => ServiceMaterialScalarWhereInputSchema).array() ]).optional(),
-  OR: z.lazy(() => ServiceMaterialScalarWhereInputSchema).array().optional(),
-  NOT: z.union([ z.lazy(() => ServiceMaterialScalarWhereInputSchema),z.lazy(() => ServiceMaterialScalarWhereInputSchema).array() ]).optional(),
-  id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  quantity: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
-  serviceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  materialId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
 }).strict();
 
 export const TenantCreateWithoutServicesInputSchema: z.ZodType<Prisma.TenantCreateWithoutServicesInput> = z.object({
@@ -15060,7 +15103,7 @@ export const ServiceMaterialCreateWithoutServiceInputSchema: z.ZodType<Prisma.Se
   id: z.string().cuid().optional(),
   quantity: z.number().int(),
   unit_price: z.number().int(),
-  material: z.lazy(() => MaterialCreateNestedOneWithoutServiceMaterialInputSchema)
+  material: z.lazy(() => MaterialCreateNestedOneWithoutServicesInputSchema)
 }).strict();
 
 export const ServiceMaterialUncheckedCreateWithoutServiceInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedCreateWithoutServiceInput> = z.object({
@@ -15108,6 +15151,7 @@ export const VisitCreateManyServiceInputEnvelopeSchema: z.ZodType<Prisma.VisitCr
 
 export const RelatedServiceCreateWithoutParentInputSchema: z.ZodType<Prisma.RelatedServiceCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -15115,6 +15159,7 @@ export const RelatedServiceCreateWithoutParentInputSchema: z.ZodType<Prisma.Rela
 
 export const RelatedServiceUncheckedCreateWithoutParentInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedCreateWithoutParentInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -15255,6 +15300,7 @@ export const RelatedServiceScalarWhereInputSchema: z.ZodType<Prisma.RelatedServi
   OR: z.lazy(() => RelatedServiceScalarWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => RelatedServiceScalarWhereInputSchema),z.lazy(() => RelatedServiceScalarWhereInputSchema).array() ]).optional(),
   id: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
+  order: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   quantity: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   service: z.lazy(() => JsonFilterSchema).optional(),
@@ -15390,7 +15436,7 @@ export const ServiceCreateOrConnectWithoutMaterialsInputSchema: z.ZodType<Prisma
   create: z.union([ z.lazy(() => ServiceCreateWithoutMaterialsInputSchema),z.lazy(() => ServiceUncheckedCreateWithoutMaterialsInputSchema) ]),
 }).strict();
 
-export const MaterialCreateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialCreateWithoutServiceMaterialInput> = z.object({
+export const MaterialCreateWithoutServicesInputSchema: z.ZodType<Prisma.MaterialCreateWithoutServicesInput> = z.object({
   id: z.string().cuid().optional(),
   name: z.string(),
   description: z.string().optional().nullable(),
@@ -15406,7 +15452,7 @@ export const MaterialCreateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.M
   tenant: z.lazy(() => TenantCreateNestedOneWithoutMaterialsInputSchema)
 }).strict();
 
-export const MaterialUncheckedCreateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialUncheckedCreateWithoutServiceMaterialInput> = z.object({
+export const MaterialUncheckedCreateWithoutServicesInputSchema: z.ZodType<Prisma.MaterialUncheckedCreateWithoutServicesInput> = z.object({
   id: z.string().cuid().optional(),
   name: z.string(),
   description: z.string().optional().nullable(),
@@ -15422,9 +15468,9 @@ export const MaterialUncheckedCreateWithoutServiceMaterialInputSchema: z.ZodType
   updatedAt: z.coerce.date().optional()
 }).strict();
 
-export const MaterialCreateOrConnectWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialCreateOrConnectWithoutServiceMaterialInput> = z.object({
+export const MaterialCreateOrConnectWithoutServicesInputSchema: z.ZodType<Prisma.MaterialCreateOrConnectWithoutServicesInput> = z.object({
   where: z.lazy(() => MaterialWhereUniqueInputSchema),
-  create: z.union([ z.lazy(() => MaterialCreateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServiceMaterialInputSchema) ]),
+  create: z.union([ z.lazy(() => MaterialCreateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServicesInputSchema) ]),
 }).strict();
 
 export const ServiceUpsertWithoutMaterialsInputSchema: z.ZodType<Prisma.ServiceUpsertWithoutMaterialsInput> = z.object({
@@ -15474,18 +15520,18 @@ export const ServiceUncheckedUpdateWithoutMaterialsInputSchema: z.ZodType<Prisma
   children: z.lazy(() => RelatedServiceUncheckedUpdateManyWithoutParentNestedInputSchema).optional()
 }).strict();
 
-export const MaterialUpsertWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialUpsertWithoutServiceMaterialInput> = z.object({
-  update: z.union([ z.lazy(() => MaterialUpdateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServiceMaterialInputSchema) ]),
-  create: z.union([ z.lazy(() => MaterialCreateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServiceMaterialInputSchema) ]),
+export const MaterialUpsertWithoutServicesInputSchema: z.ZodType<Prisma.MaterialUpsertWithoutServicesInput> = z.object({
+  update: z.union([ z.lazy(() => MaterialUpdateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServicesInputSchema) ]),
+  create: z.union([ z.lazy(() => MaterialCreateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedCreateWithoutServicesInputSchema) ]),
   where: z.lazy(() => MaterialWhereInputSchema).optional()
 }).strict();
 
-export const MaterialUpdateToOneWithWhereWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialUpdateToOneWithWhereWithoutServiceMaterialInput> = z.object({
+export const MaterialUpdateToOneWithWhereWithoutServicesInputSchema: z.ZodType<Prisma.MaterialUpdateToOneWithWhereWithoutServicesInput> = z.object({
   where: z.lazy(() => MaterialWhereInputSchema).optional(),
-  data: z.union([ z.lazy(() => MaterialUpdateWithoutServiceMaterialInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServiceMaterialInputSchema) ]),
+  data: z.union([ z.lazy(() => MaterialUpdateWithoutServicesInputSchema),z.lazy(() => MaterialUncheckedUpdateWithoutServicesInputSchema) ]),
 }).strict();
 
-export const MaterialUpdateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialUpdateWithoutServiceMaterialInput> = z.object({
+export const MaterialUpdateWithoutServicesInputSchema: z.ZodType<Prisma.MaterialUpdateWithoutServicesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -15501,7 +15547,7 @@ export const MaterialUpdateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.M
   tenant: z.lazy(() => TenantUpdateOneRequiredWithoutMaterialsNestedInputSchema).optional()
 }).strict();
 
-export const MaterialUncheckedUpdateWithoutServiceMaterialInputSchema: z.ZodType<Prisma.MaterialUncheckedUpdateWithoutServiceMaterialInput> = z.object({
+export const MaterialUncheckedUpdateWithoutServicesInputSchema: z.ZodType<Prisma.MaterialUncheckedUpdateWithoutServicesInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   description: z.union([ z.string(),z.lazy(() => NullableStringFieldUpdateOperationsInputSchema) ]).optional().nullable(),
@@ -15967,6 +16013,7 @@ export const PatientCreateWithoutTreatmentPlansInputSchema: z.ZodType<Prisma.Pat
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -15989,6 +16036,7 @@ export const PatientUncheckedCreateWithoutTreatmentPlansInputSchema: z.ZodType<P
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -16111,6 +16159,7 @@ export const PatientUpdateWithoutTreatmentPlansInputSchema: z.ZodType<Prisma.Pat
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -16133,6 +16182,7 @@ export const PatientUncheckedUpdateWithoutTreatmentPlansInputSchema: z.ZodType<P
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -16216,6 +16266,7 @@ export const PatientCreateWithoutQuizesInputSchema: z.ZodType<Prisma.PatientCrea
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -16238,6 +16289,7 @@ export const PatientUncheckedCreateWithoutQuizesInputSchema: z.ZodType<Prisma.Pa
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -16325,6 +16377,7 @@ export const PatientUpdateWithoutQuizesInputSchema: z.ZodType<Prisma.PatientUpda
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -16347,6 +16400,7 @@ export const PatientUncheckedUpdateWithoutQuizesInputSchema: z.ZodType<Prisma.Pa
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -16568,6 +16622,7 @@ export const PatientCreateWithoutFilesInputSchema: z.ZodType<Prisma.PatientCreat
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
   user: z.lazy(() => UserCreateNestedOneWithoutPatientsInputSchema),
@@ -16590,6 +16645,7 @@ export const PatientUncheckedCreateWithoutFilesInputSchema: z.ZodType<Prisma.Pat
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -16790,6 +16846,7 @@ export const PatientUpdateWithoutFilesInputSchema: z.ZodType<Prisma.PatientUpdat
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -16812,6 +16869,7 @@ export const PatientUncheckedUpdateWithoutFilesInputSchema: z.ZodType<Prisma.Pat
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -17141,6 +17199,7 @@ export const PatientCreateManyTenantInputSchema: z.ZodType<Prisma.PatientCreateM
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -17369,6 +17428,7 @@ export const PatientUpdateWithoutTenantInputSchema: z.ZodType<Prisma.PatientUpda
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   user: z.lazy(() => UserUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -17391,6 +17451,7 @@ export const PatientUncheckedUpdateWithoutTenantInputSchema: z.ZodType<Prisma.Pa
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -17413,6 +17474,7 @@ export const PatientUncheckedUpdateManyWithoutTenantInputSchema: z.ZodType<Prism
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   userId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -17482,7 +17544,7 @@ export const MaterialUpdateWithoutTenantInputSchema: z.ZodType<Prisma.MaterialUp
   stock: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUpdateManyWithoutMaterialNestedInputSchema).optional()
 }).strict();
 
 export const MaterialUncheckedUpdateWithoutTenantInputSchema: z.ZodType<Prisma.MaterialUncheckedUpdateWithoutTenantInput> = z.object({
@@ -17498,7 +17560,7 @@ export const MaterialUncheckedUpdateWithoutTenantInputSchema: z.ZodType<Prisma.M
   stock: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
-  ServiceMaterial: z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInputSchema).optional()
+  services: z.lazy(() => ServiceMaterialUncheckedUpdateManyWithoutMaterialNestedInputSchema).optional()
 }).strict();
 
 export const MaterialUncheckedUpdateManyWithoutTenantInputSchema: z.ZodType<Prisma.MaterialUncheckedUpdateManyWithoutTenantInput> = z.object({
@@ -17645,6 +17707,7 @@ export const PatientCreateManyUserInputSchema: z.ZodType<Prisma.PatientCreateMan
   status: z.lazy(() => StatusSchema).optional(),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   tenantId: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -17746,6 +17809,7 @@ export const PatientUpdateWithoutUserInputSchema: z.ZodType<Prisma.PatientUpdate
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   tenant: z.lazy(() => TenantUpdateOneRequiredWithoutPatientsNestedInputSchema).optional(),
@@ -17768,6 +17832,7 @@ export const PatientUncheckedUpdateWithoutUserInputSchema: z.ZodType<Prisma.Pati
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -17790,6 +17855,7 @@ export const PatientUncheckedUpdateManyWithoutUserInputSchema: z.ZodType<Prisma.
   status: z.union([ z.lazy(() => StatusSchema),z.lazy(() => EnumStatusFieldUpdateOperationsInputSchema) ]).optional(),
   smsNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   emailNotifications: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  filters: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
   tenantId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -18696,6 +18762,7 @@ export const VisitCreateManyServiceInputSchema: z.ZodType<Prisma.VisitCreateMany
 
 export const RelatedServiceCreateManyParentInputSchema: z.ZodType<Prisma.RelatedServiceCreateManyParentInput> = z.object({
   id: z.string().cuid().optional(),
+  order: z.number().int().optional(),
   quantity: z.number().int().optional(),
   unit_price: z.number().int(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]),
@@ -18705,7 +18772,7 @@ export const ServiceMaterialUpdateWithoutServiceInputSchema: z.ZodType<Prisma.Se
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  material: z.lazy(() => MaterialUpdateOneRequiredWithoutServiceMaterialNestedInputSchema).optional()
+  material: z.lazy(() => MaterialUpdateOneRequiredWithoutServicesNestedInputSchema).optional()
 }).strict();
 
 export const ServiceMaterialUncheckedUpdateWithoutServiceInputSchema: z.ZodType<Prisma.ServiceMaterialUncheckedUpdateWithoutServiceInput> = z.object({
@@ -18748,6 +18815,7 @@ export const VisitUncheckedUpdateManyWithoutServiceInputSchema: z.ZodType<Prisma
 
 export const RelatedServiceUpdateWithoutParentInputSchema: z.ZodType<Prisma.RelatedServiceUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -18755,6 +18823,7 @@ export const RelatedServiceUpdateWithoutParentInputSchema: z.ZodType<Prisma.Rela
 
 export const RelatedServiceUncheckedUpdateWithoutParentInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedUpdateWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),
@@ -18762,6 +18831,7 @@ export const RelatedServiceUncheckedUpdateWithoutParentInputSchema: z.ZodType<Pr
 
 export const RelatedServiceUncheckedUpdateManyWithoutParentInputSchema: z.ZodType<Prisma.RelatedServiceUncheckedUpdateManyWithoutParentInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   unit_price: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   service: z.union([ z.lazy(() => JsonNullValueInputSchema),InputJsonValueSchema ]).optional(),

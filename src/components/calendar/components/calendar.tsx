@@ -12,7 +12,7 @@ import { useStore } from "@/hooks/use-store";
 import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { appointmentCreateInput, type WorkingHours } from "@/types/schema";
+import { type WorkingHours, appointmentCreateInput } from "@/types/schema";
 import type {
   DateSelectArg,
   DatesSetArg,
@@ -32,7 +32,7 @@ import resourceTimeGridPlugin from "@fullcalendar/resource-timegrid";
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EventType, type DayOfWeek } from "@prisma/client";
+import { type DayOfWeek, EventType } from "@prisma/client";
 import { Bell } from "lucide-react";
 import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
@@ -55,6 +55,7 @@ const selectedUserSchema = z.union([
 
 interface CalendarProps {
   userId: string;
+  isAdmin: boolean;
   className?: string;
   selected?: z.infer<typeof selectedUserSchema>;
   firstDayOfWeek: DayOfWeek;
@@ -65,6 +66,7 @@ interface CalendarProps {
 export default function Calendar({
   userId,
   selected = "me",
+  isAdmin,
   firstDayOfWeek,
   showWeekends,
   workingHours,
@@ -165,9 +167,10 @@ export default function Calendar({
   };
 
   const handleDateClick = (arg: DateClickArg) => {
+    const resourceId = !["me", "all"].includes(selected) ? selected : (arg.resource?.id ?? userId);
+    if (!isAdmin && resourceId !== userId) return;
     newAppointmentDialog.setValue(true);
-    const isSelectedId = !["me", "all"].includes(selected);
-    setResourceId(isSelectedId ? selected : (arg.resource?.id ?? userId));
+    setResourceId(resourceId);
     form.reset({
       description: "",
       date: arg.date,
@@ -180,15 +183,17 @@ export default function Calendar({
 
   const handleEventClick = (arg: EventClickArg) => {
     if (arg.event.extendedProps.isDayOff) return;
-    openAppointmentDialog.setValue(arg.event.id);
     const appointment = appointments.find((app) => app.id === arg.event.id);
+    if (!isAdmin && appointment?.userId !== userId) return;
+    openAppointmentDialog.setValue(arg.event.id);
     setResourceId(appointment?.userId ?? userId);
   };
 
   const handleSelect = (arg: DateSelectArg) => {
+    const resourceId = !["me", "all"].includes(selected) ? selected : (arg.resource?.id ?? userId);
+    if (!isAdmin && resourceId !== userId) return;
     newAppointmentDialog.setValue(true);
-    const isSelectedId = !["me", "all"].includes(selected);
-    setResourceId(isSelectedId ? selected : (arg.resource?.id ?? userId));
+    setResourceId(resourceId);
     form.reset({
       description: "",
       allDay: arg.allDay,
@@ -233,7 +238,7 @@ export default function Calendar({
   const memoizedAppointments: EventSourceInput = useMemo(() => {
     return appointments.map((app) => ({
       ...app,
-      editable: app.type === EventType.APPOINTMENT,
+      editable: app.type === EventType.APPOINTMENT && (isAdmin || app.userId === userId),
       title:
         app.type === EventType.APPOINTMENT
           ? `${app.patient?.firstName} ${app.patient?.lastName}`

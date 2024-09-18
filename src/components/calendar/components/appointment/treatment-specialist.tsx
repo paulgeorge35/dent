@@ -29,7 +29,7 @@ export default function TreatmentSpecialist({
   resourceId,
 }: TreatmentSpecialistProps) {
   const { data: services, isLoading: servicesLoading } =
-    api.service.list.useQuery({ type: "SINGLE" });
+    api.service.listSimpleServices.useQuery({});
 
   return (
     <div className="grid grid-cols-4 gap-4 px-4">

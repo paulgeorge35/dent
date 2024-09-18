@@ -198,6 +198,7 @@ const appointmentCreateInputBase = z.object({
   serviceId: z.string({ required_error: "Service is required" }),
   quiz: quizCreateInput,
   files: z.array(fileCreateInputSchema).optional(),
+  userId: z.string().optional(),
 });
 
 export const appointmentCreateInput = z

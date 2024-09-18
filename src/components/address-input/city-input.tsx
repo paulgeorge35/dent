@@ -1,26 +1,12 @@
-import { useEffect, useState } from "react";
-
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
-import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 import type { City } from "prisma/generated/zod";
+import { useEffect } from "react";
+import { useStateful } from "react-hanger";
+import { AutoComplete } from "../ui/autocomplete";
 
 interface CitySelectProps {
   name: string;
+  value: string;
   onSelect: (_name: string) => void;
   disabled?: boolean;
   cities: City[];
@@ -29,75 +15,42 @@ interface CitySelectProps {
 
 export function CitySelect({
   name,
+  value,
   onSelect,
   disabled,
   cities,
   loading,
 }: CitySelectProps) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
-  const [label, setLabel] = useState<string>("Select city...");
+  const t = useTranslations("fields.city");
+  const search = useStateful("");
 
   useEffect(() => {
-    if (name !== "") {
-      setLabel(name);
-      return;
+    if (value && value !== "") {
+      search.setValue(value);
     }
-    setLabel("Select city...");
-  }, [name]);
-
+  }, [value]);
+  
   return (
-    <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger asChild>
-        <Button
-          disabled={disabled}
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className={cn(
-            "w-full justify-between overflow-hidden",
-            name === "" && "text-muted-foreground",
-          )}
-        >
-          {label}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" side="bottom">
-        <Command className="max-h-[200px]">
-          <CommandInput
-            placeholder="Search city..."
-            autoFocus
-            onValueChange={(search) => setValue(search)}
-          />
-          {loading ? (
-            <CommandEmpty>Loading...</CommandEmpty>
-          ) : (
-            <CommandEmpty>No results</CommandEmpty>
-          )}
-          <CommandList>
-            <CommandGroup>
-              {cities.map((city) => (
-                <CommandItem
-                  key={city.id}
-                  value={city.name}
-                  onSelect={() => {
-                    onSelect(city.name);
-                    setOpen(false);
-                  }}
-                >
-                  {city.name}
-                  <Check
-                    className={cn(
-                      "ml-auto h-4 w-4",
-                      value === city.name ? "opacity-100" : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+    <AutoComplete<string>
+      id={name}
+      value={{
+        label: value,
+        value: value,
+      }}
+      disabled={loading || disabled}
+      search={search.value}
+      setSearch={search.setValue}
+      options={cities.map((city) => {
+        return {
+          label: city.name,
+          value: city.name,
+        };
+      })}
+      onValueChange={(option) => {
+        onSelect(option.value);
+      }}
+      placeholder={loading ? t("loading") : t("placeholder")}
+      emptyMessage={t("no-results")}
+    />
   );
 }

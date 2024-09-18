@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { emailSchema } from "@/types/schema";
+import { TRPCError } from "@trpc/server";
 import { StatusSchema } from "prisma/generated/zod";
 import { createTRPCRouter, tenantProcedure } from "../trpc";
 
@@ -86,11 +87,42 @@ export const patientRouter = createTRPCRouter({
             status: "ACTIVE",
             OR: search
               ? [
-                  {
-                    firstName: { contains: search, mode: "insensitive" },
-                  },
-                  { lastName: { contains: search, mode: "insensitive" } },
-                  { email: { contains: search, mode: "insensitive" } },
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["0"],
+                      string_contains: word,
+                    },
+                  })),
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["1"],
+                      string_contains: word,
+                    },
+                  })),
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["2"],
+                      string_contains: word,
+                    },
+                  })),
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["3"],
+                      string_contains: word,
+                    },
+                  })),
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["4"],
+                      string_contains: word,
+                    },
+                  })),
+                  ...search.split(" ").map((word) => ({
+                    filters: {
+                      path: ["5"],
+                      string_contains: word,
+                    },
+                  })),
                 ]
               : undefined,
           },
@@ -124,6 +156,14 @@ export const patientRouter = createTRPCRouter({
       const patient = await ctx.db.patient.findUnique({
         where: { id: input.id },
       });
+
+      if (!patient) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Patient not found",
+        });
+      }
+
       return patient;
     }),
 

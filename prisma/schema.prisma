@@ -208,6 +208,7 @@ model Patient {
   status             Status    @default(ACTIVE)
   smsNotifications   Boolean   @default(false)
   emailNotifications Boolean   @default(false)
+  filters            Json      @default("[]")
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
@@ -334,6 +335,7 @@ model Service {
 
 model RelatedService {
   id         String @id @default(cuid())
+  order      Int    @default(0)
   quantity   Int    @default(1)
   unit_price Int
   service    Json
@@ -503,9 +505,8 @@ model City {
 
 enum ServiceUnit {
   TOOTH
-  QUARTER
-  JAW
-  MOUTH
+  QUAD
+  ARCH
   VISIT
 }
 

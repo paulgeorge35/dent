@@ -1,18 +1,26 @@
 "use client";
 
-import type { InputProps } from "@/components/ui/input";
 import { Input } from "@/components/ui/input";
-import { type ChangeEvent, forwardRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import * as React from "react";
 
-interface PriceInputProps extends Omit<InputProps, "value" | "onChange"> {
+export interface PriceInputProps
+extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "type" | "onChange" | "value"
+> {
   value?: number;
   onChange?: (value: number) => void;
   currency?: string;
 }
 
-const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
-  ({ value = 0, onChange, currency = "RON", ...props }, ref) => {
-    const [displayValue, setDisplayValue] = useState(formatPrice(value));
+const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
+  ({ className, value = 0, onChange, currency = "RON", ...props }, ref) => {
+    const [displayValue, setDisplayValue] = React.useState(formatPrice(value));
+
+    React.useEffect(() => {
+      setDisplayValue(formatPrice(value));
+    }, [value]);
 
     function formatPrice(value: number): string {
       return (value / 100).toFixed(2);
@@ -22,7 +30,7 @@ const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
       return Math.round(Number.parseFloat(value) * 100);
     }
 
-    function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
       const inputValue = e.target.value.replace(/[^\d.]/g, "");
       const parsedValue = parsePrice(inputValue);
 
@@ -39,7 +47,7 @@ const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
     }
 
     return (
-      <div className="relative">
+      <div className={cn("relative", className)}>
         <Input
           {...props}
           ref={ref}
@@ -54,7 +62,7 @@ const PriceInput = forwardRef<HTMLInputElement, PriceInputProps>(
         </span>
       </div>
     );
-  },
+  }
 );
 
 PriceInput.displayName = "PriceInput";

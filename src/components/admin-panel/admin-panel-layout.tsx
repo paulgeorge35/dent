@@ -28,7 +28,7 @@ export default function AdminPanelLayout({
   return (
     <>
       <Sidebar
-        title={t(`${getPageTitle(pathname)}.title`)}
+        title={t(`${getPageTitle(pathname ?? "")}.title`)}
         session={session}
         accounts={accounts}
         locale={locale}

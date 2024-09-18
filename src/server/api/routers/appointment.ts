@@ -52,7 +52,7 @@ export const appointmentRouter = createTRPCRouter({
     .mutation(
       async ({
         ctx,
-        input: { patient: patientInput, serviceId, quiz, files, ...input },
+        input: { patient: patientInput, serviceId, quiz, files, userId: resourceId,...input },
       }) => {
         const userId = ctx.session.user.id;
         const tenantId = ctx.session.user.tenantId;
@@ -68,7 +68,7 @@ export const appointmentRouter = createTRPCRouter({
             data: {
               ...patientInput,
               tenantId,
-              userId,
+              userId: resourceId ?? userId,
             },
           });
 
@@ -100,7 +100,7 @@ export const appointmentRouter = createTRPCRouter({
           const event = await tx.event.create({
             data: {
               ...input,
-              userId,
+              userId: resourceId ?? userId,
               tenantId,
               patientId,
               initiator: "USER",

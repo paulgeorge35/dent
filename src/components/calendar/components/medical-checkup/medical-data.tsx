@@ -12,7 +12,7 @@ export default function MedicalData({ form }: MedicalDataProps) {
   };
 
   return (
-    <div className="vertical gap-4 px-4">
+    <div className="vertical gap-4 px-4 h-[2000px] bg-red-200">
       Medical Data
       <Button onClick={() => form.handleSubmit(onSubmit)}>Agree</Button>
     </div>

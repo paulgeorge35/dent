@@ -14,9 +14,10 @@ import { DataTablePagination } from "./pagination";
 
 interface DataTableProps<TData> {
   table: TanstackTable<TData>;
+  onRowClick?: (row: TData) => void;
 }
 
-export function DataTable<TData>({ table }: DataTableProps<TData>) {
+export function DataTable<TData>({ table, onRowClick }: DataTableProps<TData>) {
   const t = useTranslations("table");
   return (
     <div className="w-full space-y-2.5 h-auto">
@@ -47,6 +48,7 @@ export function DataTable<TData>({ table }: DataTableProps<TData>) {
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="group"
+                  onClick={() => onRowClick?.(row.original)}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
