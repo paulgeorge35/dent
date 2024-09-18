@@ -89,6 +89,7 @@ export default function EditServiceDialog({
       unit_price: service?.unit_price,
       duration: service?.duration,
       unit: service?.unit,
+      tags: service?.tags,
       relatedServices: service?.children.map((service) => ({
         serviceId: (service.service as unknown as Service).id,
         unit_price: service.unit_price,

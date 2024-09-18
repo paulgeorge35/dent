@@ -72,6 +72,8 @@ export default function ServiceForm({
   const t = useTranslations("page.treatments.fields");
   const tEnums = useTranslations("enums.serviceUnit");
 
+  const { data: tags } = api.material.listTags.useQuery();
+
   return (
     <Form {...form}>
       <form className="grid grid-cols-2 gap-4">
@@ -126,6 +128,25 @@ export default function ServiceForm({
             </FormItem>
           )}
         />
+        <FormField
+          name="tags"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel htmlFor={field.name}>
+                {t("tags.label")} <OptionalInputTag />
+              </FormLabel>
+              <TagInput
+                id={field.name}
+                {...field}
+                placeholder={t("tags.placeholder")}
+                suggestions={tags ?? []}
+              />
+              <FormDescription>{t("tags.description")}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <ServicesSection onSetupMultivisit={onSetupMultivisit} form={form} />
         <span className="col-span-2 grid grid-cols-[1fr_auto] gap-4">
           <FormField
@@ -173,24 +194,6 @@ export default function ServiceForm({
             <ComponentsSection form={form} />
           )}
         </span>
-        <FormField
-          name="tags"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel htmlFor={field.name}>
-                {t("tags.label")} <OptionalInputTag />
-              </FormLabel>
-              <TagInput
-                id={field.name}
-                {...field}
-                placeholder={t("tags.placeholder")}
-              />
-              <FormDescription>{t("tags.description")}</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
       </form>
     </Form>
   );
