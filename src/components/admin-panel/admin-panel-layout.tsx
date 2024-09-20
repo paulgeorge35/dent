@@ -35,7 +35,7 @@ export default function AdminPanelLayout({
       />
       <Shell
         className={cn(
-          "h-screen !w-auto gap-2 bg-background transition-[margin-left] duration-300 ease-in-out md:p-4 md:pt-20",
+          "h-screen !w-auto gap-2 bg-background transition-[margin-left] duration-300 ease-in-out p-4 pt-20 md:pt-[72px]",
           sidebar?.isOpen === false ? "lg:ml-[90px]" : "lg:ml-72",
         )}
       >

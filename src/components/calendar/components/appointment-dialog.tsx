@@ -96,7 +96,7 @@ export default function AppointmentDialog({
               <span className="text-sm font-medium text-muted-foreground">
                 Appointment ID
               </span>
-              <span className="font-mono text-lg font-bold">{`#RSVA${zeroPad(event?.index ?? 0)}`}</span>
+              <span className="font-mono text-lg font-bold">{`#APPT${zeroPad(event?.index ?? 0)}`}</span>
               <span className="text-xs text-muted-foreground">&bull;</span>
               <span className="horizontal items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Monitor className="size-4" />

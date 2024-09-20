@@ -87,6 +87,7 @@ model User {
   treatmentPlans TreatmentPlan[]
   invitations    Invitation[]    @relation(name: "InvitedByUser")
   files          File[]
+  tasks          Task[]
 
   deletedAt   DateTime?
   activatedAt DateTime?
@@ -438,6 +439,19 @@ model Quiz {
 model Tag {
   id   String @id @default(cuid())
   name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id      String    @id @default(cuid())
+  title   String
+  isDone  Boolean   @default(false)
+  dueDate DateTime?
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

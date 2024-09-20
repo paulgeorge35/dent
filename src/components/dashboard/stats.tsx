@@ -1,29 +1,31 @@
 "use client";
 
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { DateTime } from "luxon";
 import { useStateful } from "react-hanger";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
-    type ChartConfig,
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "../ui/chart";
 
 type View = "currentWeek" | "lastWeek" | "currentMonth" | "today";
@@ -111,7 +113,7 @@ export default function Stats({
           config={chartConfig}
           className="min-h-[200px] max-h-[400px] w-full"
         >
-          <BarChart accessibilityLayer data={chartData}>
+          <LineChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -121,8 +123,15 @@ export default function Stats({
               tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey="count" fill="var(--color-count)" radius={4} />
-          </BarChart>
+            <ChartLegend content={<ChartLegendContent />} />
+            <Line
+              type="monotone"
+              dataKey="count"
+              stroke="var(--color-count)"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+            />
+          </LineChart>
         </ChartContainer>
       </CardContent>
     </Card>

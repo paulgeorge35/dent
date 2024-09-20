@@ -33,7 +33,7 @@ export function Sidebar({
       <Shell
         variant="nav"
         className={cn(
-          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[50]", // Add z-index here
+          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[30] lg:z-[50]", // Add z-index here
           {
             "lg:w-[calc(100vw-289px)]": sidebar?.isOpen,
           },
@@ -47,10 +47,13 @@ export function Sidebar({
           {title}
         </h1>
         <GlobalSearch />
-        <Button size="icon" className="flex-shrink-0 rounded-full">
+        <Button
+          size="icon"
+          className="hidden md:flex flex-shrink-0 rounded-full"
+        >
           <Plus />
         </Button>
-        <Link href="/settings">
+        <Link href="/settings" className="hidden md:flex">
           <Button
             size="icon"
             variant="ghost"
@@ -66,10 +69,23 @@ export function Sidebar({
           className="flex-shrink-0"
         />
       </Shell>
+      <span
+        className={cn("lg:hidden fixed inset-0 z-[35] bg-black/80", {
+          hidden: sidebar?.isOpen === false,
+        })}
+        onClick={() => sidebar?.setIsOpen?.()}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            sidebar?.setIsOpen?.();
+          }
+        }}
+      />
       <aside
         className={cn(
-          "fixed left-0 top-0 h-screen -translate-x-full transition-[width] duration-300 ease-in-out lg:translate-x-0 z-[40]", // Lower z-index here
-          sidebar?.isOpen === false ? "w-[90px]" : "w-72",
+          "fixed left-0 top-0 h-screen transition-[width] duration-300 ease-in-out translate-x-0 z-[40]",
+          sidebar?.isOpen === false
+            ? "hidden w-0 lg:w-[90px] lg:block"
+            : "w-72",
         )}
       >
         <div className="relative flex h-full flex-col overflow-y-auto bg-background px-3 py-4 shadow-md dark:shadow-zinc-800">

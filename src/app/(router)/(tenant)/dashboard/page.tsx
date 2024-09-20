@@ -33,7 +33,7 @@ export default async function Dashboard() {
           currentWeek={currentWeek}
           lastWeek={lastWeek}
           currentMonth={currentMonth}
-          className="col-span-4"
+          className="col-span-6 lg:col-span-4"
         />
         <CommonTreatments services={services} className="col-span-2" />
         <Upcomming appointments={appointments} className="col-span-6" />

@@ -63,7 +63,7 @@ export function DataTablePagination<TData>({
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
           >
-            <DoubleArrowLeftIcon className="size-4" aria-hidden="true" />
+            <DoubleArrowLeftIcon className="size-4 shrink-0" aria-hidden="true" />
           </Button>
           <Button
             aria-label="Go to previous page"

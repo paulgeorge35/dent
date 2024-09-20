@@ -3,10 +3,11 @@ import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { Patient } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
+import debounce from "lodash/debounce";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { useHotkeys } from "react-hotkeys-hook";
 import AvatarComponent from "../shared/avatar-component";
@@ -83,11 +84,21 @@ export default function GlobalSearch() {
     }
   }, [selectedIndex]);
 
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      if (search.value.trim().length > 2) {
+        refetchPatients();
+      }
+    }, 1000),
+    [refetchPatients, search.value],
+  );
+
   useEffect(() => {
     if (search.value.trim().length > 2) {
-      refetchPatients();
+      debouncedRefetch();
     }
-  }, [search.value, refetchPatients]);
+    return () => debouncedRefetch.cancel();
+  }, [search.value, debouncedRefetch]);
 
   useEffect(() => {
     search.setValue("");
@@ -102,11 +113,11 @@ export default function GlobalSearch() {
     <>
       <Button
         onClick={globalSearch.setTrue}
-        className="rounded-full bg-muted h-10 w-80 text-muted-foreground text-base justify-start font-normal gap-2 border border-input shadow-sm hover:bg-background/50"
+        className="rounded-full w-10 justify-center md:w-80 bg-muted h-10 text-muted-foreground text-base md:justify-start font-normal gap-2 border border-input shadow-sm hover:bg-background/50"
       >
         <Search className="size-4 shrink-0" />
-        <p className="truncate">{t("search.placeholder")}</p>
-        <span className="ml-auto flex items-center gap-1 shrink-0">
+        <p className="hidden md:flex truncate">{t("search.placeholder")}</p>
+        <span className="hidden md:flex ml-auto items-center gap-1 shrink-0">
           <ShortcutKeys shortcut={CONTROL_KEY} />
           <ShortcutKeys shortcut="/" />
         </span>
@@ -119,7 +130,7 @@ export default function GlobalSearch() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 horizontal center z-[9999]" // Increase z-index significantly
+            className="pt-20 px-4 md:p-0 fixed inset-0 horizontal center-h items-start md:center z-[100]"
           >
             <motion.div
               initial={{ opacity: 0 }}
@@ -135,7 +146,7 @@ export default function GlobalSearch() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className={cn(
-                "bg-background/90 backdrop-blur-sm rounded-lg shadow-xl z-[10000] w-full max-w-3xl rounded-t-[32px] vertical p-2",
+                "bg-background/90 backdrop-blur-sm rounded-lg shadow-xl z-[100] w-full max-w-3xl rounded-t-[32px] vertical p-2",
                 {
                   "rounded-b-[32px]": !isData && !isLoading,
                 },

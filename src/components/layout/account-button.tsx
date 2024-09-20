@@ -71,7 +71,7 @@ export default function AccountButton({
         <Button
           variant="ghost"
           className={cn(
-            "flex w-56 flex-row items-center gap-4 rounded-full py-2 !pl-0",
+            "flex w-auto px-0 md:px-4 md:w-56 flex-row items-center md:gap-4 rounded-full py-2 !pl-0",
             className,
           )}
         >
@@ -83,7 +83,7 @@ export default function AccountButton({
             height={36}
             width={36}
           />
-          <span className="flex flex-col items-start overflow-hidden">
+          <span className="hidden md:flex flex-col items-start overflow-hidden">
             <p className="truncate text-sm font-semibold">
               {session.firstName} {session.lastName}
             </p>
@@ -91,10 +91,10 @@ export default function AccountButton({
               {tenant?.profile.name}
             </p>
           </span>
-          <ChevronDown className="ml-auto size-5 flex-shrink-0 text-muted-foreground" />
+          <ChevronDown className="hidden md:flex ml-auto size-5 flex-shrink-0 text-muted-foreground" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-56 p-0 shadow-lg" side="bottom" align="end">
+      <PopoverContent className="w-56 p-0 shadow-lg !text-base md:!text-xs" side="bottom" align="end">
         <div className="grid">
           <Link
             href="/welcome"

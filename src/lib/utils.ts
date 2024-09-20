@@ -155,7 +155,7 @@ export function getPageTitle(path: string) {
   return path.split("/").pop();
 }
 
-export const zeroPad = (num: number, places = 4) => {
+export const zeroPad = (num: number, places = 6) => {
   return String(num).padStart(places, "0");
 };
 

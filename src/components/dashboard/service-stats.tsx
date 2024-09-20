@@ -1,22 +1,24 @@
 "use client";
 
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 
+import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { useMemo } from "react";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
 import {
-    type ChartConfig,
-    ChartContainer,
-    ChartLegend,
-    ChartLegendContent,
-    ChartTooltip,
-    ChartTooltipContent,
+  type ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
 } from "../ui/chart";
 
 type View = "currentWeek" | "lastWeek" | "currentMonth" | "today";
@@ -31,45 +33,54 @@ type StatsProps = {
   className?: string;
 };
 
-export default function CommonTreatments({ services, className }: StatsProps) {
-  const chartConfig = {
-    count: {
-      label: "Treatments",
-      color: "#2563eb",
-    },
-  } satisfies ChartConfig;
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
-  const chartData = services.map((service) => ({
+export default function CommonTreatments({ services, className }: StatsProps) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const radius = useMemo(() => (isDesktop ? "80%" : "50%"), [isDesktop]);
+  const chartConfig = {} satisfies ChartConfig;
+
+  const chartData = services.map((service, index) => ({
     name: service.name,
-    count: service.count,
+    value: service.count,
+    color: COLORS[index % COLORS.length],
   }));
 
   return (
-    <Card className={cn("w-full", className)}>
+    <Card className={cn("w-full flex-col hidden lg:flex", className)}>
       <CardHeader>
-        <CardTitle className="flex justify-between">Common Treatments</CardTitle>
+        <CardTitle className="flex justify-between">
+          Common Treatments
+        </CardTitle>
         <CardDescription>
           Here are some stats about your most common treatments.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer
-          config={chartConfig}
-          className="min-h-[200px] max-h-[400px] w-full"
-        >
-          <BarChart accessibilityLayer data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="name"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
-            />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar dataKey="count" fill="var(--color-count)" radius={4} />
-          </BarChart>
+      <CardContent className="flex items-center justify-center grow">
+        <ChartContainer config={chartConfig} className="min-h-[200px] h-full">
+          <ResponsiveContainer width="100%">
+            <PieChart>
+              <Pie
+                data={chartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                outerRadius={radius}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {chartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={entry.color}
+                    name={entry.name}
+                  />
+                ))}
+              </Pie>
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+            </PieChart>
+          </ResponsiveContainer>
         </ChartContainer>
       </CardContent>
     </Card>

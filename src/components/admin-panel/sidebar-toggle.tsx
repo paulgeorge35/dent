@@ -1,6 +1,7 @@
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { useHotkeys } from "react-hotkeys-hook";
 import { ShortcutKeys } from "../ui/shortcut-key";
@@ -12,11 +13,21 @@ interface SidebarToggleProps {
 }
 
 export function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps) {
+  const isMobile = useMediaQuery("(max-width: 1023px)");
   useHotkeys("/", () => {
     setIsOpen?.();
   });
-  return (
-    <div className="invisible lg:visible absolute top-[16px] -left-[16px] z-20">
+  return isMobile ? (
+    <Button
+      onClick={() => setIsOpen?.()}
+      className="!size-10 p-1"
+      variant="ghost"
+      size="icon"
+    >
+      <Menu className="size-4" />
+    </Button>
+  ) : (
+    <div className="absolute top-[16px] -left-[16px] z-20">
       <Tooltip>
         <TooltipTrigger>
           <Button
