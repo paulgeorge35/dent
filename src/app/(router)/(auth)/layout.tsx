@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import AuthHero from "@/components/auth/auth-hero";
 import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 import { Box } from "lucide-react";
 import { RedirectType, redirect } from "next/navigation";
 
@@ -20,7 +21,12 @@ export default async function AuthLayout({
 
   return (
     <>
-      <div className="container relative grid h-[100dvh] flex-col items-center justify-center md:h-screen lg:max-w-none lg:grid-cols-[5fr,4fr] lg:grid-rows-[1fr] lg:gap-0 lg:px-0">
+      <div
+        className={cn(
+          "container relative grid flex-col items-center justify-center h-screen lg:max-w-none lg:grid-cols-[5fr,4fr] lg:grid-rows-[1fr] lg:gap-0 lg:px-0",
+          "h-[100dvh]",
+        )}
+      >
         <AuthHero />
         <div className="lg:p-8">
           <div className="vertical center gap-8 py-12">
