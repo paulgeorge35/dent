@@ -77,7 +77,7 @@ export default async function Staff() {
           </Tooltip>
           <span
             className={cn(
-              "rounded-md border border-border bg-background/50 px-2 py-1 text-sm",
+              "hidden md:block rounded-md border border-border bg-background/50 px-2 py-1 text-sm",
               {
                 hidden: isCanceled,
               },

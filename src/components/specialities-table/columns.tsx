@@ -28,7 +28,7 @@ export function getColumns({
         return (
           <div className="horizontal center-v grow gap-2">
             <span
-              className={cn("size-2 rounded-full", {
+              className={cn("size-2 rounded-full shrink-0", {
                 "bg-blue-500": row.original.color === "blue",
                 "bg-green-500": row.original.color === "green",
                 "bg-red-500": row.original.color === "red",

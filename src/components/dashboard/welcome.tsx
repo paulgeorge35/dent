@@ -4,12 +4,12 @@ import Link from "next/link";
 import AvatarComponent from "../shared/avatar-component";
 import { Button } from "../ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "../ui/card";
 import { Progress } from "../ui/progress";
 import { Separator } from "../ui/separator";
@@ -62,7 +62,7 @@ function CurrentTasks() {
     <div className="vertical">
       <p className="shrink-0 text-sm font-medium">Current tasks</p>
       <span className="horizontal center-v gap-2">
-        <Progress value={50} className="w-40 shrink-0" />
+        <Progress value={50} className="w-20 md:40 shrink-0" />
         <p className="shrink-0 text-sm">3/6</p>
       </span>
     </div>

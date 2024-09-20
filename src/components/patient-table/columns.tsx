@@ -53,9 +53,9 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
       cell: ({ row }) => {
         return (
           <div className="horizontal center-v gap-2 group">
-            <PhoneIcon className="size-4" />
+            <PhoneIcon className="size-4 shrink-0" />
             <a
-              className="text-link hover:text-link-hover"
+              className="text-link hover:text-link-hover text-nowrap"
               href={`tel:${row.original.phone}`}
             >
               {row.original.phone}
@@ -63,7 +63,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
             {row.original.phone && (
               <Clipboard
                 text={row.original.phone}
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               />
             )}
           </div>
@@ -92,7 +92,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
             {row.original.email && (
               <Clipboard
                 text={row.original.email}
-                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                className="hidden md:block opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               />
             )}
           </div>

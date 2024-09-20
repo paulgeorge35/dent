@@ -13,12 +13,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import useMediaQuery from "@/hooks/use-media-query";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { getMenuList } from "@/lib/menu-list";
 import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { useTranslations } from "next-intl";
 import { useMemo } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { useStore } from "zustand";
 import { ShortcutKeys } from "../ui/shortcut-key";
 import CurrentTenant from "./tenant-card";
 
@@ -30,6 +33,8 @@ interface MenuProps {
 
 export function Menu({ isOpen, accounts, session }: MenuProps) {
   const t = useTranslations("layout.sidebar");
+  const sidebar = useStore(useSidebarToggle, (state) => state);
+  const isMobile = useMediaQuery("(max-width: 1023px)");
   const pathname = usePathname();
   const menuList = getMenuList(pathname ?? "");
 
@@ -95,6 +100,11 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                               variant={active ? "secondary" : "ghost"}
                               className="mb-1 h-10 w-full justify-start"
                               asChild
+                              onClick={() => {
+                                if (isMobile) {
+                                  sidebar?.setIsOpen();
+                                }
+                              }}
                             >
                               <Link href={href}>
                                 <span
