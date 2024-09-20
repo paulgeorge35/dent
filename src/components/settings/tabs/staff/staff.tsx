@@ -50,7 +50,7 @@ export default async function Staff() {
   return (
     <TabsContent
       value="staff"
-      className="md:max-w-screen-5xl !mt-0 flex flex-col gap-4"
+      className="md:max-w-screen-lg !mt-0 flex flex-col gap-4"
     >
       <span className="horizontal center-v gap-2">
         <InvitationDialog disabled={noSpotsLeft} />

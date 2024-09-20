@@ -144,7 +144,7 @@ export function TagInput({
           onKeyDown={handleInputKeyDown}
           placeholder={placeholder}
           className={cn(
-            "flex-grow border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 text-sm",
+            "flex-grow border-none shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 text-sm md:text-base",
             isAtMaxChars && "text-destructive",
           )}
         />

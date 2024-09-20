@@ -161,11 +161,11 @@ export default function EditServiceDialog({
         className={cn({
           "!vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
             isDesktop,
-          "translate-x-[75%]": secondDialogOpen.value,
+          "lg:translate-x-[75%]": secondDialogOpen.value,
         })}
       >
         <HeaderComponent className="p-6">
-          <TitleComponent className="flex items-center gap-2">
+          <TitleComponent className="lg:flex lg:items-center lg:gap-2">
             {t("dialog.title")}
           </TitleComponent>
           <DescriptionComponent>{t("dialog.description")}</DescriptionComponent>
@@ -369,7 +369,7 @@ function ComplexTreatmentDialog({
         className={cn({
           "vertical p-0 my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-2xl opacity-0 transition-opacity duration-300 ease-in-out":
             isDesktop,
-          "translate-x-[calc(100vw-125%-32px)] opacity-100": open,
+          "lg:translate-x-[calc(100vw-125%-32px)] opacity-100": open,
         })}
       >
         <HeaderComponent className="p-6">

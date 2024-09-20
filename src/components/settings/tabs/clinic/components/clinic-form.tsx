@@ -129,7 +129,7 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
               control={form.control}
               name="name"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel htmlFor={field.name}>{t("name.label")}</FormLabel>
                   <Input id={field.name} {...field} />
                   <FormDescription>
@@ -143,7 +143,7 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
               control={form.control}
               name="phone"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="col-span-2 md:col-span-1">
                   <FormLabel htmlFor={field.name}>{t("phone.label")}</FormLabel>
                   <FormControl>
                     <PhoneInput

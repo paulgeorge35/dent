@@ -280,7 +280,7 @@ function ComponentsSection({ form }: { form: UseFormReturn<FormValues> }) {
             (material) =>
               !form
                 .watch("materials")
-                .some((m) => m.materialId === material.id),
+                ?.some((m) => m.materialId === material.id),
           ) ?? []
         }
       />

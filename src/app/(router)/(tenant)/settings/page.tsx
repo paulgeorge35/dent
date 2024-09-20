@@ -31,8 +31,8 @@ export default async function Settings({ searchParams }: StaffPageProps) {
 
   if (tab && adminOnlyTabs.includes(tab) && !isAdmin) redirect("/settings");
   return (
-    <Shell variant="center">
-      <SettingsTabs isAdmin={isAdmin} tab={tab}>
+    <Shell>
+    <SettingsTabs isAdmin={isAdmin} tab={tab}>
         <Account />
         {isAdmin && <Staff />}
         {isAdmin && <Clinic />}
