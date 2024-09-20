@@ -159,7 +159,7 @@ export default function EditServiceDialog({
     <Root open={!!dialogOpen.value} onOpenChange={onOpenChange}>
       <ContentComponent
         className={cn({
-          "vertical my-8 mr-4  h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
+          "!vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
             isDesktop,
           "translate-x-[75%]": secondDialogOpen.value,
         })}

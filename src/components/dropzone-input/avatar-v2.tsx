@@ -1,13 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { cn, generateRandomTailwindColor } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -20,6 +13,13 @@ import Cropper from "react-easy-crop";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 import AvatarComponent from "../shared/avatar-component";
+import {
+  Credenza,
+  CredenzaContent,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+} from "../ui/credenza";
 import { Separator } from "../ui/separator";
 
 type AvatarInputProps = {
@@ -333,118 +333,116 @@ export default function AvatarInput({
   });
 
   return (
-    <div>
-      <div
-        {...getRootProps()}
-        className={cn("dropzone horizontal center gap-4", {
-          "rounded-lg border-[2px] border-dashed": isDragActive,
-          "border-blue-400": isDragAccept,
-          "border-red-400": isDragReject,
-        })}
-      >
-        <input
-          id={id}
-          ref={fileInputRef}
-          type="file"
-          onChange={onFileChange}
-          className="sr-only"
-          aria-label="Choose an image to crop"
-          {...getInputProps()}
-        />
-        <div className="relative">
-          <AvatarComponent
-            src={avatar?.url}
-            alt={fallback ?? "Avatar"}
-            fallback={fallback === "" ? "Avatar" : (fallback ?? "Avatar")}
-            width={200}
-            height={200}
-            className={cn(
-              "aspect-square size-[100px] bg-cover bg-center text-2xl",
-              randomBgColor,
-            )}
-            isLoading={isUploading || isFetching}
-            randomColor
+    <>
+      <Credenza open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <CredenzaContent className="sm:max-w-[425px]">
+          <CredenzaHeader>
+            <CredenzaTitle>{t("avatar.crop")}</CredenzaTitle>
+          </CredenzaHeader>
+          {image && (
+            <div className="relative w-64 h-64 mx-auto">
+              <Cropper
+                image={image}
+                crop={crop}
+                zoom={zoom}
+                aspect={1}
+                onCropChange={setCrop}
+                onCropComplete={onCropComplete}
+                onZoomChange={setZoom}
+                cropShape="rect"
+                showGrid={false}
+              />
+            </div>
+          )}
+          {image && (
+            <div className="w-64 mx-auto">
+              <Slider
+                min={1}
+                max={2}
+                step={0.1}
+                value={[zoom]}
+                onValueChange={(value) => setZoom(value[0] ?? 1)}
+              />
+            </div>
+          )}
+          <CredenzaFooter>
+            <Button onClick={cropAndUpload} disabled={isLoading}>
+              {isLoading ? t("avatar.processing") : t("avatar.confirm")}
+            </Button>
+          </CredenzaFooter>
+        </CredenzaContent>
+      </Credenza>
+      <div>
+        <div
+          {...getRootProps()}
+          className={cn("dropzone horizontal center gap-4", {
+            "rounded-lg border-[2px] border-dashed": isDragActive,
+            "border-blue-400": isDragAccept,
+            "border-red-400": isDragReject,
+          })}
+        >
+          <input
+            id={id}
+            ref={fileInputRef}
+            type="file"
+            onChange={onFileChange}
+            className="sr-only"
+            aria-label="Choose an image to crop"
+            {...getInputProps()}
           />
-          <button
-            type="button"
-            className="absolute top-0 left-0 size-[100px] opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 rounded-full flex items-center justify-center text-white border-0 border-blue-500 hover:border-4 border-dashed"
-            onClick={handleBrowseClick}
-          >
-            <Upload />
-          </button>
+          <div className="relative">
+            <AvatarComponent
+              src={avatar?.url}
+              alt={fallback ?? "Avatar"}
+              fallback={fallback === "" ? "Avatar" : fallback ?? "Avatar"}
+              width={200}
+              height={200}
+              className={cn(
+                "aspect-square size-[100px] bg-cover bg-center text-2xl",
+                randomBgColor,
+              )}
+              isLoading={isUploading || isFetching}
+              randomColor
+            />
+            <button
+              type="button"
+              className="absolute top-0 left-0 size-[100px] opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black/50 rounded-full flex items-center justify-center text-white border-0 border-blue-500 hover:border-4 border-dashed"
+              onClick={handleBrowseClick}
+            >
+              <Upload />
+            </button>
+          </div>
+          <Separator orientation="vertical" className="h-8 shrink-0" />
+          {value && (
+            <Button
+              type="button"
+              variant="link"
+              className="text-link hover:text-link-hover !px-0"
+              onClick={handleRemoveImage}
+            >
+              {t("avatar.remove")}
+            </Button>
+          )}
+          {!value && (
+            <Button
+              type="button"
+              variant="link"
+              className="text-link hover:text-link-hover !px-0"
+              onClick={handleBrowseClick}
+            >
+              {t("avatar.browse")}
+            </Button>
+          )}
         </div>
-        <Separator orientation="vertical" className="h-8 shrink-0" />
-        {value && (
-          <Button
-            type="button"
-            variant="link"
-            className="text-link hover:text-link-hover !px-0"
-            onClick={handleRemoveImage}
-          >
-            {t("avatar.remove")}
-          </Button>
-        )}
-        {!value && (
-          <Button
-            type="button"
-            variant="link"
-            className="text-link hover:text-link-hover !px-0"
-            onClick={handleBrowseClick}
-          >
-            {t("avatar.browse")}
-          </Button>
-        )}
-
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent
-            className="sm:max-w-[425px]"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <DialogHeader>
-              <DialogTitle>{t("avatar.crop")}</DialogTitle>
-            </DialogHeader>
-            {image && (
-              <div className="relative w-64 h-64 mx-auto">
-                <Cropper
-                  image={image}
-                  crop={crop}
-                  zoom={zoom}
-                  aspect={1}
-                  onCropChange={setCrop}
-                  onCropComplete={onCropComplete}
-                  onZoomChange={setZoom}
-                  cropShape="rect"
-                  showGrid={false}
-                />
-              </div>
-            )}
-            {image && (
-              <div className="w-64 mx-auto">
-                <Slider
-                  min={1}
-                  max={2}
-                  step={0.1}
-                  value={[zoom]}
-                  onValueChange={(value) => setZoom(value[0] ?? 1)}
-                />
-              </div>
-            )}
-            <DialogFooter>
-              <Button onClick={cropAndUpload} disabled={isLoading}>
-                {isLoading ? t("avatar.processing") : t("avatar.confirm")}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <div
+          className={cn(
+            "horizontal mt-2 w-full items-center justify-between text-xs text-muted-foreground",
+          )}
+        >
+          <p>{t("avatar.limit", { size: maxSize })}</p>
+        </div>
       </div>
-      <div
-        className={cn(
-          "horizontal mt-2 w-full items-center justify-between text-xs text-muted-foreground",
-        )}
-      >
-        <p>{t("avatar.limit", { size: maxSize })}</p>
-      </div>
-    </div>
+    </>
   );
 }
 

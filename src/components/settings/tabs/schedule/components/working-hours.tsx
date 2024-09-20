@@ -164,14 +164,14 @@ function WorkingDay({ day, form }: WorkingDayProps) {
   return (
     <div
       className={cn(
-        "grid grid-cols-[200px_1fr] gap-2 p-4 [&:not(:first-child)]:border-t",
+        "grid grid-cols-[200px_1fr] gap-4 p-4 [&:not(:first-child)]:border-t",
       )}
     >
       <FormField
         control={form.control}
         name={`workingHours.${day}`}
         render={({ field }) => (
-          <FormItem className="flex items-center gap-2">
+          <FormItem className="flex items-center gap-2 col-span-2 sm:col-span-1">
             <Switch
               id={`working-day-${day}`}
               checked={isWorking}
@@ -193,18 +193,18 @@ function WorkingDay({ day, form }: WorkingDayProps) {
         )}
       />
       {!isWorking && (
-        <p className="h-10 flex items-center col-span-1 text-sm text-muted-foreground">
+        <p className="h-10 flex items-center col-span-2 sm:col-span-1 text-sm text-muted-foreground">
           {t("not-working")}
         </p>
       )}
       {isWorking && (
-        <span className="horizontal gap-4">
+        <span className="horizontal gap-4 col-span-2 sm:col-span-1">
           <FormFieldCompact
             control={form.control}
             name={`workingHours.${day}.startTime`}
             required={false}
             render={({ field }) => (
-              <span className="horizontal h-full  items-end justify-end">
+              <span className="horizontal h-full items-end justify-end">
                 <TimePickerInput
                   picker="hours"
                   date={field.value ?? undefined}

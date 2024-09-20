@@ -168,13 +168,9 @@ const CredenzaFooter = ({ className, children, ...props }: CredenzaProps) => {
 };
 
 export {
-  Credenza,
-  CredenzaTrigger,
-  CredenzaClose,
+  Credenza, CredenzaBody, CredenzaClose,
   CredenzaContent,
-  CredenzaDescription,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaBody,
-  CredenzaFooter,
+  CredenzaDescription, CredenzaFooter, CredenzaHeader,
+  CredenzaTitle, CredenzaTrigger
 };
+

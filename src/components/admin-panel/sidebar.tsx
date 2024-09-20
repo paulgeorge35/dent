@@ -33,7 +33,7 @@ export function Sidebar({
       <Shell
         variant="nav"
         className={cn(
-          "w-full justify-between pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[30] lg:z-[50]", // Add z-index here
+          "w-full justify-between lg:pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[30] lg:z-[50]", // Add z-index here
           {
             "lg:w-[calc(100vw-289px)]": sidebar?.isOpen,
           },

@@ -102,11 +102,11 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<
         return (
           <div>
             {row.original.children.length > 0 ? (
-              <span className="bg-purple-500/20 px-2 py-1 rounded-full text-purple-800 font-medium uppercase text-xs">
+              <span className="bg-purple-500/20 px-2 py-1 rounded-full text-purple-800 font-medium uppercase text-xs whitespace-nowrap">
                 {t("page.treatments.fields.type.options.MULTI_VISIT")}
               </span>
             ) : (
-              <span className="bg-teal-500/20 px-2 py-1 rounded-full text-teal-800 font-medium uppercase text-xs">
+              <span className="bg-teal-500/20 px-2 py-1 rounded-full text-teal-800 font-medium uppercase text-xs whitespace-nowrap">
                 {t("page.treatments.fields.type.options.SINGLE_VISIT")}
               </span>
             )}

@@ -21,8 +21,8 @@ export default async function Dashboard() {
   const appointments = await api.appointment.today();
 
   return (
-    <Shell className="grow overflow-y-auto p-0 md:p-4">
-      <div className="grid grid-cols-6 gap-4">
+    <Shell>
+      <div className="gap-2 grid grid-cols-6 md:gap-4 max-w-full">
         <Welcome
           name={`${session?.firstName} ${session?.lastName}`}
           avatar={session?.avatar?.url}

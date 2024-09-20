@@ -40,7 +40,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<UserComplete>[] {
               height={40}
               randomColor
             />
-            <span className="vertical items-start">
+            <span className="vertical items-start whitespace-nowrap">
               {`${row.original.profile.firstName} ${row.original.profile.lastName}`}
               <span className="text-sm text-muted-foreground">
                 {row.original.speciality?.name}

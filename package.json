@@ -125,7 +125,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-animation-delay": "^1.2.0",
     "uuid": "^10.0.0",
-    "vaul": "^0.9.1",
+    "vaul": "^0.9.4",
     "webcrypto-core": "^1.8.0",
     "zod": "^3.22.4",
     "zod-prisma-types": "^3.1.6",
