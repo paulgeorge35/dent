@@ -66,16 +66,16 @@ export default function CalendarToolbar({
 
   return (
     <section className="grid grid-cols-[1fr_2fr_1fr] items-center gap-4">
-      <div className="flex items-center justify-start gap-2 col-span-2 lg:col-span-1">
-        <CalendarCheck className="size-14 rounded-lg bg-muted p-3 text-muted-foreground shrink-0" />
-        <span className="text-3xl font-medium">
+      <div className="flex items-baseline md:items-center justify-start gap-2 col-span-2 lg:col-span-1">
+        <CalendarCheck className="hidden md:block size-14 rounded-lg bg-muted p-3 text-muted-foreground shrink-0" />
+        <span className="text-2xl md:text-3xl font-medium">
           {appointments ? (
             <AnimatedNumber animateToNumber={appointments.length} />
           ) : (
             "-"
           )}
         </span>
-        <span className="text-lg text-muted-foreground/80 lowercase">
+        <span className="text-base md:text-lg text-muted-foreground/80 lowercase">
           {t("total-appointments")}
         </span>
       </div>
@@ -133,7 +133,7 @@ export default function CalendarToolbar({
                 label: t("view-select.week"),
               },
             ]}
-            className="hidden lg:block"
+            className="hidden lg:inline-flex"
             onCheckedChange={(value) => setPeriod(value ? "week" : "day")}
           />
         )}

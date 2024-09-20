@@ -158,6 +158,11 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
                           ),
                         }))}
                         isOpen={isOpen}
+                        onClick={() => {
+                          if (isMobile) {
+                            sidebar?.setIsOpen();
+                          }
+                        }}
                       />
                     </div>
                   ),

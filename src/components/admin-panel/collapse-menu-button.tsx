@@ -47,6 +47,7 @@ interface CollapseMenuButtonProps {
   active: boolean;
   submenus: Submenu[];
   isOpen: boolean | undefined;
+  onClick: () => void;
 }
 
 export function CollapseMenuButton({
@@ -55,6 +56,7 @@ export function CollapseMenuButton({
   active,
   submenus,
   isOpen,
+  onClick,
 }: CollapseMenuButtonProps) {
   const isSubmenuActive = submenus.some((submenu) => submenu.active);
   const [isCollapsed, setIsCollapsed] = useState<boolean>(isSubmenuActive);
@@ -121,6 +123,7 @@ export function CollapseMenuButton({
             variant={active ? "secondary" : "ghost"}
             className="mb-1 h-10 w-full justify-start"
             asChild
+            onClick={onClick}
           >
             <Link href={href}>
               <span className="ml-2 mr-4">
