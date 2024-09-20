@@ -65,7 +65,7 @@ export default function CalendarToolbar({
     .filter((event) => event.type === "APPOINTMENT");
 
   return (
-    <section className="grid grid-cols-[1fr_2fr_1fr] items-center gap-4">
+    <section className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
       <div className="flex items-baseline md:items-center justify-start gap-2 col-span-2 lg:col-span-1">
         <CalendarCheck className="hidden md:block size-14 rounded-lg bg-muted p-3 text-muted-foreground shrink-0" />
         <span className="text-2xl md:text-3xl font-medium">
