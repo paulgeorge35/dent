@@ -134,6 +134,7 @@
 
   body {
     @apply bg-background text-foreground !overflow-x-hidden;
+    padding-bottom: env(safe-area-inset-bottom);
   }
   
   input[type="number"]::-webkit-inner-spin-button,
