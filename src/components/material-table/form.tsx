@@ -93,7 +93,7 @@ export default function MaterialForm({ form }: MaterialFormProps) {
             </FormItem>
           )}
         />
-        <span className="col-span-2 grid grid-cols-[1fr_auto] gap-4">
+        <span className="col-span-2 grid grid-cols-[auto_1fr] gap-4">
           <FormField
             name="unit_price"
             control={form.control}
