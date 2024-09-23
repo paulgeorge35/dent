@@ -29,7 +29,7 @@ export function SidebarToggle({ isOpen, setIsOpen }: SidebarToggleProps) {
   ) : (
     <div className="absolute top-[16px] -left-[16px] z-20">
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger asChild>
           <Button
             onClick={() => setIsOpen?.()}
             className="rounded-full !size-8 p-1"

@@ -8,20 +8,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
-import { useMemo } from "react";
-import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 import {
   type ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "../ui/chart";
-
-type View = "currentWeek" | "lastWeek" | "currentMonth" | "today";
 
 type StatsFormat = {
   name: string;
@@ -36,8 +30,6 @@ type StatsProps = {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
 export default function CommonTreatments({ services, className }: StatsProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const radius = useMemo(() => (isDesktop ? "80%" : "50%"), [isDesktop]);
   const chartConfig = {} satisfies ChartConfig;
 
   const chartData = services.map((service, index) => ({
@@ -58,29 +50,26 @@ export default function CommonTreatments({ services, className }: StatsProps) {
       </CardHeader>
       <CardContent className="flex items-center justify-center grow">
         <ChartContainer config={chartConfig} className="min-h-[200px] h-full">
-          <ResponsiveContainer width="100%">
-            <PieChart>
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                outerRadius={radius}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {chartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={entry.color}
-                    name={entry.name}
-                  />
-                ))}
-              </Pie>
-              <ChartTooltip content={<ChartTooltipContent />} />
-              <ChartLegend content={<ChartLegendContent />} />
-            </PieChart>
-          </ResponsiveContainer>
+          <PieChart>
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              outerRadius="80%"
+              fill="#8884d8"
+              dataKey="value"
+            >
+              {chartData.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={entry.color}
+                  name={entry.name}
+                />
+              ))}
+            </Pie>
+            <ChartTooltip content={<ChartTooltipContent />} />
+          </PieChart>
         </ChartContainer>
       </CardContent>
     </Card>

@@ -152,6 +152,10 @@ const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
     { className, children, sheet, noOverlay, noCloseButton, side, ...props },
     ref,
   ) => {
+    const isPWA = () => {
+      return window.matchMedia("(display-mode: standalone)").matches;
+    };
+
     const { isDesktop } = useContext(CredenzaContext);
     return isDesktop ? (
       sheet ? (
@@ -174,7 +178,12 @@ const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
       <DrawerContent
         noOverlay={noOverlay}
         ref={ref}
-        className={className}
+        className={cn(
+          {
+            "pb-8": isPWA(),
+          },
+          className,
+        )}
         {...props}
       >
         {children}
