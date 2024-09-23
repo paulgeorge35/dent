@@ -6,7 +6,7 @@
     "sidebar": {
       "back": "Înapoi",
       "search": {
-        "placeholder": "Caută programări, pacienți, doctori, etc."
+        "placeholder": "Caută aici totul..."
       },
       "controls": {
         "my-clinics": "Clinicile mele",
@@ -15,7 +15,8 @@
         "logout": {
           "trigger": "Deconectare",
           "dialog": {
-            "title": "Ești sigur că vrei să te deconectezi?",
+            "title": "Deconectare",
+            "description": "Ești sigur că vrei să te deconectezi?",
             "cancel": "Anulează",
             "confirm": "Deconectare"
           }
@@ -390,7 +391,7 @@
         },
         "search": {
           "label": "Căutare",
-          "placeholder": "Caută un tratament..."
+          "placeholder": "Caută..."
         },
         "setup-multivisit": {
           "label": "Configurează multiple vizite",
@@ -527,7 +528,7 @@
         },
         "search": {
           "label": "Căutare",
-          "placeholder": "Caută un material..."
+          "placeholder": "Caută..."
         },
         "actions": {
           "label": "Acțiuni"

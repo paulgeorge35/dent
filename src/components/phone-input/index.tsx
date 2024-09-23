@@ -73,14 +73,18 @@ export function getPhoneData(phone: string): PhoneData {
   };
 }
 
-export function PhoneInput({
+// Change the component definition to use forwardRef
+export const PhoneInput = React.forwardRef<
+  HTMLInputElement,
+  PhoneInputProps
+>(({
   value: valueProp,
   defaultCountry = "RO",
   className,
   id,
   required = true,
   ...rest
-}: PhoneInputProps) {
+}, ref) => {
   const asYouType = new AsYouType();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -223,7 +227,7 @@ export function PhoneInput({
         </PopoverContent>
       </Popover>
       <Input
-        ref={inputRef}
+        ref={ref} // Use the forwarded ref here
         type="text"
         pattern="^(\+)?[0-9\s]*$"
         name="phone"
@@ -239,4 +243,7 @@ export function PhoneInput({
       />
     </div>
   );
-}
+});
+
+// Add a display name for the component (optional, but good for debugging)
+PhoneInput.displayName = "PhoneInput";

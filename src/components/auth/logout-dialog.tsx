@@ -9,6 +9,7 @@ import {
   Credenza,
   CredenzaClose,
   CredenzaContent,
+  CredenzaDescription,
   CredenzaFooter,
   CredenzaHeader,
   CredenzaTitle,
@@ -47,6 +48,7 @@ export default function LogoutDialog({ children }: LogoutDialogProps) {
       <CredenzaContent>
         <CredenzaHeader>
           <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
+          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
         </CredenzaHeader>
         <CredenzaFooter className="gap-4">
           <CredenzaClose>{t("dialog.cancel")}</CredenzaClose>

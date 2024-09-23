@@ -218,6 +218,13 @@ function ComplexTreatmentDialog({
     },
   });
 
+  useEffect(() => {
+    complexServicesForm.setValue(
+      "relatedServices",
+      form.watch("relatedServices"),
+    );
+  }, [form.watch("relatedServices"), open]);
+
   const handleAdd = useMemo(() => {
     return () => {
       complexServicesForm.setValue("relatedServices", [
@@ -424,7 +431,16 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
     return () => {
       form.setValue(
         "relatedServices",
-        [...form.getValues("relatedServices").filter((_, i) => i !== index)],
+        [
+          ...form.getValues("relatedServices").filter((_, i) => i < index),
+          ...form
+            .getValues("relatedServices")
+            .filter((_, i) => i > index)
+            .map((service, i) => ({
+              ...service,
+              order: service.order - 1,
+            })),
+        ],
         {
           shouldDirty: true,
           shouldTouch: true,

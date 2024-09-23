@@ -53,9 +53,9 @@ export default async function Tenants() {
       </Card>
       {accounts.length > 0 && (
         <Card className="border-0 bg-muted shadow-none">
-          <CardContent className="flex items-center justify-between py-4">
+          <CardContent className="flex gap-2 flex-col md:flex-row items-center justify-between py-4">
             <h1 className="text-sm">{t("want-to-create")}</h1>
-            <CreateTenant />
+            <CreateTenant className="w-full md:w-auto" />
           </CardContent>
         </Card>
       )}

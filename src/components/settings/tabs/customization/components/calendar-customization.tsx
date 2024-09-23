@@ -2,25 +2,25 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Form,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
+  Form,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
 } from "@/components/ui/form";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { showErrorToast } from "@/lib/handle-error";
@@ -147,7 +147,7 @@ export default function CalendarCustomization() {
               variant="expandIcon"
               iconPlacement="left"
               type="submit"
-              className="col-span-2 sm:w-fit"
+              className="w-full sm:w-fit"
             >
               {t("button")}
             </Button>

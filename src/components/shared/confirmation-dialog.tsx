@@ -40,7 +40,7 @@ export default function ConfirmationDialog({
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
-      {trigger && <CredenzaTrigger>{trigger}</CredenzaTrigger>}
+      {trigger && <CredenzaTrigger asChild>{trigger}</CredenzaTrigger>}
       <CredenzaContent>
         <CredenzaHeader>
           <CredenzaTitle>{title}</CredenzaTitle>

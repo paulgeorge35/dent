@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Credenza,
-    CredenzaBody,
-    CredenzaClose,
-    CredenzaContent,
-    CredenzaDescription,
-    CredenzaFooter,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
 } from "@/components/ui/credenza";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
@@ -79,7 +79,7 @@ export default function EditMaterialDialog({
 
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger>
+      <CredenzaTrigger asChild>
         <Button variant="ghost" size="icon">
           <Edit2 className="size-4" />
         </Button>
@@ -88,13 +88,15 @@ export default function EditMaterialDialog({
         <CredenzaHeader>
           <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
           <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
+        </CredenzaHeader>
           <CredenzaBody>
             <MaterialForm form={form} />
           </CredenzaBody>
-        </CredenzaHeader>
         <CredenzaFooter>
-          <CredenzaClose>
-            <Button variant="secondary">{t("dialog.cancel")}</Button>
+          <CredenzaClose asChild>
+            <Button variant="secondary" className="w-full md:w-auto">
+              {t("dialog.cancel")}
+            </Button>
           </CredenzaClose>
           <Button
             onClick={form.handleSubmit(onSubmit)}

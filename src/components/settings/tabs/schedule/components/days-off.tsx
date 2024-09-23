@@ -3,32 +3,32 @@
 import { DateTimePicker } from "@/components/datetime-input/datetime";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Form,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Event } from "@prisma/client";
-import { Check, Edit, Trash2, X } from "lucide-react";
+import { Check, Edit, Plus, Trash2, X } from "lucide-react";
 import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import {
-    type UseBoolean,
-    useBoolean,
-    type UseStateful,
-    useStateful,
+  type UseBoolean,
+  type UseStateful,
+  useBoolean,
+  useStateful,
 } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -50,6 +50,12 @@ export default function DaysOff({ daysOff }: DaysOffProps) {
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="vertical gap-2">
+        <DayOffAdd open={open} disabled={edit.value !== null} />
+        {daysOff.length === 0 && !open.value && (
+          <div className="flex items-center justify-center text-muted-foreground text-sm">
+            {t("empty")}
+          </div>
+        )}
         {daysOff.map((dayOff) => (
           <DayOffItem
             key={dayOff.id}
@@ -58,12 +64,6 @@ export default function DaysOff({ daysOff }: DaysOffProps) {
             edit={edit}
           />
         ))}
-        <DayOffAdd open={open} disabled={edit.value !== null} />
-        {daysOff.length === 0 && !open.value && (
-          <div className="flex items-center justify-center text-muted-foreground text-sm">
-            {t("empty")}
-          </div>
-        )}
       </CardContent>
     </Card>
   );
@@ -204,7 +204,7 @@ function DayOffEdit({
               </FormItem>
             )}
           />
-          <span className="col-span-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-end">
+          <span className="col-span-2 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-2 items-end">
             <FormField
               control={form.control}
               name="start"
@@ -332,7 +332,7 @@ function DayOffAdd({
               </FormItem>
             )}
           />
-          <span className="col-span-2 grid grid-cols-[1fr_auto_1fr] gap-2 items-end">
+          <span className="col-span-2 grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-2 items-end">
             <FormField
               control={form.control}
               name="start"
@@ -393,9 +393,12 @@ function DayOffAdd({
     </section>
   ) : (
     <Button
-      className="px-4 py-2 rounded-md"
+      className="ml-auto w-full sm:w-fit"
       onClick={open.setTrue}
       disabled={disabled}
+      variant="expandIcon"
+      Icon={Plus}
+      iconPlacement="left"
     >
       {t("actions.add.label")}
     </Button>

@@ -55,9 +55,9 @@ export default function EditSpecialityDialog({
     },
   });
 
-  const onSubmit = async (values: FormValues) => {
-    await updateSpeciality({ id: speciality.id, ...values });
-  };
+  const onSubmit = form.handleSubmit(async (data) => {
+    await updateSpeciality({ id: speciality.id, ...data });
+  });
 
   useEffect(() => {
     if (dialogOpen.value) {
@@ -71,7 +71,7 @@ export default function EditSpecialityDialog({
 
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger>
+      <CredenzaTrigger asChild>
         <Button variant="ghost" size="icon">
           <Edit2 className="size-4" />
         </Button>
@@ -80,16 +80,18 @@ export default function EditSpecialityDialog({
         <CredenzaHeader>
           <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
           <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-          <CredenzaBody>
-            <SpecialityForm form={form} />
-          </CredenzaBody>
         </CredenzaHeader>
+        <CredenzaBody>
+          <SpecialityForm form={form} onSubmit={onSubmit} />
+        </CredenzaBody>
         <CredenzaFooter>
-          <CredenzaClose>
-            <Button variant="secondary">{t("dialog.cancel")}</Button>
+          <CredenzaClose asChild>
+            <Button variant="secondary" className="w-full md:w-auto">
+              {t("dialog.cancel")}
+            </Button>
           </CredenzaClose>
           <Button
-            onClick={form.handleSubmit(onSubmit)}
+            onClick={onSubmit}
             disabled={
               !form.formState.isValid ||
               !form.formState.isDirty ||

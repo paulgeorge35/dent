@@ -51,17 +51,16 @@ export default function ColorPicker({
 
   return (
     <Popover open={open.value} onOpenChange={open.toggle} modal>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         {value ? (
           <Button
             id={id}
             variant="outline"
             onClick={handleClick}
-            className="horizontal center gap-2"
+            className="horizontal center gap-2 !h-9"
             type="button"
           >
             <Circle color={value} className="!size-3" />
-            <span className="capitalize">{t(`options.${value}`)}</span>
           </Button>
         ) : (
           <Button id={id} variant="outline" onClick={handleClick} type="button">

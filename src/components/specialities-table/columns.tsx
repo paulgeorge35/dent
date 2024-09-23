@@ -39,7 +39,9 @@ export function getColumns({
                 "bg-gray-500": row.original.color === "gray",
               })}
             />
-            <div className="grow">{row.getValue("name")}</div>
+            <div className="grow whitespace-nowrap w-[10em] truncate">
+              {row.getValue("name")}
+            </div>
           </div>
         );
       },

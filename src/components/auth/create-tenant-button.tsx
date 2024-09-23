@@ -6,7 +6,11 @@ import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function CreateTenant() {
+type CreateTenantProps = {
+  className?: string;
+};
+
+export default function CreateTenant({ className }: CreateTenantProps) {
   const t = useTranslations("page.welcome.clinic");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,13 +19,14 @@ export default function CreateTenant() {
   };
 
   return (
-    <Link href="/create-clinic">
+    <Link href="/create-clinic" className={className}>
       <Button
         variant="expandIcon"
         Icon={BadgePlus}
         iconPlacement="right"
         onClick={handleClick}
         isLoading={isLoading}
+        className="w-full"
       >
         {t("create-clinic")}
       </Button>

@@ -5,7 +5,6 @@ import type { Material } from "prisma/generated/zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import { Info } from "lucide-react";
-import { useLocale } from "next-intl";
 import AvatarComponent from "../shared/avatar-component";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import MaterialRowActions from "./row-actions";
@@ -15,7 +14,6 @@ type GetColumnsProps = {
 };
 
 export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
-  const locale = useLocale();
   return [
     {
       accessorKey: "name",
@@ -34,7 +32,9 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
               height={40}
               randomColor
             />
-            {row.getValue("name")}
+            <p className="whitespace-nowrap truncate w-[10em]">
+              {row.getValue("name")}
+            </p>
           </div>
         );
       },
@@ -50,7 +50,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="horizontal center-v gap-2 group">
+          <div className="horizontal center-v gap-2 group truncate w-[10em] whitespace-nowrap">
             <span className="font-light px-1 rounded-full bg-muted border border-muted-foreground/20 text-xs text-muted-foreground">
               RON
             </span>
@@ -83,7 +83,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
             <Tooltip>
               <TooltipTrigger className="italic text-muted-foreground horizontal center-v gap-2">
                 {t("no-inventory")}
-                <Info className="size-4" />
+                <Info className="size-4 shrink-0" />
               </TooltipTrigger>
               <TooltipContent>
                 {t("fields.keepInventory.description")}

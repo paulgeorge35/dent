@@ -18,7 +18,18 @@ interface TagInputProps {
 }
 
 export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
-  ({ id, value = [], onChange, separator = ",", placeholder, charLimit, suggestions }, ref) => {
+  (
+    {
+      id,
+      value = [],
+      onChange,
+      separator = ",",
+      placeholder,
+      charLimit,
+      suggestions,
+    },
+    ref,
+  ) => {
     const [inputValue, setInputValue] = useState("");
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [activeSuggestion, setActiveSuggestion] = useState(0);
@@ -30,8 +41,6 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         suggestion.toLowerCase().includes(inputValue.toLowerCase()),
       ) || [];
 
-    const firstSuggestion = filteredSuggestions[0];
-
     const handleInputChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
@@ -42,7 +51,10 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
 
         if (newValue.endsWith(separator)) {
           const trimmedValue = newValue.slice(0, -separator.length).trim();
-          if (trimmedValue && (!charLimit || trimmedValue.length <= charLimit)) {
+          if (
+            trimmedValue &&
+            (!charLimit || trimmedValue.length <= charLimit)
+          ) {
             onChange([...value, trimmedValue]);
             setInputValue("");
             setShowSuggestions(false);
@@ -62,7 +74,9 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
           }
         } else if (e.key === "ArrowDown") {
           e.preventDefault();
-          setActiveSuggestion((prev) => (prev + 1) % filteredSuggestions.length);
+          setActiveSuggestion(
+            (prev) => (prev + 1) % filteredSuggestions.length,
+          );
         } else if (e.key === "ArrowUp") {
           e.preventDefault();
           setActiveSuggestion(
@@ -113,7 +127,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
     const isAtMaxChars = charLimit && inputValue.length >= charLimit;
 
     return (
-      <div className="space-y-2 relative">
+      <div className="space-y-2 relative w-full">
         <div className="flex flex-wrap gap-2 rounded-md border p-2 focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
           {value.map((tag, index) => (
             <Badge
@@ -186,7 +200,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 TagInput.displayName = "TagInput";

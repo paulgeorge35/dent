@@ -28,7 +28,9 @@ type AddMaterialDialogProps = {
   className?: string;
 };
 
-export default function AddMaterialDialog({ className }: AddMaterialDialogProps) {
+export default function AddMaterialDialog({
+  className,
+}: AddMaterialDialogProps) {
   const t = useTranslations("page.materials.add");
   const router = useRouter();
   const { mutateAsync: createMaterial } = api.material.create.useMutation({
@@ -59,7 +61,7 @@ export default function AddMaterialDialog({ className }: AddMaterialDialogProps)
 
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger className="horizontal justify-start">
+      <CredenzaTrigger asChild className="horizontal justify-start">
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -73,20 +75,17 @@ export default function AddMaterialDialog({ className }: AddMaterialDialogProps)
         <CredenzaHeader>
           <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
           <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-          <CredenzaBody>
-            <MaterialForm form={form} />
-          </CredenzaBody>
         </CredenzaHeader>
+        <CredenzaBody>
+          <MaterialForm form={form} />
+        </CredenzaBody>
         <CredenzaFooter>
-          <CredenzaClose>
+          <CredenzaClose asChild>
             <Button variant="secondary">{t("dialog.cancel")}</Button>
           </CredenzaClose>
           <Button
             onClick={form.handleSubmit(onSubmit)}
-            disabled={
-              !form.formState.isDirty ||
-              form.formState.isSubmitting
-            }
+            disabled={!form.formState.isDirty || form.formState.isSubmitting}
             isLoading={form.formState.isSubmitting}
           >
             {t("dialog.confirm")}

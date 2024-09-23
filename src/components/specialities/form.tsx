@@ -8,9 +8,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useTranslations } from "next-intl";
+import { useEffect } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import { z } from "zod";
 import ColorPicker from "../ui/color-picker";
+import OptionalInputTag from "../ui/optional-input-tag";
 
 export const specialitySchema = z.object({
   name: z.string({
@@ -26,56 +28,66 @@ export type FormValues = z.infer<typeof specialitySchema>;
 
 type SpecialityFormProps = {
   form: UseFormReturn<FormValues>;
+  onSubmit?: (e?: React.BaseSyntheticEvent) => Promise<void>;
 };
 
-export default function SpecialityForm({ form }: SpecialityFormProps) {
+export default function SpecialityForm({
+  form,
+  onSubmit,
+}: SpecialityFormProps) {
   const t = useTranslations("page.specialities.fields");
 
+  useEffect(() => {
+    return () => {
+      form.reset();
+    };
+  }, [form]);
+  
   return (
     <Form {...form}>
-      <form className="space-y-2">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel htmlFor={field.name}>{t("name.label")}</FormLabel>
-              <Input id={field.name} {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={onSubmit} className="grid grid-cols-1 gap-4 py-2">
+        <span className="grid grid-cols-[1fr_auto] gap-4 items-end">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel htmlFor={field.name}>{t("name.label")}</FormLabel>
+                <Input id={field.name} {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="color"
+            render={({ field }) => (
+              <FormItem>
+                <ColorPicker
+                  id={field.name}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </span>
         <FormField
           control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel htmlFor={field.name}>
-                {t("description.label")}
+                {t("description.label")} <OptionalInputTag />
               </FormLabel>
               <Textarea
                 id={field.name}
                 {...field}
                 value={field.value ?? ""}
-                className="h-40 max-h-40"
+                className="max-h-40"
                 placeholder={t("description.placeholder")}
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="color"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="block" htmlFor={field.name}>
-                {t("color.label")}
-              </FormLabel>
-              <ColorPicker
-                id={field.name}
-                value={field.value}
-                onChange={field.onChange}
+                charLimit={250}
               />
               <FormMessage />
             </FormItem>

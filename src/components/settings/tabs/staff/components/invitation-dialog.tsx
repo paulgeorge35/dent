@@ -87,8 +87,8 @@ export default function InvitationDialog({ disabled }: InvitationDialogProps) {
       open={dialogOpen.value}
       onOpenChange={disabled ? undefined : dialogOpen.toggle}
     >
-      <CredenzaTrigger>
-        <Button disabled={disabled} className="grow">
+      <CredenzaTrigger asChild>
+        <Button disabled={disabled} className="grow sm:grow-0">
           {t("trigger")} <PlusIcon className="ml-2 size-4" />
         </Button>
       </CredenzaTrigger>

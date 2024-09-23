@@ -47,7 +47,7 @@ export default function MaterialForm({ form }: MaterialFormProps) {
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-2 gap-4">
+      <form className="grid grid-cols-2 gap-4 py-2">
         <FormField
           name="name"
           control={form.control}
@@ -72,6 +72,24 @@ export default function MaterialForm({ form }: MaterialFormProps) {
                 className="max-h-[100px]"
                 charLimit={255}
               />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="tags"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="col-span-2">
+              <FormLabel htmlFor={field.name}>
+                {t("tags.label")} <OptionalInputTag />
+              </FormLabel>
+              <TagInput
+                id={field.name}
+                {...field}
+                placeholder={t("tags.placeholder")}
+              />
+              <FormDescription>{t("tags.description")}</FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -141,24 +159,6 @@ export default function MaterialForm({ form }: MaterialFormProps) {
               <FormDescription>
                 {t("keepInventory.description")}
               </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="tags"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-2">
-              <FormLabel htmlFor={field.name}>
-                {t("tags.label")} <OptionalInputTag />
-              </FormLabel>
-              <TagInput
-                id={field.name}
-                {...field}
-                placeholder={t("tags.placeholder")}
-              />
-              <FormDescription>{t("tags.description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}

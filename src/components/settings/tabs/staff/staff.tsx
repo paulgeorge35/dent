@@ -139,7 +139,7 @@ const ActiveUsers = async ({ users }: ActiveUsersProps) => {
                     width={32}
                     height={32}
                   />
-                  <p>
+                  <p className="whitespace-nowrap">
                     {user.profile.firstName} {user.profile.lastName}
                   </p>
                   {user.id === session.user!.id && (
@@ -215,7 +215,9 @@ const Invitations = async ({ invitations }: InvitationsProps) => {
                 key={invitation.id}
                 className="text-muted-foreground hover:bg-transparent"
               >
-                <TableCell>{invitation.email}</TableCell>
+                <TableCell className="whitespace-nowrap">
+                  {invitation.email}
+                </TableCell>
                 <TableCell>
                   {invitation.role === "ADMIN" ? "Admin" : "Staff"}
                 </TableCell>

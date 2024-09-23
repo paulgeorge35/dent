@@ -48,6 +48,7 @@ interface BaseProps {
 interface RootCredenzaProps extends BaseProps {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  dismissible?: boolean;
 }
 
 interface CredenzaProps extends BaseProps {
@@ -61,7 +62,7 @@ const CredenzaContext = createContext<{ isDesktop: boolean }>({
   isDesktop: true,
 });
 
-const Credenza = ({ children, sheet, ...props }: RootCredenzaProps) => {
+const Credenza = ({ children, sheet, dismissible = true, ...props }: RootCredenzaProps) => {
   const isDesktop = useMediaQuery(desktop);
   const [isDesktopState, setIsDesktopState] = React.useState(isDesktop);
 
@@ -78,7 +79,7 @@ const Credenza = ({ children, sheet, ...props }: RootCredenzaProps) => {
           <Dialog {...props}>{children}</Dialog>
         )
       ) : (
-        <Drawer {...props}>{children}</Drawer>
+        <Drawer dismissible={dismissible} {...props}>{children}</Drawer>
       )}
     </CredenzaContext.Provider>
   );
@@ -180,7 +181,7 @@ const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
         ref={ref}
         className={cn(
           {
-            "pb-8": isPWA(),
+            "pb-4": isPWA(),
           },
           className,
         )}

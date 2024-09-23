@@ -6,7 +6,7 @@
     "sidebar": {
       "back": "Back",
       "search": {
-        "placeholder": "Search for everything here..."
+        "placeholder": "Search for anything here..."
       },
       "controls": {
         "my-clinics": "My clinics",
@@ -15,7 +15,8 @@
         "logout": {
           "trigger": "Sign out",
           "dialog": {
-            "title": "Are you sure you want to sign out?",
+            "title": "Sign out",
+            "description": "Are you sure you want to sign out?",
             "cancel": "Cancel",
             "confirm": "Sign out"
           }
@@ -391,7 +392,7 @@
         },
         "search": {
           "label": "Search",
-          "placeholder": "Search for a treatment..."
+          "placeholder": "Search..."
         },
         "setup-multivisit": {
           "label": "Setup multiple visits",
@@ -528,7 +529,7 @@
         },
         "search": {
           "label": "Search",
-          "placeholder": "Search for a material..."
+          "placeholder": "Search..."
         },
         "actions": {
           "label": "Actions"
@@ -835,16 +836,16 @@
             "description": {
               "label": "Description",
               "placeholder": "Description"
-            },
-            "status": {
-              "success": "Support ticket submitted successfully"
-            },
-            "success-screen": {
-              "title": "Support ticket submitted successfully",
-              "description": "We will review your ticket and get back to you as soon as possible."
-            },
-            "button": "Submit"
-          }
+            }
+          },
+          "status": {
+            "success": "Support ticket submitted successfully"
+          },
+          "success-screen": {
+            "title": "Support ticket submitted successfully",
+            "description": "We will review your ticket and get back to you as soon as possible."
+          },
+          "button": "Submit"
         }
       }
     },

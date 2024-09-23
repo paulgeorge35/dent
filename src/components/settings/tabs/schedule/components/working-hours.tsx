@@ -140,7 +140,7 @@ export default function WorkingHoursComponent({
               variant="expandIcon"
               iconPlacement="left"
               type="submit"
-              className="col-span-2 sm:w-fit"
+              className="w-full sm:w-fit"
             >
               {t("button")}
             </Button>
