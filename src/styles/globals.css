@@ -134,8 +134,6 @@
 
   body {
     @apply bg-background text-foreground !overflow-x-hidden;
-    /* padding-bottom: env(safe-area-inset-bottom); */
-    padding-bottom: 32px;
   }
   
   input[type="number"]::-webkit-inner-spin-button,
@@ -295,9 +293,9 @@
   @apply bg-red-200 !important;
 }
 
-.fc-daygrid-day-bottom {
-  /* @apply bg-red-200 !important; */
-}
+/* .fc-daygrid-day-bottom {
+  @apply bg-red-200 !important;
+} */
 
 .fc-popover {
   @apply z-[1] rounded-lg border border-primary/50 bg-background text-foreground shadow-md !important;

@@ -2,25 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Credenza,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "@/components/ui/credenza";
 import {
   Form,
   FormField,
@@ -88,21 +78,15 @@ export default function InvitationDialog({ disabled }: InvitationDialogProps) {
     },
   });
 
-  const Credenza = isDesktop ? Dialog : Drawer;
-  const CredenzaContent = isDesktop ? DialogContent : DrawerContent;
-  const CredenzaHeader = isDesktop ? DialogHeader : DrawerHeader;
-  const CredenzaTitle = isDesktop ? DialogTitle : DrawerTitle;
-  const CredenzaDescription = isDesktop ? DialogDescription : DrawerDescription;
-  const CredenzaFooter = isDesktop ? DialogFooter : DrawerFooter;
-  const CredenzaClose = isDesktop ? DialogClose : DrawerClose;
-  const CredenzaTrigger = isDesktop ? DialogTrigger : DrawerTrigger;
-
   const onSubmit = form.handleSubmit((values) => {
     invite(values);
   });
 
   return (
-    <Credenza open={dialogOpen.value} onOpenChange={disabled ? undefined : dialogOpen.toggle}>
+    <Credenza
+      open={dialogOpen.value}
+      onOpenChange={disabled ? undefined : dialogOpen.toggle}
+    >
       <CredenzaTrigger>
         <Button disabled={disabled} className="grow">
           {t("trigger")} <PlusIcon className="ml-2 size-4" />
@@ -171,7 +155,11 @@ export default function InvitationDialog({ disabled }: InvitationDialogProps) {
           <Button
             onClick={onSubmit}
             isLoading={isPending}
-            disabled={!form.formState.isValid || form.formState.isSubmitting || isPending}
+            disabled={
+              !form.formState.isValid ||
+              form.formState.isSubmitting ||
+              isPending
+            }
           >
             {form.formState.isSubmitting
               ? t("dialog.inviting")

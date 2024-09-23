@@ -22,11 +22,27 @@ import {
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
+import type * as DialogPrimitive from "@radix-ui/react-dialog";
+import type * as SheetPrimitive from "@radix-ui/react-dialog";
+import { AnimatePresence } from "framer-motion";
 import * as React from "react";
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { ScrollArea } from "./scroll-area";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  type SheetContentProps,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./sheet";
 
 interface BaseProps {
   children: React.ReactNode;
+  sheet?: boolean;
 }
 
 interface RootCredenzaProps extends BaseProps {
@@ -45,7 +61,7 @@ const CredenzaContext = createContext<{ isDesktop: boolean }>({
   isDesktop: true,
 });
 
-const Credenza = ({ children, ...props }: RootCredenzaProps) => {
+const Credenza = ({ children, sheet, ...props }: RootCredenzaProps) => {
   const isDesktop = useMediaQuery(desktop);
   const [isDesktopState, setIsDesktopState] = React.useState(isDesktop);
 
@@ -56,7 +72,11 @@ const Credenza = ({ children, ...props }: RootCredenzaProps) => {
   return (
     <CredenzaContext.Provider value={{ isDesktop: isDesktopState }}>
       {isDesktopState ? (
-        <Dialog {...props}>{children}</Dialog>
+        sheet ? (
+          <Sheet {...props}>{children}</Sheet>
+        ) : (
+          <Dialog {...props}>{children}</Dialog>
+        )
       ) : (
         <Drawer {...props}>{children}</Drawer>
       )}
@@ -64,12 +84,28 @@ const Credenza = ({ children, ...props }: RootCredenzaProps) => {
   );
 };
 
-const CredenzaTrigger = ({ className, children, ...props }: CredenzaProps) => {
+type CredenzaTriggerProps = CredenzaProps &
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger> &
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Trigger> &
+  React.ComponentPropsWithoutRef<typeof DrawerTrigger>;
+
+const CredenzaTrigger = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaTriggerProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogTrigger className={className} {...props}>
-      {children}
-    </DialogTrigger>
+    sheet ? (
+      <SheetTrigger className={className} {...props}>
+        {children}
+      </SheetTrigger>
+    ) : (
+      <DialogTrigger className={className} {...props}>
+        {children}
+      </DialogTrigger>
+    )
   ) : (
     <DrawerTrigger className={className} {...props}>
       {children}
@@ -77,12 +113,28 @@ const CredenzaTrigger = ({ className, children, ...props }: CredenzaProps) => {
   );
 };
 
-const CredenzaClose = ({ className, children, ...props }: CredenzaProps) => {
+type CredenzaCloseProps = CredenzaProps &
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close> &
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Close> &
+  React.ComponentPropsWithoutRef<typeof DrawerClose>;
+
+const CredenzaClose = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaCloseProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogClose className={className} {...props}>
-      {children}
-    </DialogClose>
+    sheet ? (
+      <SheetClose className={className} {...props}>
+        {children}
+      </SheetClose>
+    ) : (
+      <DialogClose className={className} {...props}>
+        {children}
+      </DialogClose>
+    )
   ) : (
     <DrawerClose className={className} {...props}>
       {children}
@@ -90,29 +142,70 @@ const CredenzaClose = ({ className, children, ...props }: CredenzaProps) => {
   );
 };
 
-const CredenzaContent = ({ className, children, ...props }: CredenzaProps) => {
-  const { isDesktop } = useContext(CredenzaContext);
-  return isDesktop ? (
-    <DialogContent className={className} {...props}>
-      {children}
-    </DialogContent>
-  ) : (
-    <DrawerContent className={className} {...props}>
-      {children}
-    </DrawerContent>
-  );
-};
+type CredenzaContentProps = CredenzaProps &
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> &
+  Omit<SheetContentProps, "children"> &
+  React.ComponentPropsWithoutRef<typeof DrawerContent>;
+
+const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
+  (
+    { className, children, sheet, noOverlay, noCloseButton, side, ...props },
+    ref,
+  ) => {
+    const { isDesktop } = useContext(CredenzaContext);
+    return isDesktop ? (
+      sheet ? (
+        <SheetContent
+          ref={ref}
+          className={className}
+          side={side}
+          noOverlay={noOverlay}
+          noCloseButton={noCloseButton}
+          {...props}
+        >
+          {children}
+        </SheetContent>
+      ) : (
+        <DialogContent ref={ref} className={className} {...props}>
+          {children}
+        </DialogContent>
+      )
+    ) : (
+      <DrawerContent
+        noOverlay={noOverlay}
+        ref={ref}
+        className={className}
+        {...props}
+      >
+        {children}
+      </DrawerContent>
+    );
+  },
+);
+CredenzaContent.displayName = "CredenzaContent";
+
+type CredenzaDescriptionProps = CredenzaProps &
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description> &
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Description> &
+  React.ComponentPropsWithoutRef<typeof DrawerDescription>;
 
 const CredenzaDescription = ({
   className,
   children,
+  sheet,
   ...props
-}: CredenzaProps) => {
+}: CredenzaDescriptionProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogDescription className={className} {...props}>
-      {children}
-    </DialogDescription>
+    sheet ? (
+      <SheetDescription className={className} {...props}>
+        {children}
+      </SheetDescription>
+    ) : (
+      <DialogDescription className={className} {...props}>
+        {children}
+      </DialogDescription>
+    )
   ) : (
     <DrawerDescription className={className} {...props}>
       {children}
@@ -120,12 +213,25 @@ const CredenzaDescription = ({
   );
 };
 
-const CredenzaHeader = ({ className, children, ...props }: CredenzaProps) => {
+type CredenzaHeaderProps = CredenzaProps & React.HTMLAttributes<HTMLDivElement>;
+
+const CredenzaHeader = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaHeaderProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogHeader className={className} {...props}>
-      {children}
-    </DialogHeader>
+    sheet ? (
+      <SheetHeader className={className} {...props}>
+        {children}
+      </SheetHeader>
+    ) : (
+      <DialogHeader className={className} {...props}>
+        {children}
+      </DialogHeader>
+    )
   ) : (
     <DrawerHeader className={className} {...props}>
       {children}
@@ -133,12 +239,28 @@ const CredenzaHeader = ({ className, children, ...props }: CredenzaProps) => {
   );
 };
 
-const CredenzaTitle = ({ className, children, ...props }: CredenzaProps) => {
+type CredenzaTitleProps = CredenzaProps &
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title> &
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Title> &
+  React.ComponentPropsWithoutRef<typeof DrawerTitle>;
+
+const CredenzaTitle = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaTitleProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogTitle className={className} {...props}>
-      {children}
-    </DialogTitle>
+    sheet ? (
+      <SheetTitle className={className} {...props}>
+        {children}
+      </SheetTitle>
+    ) : (
+      <DialogTitle className={className} {...props}>
+        {children}
+      </DialogTitle>
+    )
   ) : (
     <DrawerTitle className={className} {...props}>
       {children}
@@ -146,20 +268,91 @@ const CredenzaTitle = ({ className, children, ...props }: CredenzaProps) => {
   );
 };
 
-const CredenzaBody = ({ className, children, ...props }: CredenzaProps) => {
+const CredenzaBody = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaProps) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+
+  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLDivElement;
+    setScrollTop(target.scrollTop);
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scrollAreaRef.current) {
+        setScrollTop(scrollAreaRef.current.scrollTop);
+      }
+    };
+
+    const scrollArea = scrollAreaRef.current;
+    if (scrollArea) {
+      scrollArea.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (scrollArea) {
+        scrollArea.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, []);
+
   return (
-    <div className={cn("px-4 md:px-0", className)} {...props}>
-      {children}
-    </div>
+    <AnimatePresence mode="wait">
+      <ScrollArea
+        className="relative grow"
+        viewportRef={scrollAreaRef}
+        onScroll={handleScroll}
+      >
+        <div
+          className={cn(
+            "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
+            {
+              "h-0": scrollTop === 0,
+            },
+          )}
+        />
+        <div className={cn("px-4", className)} {...props}>
+          {children}
+        </div>
+        <div
+          className={cn(
+            "ease-in-outƒ pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
+            {
+              "h-0":
+                scrollTop + (scrollAreaRef.current?.clientHeight ?? 0) >=
+                (scrollAreaRef.current?.scrollHeight ?? 0),
+            },
+          )}
+        />
+      </ScrollArea>
+    </AnimatePresence>
   );
 };
 
-const CredenzaFooter = ({ className, children, ...props }: CredenzaProps) => {
+type CredenzaFooterProps = CredenzaProps & React.HTMLAttributes<HTMLDivElement>;
+
+const CredenzaFooter = ({
+  className,
+  children,
+  sheet,
+  ...props
+}: CredenzaFooterProps) => {
   const { isDesktop } = useContext(CredenzaContext);
   return isDesktop ? (
-    <DialogFooter className={className} {...props}>
-      {children}
-    </DialogFooter>
+    sheet ? (
+      <SheetFooter className={className} {...props}>
+        {children}
+      </SheetFooter>
+    ) : (
+      <DialogFooter className={className} {...props}>
+        {children}
+      </DialogFooter>
+    )
   ) : (
     <DrawerFooter className={className} {...props}>
       {children}
@@ -168,9 +361,14 @@ const CredenzaFooter = ({ className, children, ...props }: CredenzaProps) => {
 };
 
 export {
-  Credenza, CredenzaBody, CredenzaClose,
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
   CredenzaContent,
-  CredenzaDescription, CredenzaFooter, CredenzaHeader,
-  CredenzaTitle, CredenzaTrigger
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger
 };
 

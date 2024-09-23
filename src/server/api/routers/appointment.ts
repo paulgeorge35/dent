@@ -390,6 +390,10 @@ export const appointmentRouter = createTRPCRouter({
         _count: {
           id: true,
         },
+        cacheStrategy: {
+          ttl: 30,
+          swr: 30,
+        },
       });
 
       const dailyCounts = [];
@@ -432,6 +436,9 @@ export const appointmentRouter = createTRPCRouter({
       include: {
         visits: true,
       },
+      cacheStrategy: {
+        swr: 60 * 60 * 24,
+      },
     });
 
     return services
@@ -466,6 +473,10 @@ export const appointmentRouter = createTRPCRouter({
               service: true,
             },
           },
+        },
+        cacheStrategy: {
+          ttl: 30,
+          swr: 30,
         },
       })
       .then((appointments) => {

@@ -2,23 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+  Credenza,
+  CredenzaBody,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "@/components/ui/credenza";
 import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
@@ -37,7 +29,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { useForm, type UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -55,7 +47,6 @@ import {
 import { Label } from "../ui/label";
 import NumberInput from "../ui/number-input";
 import PriceInput from "../ui/price-input";
-import { ScrollArea } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
@@ -109,14 +100,6 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
     }
   }, [dialogOpen.value, form]);
 
-  const Root = isDesktop ? Sheet : Drawer;
-  const ContentComponent = isDesktop ? SheetContent : DrawerContent;
-  const HeaderComponent = isDesktop ? SheetHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? SheetTitle : DrawerTitle;
-  const DescriptionComponent = isDesktop ? SheetDescription : DrawerDescription;
-  const FooterComponent = isDesktop ? SheetFooter : DrawerFooter;
-  const TriggerComponent = isDesktop ? SheetTrigger : DrawerTrigger;
-
   const onOpenChange = useCallback(
     (open: boolean) => {
       if (!open && form.formState.isDirty) {
@@ -129,8 +112,8 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
   );
 
   return (
-    <Root open={dialogOpen.value} onOpenChange={onOpenChange}>
-      <TriggerComponent>
+    <Credenza sheet open={dialogOpen.value} onOpenChange={onOpenChange}>
+      <CredenzaTrigger sheet>
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -139,29 +122,30 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
         >
           {t("trigger")}
         </Button>
-      </TriggerComponent>
-      <ContentComponent
+      </CredenzaTrigger>
+      <CredenzaContent
+        sheet
         className={cn({
           "vertical my-8 mr-4  h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
             isDesktop,
           "lg:translate-x-[75%]": secondDialogOpen.value,
         })}
       >
-        <HeaderComponent className="p-6">
-          <TitleComponent className="flex items-center gap-2">
+        <CredenzaHeader className="p-6">
+          <CredenzaTitle className="flex items-center gap-2">
             {t("dialog.title")}
-          </TitleComponent>
-          <DescriptionComponent>{t("dialog.description")}</DescriptionComponent>
-        </HeaderComponent>
-        <ScrollArea className="relative my-4 grow px-6">
+          </CredenzaTitle>
+          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
+        </CredenzaHeader>
+        <CredenzaBody sheet className="pb-4">
           <span className="vertical gap-8 px-1">
             <ServiceForm
               form={form}
               onSetupMultivisit={() => secondDialogOpen.setTrue()}
             />
           </span>
-        </ScrollArea>
-        <FooterComponent className="grid grid-cols-2 gap-2 p-6">
+        </CredenzaBody>
+        <CredenzaFooter className="grid grid-cols-2 gap-2 p-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -193,14 +177,14 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
           >
             {t("dialog.confirm")}
           </Button>
-        </FooterComponent>
-      </ContentComponent>
+        </CredenzaFooter>
+      </CredenzaContent>
       <ComplexTreatmentDialog
         open={secondDialogOpen.value}
         onOpenChange={secondDialogOpen.toggle}
         form={form}
       />
-    </Root>
+    </Credenza>
   );
 }
 
@@ -225,48 +209,7 @@ function ComplexTreatmentDialog({
   const tClose = useTranslations("page.treatments.close");
   const confirmationDialog = useBoolean(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = useState(0);
   const listServices = api.service.listSimpleServices.useQuery({});
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    setScrollTop(target.scrollTop);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollAreaRef.current) {
-        setScrollTop(scrollAreaRef.current.scrollTop);
-      }
-    };
-
-    const scrollArea = scrollAreaRef.current;
-    if (scrollArea) {
-      scrollArea.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (scrollArea) {
-        scrollArea.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (open) {
-      setScrollTop(0);
-      complexServicesForm.reset({
-        relatedServices: form.watch("relatedServices"),
-      });
-    }
-  }, [open]);
-
-  const Root = isDesktop ? Sheet : Drawer;
-  const ContentComponent = isDesktop ? SheetContent : DrawerContent;
-  const HeaderComponent = isDesktop ? SheetHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? SheetTitle : DrawerTitle;
-  const FooterComponent = isDesktop ? SheetFooter : DrawerFooter;
 
   const complexServicesForm = useForm<ComplexTreatmentFormValues>({
     resolver: zodResolver(complexServicesSchema),
@@ -321,19 +264,6 @@ function ComplexTreatmentDialog({
           { keepDefaultValues: true, keepDirty: true },
         );
 
-        // form.setValue("relatedServices", values.relatedServices, {
-        //   shouldDirty: true,
-        //   shouldTouch: true,
-        // });
-        // form.setValue("unit_price", unit_price, {
-        //   shouldDirty: true,
-        //   shouldTouch: true,
-        // });
-        // form.setValue("duration", duration, {
-        //   shouldDirty: true,
-        //   shouldTouch: true,
-        // });
-
         onOpenChange(false);
       })
       .catch((error) => {
@@ -353,8 +283,9 @@ function ComplexTreatmentDialog({
   );
 
   return (
-    <Root open={open} onOpenChange={handleOpenChange}>
-      <ContentComponent
+    <Credenza sheet open={open} onOpenChange={handleOpenChange}>
+      <CredenzaContent
+        sheet
         side="left"
         noOverlay
         noCloseButton
@@ -364,8 +295,11 @@ function ComplexTreatmentDialog({
           "lg:translate-x-[calc(100vw-125%-32px)] opacity-100": open,
         })}
       >
-        <HeaderComponent className="p-6">
-          <TitleComponent className="horizontal relative h-9 w-full items-center">
+        <CredenzaHeader sheet className="p-6">
+          <CredenzaTitle
+            sheet
+            className="horizontal relative h-9 w-full items-center"
+          >
             {t("title")}
             <Button
               size="icon"
@@ -375,8 +309,8 @@ function ComplexTreatmentDialog({
             >
               <ChevronRight className="size-4" />
             </Button>
-          </TitleComponent>
-        </HeaderComponent>
+          </CredenzaTitle>
+        </CredenzaHeader>
         <Separator />
         <span className="p-6 horizontal center-v justify-between">
           <p className="font-medium">Visitation Settings</p>
@@ -385,53 +319,29 @@ function ComplexTreatmentDialog({
             Add New Visit
           </Button>
         </span>
-        <AnimatePresence mode="wait">
-          <ScrollArea
-            className="relative grow"
-            viewportRef={scrollAreaRef}
-            onScroll={handleScroll}
-          >
-            <div
-              className={cn(
-                "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
-                {
-                  "h-0": scrollTop === 0,
-                },
-              )}
-            />
-            {complexServicesForm.watch("relatedServices").length === 0 && (
-              <span className="py-6 vertical center-h">
-                <p className="text-muted-foreground">
-                  Add a new visit to get started.
-                </p>
-              </span>
-            )}
-            <span className="py-6 vertical gap-8">
-              {complexServicesForm
-                .watch("relatedServices")
-                .sort((a, b) => a.order - b.order)
-                .map((service) => (
-                  <TreatmentVisit
-                    key={service.serviceId + service.order}
-                    index={service.order}
-                    length={complexServicesForm.watch("relatedServices").length}
-                    form={complexServicesForm}
-                  />
-                ))}
+        <CredenzaBody sheet>
+          {complexServicesForm.watch("relatedServices").length === 0 && (
+            <span className="py-6 vertical center-h">
+              <p className="text-muted-foreground">
+                Add a new visit to get started.
+              </p>
             </span>
-            <div
-              className={cn(
-                "ease-in-outƒ pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
-                {
-                  "h-0":
-                    scrollTop + (scrollAreaRef.current?.clientHeight ?? 0) >=
-                    (scrollAreaRef.current?.scrollHeight ?? 0),
-                },
-              )}
-            />
-          </ScrollArea>
-        </AnimatePresence>
-        <FooterComponent className="grid grid-cols-2 gap-2 p-6">
+          )}
+          <span className="py-6 vertical gap-8">
+            {complexServicesForm
+              .watch("relatedServices")
+              .sort((a, b) => a.order - b.order)
+              .map((service) => (
+                <TreatmentVisit
+                  key={service.serviceId + service.order}
+                  index={service.order}
+                  length={complexServicesForm.watch("relatedServices").length}
+                  form={complexServicesForm}
+                />
+              ))}
+          </span>
+        </CredenzaBody>
+        <CredenzaFooter sheet className="grid grid-cols-2 gap-2 p-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -463,9 +373,9 @@ function ComplexTreatmentDialog({
           >
             {t("confirm")}
           </Button>
-        </FooterComponent>
-      </ContentComponent>
-    </Root>
+        </CredenzaFooter>
+      </CredenzaContent>
+    </Credenza>
   );
 }
 

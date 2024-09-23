@@ -1,23 +1,16 @@
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+  Credenza,
+  CredenzaContent,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+} from "@/components/ui/credenza";
 import { Form } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import Steps from "@/components/ui/steps";
 import useMediaQuery from "@/hooks/use-media-query";
 import { cn, zeroPad } from "@/lib/utils";
@@ -61,15 +54,10 @@ export default function AppointmentDialog({
   onClose,
   eventId,
 }: AppointmentDialogProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
   const { data: event } = api.appointment.get.useQuery(eventId);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const openMedicalCheckup = useBoolean(false);
-  const Root = isDesktop ? Sheet : Drawer;
-  const ContentComponent = isDesktop ? SheetContent : DrawerContent;
-  const HeaderComponent = isDesktop ? SheetHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? SheetTitle : DrawerTitle;
-  const FooterComponent = isDesktop ? SheetFooter : DrawerFooter;
 
   const hasMedicalCheckup = false;
   const hasMedicalRecord = true;
@@ -79,8 +67,9 @@ export default function AppointmentDialog({
   });
 
   return (
-    <Root open={open} onOpenChange={() => onClose()}>
-      <ContentComponent
+    <Credenza sheet open={open} onOpenChange={() => onClose()}>
+      <CredenzaContent
+        sheet
         className={cn({
           " horizontal my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl bg-neutral-200 p-0":
             isDesktop,
@@ -91,8 +80,8 @@ export default function AppointmentDialog({
           <PlusCircle className="size-10 rounded-full bg-background p-2 text-muted-foreground" />
         </span>
         <span className="vertical grow rounded-3xl bg-background p-6">
-          <HeaderComponent>
-            <TitleComponent className="flex items-center gap-2">
+          <CredenzaHeader sheet>
+            <CredenzaTitle sheet className="flex items-center gap-2">
               <span className="text-sm font-medium text-muted-foreground">
                 Appointment ID
               </span>
@@ -104,8 +93,8 @@ export default function AppointmentDialog({
                   ? "AUTOMATIC APPOINTMENT"
                   : "MANUAL APPOINTMENT"}
               </span>
-            </TitleComponent>
-          </HeaderComponent>
+            </CredenzaTitle>
+          </CredenzaHeader>
           {event && (
             <ScrollArea className="relative my-4 grow">
               <span className="vertical gap-8 bg-red-200 h-[2000px]">
@@ -125,7 +114,7 @@ export default function AppointmentDialog({
               </span>
             </ScrollArea>
           )}
-          <FooterComponent className="grid grid-cols-2 gap-2">
+          <CredenzaFooter sheet className="grid grid-cols-2 gap-2">
             <Button
               onClick={openMedicalCheckup.toggle}
               variant={hasMedicalCheckup ? "default" : "outline"}
@@ -174,15 +163,15 @@ export default function AppointmentDialog({
               Please add Medical Checkup and Medical Record to finish the
               appointment.
             </p>
-          </FooterComponent>
+          </CredenzaFooter>
         </span>
-      </ContentComponent>
+      </CredenzaContent>
       <MedicalCheckup
         open={openMedicalCheckup.value}
         onOpenChange={openMedicalCheckup.toggle}
         form={form}
       />
-    </Root>
+    </Credenza>
   );
 }
 
@@ -287,17 +276,13 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
         });
     }
   };
-  const Root = isDesktop ? Sheet : Drawer;
-  const ContentComponent = isDesktop ? SheetContent : DrawerContent;
-  const HeaderComponent = isDesktop ? SheetHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? SheetTitle : DrawerTitle;
-  const FooterComponent = isDesktop ? SheetFooter : DrawerFooter;
 
   const Component = steps[step.value]!.Component;
 
   return (
-    <Root open={open} onOpenChange={onOpenChange}>
-      <ContentComponent
+    <Credenza sheet open={open} onOpenChange={onOpenChange}>
+      <CredenzaContent
+        sheet
         side="left"
         noOverlay
         noCloseButton
@@ -307,8 +292,11 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           "translate-x-[calc(100vw-125%-32px)] opacity-100": open,
         })}
       >
-        <HeaderComponent className="p-6">
-          <TitleComponent className="horizontal relative h-9 w-full items-center">
+        <CredenzaHeader sheet className="p-6">
+          <CredenzaTitle
+            sheet
+            className="horizontal relative h-9 w-full items-center"
+          >
             Medical Checkup
             <Button
               size="icon"
@@ -318,8 +306,8 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             >
               <ChevronRight className="size-4" />
             </Button>
-          </TitleComponent>
-        </HeaderComponent>
+          </CredenzaTitle>
+        </CredenzaHeader>
         <Separator />
         <Steps steps={steps} currentStep={step.value} className="px-14 py-4" />
         <AnimatePresence mode="wait">
@@ -361,7 +349,7 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             </motion.div>
           </ScrollArea>
         </AnimatePresence>
-        <FooterComponent className="p-6">
+        <CredenzaFooter sheet className="p-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -402,8 +390,8 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           >
             {step.value === steps.length - 1 ? "Save" : "Next"}
           </Button>
-        </FooterComponent>
-      </ContentComponent>
-    </Root>
+        </CredenzaFooter>
+      </CredenzaContent>
+    </Credenza>
   );
 }

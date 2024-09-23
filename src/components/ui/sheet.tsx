@@ -143,8 +143,22 @@ const SheetDescription = React.forwardRef<
 ));
 SheetDescription.displayName = SheetPrimitive.Description.displayName;
 
+interface SheetProps extends React.ComponentProps<typeof Sheet> {
+  children: React.ReactNode;
+}
+
 export {
-  Sheet, SheetClose,
-  SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetOverlay, SheetPortal, SheetTitle, SheetTrigger
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetOverlay,
+  SheetPortal,
+  SheetTitle,
+  SheetTrigger
 };
+
+  export type { SheetContentProps, SheetProps };
 

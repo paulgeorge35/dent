@@ -2,25 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+  Credenza,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "@/components/ui/credenza";
 import useMediaQuery from "@/hooks/use-media-query";
 import { useTranslations } from "next-intl";
 
@@ -47,15 +37,6 @@ export default function ConfirmationDialog({
 }: ConfirmationDialogProps) {
   const t = useTranslations("layout.confirmation-dialog");
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
-  const Credenza = isDesktop ? Dialog : Drawer;
-  const CredenzaContent = isDesktop ? DialogContent : DrawerContent;
-  const CredenzaHeader = isDesktop ? DialogHeader : DrawerHeader;
-  const CredenzaTitle = isDesktop ? DialogTitle : DrawerTitle;
-  const CredenzaDescription = isDesktop ? DialogDescription : DrawerDescription;
-  const CredenzaFooter = isDesktop ? DialogFooter : DrawerFooter;
-  const CredenzaClose = isDesktop ? DialogClose : DrawerClose;
-  const CredenzaTrigger = isDesktop ? DialogTrigger : DrawerTrigger;
 
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>

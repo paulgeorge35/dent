@@ -14,7 +14,7 @@ import { translations } from "@/lib/translations";
 import type { Patient } from "@prisma/client";
 import { StickyNote } from "lucide-react";
 import { EventStatusSchema } from "prisma/generated/zod";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import type { z } from "zod";
 
 type PatientCardProps = {
@@ -31,18 +31,6 @@ export default function PatientCard({
   const fullName = useMemo(() => {
     return `${patient.firstName} ${patient.lastName}`;
   }, [patient]);
-
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      console.log("Clicked element:", event.target);
-    };
-
-    document.addEventListener("click", handleClick);
-
-    return () => {
-      document.removeEventListener("click", handleClick);
-    };
-  }, []);
 
   return (
     <Card>

@@ -2,28 +2,18 @@
 
 import { signOut } from "@/app/(router)/(tenant)/settings/actions";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import useMediaQuery from "@/hooks/use-media-query";
 import { LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
+import {
+  Credenza,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
+} from "../ui/credenza";
 
 type LogoutDialogProps = {
   children?: React.ReactNode;
@@ -32,7 +22,6 @@ type LogoutDialogProps = {
 export default function LogoutDialog({ children }: LogoutDialogProps) {
   const t = useTranslations("layout.sidebar.controls.logout");
   const [pending, startTransition] = useTransition();
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
   const handleClick = () => {
     startTransition(async () => {
@@ -40,17 +29,9 @@ export default function LogoutDialog({ children }: LogoutDialogProps) {
     });
   };
 
-  const Credenza = isDesktop ? Dialog : Drawer;
-  const TriggerComponent = isDesktop ? DialogTrigger : DrawerTrigger;
-  const ContentComponent = isDesktop ? DialogContent : DrawerContent;
-  const HeaderComponent = isDesktop ? DialogHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? DialogTitle : DrawerTitle;
-  const FooterComponent = isDesktop ? DialogFooter : DrawerFooter;
-  const CloseComponent = isDesktop ? DialogClose : DrawerClose;
-
   return (
     <Credenza>
-      <TriggerComponent asChild>
+      <CredenzaTrigger asChild>
         {children ?? (
           <Button
             Icon={LogOut}
@@ -62,18 +43,18 @@ export default function LogoutDialog({ children }: LogoutDialogProps) {
             {t("trigger")}
           </Button>
         )}
-      </TriggerComponent>
-      <ContentComponent>
-        <HeaderComponent>
-          <TitleComponent>{t("dialog.title")}</TitleComponent>
-        </HeaderComponent>
-        <FooterComponent className="gap-4">
-          <CloseComponent>{t("dialog.cancel")}</CloseComponent>
+      </CredenzaTrigger>
+      <CredenzaContent>
+        <CredenzaHeader>
+          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
+        </CredenzaHeader>
+        <CredenzaFooter className="gap-4">
+          <CredenzaClose>{t("dialog.cancel")}</CredenzaClose>
           <Button disabled={pending} color="destructive" onClick={handleClick}>
             {t("dialog.confirm")}
           </Button>
-        </FooterComponent>
-      </ContentComponent>
+        </CredenzaFooter>
+      </CredenzaContent>
     </Credenza>
   );
 }

@@ -2,22 +2,15 @@ import type { AppointmentSchema } from "@/components/calendar/components/calenda
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@/components/ui/drawer";
+  Credenza,
+  CredenzaContent,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+} from "@/components/ui/credenza";
 import { Form } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
 import Steps from "@/components/ui/steps";
 import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
@@ -174,16 +167,11 @@ export default function CreateAppointmentDialog({
     }
   };
 
-  const Root = isDesktop ? Sheet : Drawer;
-  const ContentComponent = isDesktop ? SheetContent : DrawerContent;
-  const HeaderComponent = isDesktop ? SheetHeader : DrawerHeader;
-  const TitleComponent = isDesktop ? SheetTitle : DrawerTitle;
-  const FooterComponent = isDesktop ? SheetFooter : DrawerFooter;
-
   const Component = steps[step.value]!.Component;
 
   return (
-    <Root
+    <Credenza
+      sheet
       open={open}
       onOpenChange={(value) => {
         if (!value && form.formState.isDirty) {
@@ -193,15 +181,16 @@ export default function CreateAppointmentDialog({
         onOpenChange(value);
       }}
     >
-      <ContentComponent
+      <CredenzaContent
+        sheet
         className={cn({
           "vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] rounded-2xl":
             isDesktop,
         })}
       >
-        <HeaderComponent>
-          <TitleComponent>Add new appointment</TitleComponent>
-        </HeaderComponent>
+        <CredenzaHeader sheet>
+          <CredenzaTitle sheet>Add new appointment</CredenzaTitle>
+        </CredenzaHeader>
         <Steps steps={steps} currentStep={step.value} className="px-8 py-2" />
         <AnimatePresence mode="wait">
           <ScrollArea
@@ -242,7 +231,7 @@ export default function CreateAppointmentDialog({
             </motion.div>
           </ScrollArea>
         </AnimatePresence>
-        <FooterComponent>
+        <CredenzaFooter sheet>
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -294,8 +283,8 @@ export default function CreateAppointmentDialog({
           >
             {step.value === steps.length - 1 ? "Save" : "Next"}
           </Button>
-        </FooterComponent>
-      </ContentComponent>
-    </Root>
+        </CredenzaFooter>
+      </CredenzaContent>
+    </Credenza>
   );
 }
