@@ -107,7 +107,7 @@ export const AutoComplete = <T,>({
           onBlur={handleBlur}
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
-          className="md:text-sm h-9"
+          className="text-base md:text-sm h-9"
         />
       </div>
       <div

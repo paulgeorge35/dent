@@ -321,7 +321,7 @@ const CredenzaBody = ({
           className={cn(
             "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
             {
-              "h-0": scrollTop === 0,
+              "h-0": scrollTop <= 0,
             },
           )}
         />
