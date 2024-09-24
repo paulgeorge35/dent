@@ -325,14 +325,20 @@
       "multiple-visits": {
         "title": "Configurare vizite multiple",
         "cancel": "Anulează",
-        "confirm": "Salvează"
+        "confirm": "Salvează",
+        "add-visit": {
+          "trigger": "Adaugă vizită",
+          "title": "Configurare vizite",
+          "placeholder": "Adaugă o nouă vizită pentru a începe.",
+          "visit": "Vizită #{index}"
+        }
       },
       "close": {
         "trigger": "Anulează",
         "confirmation": {
-          "title": "Ești sigur că vrei să închi",
+          "title": "Șterge modificările",
           "description": "Această acțiune nu poate fi anulată și toate modificările vor fi pierdute.",
-          "confirm": "Da, închide"
+          "confirm": "Șterge"
         }
       },
       "add": {
@@ -348,6 +354,7 @@
         }
       },
       "edit": {
+        "trigger": "Editează tratament",
         "status": {
           "success": "Tratament actualizat cu succes"
         },
@@ -363,10 +370,12 @@
           "label": "Denumire"
         },
         "description": {
-          "label": "Descriere"
+          "label": "Descriere",
+          "no-description": "Fără descriere"
         },
         "unit_price": {
-          "label": "Preț"
+          "label": "Preț tratament",
+          "description": "Se aplică doar pentru acest tratament. Prețul original nu va fi afectat."
         },
         "unit": {
           "label": "Aplicare",
@@ -397,6 +406,29 @@
           "label": "Configurează multiple vizite",
           "description": "Dacă este necesar, configurează multiple vizite pentru acest tratament.",
           "button": "Configurează"
+        },
+        "related_services": {
+          "label": "Tratamente asociate",
+          "unit": "zile",
+          "search": "Caută...",
+          "empty": "Nici un tratament",
+          "visit": {
+            "singular": "vizită",
+            "plural": "vizite"
+          },
+          "edit": "Editează",
+          "remove": "Șterge",
+          "show": "Afișează",
+          "hide": "Ascunde"
+        },
+        "related_materials": {
+          "label": "Materiale asociate",
+          "description": "Adaugă fiecare material folosit în tratament.",
+          "unit": "component(e)",
+          "search": "Caută...",
+          "empty": "Nici un material",
+          "see-details": "Vezi detalii",
+          "hide-details": "Ascunde detalii"
         }
       }
     },

@@ -112,6 +112,11 @@ export const serviceRouter = createTRPCRouter({
                 order: "asc",
               },
             },
+            materials: {
+              include: {
+                material: true,
+              },
+            },
           },
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
@@ -154,6 +159,7 @@ export const serviceRouter = createTRPCRouter({
     .input(
       z.object({
         search: z.string().optional(),
+        ids: z.array(z.string()).optional(),
       }),
     )
     .query(async ({ ctx, input }) => {
@@ -169,6 +175,16 @@ export const serviceRouter = createTRPCRouter({
           ...(input.search && {
             name: { contains: input.search },
           }),
+          ...(input.ids && {
+            id: { in: input.ids },
+          }),
+        },
+        include: {
+          materials: {
+            include: {
+              material: true,
+            },
+          },
         },
       });
     }),
@@ -208,6 +224,14 @@ export const serviceRouter = createTRPCRouter({
         where: {
           id: { in: relatedServices.map((service) => service.serviceId) },
         },
+        include: {
+          children: true,
+          materials: {
+            include: {
+              material: true,
+            },
+          },
+        },
         cacheStrategy: {
           ttl: env.DEFAULT_TTL,
           swr: env.DEFAULT_SWR,
@@ -225,6 +249,7 @@ export const serviceRouter = createTRPCRouter({
             createMany: {
               data: relatedServices.map((service) => ({
                 ...service,
+                serviceId: undefined,
                 service: services.find(
                   (s) => s.id === service.serviceId,
                 ) as unknown as Prisma.JsonObject,

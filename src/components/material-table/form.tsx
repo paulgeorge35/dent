@@ -98,7 +98,7 @@ export default function MaterialForm({ form }: MaterialFormProps) {
             name="unit_price"
             control={form.control}
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full col-span-1">
                 <FormLabel htmlFor={field.name}>
                   {t("unit_price.label")}
                 </FormLabel>
@@ -110,7 +110,7 @@ export default function MaterialForm({ form }: MaterialFormProps) {
             name="unit"
             control={form.control}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="col-span-1">
                 <FormLabel htmlFor={field.name}>{t("unit.label")}</FormLabel>
                 <FormControl>
                   <Input

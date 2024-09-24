@@ -325,14 +325,20 @@
       "multiple-visits": {
         "title": "Setup multiple visits",
         "cancel": "Cancel",
-        "confirm": "Save"
+        "confirm": "Save",
+        "add-visit": {
+          "trigger": "Add New Visit",
+          "title": "Visitation Settings",
+          "placeholder": "Add a new visit to get started.",
+          "visit": "Visit #{index}"
+        }
       },
       "close": {
         "trigger": "Cancel",
         "confirmation": {
-          "title": "Are you sure you want to close this dialog?",
+          "title": "Discard changes",
           "description": "This action cannot be undone and all changes will be lost.",
-          "confirm": "Yes"
+          "confirm": "Discard"
         }
       },
       "add": {
@@ -361,13 +367,15 @@
       },
       "fields": {
         "name": {
-          "label": "Name"
+          "label": "Treatment Name"
         },
         "description": {
-          "label": "Description"
+          "label": "Treatment Description",
+          "no-description": "No description"
         },
         "unit_price": {
-          "label": "Price"
+          "label": "Treatment Price",
+          "description": "Only applies for this treatment. The original price will not be affected."
         },
         "unit": {
           "label": "Scope",
@@ -398,6 +406,29 @@
           "label": "Setup multiple visits",
           "description": "If required, setup multiple visits for this treatment.",
           "button": "Setup"
+        },
+        "related_services": {
+          "label": "Related services",
+          "unit": "days",
+          "search": "Search...",
+          "empty": "No services found",
+          "visit": {
+            "singular": "visit",
+            "plural": "visits"
+          },
+          "edit": "Edit",
+          "remove": "Remove",
+          "show": "Show",
+          "hide": "Hide"
+        },
+        "related_materials": {
+          "label": "Components used",
+          "description": "Add every component used in the service.",
+          "unit": "component(s)",
+          "search": "Search...",
+          "empty": "No materials found",
+          "see-details": "See details",
+          "hide-details": "Hide details"
         }
       }
     },

@@ -17,7 +17,7 @@ export default function AppointmentDetailsCard({
   className,
 }: AppointmentDetailsCardProps) {
   return (
-    <span className={cn("grid grid-cols-3", className)}>
+    <span className={cn("grid grid-cols-1 gap-2 md:grid-cols-3", className)}>
       <Section title="Treatment" value={treatment} Icon={Pill} />
       <Section
         title="Date & Time"
@@ -43,7 +43,7 @@ function Section({ title, value, secondValue, Icon }: SectionProps) {
       <Icon className="size-11 rounded-lg bg-muted p-2 text-muted-foreground" />
       <div className="flex flex-col gap-2 ">
         <p className="text-xs uppercase text-muted-foreground">{title}</p>
-        <p className="text-balance text-sm font-medium">
+        <p className="text-balance text-sm font-medium flex gap-1 md:block">
           {value}
           {secondValue && (
             <span className="!font-normal block">{secondValue}</span>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import StatusBullet from "@/components/ui/status-bullet";
+import useMediaQuery from "@/hooks/use-media-query";
 import { translations } from "@/lib/translations";
 import type { Patient } from "@prisma/client";
 import { StickyNote } from "lucide-react";
@@ -32,36 +33,48 @@ export default function PatientCard({
     return `${patient.firstName} ${patient.lastName}`;
   }, [patient]);
 
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center gap-4">
-        <AvatarComponent
-          alt={fullName}
-          fallback={fullName}
-          width={80}
-          height={80}
-          className="size-20 !text-2xl"
-        />
-        <span className="flex flex-col justify-around">
-          <p className="text-sm text-muted-foreground">Patient name</p>
-          <p className="text-2xl">{fullName}</p>
+      <CardHeader className="flex flex-col md:flex-row items-center gap-4">
+        <span className="horizontal gap-4 center-v">
+          <AvatarComponent
+            alt={fullName}
+            fallback={fullName}
+            width={isDesktop ? 80 : 40}
+            height={isDesktop ? 80 : 40}
+            className="size-10 md:size-20 !text-2xl"
+          />
+          <span className="flex flex-col justify-around">
+            <p className="text-sm text-muted-foreground">Patient name</p>
+            <p className="text-lg md:text-2xl">{fullName}</p>
+          </span>
         </span>
-        <p className="ml-auto text-sm text-muted-foreground">Status</p>
-        <Select value={eventStatus}>
-          <SelectTrigger className="w-40">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="z-50">
-            {Object.values(EventStatusSchema.Values).map((status) => (
-              <SelectItem key={status} value={status} className="cursor-pointer hover:bg-muted">
-                <span className="horizontal center-v gap-2">
-                  <StatusBullet status={status} />
-                  {translations.en.event.status[status]}
-                </span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <span className="md:ml-auto horizontal center-v gap-2">
+          <p className="hidden md:block text-sm text-muted-foreground">
+            Status
+          </p>
+          <Select value={eventStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="z-50">
+              {Object.values(EventStatusSchema.Values).map((status) => (
+                <SelectItem
+                  key={status}
+                  value={status}
+                  className="cursor-pointer hover:bg-muted"
+                >
+                  <span className="horizontal center-v gap-2">
+                    <StatusBullet status={status} />
+                    {translations.en.event.status[status]}
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </span>
       </CardHeader>
       <Separator />
       <CardFooter className="flex flex-row items-center gap-4 !py-4 text-muted-foreground">

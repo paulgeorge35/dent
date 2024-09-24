@@ -113,7 +113,7 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
 
   return (
     <Credenza sheet open={dialogOpen.value} onOpenChange={onOpenChange}>
-      <CredenzaTrigger sheet>
+      <CredenzaTrigger asChild sheet>
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -126,7 +126,7 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
       <CredenzaContent
         sheet
         className={cn({
-          "vertical my-8 mr-4  h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
+          "vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
             isDesktop,
           "lg:translate-x-[75%]": secondDialogOpen.value,
         })}
@@ -312,7 +312,7 @@ function ComplexTreatmentDialog({
               size="icon"
               variant="secondary"
               className="absolute right-0 top-0 ml-auto rounded-full !p-2"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
             >
               <ChevronRight className="size-4" />
             </Button>
@@ -320,17 +320,17 @@ function ComplexTreatmentDialog({
         </CredenzaHeader>
         <Separator />
         <span className="p-6 horizontal center-v justify-between">
-          <p className="font-medium">Visitation Settings</p>
+          <p className="font-medium">{t("add-visit.title")}</p>
           <Button type="button" variant="outline" onClick={handleAdd}>
             <Plus className="size-4" />
-            Add New Visit
+            {t("add-visit.trigger")}
           </Button>
         </span>
         <CredenzaBody sheet>
           {complexServicesForm.watch("relatedServices").length === 0 && (
             <span className="py-6 vertical center-h">
               <p className="text-muted-foreground">
-                Add a new visit to get started.
+                {t("add-visit.placeholder")}
               </p>
             </span>
           )}
@@ -393,6 +393,7 @@ type TreatmentVisitProps = {
 };
 
 function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
+  const t = useTranslations("page.treatments");
   const listServices = api.service.listSimpleServices.useQuery({});
   const serviceQuery = api.service.get.useQuery(
     form.watch(`relatedServices.${index}.serviceId`),
@@ -453,7 +454,7 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
     <Form {...form}>
       <form className="vertical gap-8">
         <span className="horizontal gap-2 px-6">
-          <span className="vertical gap-2">
+          <span className="vertical gap-2 hidden sm:flex">
             <Button
               type="button"
               size="icon"
@@ -477,13 +478,35 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
           </span>
           <Card className="w-full">
             <CardHeader className="py-4 bg-muted border-b border-input rounded-t-xl">
-              <CardTitle className="horizontal center-v justify-between">
-                Visit #{index + 1}
+              <CardTitle className="horizontal gap-2 center-v">
+                <span className="horizontal gap-2 sm:hidden">
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    className="rounded-full"
+                    disabled={index === 0}
+                    onClick={handleMoveUp}
+                  >
+                    <ArrowUp className="size-4" />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="outline"
+                    className="rounded-full"
+                    disabled={index === length - 1}
+                    onClick={handleMoveDown}
+                  >
+                    <ArrowDown className="size-4" />
+                  </Button>
+                </span>
+                {t("multiple-visits.add-visit.visit", { index: index + 1 })}
                 <Button
                   type="button"
                   size="icon"
                   variant="outline"
-                  className="rounded-full"
+                  className="rounded-full ml-auto"
                   onClick={handleDelete}
                 >
                   <X className="size-4" />
@@ -491,7 +514,7 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
               </CardTitle>
             </CardHeader>
             <CardContent className="pt-4 vertical gap-4">
-              <Label htmlFor="name">Treatment Name</Label>
+              <Label htmlFor="name">{t("fields.name.label")}</Label>
               <SearchService
                 form={form}
                 index={index}
@@ -509,7 +532,7 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
               )}
               {serviceQuery.data && (
                 <>
-                  <Label htmlFor="description">Treatment Description</Label>
+                  <Label htmlFor="description">{t("fields.description.label")}</Label>
                   <Textarea
                     id="description"
                     value={serviceQuery.data?.description ?? ""}
@@ -524,15 +547,14 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
                         <FormLabel
                           htmlFor={`relatedServices.${index}.unit_price`}
                         >
-                          Treatment Price
+                          {t("fields.unit_price.label")}
                         </FormLabel>
                         <PriceInput
                           id={`relatedServices.${index}.unit_price`}
                           {...field}
                         />
                         <FormDescription>
-                          Only applies for this treatment. The original price
-                          will not be affected.
+                          {t("fields.unit_price.description")}
                         </FormDescription>
                       </FormItem>
                     )}
@@ -566,8 +588,8 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
                   )}
                 />
               </span>
-              <span className="pl-1 pr-2 py-1 horizontal center-v">
-                {"Day(s)"}
+              <span className="pl-2 pr-2 py-1 horizontal center-v capitalize">
+                {t("fields.related_services.unit")}
               </span>
             </span>
           </span>
@@ -591,8 +613,8 @@ function SearchService({
   isLoading,
   options,
 }: SearchServiceProps) {
+  const t = useTranslations("page.treatments.fields.related_services");
   const search = useStateful("");
-
   useEffect(() => {
     if (form.watch(`relatedServices.${index}.serviceId`) !== "") {
       const service = options.find(
@@ -611,8 +633,8 @@ function SearchService({
       search={search.value}
       setSearch={search.setValue}
       disabled={isLoading}
-      emptyMessage="No services found"
-      placeholder="Search for a service..."
+      emptyMessage={t("empty")}
+      placeholder={t("search")}
       options={
         options.map((service) => ({
           label: service.name,
@@ -642,6 +664,7 @@ function ServiceComponents({
     material: Material;
   })[];
 }) {
+  const t = useTranslations("page.treatments.fields.related_materials");
   const extended = useBoolean(false);
 
   if (materials.length === 0) {
@@ -654,7 +677,7 @@ function ServiceComponents({
       <span className="vertical truncate">
         <p className="font-light">
           <span className="text-2xl font-medium">{materials.length}</span>{" "}
-          components
+          {t("unit")}
         </p>
         <AnimatePresence mode="wait">
           {!extended.value && (
@@ -676,10 +699,10 @@ function ServiceComponents({
       <Button
         type="button"
         variant="link"
-        className="text-link hover:text-link-hover whitespace-nowrap my-auto"
+        className="text-link hover:text-link-hover whitespace-nowrap my-auto !p-0"
         onClick={extended.toggle}
       >
-        {extended.value ? "Hide details" : "See details"}
+        {extended.value ? t("hide-details") : t("see-details")}
       </Button>
       <AnimatePresence>
         {extended.value && (

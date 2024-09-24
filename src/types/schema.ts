@@ -3,7 +3,11 @@ import {
   EventInitiatorSchema,
   EventStatusSchema,
   EventTypeSchema,
+  MaterialSchema,
   ProfileSchema,
+  RelatedServiceSchema,
+  ServiceMaterialSchema,
+  ServiceSchema,
   SpecialitySchema,
   StatusSchema,
   TenantProfileSchema,
@@ -238,3 +242,14 @@ export const appointmentCreateInput = z
 export const medicalCheckupSchema = z.object({});
 
 export type MedicalCheckupSchema = z.infer<typeof medicalCheckupSchema>;
+
+export const serviceCompleteSchema = ServiceSchema.extend({
+  materials: z.array(
+    ServiceMaterialSchema.extend({
+      material: MaterialSchema,
+    }),
+  ),
+  children: z.array(RelatedServiceSchema),
+});
+
+export type ServiceComplete = z.infer<typeof serviceCompleteSchema>;

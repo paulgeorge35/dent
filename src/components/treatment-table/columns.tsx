@@ -1,20 +1,18 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import type { RelatedService, Service } from "prisma/generated/zod";
 
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
+import type { ServiceComplete } from "@/types/schema";
 import AvatarComponent from "../shared/avatar-component";
 
 type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
 };
 
-export function getColumns({ t }: GetColumnsProps): ColumnDef<
-  Service & {
-    children: RelatedService[];
-  }
->[] {
+export function getColumns({
+  t,
+}: GetColumnsProps): ColumnDef<ServiceComplete>[] {
   return [
     {
       accessorKey: "name",

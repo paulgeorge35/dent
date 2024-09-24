@@ -260,7 +260,7 @@ export default function ClinicForm() {
           )}
         />
         {profile?.stripeFreeTrialUsed === false && (
-          <p className="horizontal col-span-2 items-start justify-center rounded-lg bg-muted p-2 text-xs text-muted-foreground">
+          <span className="horizontal col-span-2 items-start justify-center rounded-lg bg-muted p-2 text-xs text-muted-foreground">
             <Info className="mr-2 size-4" />
             <p>
               {t("get-started-with")}
@@ -269,7 +269,7 @@ export default function ClinicForm() {
               </span>
               .{t("cancel-anytime")}
             </p>
-          </p>
+          </span>
         )}
         <Button
           variant="expandIcon"

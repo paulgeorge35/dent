@@ -190,17 +190,19 @@ export default function ServiceForm({
               </FormItem>
             )}
           />
-          {!form.watch("relatedServices")?.length && (
-            <ComponentsSection form={form} />
-          )}
+          <ComponentsSection form={form} />
         </span>
       </form>
     </Form>
   );
 }
 
-function ComponentsSection({ form }: { form: UseFormReturn<FormValues> }) {
-  const t = useTranslations("page.treatments.fields");
+function ComponentsSection({
+  form,
+}: {
+  form: UseFormReturn<FormValues>;
+}) {
+  const t = useTranslations("page.treatments.fields.related_materials");
   const { data: materials, isLoading } = api.material.list.useQuery({});
 
   const materialsLenth = form.watch("materials")?.length ?? 0;
@@ -219,10 +221,8 @@ function ComponentsSection({ form }: { form: UseFormReturn<FormValues> }) {
         <span className="w-full p-4 grid grid-cols-[auto_1fr] gap-4">
           <Pill className="size-10 p-2 rounded-lg bg-background/80 text-muted-foreground border border-border" />
           <span className="vertical truncate">
-            <p className="font-medium">Components used</p>
-            <p className="text-muted-foreground text-xs">
-              Add every component used in the service.
-            </p>
+            <p className="font-medium">{t("label")}</p>
+            <p className="text-muted-foreground text-xs">{t("description")}</p>
           </span>
         </span>
       </span>
@@ -302,6 +302,7 @@ function SearchMaterial({
   isLoading,
   options,
 }: SearchMaterialProps) {
+  const t = useTranslations("page.treatments.fields.related_materials");
   const search = useStateful("");
 
   return (
@@ -310,8 +311,8 @@ function SearchMaterial({
       search={search.value}
       setSearch={(_: string) => {}}
       disabled={isLoading}
-      emptyMessage="No materials found"
-      placeholder="Search for a material..."
+      emptyMessage={t("empty")}
+      placeholder={t("search")}
       options={
         options.map((material) => ({
           label: material.name,
@@ -359,7 +360,9 @@ function ServicesSection({
           <span className="text-2xl font-medium">
             {form.watch("relatedServices")?.length}
           </span>{" "}
-          visits
+          {form.watch("relatedServices")?.length > 1
+            ? t("related_services.visit.plural")
+            : t("related_services.visit.singular")}
         </p>
         <p className="truncate text-xs text-muted-foreground">
           {services?.map((service) => service.name).join(" → ")}
@@ -372,7 +375,7 @@ function ServicesSection({
           type="button"
           onClick={onSetupMultivisit}
         >
-          Edit
+          {t("related_services.edit")}
         </Button>
         <Button
           variant="link"
@@ -382,7 +385,7 @@ function ServicesSection({
             form.setValue("relatedServices", [], { shouldDirty: true });
           }}
         >
-          Remove
+          {t("related_services.remove")}
         </Button>
       </span>
     </span>

@@ -9,7 +9,7 @@ import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";
 
 import { api } from "@/trpc/react";
-import type { RelatedService, Service } from "@prisma/client";
+import type { ServiceComplete } from "@/types/schema";
 import { useTranslations } from "next-intl";
 import { useStateful } from "react-hanger";
 import { getColumns } from "./columns";
@@ -18,7 +18,7 @@ import { ServicesTableToolbarActions } from "./toolbar-actions";
 
 interface ServicesTableProps {
   services: {
-    content: (Service & { children: RelatedService[] })[];
+    content: ServiceComplete[];
     count: number;
     pageCount: number;
   };
@@ -26,18 +26,17 @@ interface ServicesTableProps {
 
 export function ServiceTable({ services }: ServicesTableProps) {
   const t = useTranslations("");
-  const selectedRow = useStateful<string | null>(null);
+  const selectedRow = useStateful<ServiceComplete | null>(null);
   const tServices = useTranslations("page.treatments");
   const { content, pageCount } = services;
   const { data: tags } = api.service.listTags.useQuery();
 
-  const columns = React.useMemo<
-    ColumnDef<Service & { children: RelatedService[] }>[]
-  >(() => getColumns({ t }), []);
+  const columns = React.useMemo<ColumnDef<ServiceComplete>[]>(
+    () => getColumns({ t }),
+    [],
+  );
 
-  const filterFields: DataTableFilterField<
-    Service & { children: RelatedService[] }
-  >[] = [
+  const filterFields: DataTableFilterField<ServiceComplete>[] = [
     {
       label: tServices("fields.search.label"),
       value: "name",
@@ -75,7 +74,7 @@ export function ServiceTable({ services }: ServicesTableProps) {
       </DataTableToolbar>
       <DataTable
         table={table}
-        onRowClick={(value) => selectedRow.setValue(value.id)}
+        onRowClick={(value) => selectedRow.setValue(value)}
       />
     </div>
   );

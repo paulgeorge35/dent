@@ -2,6 +2,7 @@ import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Credenza,
+  CredenzaBody,
   CredenzaContent,
   CredenzaFooter,
   CredenzaHeader,
@@ -9,7 +10,6 @@ import {
 } from "@/components/ui/credenza";
 import { Form } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import Steps from "@/components/ui/steps";
 import useMediaQuery from "@/hooks/use-media-query";
@@ -20,7 +20,7 @@ import {
   medicalCheckupSchema,
 } from "@/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Activity,
   Check,
@@ -71,33 +71,38 @@ export default function AppointmentDialog({
       <CredenzaContent
         sheet
         className={cn({
-          " horizontal my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl bg-neutral-200 p-0":
+          "horizontal my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl bg-neutral-200 p-0":
             isDesktop,
-          "translate-x-[75%]": openMedicalCheckup.value,
+          "lg:translate-x-[75%]": openMedicalCheckup.value,
         })}
       >
-        <span className="vertical shrink-0 items-center p-2">
+        <span className="hidden md:flex vertical shrink-0 items-center p-2">
           <PlusCircle className="size-10 rounded-full bg-background p-2 text-muted-foreground" />
         </span>
-        <span className="vertical grow rounded-3xl bg-background p-6">
-          <CredenzaHeader sheet>
-            <CredenzaTitle sheet className="flex items-center gap-2">
+        <span className="vertical grow rounded-3xl bg-background pt-0 md:pt-6 p-6">
+          <CredenzaHeader sheet className="lg:pb-4">
+            <CredenzaTitle
+              sheet
+              className="flex flex-col md:flex-row items-center gap-2"
+            >
               <span className="text-sm font-medium text-muted-foreground">
-                Appointment ID
+                Appointment ID{" "}
+                <span className="font-mono text-lg font-bold text-primary">{`#APPT${zeroPad(event?.index ?? 0)}`}</span>
               </span>
-              <span className="font-mono text-lg font-bold">{`#APPT${zeroPad(event?.index ?? 0)}`}</span>
-              <span className="text-xs text-muted-foreground">&bull;</span>
+              <span className="hidden md:block text-xs text-muted-foreground">
+                &bull;
+              </span>
               <span className="horizontal items-center gap-2 text-xs font-medium text-muted-foreground">
-                <Monitor className="size-4" />
+                <Monitor className="size-4 shrink-0" />
                 {event?.initiator === "SYSTEM"
                   ? "AUTOMATIC APPOINTMENT"
                   : "MANUAL APPOINTMENT"}
               </span>
             </CredenzaTitle>
           </CredenzaHeader>
-          {event && (
-            <ScrollArea className="relative my-4 grow">
-              <span className="vertical gap-8 bg-red-200 h-[2000px]">
+          <CredenzaBody sheet className="px-0">
+            {event && (
+              <span className="vertical gap-4 md:gap-8">
                 {event?.patient && (
                   <PatientCard
                     patient={event.patient}
@@ -112,9 +117,9 @@ export default function AppointmentDialog({
                   doctor={`${event.user.profile.title} ${event.user.profile.firstName} ${event.user.profile.lastName}`}
                 />
               </span>
-            </ScrollArea>
-          )}
-          <CredenzaFooter sheet className="grid grid-cols-2 gap-2">
+            )}
+          </CredenzaBody>
+          <CredenzaFooter sheet className="grid grid-cols-2 gap-2 px-0">
             <Button
               onClick={openMedicalCheckup.toggle}
               variant={hasMedicalCheckup ? "default" : "outline"}
@@ -125,13 +130,15 @@ export default function AppointmentDialog({
               })}
             >
               {hasMedicalCheckup ? (
-                <FilePenLine className="mr-2 h-4 w-4" />
+                <FilePenLine className="mr-2 size-3 sm:size-4 shrink-0" />
               ) : (
-                <Activity className="mr-2 h-4 w-4" />
+                <Activity className="mr-2 size-3 sm:size-4shrink-0" />
               )}
-              {hasMedicalCheckup ? "Edit" : "Add"} Medical Checkup
+              <p className="truncate">
+                {hasMedicalCheckup ? "Edit" : "Add"} Medical Checkup
+              </p>
               {hasMedicalCheckup && (
-                <Check className="ml-2 h-4 w-4 rounded-full bg-background p-[2px] text-green-600" />
+                <Check className="ml-2 size-3 sm:size-4 rounded-full bg-background p-[2px] text-green-600 shrink-0" />
               )}
             </Button>
             <Button
@@ -142,12 +149,16 @@ export default function AppointmentDialog({
               })}
             >
               {hasMedicalRecord ? (
-                <FilePenLine className="mr-2 h-4 w-4" />
+                <FilePenLine className="mr-2 size-3 sm:size-4 shrink-0" />
               ) : (
-                <Activity className="mr-2 h-4 w-4" />
+                <Activity className="mr-2 size-3 sm:size-4 shrink-0" />
               )}
-              {hasMedicalRecord ? "Edit" : "Add"} Medical Record
-              {hasMedicalRecord && <CheckCircle className="ml-2 h-4 w-4" />}
+              <p className="truncate">
+                {hasMedicalRecord ? "Edit" : "Add"} Medical Record
+              </p>
+              {hasMedicalRecord && (
+                <CheckCircle className="ml-2 size-3 sm:size-4 shrink-0" />
+              )}
             </Button>
             <Button
               variant="expandIcon"
@@ -158,10 +169,12 @@ export default function AppointmentDialog({
             >
               Finish
             </Button>
-            <p className="col-span-2 flex items-center justify-center text-center text-xs text-muted-foreground">
-              <Info className="mr-2 h-4 w-4" />
-              Please add Medical Checkup and Medical Record to finish the
-              appointment.
+            <p className="col-span-2 flex items-center justify-center text-center text-xs text-muted-foreground flex-wrap">
+              <Info className="mr-2 h-4 w-4 shrink-0" />
+              <span>
+                Please add Medical Checkup and Medical Record to finish the
+                appointment.
+              </span>
             </p>
           </CredenzaFooter>
         </span>
@@ -289,7 +302,7 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
         className={cn({
           "vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-2xl p-0 opacity-0 transition-opacity duration-300 ease-in-out":
             isDesktop,
-          "translate-x-[calc(100vw-125%-32px)] opacity-100": open,
+          "lg:translate-x-[calc(100vw-125%-32px)] opacity-100": open,
         })}
       >
         <CredenzaHeader sheet className="p-6">
@@ -309,47 +322,19 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           </CredenzaTitle>
         </CredenzaHeader>
         <Separator />
-        <Steps steps={steps} currentStep={step.value} className="px-14 py-4" />
-        <AnimatePresence mode="wait">
-          <ScrollArea
-            className="relative grow"
-            viewportRef={scrollAreaRef}
-            onScroll={handleScroll}
-          >
-            <div
-              className={cn(
-                "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
-                {
-                  "h-0": scrollTop === 0,
-                },
-              )}
-            />
-            <div
-              className={cn(
-                "ease-in-outƒ pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
-                {
-                  "h-0":
-                    scrollTop + (scrollAreaRef.current?.clientHeight ?? 0) >=
-                    (scrollAreaRef.current?.scrollHeight ?? 0),
-                },
-              )}
-            />
-            <motion.div
-              key={step.value}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Form {...form}>
-                <form onSubmit={onSubmit}>
-                  <Component form={form} />
-                </form>
-              </Form>
-            </motion.div>
-          </ScrollArea>
-        </AnimatePresence>
-        <CredenzaFooter sheet className="p-6">
+        <Steps
+          steps={steps}
+          currentStep={step.value}
+          className="px-2 md:px-14 py-4"
+        />
+        <CredenzaBody sheet className="px-0">
+          <Form {...form}>
+            <form onSubmit={onSubmit}>
+              <Component form={form} />
+            </form>
+          </Form>
+        </CredenzaBody>
+        <CredenzaFooter sheet className="p-6 grid grid-cols-3 gap-2 px-4">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -375,7 +360,12 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             transition={{ duration: 0.15 }}
             className="overflow-hidden"
           >
-            <Button size="lg" variant="outline" onClick={handleBack}>
+            <Button
+              size="lg"
+              className="w-full"
+              variant="outline"
+              onClick={handleBack}
+            >
               Back
             </Button>
           </motion.div>

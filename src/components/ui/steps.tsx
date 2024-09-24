@@ -13,7 +13,7 @@ type StepsProps = {
 
 export default function Steps({ steps, currentStep, className }: StepsProps) {
   return (
-    <span className={cn("horizontal items-start gap-1", className)}>
+    <span className={cn("horizontal items-start justify-between sm:justify-center gap-1", className)}>
       {steps.map((step, index) => (
         <Step
           key={step.title}
@@ -79,7 +79,7 @@ const Step = ({
       </span>
       {!isLast && (
         <Progress
-          className="mt-5 h-1"
+          className="mt-5 h-1 hidden sm:block"
           indicatorClassName={cn("bg-muted", {
             "bg-green-600": isCompleted,
             "bg-blue-500": isActive,

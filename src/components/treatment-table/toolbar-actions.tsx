@@ -1,11 +1,11 @@
 "use client";
 
-import AddMServiceDialog from "./add-dialog";
+import AddServiceDialog from "./add-dialog";
 
 export function ServicesTableToolbarActions() {
   return (
     <div className="flex items-center gap-2">
-      <AddMServiceDialog />
+      <AddServiceDialog className="h-8" />
     </div>
   );
 }
