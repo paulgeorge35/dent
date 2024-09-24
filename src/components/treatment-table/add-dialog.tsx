@@ -132,7 +132,7 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
         })}
       >
         <CredenzaHeader className="p-6">
-          <CredenzaTitle className="flex items-center gap-2">
+          <CredenzaTitle sheet>
             {t("dialog.title")}
           </CredenzaTitle>
           <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>

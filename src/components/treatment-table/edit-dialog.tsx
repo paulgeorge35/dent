@@ -37,7 +37,6 @@ export default function EditServiceDialog({
   dialogOpen,
 }: EditServiceDialogProps) {
   const t = useTranslations("page.treatments");
-  const tEnums = useTranslations("enums");
   const extendedService = useStateful<number | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -66,7 +65,7 @@ export default function EditServiceDialog({
       <CredenzaContent
         sheet
         className={cn({
-          "!vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
+          "!vertical my-8 mr-4 md:h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
             isDesktop,
         })}
       >
@@ -96,65 +95,8 @@ export default function EditServiceDialog({
             )}
           </CredenzaDescription>
         </CredenzaHeader>
-        <CredenzaBody>
-          <span className="vertical gap-8 px-1">
-            <span className="horizontal justify-center sm:justify-start flex-wrap gap-2">
-              {service.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="bg-muted border border-muted-foreground px-1 rounded-lg text-muted-foreground text-xs whitespace-nowrap"
-                >
-                  {tag}
-                </span>
-              ))}
-            </span>
-            <Card className="border-border shadow-none bg-muted">
-              <CardContent className="grid grid-cols-2 gap-2 py-4">
-                <span className="vertical gap-2 col-span-2 sm:col-span-1">
-                  <p className="font-medium">{t("fields.unit_price.label")}</p>
-                  <span className="horizontal center-v gap-2">
-                    <span className="font-light px-1 rounded-full bg-muted border border-muted-foreground/20 text-xs text-muted-foreground">
-                      RON
-                    </span>
-                    <span className="font-medium">
-                      {Number(service.unit_price / 100).toFixed(2)}
-                    </span>
-                    {service.unit !== "VISIT" && (
-                      <span className="font-light text-muted-foreground lowercase">
-                        {`per ${tEnums(`serviceUnit.${service.unit}`)}`}
-                      </span>
-                    )}
-                  </span>
-                </span>
-                <Separator className="col-span-2 sm:hidden" />
-                <span className="vertical gap-2 col-span-2 sm:col-span-1">
-                  <p className="font-medium">{t("fields.duration.label")}</p>
-                  <div className="horizontal items-baseline gap-1">
-                    <span className="text-muted-foreground">~</span>
-                    {(service.duration / 60).toFixed(1)}
-                    <span className="text-xs text-muted-foreground">
-                      {t("fields.duration.unit")}
-                    </span>
-                  </div>
-                </span>
-              </CardContent>
-            </Card>
-            <span className="vertical gap-4">
-              <span className="font-medium text-lg">
-                {t("fields.related_services.label")}
-              </span>
-              {service.children.map((child, index) => (
-                <RelatedServiceComponent
-                  key={index}
-                  data={child}
-                  index={index}
-                  extendedService={extendedService}
-                />
-              ))}
-            </span>
-            <Separator />
-            <RelatedMaterials materials={service.materials} />
-          </span>
+        <CredenzaBody sheet className="pb-4 vertical gap-8 ">
+          <ServiceDetails service={service} extendedService={extendedService} />
         </CredenzaBody>
         <CredenzaFooter className="grid grid-cols-2 gap-2 p-6">
           <Button
@@ -167,6 +109,79 @@ export default function EditServiceDialog({
         </CredenzaFooter>
       </CredenzaContent>
     </Credenza>
+  );
+}
+
+type ServiceDetailsProps = {
+  service: ServiceComplete;
+  extendedService: UseStateful<number | null>;
+};
+
+function ServiceDetails({ service, extendedService }: ServiceDetailsProps) {
+  const t = useTranslations("page.treatments");
+  const tEnums = useTranslations("enums");
+
+  return (
+    <>
+      {service.tags.length > 0 && (
+        <span className="horizontal justify-center sm:justify-start flex-wrap gap-2">
+          {service.tags.map((tag, index) => (
+            <span
+              key={index}
+              className="bg-muted border border-muted-foreground px-1 rounded-lg text-muted-foreground text-xs whitespace-nowrap"
+            >
+              {tag}
+            </span>
+          ))}
+        </span>
+      )}
+      <Card className="border-border shadow-none bg-muted">
+        <CardContent className="grid grid-cols-2 gap-2 py-4">
+          <span className="vertical gap-2 col-span-2 sm:col-span-1">
+            <p className="font-medium">{t("fields.unit_price.label")}</p>
+            <span className="horizontal center-v gap-2">
+              <span className="font-light px-1 rounded-full bg-muted border border-muted-foreground/20 text-xs text-muted-foreground">
+                RON
+              </span>
+              <span className="font-medium">
+                {Number(service.unit_price / 100).toFixed(2)}
+              </span>
+              {service.unit !== "VISIT" && (
+                <span className="font-light text-muted-foreground lowercase">
+                  {`per ${tEnums(`serviceUnit.${service.unit}`)}`}
+                </span>
+              )}
+            </span>
+          </span>
+          <Separator className="col-span-2 sm:hidden" />
+          <span className="vertical gap-2 col-span-2 sm:col-span-1">
+            <p className="font-medium">{t("fields.duration.label")}</p>
+            <div className="horizontal items-baseline gap-1">
+              <span className="text-muted-foreground">~</span>
+              {(service.duration / 60).toFixed(1)}
+              <span className="text-xs text-muted-foreground">
+                {t("fields.duration.unit")}
+              </span>
+            </div>
+          </span>
+        </CardContent>
+      </Card>
+      <span className="vertical gap-4">
+        <span className="font-medium text-lg">
+          {t("fields.related_services.label")}
+        </span>
+        {service.children.map((child, index) => (
+          <RelatedServiceComponent
+            key={index}
+            data={child}
+            index={index}
+            extendedService={extendedService}
+          />
+        ))}
+      </span>
+      <Separator />
+      <RelatedMaterials materials={service.materials} />
+    </>
   );
 }
 
@@ -292,7 +307,7 @@ function RelatedMaterials({
       <Button
         type="button"
         variant="link"
-        className="text-link hover:text-link-hover whitespace-nowrap my-auto"
+        className="text-link hover:text-link-hover whitespace-nowrap my-auto !p-0"
         onClick={extended.toggle}
       >
         {extended.value ? t("hide-details") : t("see-details")}
