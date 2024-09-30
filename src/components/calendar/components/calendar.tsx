@@ -40,6 +40,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBoolean, useInput } from "react-hanger";
 import { useForm } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
 import { z } from "zod";
 import AppointmentDialog from "./appointment-dialog";
@@ -141,6 +142,9 @@ export default function Calendar({
       router.refresh();
     },
   });
+
+  useHotkeys("ArrowLeft", () => calendarRef.current?.getApi().prev());
+  useHotkeys("ArrowRight", () => calendarRef.current?.getApi().next());
 
   const handleDrop = (arg: EventDropArg) => {
     if (!arg.event.start) return;

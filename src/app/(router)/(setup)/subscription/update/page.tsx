@@ -33,7 +33,7 @@ export default async function UpdateSubscription({
     (await api.stripe.subscription()) as unknown as PlanI;
 
   if (subscription.cancel_at_period_end) {
-    return redirect(redirectUrl ?? "/");
+    return redirect(redirectUrl ?? "/dashboard");
   }
 
   return (

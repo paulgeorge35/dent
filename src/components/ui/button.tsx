@@ -3,7 +3,9 @@ import { type VariantProps, cva } from "class-variance-authority";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
+import { type Shortcut, ShortcutKeys } from "./shortcut-key";
 import { LoadingSpinner } from "./spinner";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 h-10 px-8 md:h-9 md:px-4 md:py-2",
@@ -72,6 +74,8 @@ interface IconRefProps {
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color">,
     VariantProps<typeof buttonVariants> {
+  shortcut?: (string | Shortcut)[] | string | Shortcut;
+  shortcutPlacement?: "top" | "bottom" | "left" | "right";
   asChild?: boolean;
   isLoading?: boolean;
 }
@@ -93,41 +97,55 @@ const Button = React.forwardRef<
       children,
       Icon,
       iconPlacement,
+      shortcut,
+      shortcutPlacement = "bottom",
       ...props
     },
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, color, size, className }))}
-        disabled={isLoading ?? props.disabled}
-        ref={ref}
-        {...props}
-      >
-        {Icon && iconPlacement === "left" && (
-          <div
-            className={cn(
-              "md:group-hover:translate-x-100 mr-2 md:mr-0 md:w-0 md:translate-x-[0%] md:opacity-0 md:transition-all md:duration-200 md:group-hover:mr-2 md:group-hover:w-5 md:group-hover:opacity-100",
-              isLoading && "hidden",
-            )}
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Comp
+            className={cn(buttonVariants({ variant, color, size, className }))}
+            disabled={isLoading ?? props.disabled}
+            ref={ref}
+            {...props}
           >
-            <Icon className="size-5" />
-          </div>
-        )}
-        {isLoading && <LoadingSpinner className="mr-2" />}
-        <Slottable>{children}</Slottable>
-        {Icon && iconPlacement === "right" && (
-          <div
-            className={cn(
-              "ml-0 w-0 translate-x-[100%] opacity-0 transition-all duration-200 group-hover:ml-2 group-hover:w-5 group-hover:translate-x-0 group-hover:opacity-100",
-              isLoading && "hidden",
+            {Icon && iconPlacement === "left" && (
+              <div
+                className={cn(
+                  "md:group-hover:translate-x-100 mr-2 md:mr-0 md:w-0 md:translate-x-[0%] md:opacity-0 md:transition-all md:duration-200 md:group-hover:mr-2 md:group-hover:w-5 md:group-hover:opacity-100",
+                  isLoading && "hidden",
+                )}
+              >
+                <Icon className="size-5" />
+              </div>
             )}
+            {isLoading && <LoadingSpinner className="mr-2" />}
+            <Slottable>{children}</Slottable>
+            {Icon && iconPlacement === "right" && (
+              <div
+                className={cn(
+                  "ml-0 w-0 translate-x-[100%] opacity-0 transition-all duration-200 group-hover:ml-2 group-hover:w-5 group-hover:translate-x-0 group-hover:opacity-100",
+                  isLoading && "hidden",
+                )}
+              >
+                <Icon className="size-5" />
+              </div>
+            )}
+          </Comp>
+        </TooltipTrigger>
+        {shortcut && (
+          <TooltipContent
+            className="md:flex items-center gap-1 hidden"
+            side={shortcutPlacement}
           >
-            <Icon className="size-5" />
-          </div>
+            <ShortcutKeys shortcut={shortcut} />
+          </TooltipContent>
         )}
-      </Comp>
+      </Tooltip>
     );
   },
 );

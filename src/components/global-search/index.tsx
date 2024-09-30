@@ -118,8 +118,7 @@ export default function GlobalSearch() {
         <Search className="size-4 shrink-0" />
         <p className="hidden md:flex truncate">{t("search.placeholder")}</p>
         <span className="hidden md:flex ml-auto items-center gap-1 shrink-0">
-          <ShortcutKeys shortcut={CONTROL_KEY} />
-          <ShortcutKeys shortcut="/" />
+          <ShortcutKeys shortcut={[CONTROL_KEY, "/"]} />
         </span>
       </Button>
 

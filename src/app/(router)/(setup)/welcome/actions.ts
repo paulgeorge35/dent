@@ -32,7 +32,7 @@ export async function toggleTenant(tenantId: string) {
     { days: 30 },
   );
 
-  redirect("/");
+  redirect("/dashboard");
 }
 
 export async function logoutTenant() {

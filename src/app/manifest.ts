@@ -5,10 +5,8 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "MyDent",
     short_name: "MyDent",
     description: "MyDent is a dental practice management software",
-    start_url: "/",
+    start_url: "/dashboard",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#ffffff",
     icons: [
       {
         src: "/icon-192x192.png",

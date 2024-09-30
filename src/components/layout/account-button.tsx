@@ -51,7 +51,7 @@ export default function AccountButton({
   const handleTenantClick = (tenantId: string) => {
     startTransition(() =>
       toggleTenant(tenantId).then(() => {
-        router.push("/");
+        router.push("/dashboard");
         setOpen(false);
       }),
     );

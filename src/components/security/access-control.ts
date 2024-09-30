@@ -13,6 +13,6 @@ export default async function checkAccess({ adminsOnly }: CheckAccess) {
   }
 
   if (adminsOnly) {
-    redirect("/");
+    redirect("/dashboard");
   }
 }

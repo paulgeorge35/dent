@@ -9,7 +9,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { ShortcutKeys } from "@/components/ui/shortcut-key";
 import { SwitchView } from "@/components/ui/switch-enhanced";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type FullCalendar from "@fullcalendar/react";
 import type { Avatar, Event, Patient, Profile, User } from "@prisma/client";
 import {
@@ -99,22 +101,36 @@ export default function CalendarToolbar({
           >
             {t("today")}
           </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="mr-[-12px] rounded-full text-muted-foreground shrink-0"
-            onClick={() => calendarRef.current?.getApi().prev()}
-          >
-            <ChevronLeft />
-          </Button>
-          <Button
-            size="icon"
-            variant="ghost"
-            className="rounded-full text-muted-foreground shrink-0"
-            onClick={() => calendarRef.current?.getApi().next()}
-          >
-            <ChevronRight />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="mr-[-12px] rounded-full text-muted-foreground shrink-0"
+                onClick={() => calendarRef.current?.getApi().prev()}
+              >
+                <ChevronLeft />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <ShortcutKeys shortcut="←" />
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="icon"
+                variant="ghost"
+                className="rounded-full text-muted-foreground shrink-0"
+                onClick={() => calendarRef.current?.getApi().next()}
+              >
+                <ChevronRight />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <ShortcutKeys shortcut="→" />
+            </TooltipContent>
+          </Tooltip>
         </span>
         <span className="hidden lg:block">{renderTitle(calendarRef)}</span>
         <Separator orientation="vertical" className="hidden lg:block h-10" />

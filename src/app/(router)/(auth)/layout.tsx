@@ -14,7 +14,7 @@ export default async function AuthLayout({
 
   if (session) {
     if (session.user?.tenantId) {
-      redirect("/", RedirectType.replace);
+      redirect("/dashboard", RedirectType.replace);
     }
     redirect("/welcome", RedirectType.replace);
   }

@@ -48,6 +48,7 @@ import { Label } from "../ui/label";
 import NumberInput from "../ui/number-input";
 import PriceInput from "../ui/price-input";
 import { Separator } from "../ui/separator";
+import { CONTROL_KEY } from "../ui/shortcut-key";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
 import ServiceForm, {
@@ -119,6 +120,7 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
           Icon={PlusCircle}
           iconPlacement="right"
           className={className}
+          shortcut={[CONTROL_KEY, "t"]}
         >
           {t("trigger")}
         </Button>

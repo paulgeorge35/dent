@@ -10,11 +10,11 @@ export default async function InvitePage({
 }) {
   const { token } = params;
   if (!token) {
-    redirect("/");
+    redirect("/dashboard");
   }
   const invitation = await api.tenant.invitation(token);
   if (!invitation) {
-    redirect("/");
+    redirect("/dashboard");
   }
 
   return (
