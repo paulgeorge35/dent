@@ -50,9 +50,15 @@
   .space-between {
     @apply justify-between;
   }
+
+  .pb-safe-bottom {
+    @media (display-mode: standalone), (display-mode: fullscreen), (display-mode: minimal-ui) {
+      padding-bottom: 10px;
+    }
+  }
   
   .safe-area {
-    padding-bottom: env(safe-area-inset-bottom);
+    @apply pb-safe-bottom;
   }
 }
 

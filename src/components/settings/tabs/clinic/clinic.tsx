@@ -8,7 +8,7 @@ export default async function Clinic() {
   const t = await useTranslations("page.settings.tabs.clinic");
   const { profile } = await api.tenant.currentTenant();
   return (
-    <TabsContent value="clinic" className="flex flex-col gap-4 md:max-w-screen-md">
+    <TabsContent value="clinic" className="flex flex-col gap-4 md:max-w-screen-md safe-area">
       <ClinicForm clinic={profile} />
       <CurrentMembership />
     </TabsContent>
