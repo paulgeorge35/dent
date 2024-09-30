@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { toggleTheme } from "@/app/(router)/(tenant)/settings/actions";
 import {
   Card,
   CardContent,
@@ -23,7 +24,6 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TabsContent } from "@/components/ui/tabs";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import CalendarCustomization from "./components/calendar-customization";
 
 const appearanceFormSchema = z.object({
@@ -39,7 +39,6 @@ const defaultValues: Partial<AppearanceFormValues> = {
 };
 export default function Customization() {
   const t = useTranslations("page.settings.tabs.customization");
-  const router = useRouter();
   const theme = useTheme();
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -70,8 +69,7 @@ export default function Customization() {
                     <RadioGroup
                       onValueChange={(value: "light" | "dark" | "system") => {
                         field.onChange(value);
-                        document.cookie = `theme=${value}; path=/`;
-                        router.refresh();
+                        toggleTheme(value);
                       }}
                       className="grid w-full grid-cols-3 gap-8 pt-2"
                     >
