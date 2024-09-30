@@ -50,6 +50,10 @@
   .space-between {
     @apply justify-between;
   }
+  
+  .safe-area {
+    @apply pt-safe-top pb-safe-bottom;
+  }
 }
 
 @layer base {
@@ -132,8 +136,12 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  html {
+    @apply bg-background;
+  }
+
   body {
-    @apply bg-background text-foreground !overflow-x-hidden;
+    @apply bg-background text-foreground !overflow-x-hidden overscroll-y-contain;
   }
   
   input[type="number"]::-webkit-inner-spin-button,

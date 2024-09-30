@@ -51,16 +51,10 @@ export default async function RootLayout({
           name="viewport"
           content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
         />
-        {theme === "light" ? (
-          <meta name="theme-color" content="#ffffff" />
-        ) : (
-          <meta name="theme-color" content="#020817" />
-        )}
-        {theme === "light" ? (
-          <meta name="background-color" content="#ffffff" />
-        ) : (
-          <meta name="background-color" content="#020817" />
-        )}
+        <meta name="theme-color" content="#ffffff" />
+        {theme === "dark" && <meta name="theme-color" content="#020817" />}
+        <meta name="background-color" content="#ffffff" />
+        {theme === "dark" && <meta name="background-color" content="#020817" />}
       </head>
       <body>
         <ThemeProvider
