@@ -14,7 +14,7 @@ export default async function Account() {
   return (
     <TabsContent
       value="account"
-      className="flex flex-col gap-4 md:max-w-screen-md"
+      className="flex flex-col gap-4 md:max-w-screen-md safe-area"
     >
       <ProfileForm me={me} specialities={specialities.content} />
       <h1 className="text-lg font-bold">{t("password.title")}</h1>
