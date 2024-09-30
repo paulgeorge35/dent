@@ -603,6 +603,7 @@
           },
           "password": {
             "title": "Schimbă parola",
+            "description": "Schimbă parola pentru a vă asigura securitatea contului.",
             "current-password": "Parola curentă",
             "new-password": "Parola nouă",
             "confirm-password": "Confirmă parola nouă",

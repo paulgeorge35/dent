@@ -12,16 +12,14 @@ export default async function Account() {
   const specialities = await api.speciality.list({});
   const t = await useTranslations("page.settings.tabs.account");
   return (
-    <TabsContent
-      value="account"
-      className="flex flex-col gap-4 md:max-w-screen-md safe-area"
-    >
-      <ProfileForm me={me} specialities={specialities.content} />
-      <h1 className="text-lg font-bold">{t("password.title")}</h1>
-      <PasswordForm />
-      <span>
-        <LogoutDialog />
-      </span>
+    <TabsContent value="account" className="md:max-w-screen-md">
+      <section className="flex flex-col gap-2 md:gap-4">
+        <ProfileForm me={me} specialities={specialities.content} />
+        <PasswordForm />
+        <span>
+          <LogoutDialog />
+        </span>
+      </section>
     </TabsContent>
   );
 }

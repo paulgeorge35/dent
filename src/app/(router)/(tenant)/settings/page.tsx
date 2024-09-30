@@ -34,8 +34,8 @@ export default async function Settings({ searchParams }: StaffPageProps) {
     <Shell>
     <SettingsTabs isAdmin={isAdmin} tab={tab}>
         <Account />
-        {isAdmin && <Staff />}
         {isAdmin && <Clinic />}
+        {isAdmin && <Staff />}
         <Customization />
         <Schedule />
         <Support />

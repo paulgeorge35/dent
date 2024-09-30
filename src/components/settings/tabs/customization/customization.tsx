@@ -50,7 +50,7 @@ export default function Customization() {
   return (
     <TabsContent
       value="customization"
-      className="flex flex-col gap-4 md:max-w-screen-md !mt-0 pb-safe-bottom"
+      className="flex flex-col gap-4 md:max-w-screen-md !mt-0"
     >
       <Card>
         <CardHeader>

@@ -50,51 +50,53 @@ export default async function Staff() {
   return (
     <TabsContent
       value="staff"
-      className="md:max-w-screen-lg !mt-0 flex flex-col gap-4"
+      className="md:max-w-screen-lg"
     >
-      <span className="horizontal center-v gap-2">
-        <InvitationDialog disabled={noSpotsLeft} />
-        <span className="horizontal center-v h-9 gap-2 rounded-md bg-muted pl-2 pr-1 text-sm text-muted-foreground">
-          <Users className="size-4" />
-          <p>
-            {spotsUsed} / {tenant.profile.plan.maxUsers} {t("users")}
-          </p>
-          <Tooltip>
-            <TooltipTrigger>
-              {noSpotsLeft ? (
-                <TriangleAlert className="size-4 text-red-500" />
-              ) : (
-                <Info className="size-4" />
+      <section className="flex flex-col gap-2 md:gap-4">
+        <span className="horizontal center-v gap-2">
+          <InvitationDialog disabled={noSpotsLeft} />
+          <span className="horizontal center-v h-9 gap-2 rounded-md bg-muted pl-2 pr-1 text-sm text-muted-foreground">
+            <Users className="size-4" />
+            <p>
+              {spotsUsed} / {tenant.profile.plan.maxUsers} {t("users")}
+            </p>
+            <Tooltip>
+              <TooltipTrigger>
+                {noSpotsLeft ? (
+                  <TriangleAlert className="size-4 text-red-500" />
+                ) : (
+                  <Info className="size-4" />
+                )}
+              </TooltipTrigger>
+              <TooltipContent>
+                {noSpotsLeft
+                  ? t("tooltip-modify", {
+                      maxUsers: tenant.profile.plan.maxUsers,
+                    })
+                  : t("tooltip", { maxUsers: tenant.profile.plan.maxUsers })}
+              </TooltipContent>
+            </Tooltip>
+            <span
+              className={cn(
+                "hidden md:block rounded-md border border-border bg-background/50 px-2 py-1 text-sm",
+                {
+                  hidden: isCanceled,
+                },
               )}
-            </TooltipTrigger>
-            <TooltipContent>
-              {noSpotsLeft
-                ? t("tooltip-modify", {
-                    maxUsers: tenant.profile.plan.maxUsers,
-                  })
-                : t("tooltip", { maxUsers: tenant.profile.plan.maxUsers })}
-            </TooltipContent>
-          </Tooltip>
-          <span
-            className={cn(
-              "hidden md:block rounded-md border border-border bg-background/50 px-2 py-1 text-sm",
-              {
-                hidden: isCanceled,
-              },
-            )}
-          >
-            <Link
-              href={`/subscription/update?redirectUrl=${encodeURIComponent("/settings?tab=staff")}`}
-              className="text-link hover:text-link-hover hover:underline"
             >
-              {t("modify")}
-            </Link>{" "}
-            {t("your-plan-to-fit-needs")}
+              <Link
+                href={`/subscription/update?redirectUrl=${encodeURIComponent("/settings?tab=staff")}`}
+                className="text-link hover:text-link-hover hover:underline"
+              >
+                {t("modify")}
+              </Link>{" "}
+              {t("your-plan-to-fit-needs")}
+            </span>
           </span>
         </span>
-      </span>
-      <Invitations invitations={invitations} />
-      <ActiveUsers users={users} />
+        <Invitations invitations={invitations} />
+        <ActiveUsers users={users} />
+      </section>
     </TabsContent>
   );
 }

@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormField,
@@ -100,6 +100,10 @@ export default function PasswordForm() {
 
   return (
     <Card>
+      <CardHeader>
+        <CardTitle>{t("title")}</CardTitle>
+        <CardDescription>{t("description")}</CardDescription>
+      </CardHeader>
       <CardContent className="p-6">
         <Form {...form}>
           <form

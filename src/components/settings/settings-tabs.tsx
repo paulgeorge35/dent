@@ -65,8 +65,8 @@ export default function SettingsTabs({
   };
 
   return (
-    <Tabs defaultValue={activeTab}>
-      <TabsList className="mb-4 flex h-10 overflow-x-auto">
+    <Tabs defaultValue={activeTab} className="safe-area">
+      <TabsList className="mb-2 md:mb-4 flex h-10 overflow-x-auto sticky top-[72px] md:top-20 z-[5]">
         {tabs
           .filter((tab) => !tab.adminsOnly || isAdmin)
           .map((tab) => (

@@ -22,7 +22,7 @@ export default async function Dashboard() {
 
   return (
     <Shell>
-      <div className="gap-2 grid grid-cols-6 md:gap-4 max-w-full">
+      <div className="gap-2 grid grid-cols-6 md:gap-4 max-w-full safe-area">
         <Welcome
           name={`${session?.firstName} ${session?.lastName}`}
           avatar={session?.avatar?.url}
