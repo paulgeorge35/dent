@@ -22,6 +22,7 @@ const Drawer = ({
       direction={direction ?? (isDesktop ? "right" : "bottom")}
       handleOnly
       shouldScaleBackground={shouldScaleBackground}
+      repositionInputs={false}
       {...props}
     />
   );
@@ -63,7 +64,7 @@ const DrawerContent = React.forwardRef<
         className={cn(
           "fixed z-50 vertical border bg-background outline-none shadow-lg",
           {
-            "inset-x-0 bottom-0 mt-24 rounded-t-xl h-screen max-h-[80dvh]":
+            "inset-x-0 bottom-0 mt-24 rounded-t-xl h-screen max-h-[95dvh]":
               !isDesktop,
           },
           {

@@ -71,7 +71,8 @@ export default function AppointmentDialog({
       <DrawerContent
         className={cn({
           "!flex-row bg-background/80 backdrop-blur-sm p-0": isDesktop,
-          "lg:translate-x-[calc(100%-50px)]": openMedicalCheckup.value && isDesktop,
+          "lg:translate-x-[calc(100%-50px)]":
+            openMedicalCheckup.value && isDesktop,
         })}
       >
         <span className="hidden md:flex vertical shrink-0 items-center p-2">
@@ -164,13 +165,13 @@ export default function AppointmentDialog({
             >
               Finish
             </Button>
-            <p className="col-span-2 flex items-center justify-center text-center text-xs text-muted-foreground flex-wrap">
-              <Info className="mr-2 h-4 w-4 shrink-0" />
-              <span>
+            <span className="col-span-2 grid grid-cols-[auto_1fr] gap-2 text-xs text-muted-foreground center-v pt-4 md:mx-20">
+              <Info className="size-4 shrink-0 col-span-1" />
+              <p className="col-span-1 text-left">
                 Please add Medical Checkup and Medical Record to finish the
                 appointment.
-              </span>
-            </p>
+              </p>
+            </span>
           </DrawerFooter>
         </span>
       </DrawerContent>

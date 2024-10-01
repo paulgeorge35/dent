@@ -12,7 +12,7 @@ import { AnimatePresence } from "framer-motion";
 import { Box, Plus, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import GlobalSearch from "../global-search";
 import LocaleSwitch from "../shared/locale-switch";
 import { LoadingSpinner } from "../ui/spinner";
@@ -35,10 +35,10 @@ export function Sidebar({
   if (!sidebar) return null;
 
   return (
-    <>
+    <React.Fragment>
       <AnimatePresence mode="wait">
         {isLoading && (
-          <div className="absolute inset-0 bg-background/90 backdrop-blur-sm z-[100] h-screen w-screen vertical center gap-2">
+          <div className="absolute inset-0 bg-background/60 backdrop-blur-sm z-[100] h-screen w-screen vertical center gap-2">
             <LoadingSpinner className="size-10" />
             {/* <p className="text-lg font-medium text-muted-foreground">
               {t("loading")}
@@ -137,6 +137,6 @@ export function Sidebar({
           <LocaleSwitch locale={locale} isOpen={sidebar?.isOpen} />
         </div>
       </aside>
-    </>
+    </React.Fragment>
   );
 }

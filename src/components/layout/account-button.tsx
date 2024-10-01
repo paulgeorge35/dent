@@ -27,7 +27,7 @@ import {
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
 const DISPLAY_TENANTS_CUTOFF = 2;
 
@@ -72,7 +72,7 @@ export default function AccountButton({
   }, []);
 
   return (
-    <>
+    <React.Fragment>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
@@ -82,14 +82,24 @@ export default function AccountButton({
               className,
             )}
           >
-            <AvatarComponent
-              src={session.avatar?.url}
-              alt={`${session.firstName} ${session.lastName}`}
-              fallback={`${session.firstName} ${session.lastName}`}
-              className="size-9"
-              height={36}
-              width={36}
-            />
+            <span className="relative">
+              <AvatarComponent
+                src={session.avatar?.url}
+                alt={`${session.firstName} ${session.lastName}`}
+                fallback={`${session.firstName} ${session.lastName}`}
+                className="size-9"
+                height={36}
+                width={36}
+              />
+              <AvatarComponent
+                src={tenant?.profile.avatar?.url}
+                alt={`${tenant?.profile.name}`}
+                fallback={`${tenant?.profile.name}`}
+                className="size-5 absolute -top-1 -right-2 border-[2px] border-background"
+                height={20}
+                width={20}
+              />
+            </span>
             <span className="hidden md:flex flex-col items-start overflow-hidden">
               <p className="truncate text-sm font-semibold">
                 {session.firstName} {session.lastName}
@@ -102,7 +112,7 @@ export default function AccountButton({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-56 p-0 shadow-lg !text-base md:!text-xs"
+          className="w-56 p-0 shadow-lg !text-base md:!text-xs overflow-hidden"
           side="bottom"
           align="end"
         >
@@ -114,7 +124,7 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs",
+                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
               )}
               onClick={async () => {
                 await logoutTenant();
@@ -136,7 +146,7 @@ export default function AccountButton({
                     key={account.tenantId}
                     variant="ghost"
                     size="sm"
-                    className="flex w-56 flex-row items-center justify-start gap-4 overflow-hidden whitespace-nowrap text-xs"
+                    className="flex w-56 flex-row items-center justify-start gap-4 overflow-hidden whitespace-nowrap text-xs rounded-none"
                     disabled={
                       account.tenantId === session.user?.tenantId || pending
                     }
@@ -151,7 +161,15 @@ export default function AccountButton({
                         },
                       )}
                     />
-                    <span className="truncate">
+                    <span className="truncate horizontal center-v gap-2">
+                      <AvatarComponent
+                        src={account.tenant.profile.avatar?.url}
+                        alt={`${account.tenant.profile.name}`}
+                        fallback={`${account.tenant.profile.name}`}
+                        className="size-6 border-[2px] border-background rounded-sm"
+                        height={24}
+                        width={24}
+                      />
                       {account.tenant.profile.name}
                     </span>
                   </Button>
@@ -174,7 +192,7 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs",
+                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
               )}
               onClick={() => setOpen(false)}
             >
@@ -188,7 +206,7 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs",
+                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
               )}
               onClick={() => setOpen(false)}
             >
@@ -199,7 +217,7 @@ export default function AccountButton({
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-row items-center justify-start gap-4 text-xs text-red-500"
+                className="flex flex-row items-center justify-start gap-4 text-xs text-red-500 rounded-none"
               >
                 <DoorOpen className="size-4" />
                 {t("logout.trigger")}
@@ -208,6 +226,6 @@ export default function AccountButton({
           </div>
         </PopoverContent>
       </Popover>
-    </>
+    </React.Fragment>
   );
 }

@@ -294,9 +294,10 @@ function ComplexTreatmentDialog({
       direction={isDesktop ? "left" : undefined}
     >
       <DrawerContent
-        noOverlay
+        noOverlay={isDesktop}
         className={cn({
           "opacity-0 transition-opacity duration-300 ease-in-out": isDesktop,
+          "max-h-[90dvh]": !isDesktop,
           "opacity-100": open,
           "right-20": open && isDesktop,
         })}

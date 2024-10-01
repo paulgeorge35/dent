@@ -7,6 +7,7 @@ import { cn, getPageTitle } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import React from "react";
 import { Shell } from "../layout/shell";
 
 export default function AdminPanelLayout({
@@ -26,7 +27,7 @@ export default function AdminPanelLayout({
   if (!sidebar) return null;
 
   return (
-    <>
+    <React.Fragment>
       <Sidebar
         title={t(`${getPageTitle(pathname ?? "")}.title`)}
         session={session}
@@ -42,6 +43,6 @@ export default function AdminPanelLayout({
       >
         {children}
       </Shell>
-    </>
+    </React.Fragment>
   );
 }
