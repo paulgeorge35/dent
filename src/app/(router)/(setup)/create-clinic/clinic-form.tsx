@@ -180,7 +180,7 @@ export default function ClinicForm() {
                   ))}
                 {products.map((plan) => (
                   <FormItem key={plan.id} className="col-span-1 w-full">
-                    <FormLabel className="group">
+                    <FormLabel className="group w-full">
                       <FormControl>
                         <RadioGroupItem value={plan.id} className="sr-only" />
                       </FormControl>

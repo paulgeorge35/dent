@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { Box } from "lucide-react";
 import { RedirectType, redirect } from "next/navigation";
+import React from "react";
 
 export default async function AuthLayout({
   children,
@@ -20,7 +21,7 @@ export default async function AuthLayout({
   }
 
   return (
-    <>
+    <React.Fragment>
       <div
         className={cn(
           "container relative grid flex-col items-center justify-center h-screen lg:max-w-none lg:grid-cols-[5fr,4fr] lg:grid-rows-[1fr] lg:gap-0 lg:px-0",
@@ -39,6 +40,6 @@ export default async function AuthLayout({
           </div>
         </div>
       </div>
-    </>
+    </React.Fragment>
   );
 }

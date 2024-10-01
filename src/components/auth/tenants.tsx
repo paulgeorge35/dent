@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useTranslations } from "@/lib/translations";
 import { api } from "@/trpc/server";
 import type { TenantAccount } from "@/types/schema";
+import React from "react";
 import CreateTenant from "./create-tenant-button";
 import TenantCard from "./tenant-card";
 
@@ -35,7 +36,7 @@ export default async function Tenants() {
   }
 
   return (
-    <>
+    <React.Fragment>
       <Card className="rounded-sm">
         <CardHeader className="flex flex-row gap-1 border-b">
           <h2 className="text-sm text-muted-foreground">
@@ -59,6 +60,6 @@ export default async function Tenants() {
           </CardContent>
         </Card>
       )}
-    </>
+    </React.Fragment>
   );
 }

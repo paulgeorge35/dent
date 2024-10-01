@@ -16,7 +16,9 @@ export default async function CreateClinic() {
         <Box className="mr-2" />
         MyDent
       </div>
-      <h1 className="text-center text-5xl font-bold">{t("title")}</h1>
+      <h1 className="text-center text-3xl md:text-5xl font-bold mb-8">
+        {t("title")}
+      </h1>
       <ClinicForm />
     </Shell>
   );

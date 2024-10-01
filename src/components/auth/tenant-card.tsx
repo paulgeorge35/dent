@@ -4,6 +4,7 @@ import { toggleTenant } from "@/app/(router)/(setup)/welcome/actions";
 import AvatarComponent from "@/components/shared/avatar-component";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { LoadingSpinner } from "@/components/ui/spinner";
+import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import type { TenantAccount } from "@/types/schema";
 import { ArrowRight } from "lucide-react";
@@ -18,6 +19,7 @@ type TenantCardProps = {
 
 export default function TenantCard({ account }: TenantCardProps) {
   const t = useTranslations("page.welcome.clinic");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const [pending, startTransition] = useTransition();
   const router = useRouter();
   const isAdmin = account.role === "ADMIN";
@@ -70,7 +72,7 @@ export default function TenantCard({ account }: TenantCardProps) {
             {account.tenant.profile.name}
           </h3>
           <div className="flex flex-row items-center gap-2">
-            {account.tenant.users.slice(0, 5).map((user) => (
+            {account.tenant.users.slice(0, isDesktop ? 5 : 3).map((user) => (
               <Avatar
                 key={user.profile.firstName}
                 className="relative size-4 rounded-sm border border-background [&:not(:first-child)]:ml-[-12px]"
