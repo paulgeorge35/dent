@@ -24,7 +24,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         return (
-          <div className="horizontal center-v gap-2">
+          <div className="horizontal center-v gap-2 whitespace-nowrap">
             <AvatarComponent
               src={row.original.image}
               alt={row.original.name}
@@ -50,7 +50,7 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         return (
-          <div className="horizontal center-v gap-2">
+          <div className="horizontal center-v gap-2 whitespace-nowrap">
             <span className="font-light px-1 rounded-full bg-muted border border-muted-foreground/20 text-xs text-muted-foreground">
               RON
             </span>

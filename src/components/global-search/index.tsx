@@ -7,7 +7,7 @@ import debounce from "lodash/debounce";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { useHotkeys } from "react-hotkeys-hook";
 import AvatarComponent from "../shared/avatar-component";
@@ -110,7 +110,7 @@ export default function GlobalSearch() {
   }, [globalSearch.value]);
 
   return (
-    <>
+    <React.Fragment>
       <Button
         onClick={globalSearch.setTrue}
         className="rounded-full w-10 justify-center md:w-80 bg-muted h-10 text-muted-foreground text-base md:justify-start font-normal gap-2 border border-input shadow-sm hover:bg-background/50"
@@ -132,11 +132,11 @@ export default function GlobalSearch() {
             className="pt-20 px-4 md:p-0 fixed inset-0 horizontal center-h items-start md:center z-[100]"
           >
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+              animate={{ opacity: 1, backdropFilter: "blur(4px)" }}
+              exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
               transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-black/70 dark:bg-white/20 backdrop-blur-sm"
+              className="fixed inset-0 bg-background/20 transition-[backdrop-filter] duration-200"
               onClick={globalSearch.setFalse}
             />
             <motion.div
@@ -145,7 +145,7 @@ export default function GlobalSearch() {
               exit={{ scale: 0.9, opacity: 0 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className={cn(
-                "bg-background/90 backdrop-blur-sm rounded-lg shadow-xl z-[100] w-full max-w-3xl rounded-t-[32px] vertical p-2",
+                "bg-background rounded-lg shadow-xl z-[100] w-full max-w-3xl rounded-t-[32px] vertical p-2 border border-border",
                 {
                   "rounded-b-[32px]": !isData && !isLoading,
                 },
@@ -196,7 +196,7 @@ export default function GlobalSearch() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </React.Fragment>
   );
 }
 

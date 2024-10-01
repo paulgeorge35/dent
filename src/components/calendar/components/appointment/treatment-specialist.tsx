@@ -15,7 +15,10 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { useTranslations } from "next-intl";
+import { useMemo } from "react";
 import type { UseFormReturn } from "react-hook-form";
 import type { AppointmentSchema } from "../calendar";
 
@@ -28,24 +31,30 @@ export default function TreatmentSpecialist({
   form,
   resourceId,
 }: TreatmentSpecialistProps) {
+  const t = useTranslations("page.appointments.add.steps.treatment-specialist");
   const { data: services, isLoading: servicesLoading } =
     api.service.listSimpleServices.useQuery({});
 
   return (
-    <div className="grid grid-cols-4 gap-4 px-4">
+    <div className="grid grid-cols-4 gap-4 p-4">
       <FormFieldCompact
         className="col-span-4"
         control={form.control}
         name="serviceId"
-        label="Treatment"
+        label={t("fields.treatment.label")}
         render={({ field }) => (
           <Select {...field} onValueChange={field.onChange}>
-            <SelectTrigger disabled={servicesLoading || services?.length === 0}>
+            <SelectTrigger
+              className={cn({
+                "text-muted-foreground": !field.value,
+              })}
+              disabled={servicesLoading || services?.length === 0}
+            >
               <SelectValue
                 placeholder={
                   services?.length === 0
-                    ? "No treatments available"
-                    : "Select Treatment"
+                    ? t("fields.treatment.empty")
+                    : t("fields.treatment.placeholder")
                 }
               />
             </SelectTrigger>
@@ -64,22 +73,22 @@ export default function TreatmentSpecialist({
         className="col-span-4"
         control={form.control}
         name="date"
-        label="Date & Time"
+        label={t("fields.date.label")}
         required={false}
         render={({ field }) => (
-          <span className="horizontal gap-4">
+          <span className="grid grid-cols-[auto_1fr] md:grid-cols-[auto_auto_1fr] gap-4 col-span-4 w-full">
             <DateTimePicker
               granularity="day"
               jsDate={field.value}
               onJsDateChange={field.onChange}
+              className="col-span-2 md:col-span-1 w-full"
             />
             <FormFieldCompact
-              className="col-span-1"
               control={form.control}
               name="start"
               required={false}
               render={({ field }) => (
-                <span className="horizontal h-full  items-end justify-end">
+                <span className="horizontal h-full items-end justify-end">
                   <TimePickerInput
                     picker="hours"
                     date={field.value}
@@ -96,7 +105,6 @@ export default function TreatmentSpecialist({
               )}
             />
             <FormFieldCompact
-              className="col-span-1"
               control={form.control}
               name="end"
               required={false}
@@ -129,13 +137,13 @@ export default function TreatmentSpecialist({
         className="col-span-4"
         control={form.control}
         name="description"
-        label="Quick Notes"
+        label={t("fields.description.label")}
         required={false}
         render={({ field }) => (
           <Textarea
             {...field}
             charLimit={255}
-            placeholder="Type a message..."
+            placeholder={t("fields.description.placeholder")}
             className="h-24 max-h-36"
           />
         )}
@@ -144,11 +152,12 @@ export default function TreatmentSpecialist({
         className="col-span-4"
         control={form.control}
         name="files"
-        label="Attachments"
+        label={t("fields.attachments.label")}
         required={false}
         render={({ field }) => (
           <DropzoneFiles
-            className="horizontal col-span-4 items-center justify-center gap-4 rounded-lg border border-input p-4 shadow-sm"
+            className="horizontal col-span-4 w-full items-center justify-center gap-4 rounded-lg border border-input p-4 shadow-sm"
+            wrapperClassName="w-full"
             accept={{
               "application/pdf": [".pdf"],
               "application/msword": [".doc"],
@@ -171,20 +180,33 @@ export default function TreatmentSpecialist({
 
 type DentistCardProps = {
   userId: string;
-  date: Date;
+  date: Date | null;
 };
 
 const DentistCard = ({ userId, date }: DentistCardProps) => {
+  const t = useTranslations(
+    "page.appointments.add.steps.treatment-specialist.fields.specialist",
+  );
   const { data: user, isLoading: userLoading } = api.user.get.useQuery(userId);
   const { data: count, isLoading: countLoading } =
-    api.appointment.count.useQuery({
-      date,
-      userId,
-    });
+    api.appointment.count.useQuery(
+      {
+        date: date!,
+        userId,
+      },
+      {
+        enabled: !!date,
+      },
+    );
+
+  const fullName = useMemo(() => {
+    return `${user?.profile.title ? `${user.profile.title} ` : ""}${user?.profile.firstName} ${user?.profile.lastName}`;
+  }, [user]);
+
   if (userLoading || !user || countLoading)
     return (
       <section className="vertical col-span-4 gap-3">
-        <Label>Dentist</Label>
+        <Label>{t("label")}</Label>
         <div className="flex items-center gap-4 rounded-lg border border-input p-4">
           <Skeleton className="h-10 w-10 rounded-full" />
           <div className="flex flex-col gap-2">
@@ -197,24 +219,29 @@ const DentistCard = ({ userId, date }: DentistCardProps) => {
 
   return (
     <section className="vertical col-span-4 gap-3">
-      <Label>Dentist</Label>
+      <Label>{t("label")}</Label>
       <div className="flex items-center gap-4 rounded-lg border border-input p-4">
         <AvatarComponent
           src={user.profile.avatar?.url}
-          alt={`${user.profile.firstName} ${user.profile.lastName}`}
-          fallback={`${user.profile.firstName} ${user.profile.lastName}`}
+          alt={fullName}
+          fallback={fullName}
           width={40}
           height={40}
           className="h-10 w-10"
         />
         <span>
           <p className="text-sm font-medium">
-            {user.profile.title} {user.profile.firstName}{" "}
-            {user.profile.lastName}
+            {fullName}
+            <span className="text-muted-foreground">
+              {user.speciality?.name}
+            </span>
           </p>
           <p className="text-sm text-muted-foreground">
-            Same day appointments:{" "}
-            <span className="font-bold">{count} patient(s)</span>
+            {t("same-day-appointments")}
+            <span className="font-bold">
+              {count}{" "}
+              {count === 1 ? t("patients.singular") : t("patients.plural")}
+            </span>
           </p>
         </span>
       </div>

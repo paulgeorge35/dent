@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import React from "react";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>;
@@ -44,7 +45,7 @@ export function DataTableFacetedFilter<TData, TValue>({
           <PlusCircledIcon className="mr-2 size-4" />
           {title}
           {selectedValues?.size > 0 && (
-            <>
+            <React.Fragment>
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
                 variant="secondary"
@@ -74,13 +75,13 @@ export function DataTableFacetedFilter<TData, TValue>({
                     ))
                 )}
               </div>
-            </>
+            </React.Fragment>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[12.5rem] p-0" align="start">
         <Command>
-          <CommandInput placeholder={title} />
+          <CommandInput placeholder={title} className="h-8" />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
@@ -130,7 +131,7 @@ export function DataTableFacetedFilter<TData, TValue>({
               })}
             </CommandGroup>
             {selectedValues.size > 0 && (
-              <>
+              <React.Fragment>
                 <CommandSeparator />
                 <CommandGroup>
                   <CommandItem
@@ -140,7 +141,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                     {t("clear-filters")}
                   </CommandItem>
                 </CommandGroup>
-              </>
+              </React.Fragment>
             )}
           </CommandList>
         </Command>

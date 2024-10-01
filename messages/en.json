@@ -1,5 +1,6 @@
 {
   "layout": {
+    "loading": "Loading clinic...",
     "confirmation-dialog": {
       "cancel": "Cancel"
     },
@@ -222,6 +223,107 @@
         "user-select": {
           "only-me": "Only me",
           "all-doctors": "All doctors"
+        }
+      },
+      "add": {
+        "title": "Add new appointment",
+        "step": "Step {index}",
+        "actions": {
+          "back": "Back",
+          "next": "Next",
+          "submit": "Submit"
+        },
+        "status": {
+          "success": "Appointment created successfully"
+        },
+        "close": {
+          "trigger": "Close",
+          "confirmation": {
+            "title": "Discard changes",
+            "description": "This action cannot be undone and all changes will be lost.",
+            "confirm": "Discard"
+          }
+        },
+        "steps": {
+          "treatment-specialist": {
+            "title": "Treatment & Specialist",
+            "description": "Select the treatment and specialist for this appointment.",
+            "fields": {
+              "treatment": {
+                "label": "Treatment",
+                "placeholder": "Select a treatment",
+                "empty": "No treatments available"
+              },
+              "specialist": {
+                "label": "Specialist",
+                "placeholder": "Select a specialist",
+                "empty": "No specialists available",
+                "same-day-appointments": "Same day appointments: ",
+                "patients": {
+                  "singular": "patient",
+                  "plural": "patients"
+                }
+              },
+              "date": {
+                "label": "Date & Time",
+                "to": "to"
+              },
+              "description": {
+                "label": "Quick Notes",
+                "placeholder": "Type a message..."
+              },
+              "attachments": {
+                "label": "Attachments"
+              }
+            }
+          },
+          "basic-information": {
+            "title": "Basic Information",
+            "description": "Add basic information about the patient.",
+            "fields": {
+              "patient": {
+                "placeholder": "Search for a patient...",
+                "empty": "No patients found"
+              },
+              "firstName": {
+                "label": "First name"
+              },
+              "lastName": {
+                "label": "Last name"
+              },
+              "dob": {
+                "label": "Date of birth"
+              },
+              "age": {
+                "label": "Age"
+              },
+              "gender": {
+                "label": "Gender",
+                "options": {
+                  "M": "Male",
+                  "F": "Female"
+                }
+              },
+              "email": {
+                "label": "Email"
+              },
+              "phone": {
+                "label": "Phone"
+              },
+              "county": {
+                "label": "County",
+                "placeholder": "Select a county"
+              },
+              "city": {
+                "label": "City",
+                "placeholder": "Select a city"
+              }
+            }
+          },
+          "oral-hygiene": {
+            "title": "Oral Hygiene",
+            "description": "Answer a few questions to get started."
+          }
         }
       }
     },
@@ -1059,6 +1161,16 @@
       "confirm": "Upload",
       "processing": "Processing..."
     },
+    "files": {
+      "browse": "Browse",
+      "drag-drop": "Drag & drop files here",
+      "drop": "Drop the files here ...",
+      "reject": "Some files will be rejected",
+      "maximum-size": "Maximum upload file size: {size}MB",
+      "maximum-files": "Maximum upload files: {count}",
+      "completed": "Completed",
+      "files": "files"
+    },
     "subscription": {
       "title": "Subscription Plan",
       "description": "Select your preferred subscription plan.",
@@ -1167,7 +1279,9 @@
       "max-length": "Last name must be at most 50 characters long"
     },
     "date": {
-      "start-after-end": "Start date must be before end date"
+      "start-after-end": "Start date must be before end date",
+      "invalid": "Date is invalid",
+      "required": "Date is required"
     }
   }
 }

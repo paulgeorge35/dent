@@ -114,7 +114,7 @@ export default function PasswordForm() {
               control={form.control}
               name="current"
               render={({ field }) => (
-                <FormItem className="col-span-2 w-full">
+                <FormItem className="col-span-2 max-w-md">
                   <FormLabel htmlFor={field.name}>
                     {t("current-password")}
                   </FormLabel>
@@ -127,7 +127,7 @@ export default function PasswordForm() {
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem className="col-span-2 w-full">
+                <FormItem className="col-span-2 max-w-md">
                   <FormLabel htmlFor={field.name}>
                     {t("new-password")}
                   </FormLabel>
@@ -140,7 +140,7 @@ export default function PasswordForm() {
               control={form.control}
               name="confirm"
               render={({ field }) => (
-                <FormItem className="col-span-2 w-full">
+                <FormItem className="col-span-2 max-w-md">
                   <FormLabel htmlFor={field.name}>
                     {t("confirm-password")}
                   </FormLabel>

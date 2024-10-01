@@ -11,7 +11,9 @@ import { DataTableToolbar } from "@/components/data-table/toolbar";
 import { api } from "@/trpc/react";
 import type { Material } from "@prisma/client";
 import { useTranslations } from "next-intl";
+import { useStateful } from "react-hanger";
 import { getColumns } from "./columns";
+import EditMaterialDialog from "./edit-dialog";
 import { MaterialsTableToolbarActions } from "./toolbar-actions";
 
 interface MaterialsTableProps {
@@ -24,6 +26,7 @@ interface MaterialsTableProps {
 
 export function MaterialTable({ materials }: MaterialsTableProps) {
   const t = useTranslations("page.materials");
+  const selectedRow = useStateful<Material | null>(null);
   const { content, pageCount } = materials;
   const { data: tags } = api.material.listTags.useQuery();
 
@@ -60,10 +63,14 @@ export function MaterialTable({ materials }: MaterialsTableProps) {
 
   return (
     <div className="w-full space-y-2.5 overflow-auto">
+      <EditMaterialDialog dialogOpen={selectedRow} />
       <DataTableToolbar table={table} filterFields={filterFields} tColumns={t}>
         <MaterialsTableToolbarActions />
       </DataTableToolbar>
-      <DataTable table={table} />
+      <DataTable
+        table={table}
+        onRowClick={(value) => selectedRow.setValue(value)}
+      />
     </div>
   );
 }

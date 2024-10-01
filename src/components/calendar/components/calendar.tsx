@@ -37,7 +37,7 @@ import { Bell } from "lucide-react";
 import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useBoolean, useInput } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { useHotkeys } from "react-hotkeys-hook";
@@ -264,7 +264,7 @@ export default function Calendar({
   }, [appointments]);
 
   return (
-    <>
+    <React.Fragment>
       <CalendarToolbar
         period={period}
         selectedUser={selectedUser}
@@ -402,6 +402,6 @@ export default function Calendar({
           omitCommas: true,
         }}
       />
-    </>
+    </React.Fragment>
   );
 }

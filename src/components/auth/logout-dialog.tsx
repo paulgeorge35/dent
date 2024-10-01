@@ -2,6 +2,7 @@
 
 import { signOut } from "@/app/(router)/(tenant)/settings/actions";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { LogOut } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
@@ -18,9 +19,10 @@ import {
 
 type LogoutDialogProps = {
   children?: React.ReactNode;
+  className?: string;
 };
 
-export default function LogoutDialog({ children }: LogoutDialogProps) {
+export default function LogoutDialog({ children, className }: LogoutDialogProps) {
   const t = useTranslations("layout.sidebar.controls.logout");
   const [pending, startTransition] = useTransition();
 
@@ -39,13 +41,13 @@ export default function LogoutDialog({ children }: LogoutDialogProps) {
             variant="expandIcon"
             color="destructive"
             iconPlacement="left"
-            className="w-full sm:w-fit"
+            className={cn("w-full sm:w-fit", className)}
           >
             {t("trigger")}
           </Button>
         )}
       </CredenzaTrigger>
-      <CredenzaContent>
+      <CredenzaContent className="h-auto">
         <CredenzaHeader>
           <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
           <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>

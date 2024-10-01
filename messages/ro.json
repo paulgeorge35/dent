@@ -1,5 +1,6 @@
 {
   "layout": {
+    "loading": "Se încarcă...",
     "confirmation-dialog": {
       "cancel": "Anulează"
     },
@@ -223,6 +224,107 @@
           "only-me": "Doar eu",
           "all-doctors": "Toți doctorii"
         }
+      },
+      "add": {
+        "title": "Adaugă programare nouă",
+        "step": "Pasul {index}",
+        "actions": {
+          "back": "Înapoi",
+          "next": "Înainte",
+          "submit": "Salvează"
+        },
+        "status": {
+          "success": "Programarea a fost creată cu succes"
+        },
+        "close": {
+          "trigger": "Anulează",
+          "confirmation": {
+            "title": "Șterge modificările",
+            "description": "Acest lucru nu poate fi făcut din nou și toate modificările vor fi pierdute.",
+            "confirm": "Șterge"
+          }
+        },
+        "steps": {
+          "treatment-specialist": {
+            "title": "Tratament și specialist",
+            "description": "Selectează tratamentul și specialistul pentru această programare.",
+            "fields": {
+              "treatment": {
+                "label": "Tratament",
+                "placeholder": "Selectează un tratament",
+                "empty": "Nici un tratament disponibil"
+              },
+              "specialist": {
+                "label": "Specialist",
+                "placeholder": "Selectează un specialist",
+                "empty": "Nici un specialist disponibil",
+                "same-day-appointments": "Programări în aceeași zi: ",
+                "patients": {
+                  "singular": "pacient",
+                  "plural": "pacienți"
+                }
+              },
+              "date": {
+                "label": "Dată & Oră",
+                "to": "până la"
+              },
+              "description": {
+                "label": "Observații",
+                "placeholder": ""
+              },
+              "attachments": {
+                "label": "Documente"
+              }
+            }
+          },
+          "basic-information": {
+            "title": "Informații de bază",
+            "description": "Completează informațiile pacientului.",
+            "fields": {
+              "patient": {
+                "placeholder": "Caută un pacient...",
+                "empty": "Nici un pacient găsit"
+              },
+              "firstName": {
+                "label": "Prenume"
+              },
+              "lastName": {
+                "label": "Nume"
+              },
+              "dob": {
+                "label": "Data nașterii"
+              },
+              "age": {
+                "label": "Vârstă"
+              },
+              "gender": {
+                "label": "Sex",
+                "options": {
+                  "M": "Masculin",
+                  "F": "Feminin"
+                }
+              },
+              "email": {
+                "label": "Email"
+              },
+              "phone": {
+                "label": "Telefon"
+              },
+              "county": {
+                "label": "Județ",
+                "placeholder": "Selectează un județ"
+              },
+              "city": {
+                "label": "Oraș",
+                "placeholder": "Selectează un oraș"
+              }
+            }
+          },
+          "oral-hygiene": {
+            "title": "Examinare orală",
+            "description": "Răspundeți la câteva întrebări pentru a începe."
+          }
+        }
       }
     },
     "user": {
@@ -297,7 +399,7 @@
           "unit": "ani"
         },
         "gender": {
-          "label": "Gen",
+          "label": "Sex",
           "options": {
             "M": "Masculin",
             "F": "Feminin"
@@ -1059,6 +1161,16 @@
       "confirm": "Încarcă",
       "processing": "Se procesează..."
     },
+    "files": {
+      "browse": "Încarcă",
+      "drag-drop": "Plasează fișierele aici",
+      "drop": "Așează fișierele aici...",
+      "reject": "Unele fișiere vor fi respinse",
+      "maximum-size": "Dimensiunea maximă acceptată este: {size}MB",
+      "maximum-files": "Numărul maxim de fișiere este: {count}",
+      "completed": "Finalizat",
+      "files": "fișiere"
+    },
     "subscription": {
       "title": "Planul de abonament",
       "description": "Selectează planul de abonament preferat.",
@@ -1165,7 +1277,9 @@
       "max-length": "Numele de familie trebuie să aibă cel mult 50 de caractere"
     },
     "date": {
-      "start-after-end": "Data de început trebuie să fie înaintea datei de sfârșit"
+      "start-after-end": "Data de început trebuie să fie înaintea datei de sfârșit",
+      "invalid": "Data este invalidă",
+      "required": "Data este obligatorie"
     }
   }
 }

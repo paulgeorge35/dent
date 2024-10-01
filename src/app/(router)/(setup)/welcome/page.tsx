@@ -1,7 +1,6 @@
 import Invitations from "@/components/auth/invitations";
 import LogoutDialog from "@/components/auth/logout-dialog";
 import Tenants from "@/components/auth/tenants";
-import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/lib/translations";
 import { constructMetadata } from "@/lib/utils";
 import { Box } from "lucide-react";
@@ -20,18 +19,13 @@ export default async function Welcome() {
           MyDent
         </div>
         <h1 className="text-3xl font-bold text-balance">{t("title")}</h1>
-        <p className="text-balance text-muted-foreground my-2">{t("subtitle")}</p>
+        <p className="text-balance text-muted-foreground my-2">
+          {t("subtitle")}
+        </p>
       </div>
       <Tenants />
       <Invitations />
-      <LogoutDialog>
-        <Button
-          variant="destructive"
-          className="w-full border border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-white mb-8"
-        >
-          {t("sign-out")}
-        </Button>
-      </LogoutDialog>
+      <LogoutDialog className="w-full border border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-white mb-8" />
     </div>
   );
 }

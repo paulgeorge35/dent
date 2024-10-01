@@ -1,94 +1,92 @@
-{
-  "questions": [
-    {
-      "question": "How often do you brush your teeth?",
-      "options": [
-        "Once a day",
-        "Twice a day",
-        "After every meal",
-        "Only when I remember"
-      ]
-    },
-    {
-      "question": "How long do you typically brush your teeth?",
-      "options": [
-        "Less than 1 minute",
-        "1-2 minutes",
-        "2-3 minutes",
-        "More than 3 minutes"
-      ]
-    },
-    {
-      "question": "What type of toothbrush do you use?",
-      "options": [
-        "Manual toothbrush with soft bristles",
-        "Manual toothbrush with medium/hard bristles",
-        "Electric toothbrush",
-        "I don’t use a toothbrush regularly"
-      ]
-    },
-    {
-      "question": "How often do you replace your toothbrush?",
-      "options": [
-        "Every month",
-        "Every 3-4 months",
-        "Every 6 months",
-        "Only when it looks worn out"
-      ]
-    },
-    {
-      "question": "How often do you floss your teeth?",
-      "options": [
-        "Every day",
-        "A few times a week",
-        "A few times a month",
-        "I don’t floss"
-      ]
-    },
-    {
-      "question": "What kind of toothpaste do you use?",
-      "options": [
-        "Fluoride toothpaste",
-        "Whitening toothpaste",
-        "Herbal/natural toothpaste",
-        "I don’t use toothpaste regularly"
-      ]
-    },
-    {
-      "question": "How often do you visit your dentist for a check-up?",
-      "options": [
-        "Every 6 months",
-        "Once a year",
-        "Only when I have a problem",
-        "I haven’t visited a dentist in years"
-      ]
-    },
-    {
-      "question": "What do you drink most often throughout the day?",
-      "options": [
-        "Water",
-        "Soda/soft drinks",
-        "Coffee/tea",
-        "Juice/sports drinks"
-      ]
-    },
-    {
-      "question": "Do you use mouthwash regularly?",
-      "options": [
-        "Every day",
-        "A few times a week",
-        "Occasionally, when I remember",
-        "I don’t use mouthwash"
-      ]
-    },
-    {
-      "question": "What is your primary method of cleaning your tongue?",
-      "options": [
-        "I use a tongue scraper",
-        "I brush my tongue with my toothbrush",
-        "I rinse with mouthwash",
-        "I don’t clean my tongue"
-      ]
-    }
-  ]
-}
+[
+  {
+    "question": "How often do you brush your teeth?",
+    "options": [
+      "Once a day",
+      "Twice a day",
+      "After every meal",
+      "Only when I remember"
+    ]
+  },
+  {
+    "question": "How long do you typically brush your teeth?",
+    "options": [
+      "Less than 1 minute",
+      "1-2 minutes",
+      "2-3 minutes",
+      "More than 3 minutes"
+    ]
+  },
+  {
+    "question": "What type of toothbrush do you use?",
+    "options": [
+      "Manual toothbrush with soft bristles",
+      "Manual toothbrush with medium/hard bristles",
+      "Electric toothbrush",
+      "I don’t use a toothbrush regularly"
+    ]
+  },
+  {
+    "question": "How often do you replace your toothbrush?",
+    "options": [
+      "Every month",
+      "Every 3-4 months",
+      "Every 6 months",
+      "Only when it looks worn out"
+    ]
+  },
+  {
+    "question": "How often do you floss your teeth?",
+    "options": [
+      "Every day",
+      "A few times a week",
+      "A few times a month",
+      "I don’t floss"
+    ]
+  },
+  {
+    "question": "What kind of toothpaste do you use?",
+    "options": [
+      "Fluoride toothpaste",
+      "Whitening toothpaste",
+      "Herbal/natural toothpaste",
+      "I don’t use toothpaste regularly"
+    ]
+  },
+  {
+    "question": "How often do you visit your dentist for a check-up?",
+    "options": [
+      "Every 6 months",
+      "Once a year",
+      "Only when I have a problem",
+      "I haven’t visited a dentist in years"
+    ]
+  },
+  {
+    "question": "What do you drink most often throughout the day?",
+    "options": [
+      "Water",
+      "Soda/soft drinks",
+      "Coffee/tea",
+      "Juice/sports drinks"
+    ]
+  },
+  {
+    "question": "Do you use mouthwash regularly?",
+    "options": [
+      "Every day",
+      "A few times a week",
+      "Occasionally, when I remember",
+      "I don’t use mouthwash"
+    ]
+  },
+  {
+    "question": "What is your primary method of cleaning your tongue?",
+    "options": [
+      "I use a tongue scraper",
+      "I brush my tongue with my toothbrush",
+      "I rinse with mouthwash",
+      "I don’t clean my tongue"
+    ]
+  }
+]

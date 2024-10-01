@@ -238,6 +238,7 @@ export default function ProfileForm({ me, specialities }: ProfileFormProps) {
                       autoComplete="tel"
                       {...field}
                       required={false}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormDescription>{t("phone.description")}</FormDescription>

@@ -2,16 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Credenza,
-  CredenzaBody,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -58,8 +58,8 @@ export default function AddSpecialityDialog({
   });
 
   return (
-    <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger className="horizontal justify-start" asChild>
+    <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
+      <DrawerTrigger className="horizontal justify-start" asChild>
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -68,21 +68,21 @@ export default function AddSpecialityDialog({
         >
           {t("trigger")}
         </Button>
-      </CredenzaTrigger>
-      <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
-          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-        </CredenzaHeader>
-        <CredenzaBody>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{t("dialog.title")}</DrawerTitle>
+          <DrawerDescription>{t("dialog.description")}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody>
           <SpecialityForm form={form} onSubmit={onSubmit} />
-        </CredenzaBody>
-        <CredenzaFooter>
-          <CredenzaClose asChild>
+        </DrawerBody>
+        <DrawerFooter>
+          <DrawerClose asChild>
             <Button variant="secondary" className="w-full md:w-auto">
               {t("dialog.cancel")}
             </Button>
-          </CredenzaClose>
+          </DrawerClose>
           <Button
             onClick={onSubmit}
             disabled={
@@ -94,8 +94,8 @@ export default function AddSpecialityDialog({
           >
             {t("dialog.confirm")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

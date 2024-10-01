@@ -138,7 +138,9 @@ export type InvitationAccount = z.infer<typeof invitationAccountSchema>;
 
 export const emailSchema = z.union([
   z.literal(""),
-  z.string().email("Invalid email address").max(50),
+  z.string({
+    required_error: "email.required",
+  }).email("email.invalid").max(50),
 ]);
 
 export const avatarSchema = z
@@ -163,11 +165,15 @@ export const fileCreateInputSchema = z.object({
 });
 
 export const patientSchema = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z.string({
+    required_error: "firstName.required",
+  }).min(1, "firstName.required"),
+  lastName: z.string({
+    required_error: "lastName.required",
+  }).min(1, "lastName.required"),
   gender: z.string().optional(),
   dob: z.date().optional(),
-  email: emailSchema,
+  email: emailSchema.optional(),
   phone: z.string().optional(),
   city: z.string().optional(),
   county: z.string().optional(),
@@ -190,16 +196,19 @@ const appointmentCreateInputBase = z.object({
   title: z.string().default("Appointment"),
   description: z
     .string()
-    .max(255, "Description must be less than 255 characters")
+    .max(255, "global.max-length")
     .optional(),
-  date: z.date(),
+  date: z.date({
+    invalid_type_error: "date.invalid",
+    required_error: "date.required",
+  }),
   allDay: z.boolean().default(false),
   start: z.date().optional(),
   end: z.date().optional(),
   type: EventTypeSchema.optional().default("APPOINTMENT"),
   status: EventStatusSchema.optional().default("CREATED"),
   initiator: EventInitiatorSchema.optional().default("SYSTEM"),
-  serviceId: z.string({ required_error: "Service is required" }),
+  serviceId: z.string({ required_error: "global.required" }),
   quiz: quizCreateInput,
   files: z.array(fileCreateInputSchema).optional(),
   userId: z.string().optional(),
@@ -219,7 +228,7 @@ export const appointmentCreateInput = z
     if (start && end && start >= end) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Event must end after it starts",
+        message: "date.start-after-end",
         path: ["date"],
       });
     }

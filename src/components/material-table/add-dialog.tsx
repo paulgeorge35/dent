@@ -1,17 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Credenza,
-  CredenzaBody,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from "@/components/ui/credenza";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,6 +11,16 @@ import { useEffect } from "react";
 import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger
+} from "../ui/drawer";
 import MaterialForm, { type FormValues, schema } from "./form";
 
 type AddMaterialDialogProps = {
@@ -60,8 +59,8 @@ export default function AddMaterialDialog({
   }, [dialogOpen.value, form]);
 
   return (
-    <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger asChild className="horizontal justify-start">
+    <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle} dismissible={false}>
+      <DrawerTrigger asChild className="horizontal justify-start">
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -70,19 +69,22 @@ export default function AddMaterialDialog({
         >
           {t("trigger")}
         </Button>
-      </CredenzaTrigger>
-      <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
-          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-        </CredenzaHeader>
-        <CredenzaBody>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{t("dialog.title")}</DrawerTitle>
+          <DrawerDescription>{t("dialog.description")}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody>
           <MaterialForm form={form} />
-        </CredenzaBody>
-        <CredenzaFooter>
-          <CredenzaClose asChild>
-            <Button variant="secondary">{t("dialog.cancel")}</Button>
-          </CredenzaClose>
+        </DrawerBody>
+        <DrawerFooter>
+          <Button
+            variant="secondary"
+            onClick={dialogOpen.setFalse}
+          >
+            {t("dialog.cancel")}
+          </Button>
           <Button
             onClick={form.handleSubmit(onSubmit)}
             disabled={!form.formState.isDirty || form.formState.isSubmitting}
@@ -90,8 +92,8 @@ export default function AddMaterialDialog({
           >
             {t("dialog.confirm")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

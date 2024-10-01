@@ -117,11 +117,11 @@ export const AutoComplete = <T,>({
       >
         <div
           className={cn(
-            "absolute top-0 z-10 w-full rounded-xl bg-white outline-none animate-in fade-in-0 zoom-in-95",
+            "absolute top-0 z-10 w-full rounded-xl bg-background/80 backdrop-blur-sm outline-none animate-in fade-in-0 zoom-in-95",
             isOpen ? "block" : "hidden",
           )}
         >
-          <CommandList className="rounded-lg ring-1 ring-slate-200">
+          <CommandList className="rounded-lg ring-1 ring-input">
             {isLoading ? (
               <CommandPrimitive.Loading>
                 <div className="p-1">
@@ -143,7 +143,7 @@ export const AutoComplete = <T,>({
                       }}
                       onSelect={() => handleSelectOption(option)}
                       className={cn(
-                        "flex w-full items-center gap-2",
+                        "flex w-full items-center gap-2 aria-selected:bg-accent/50 cursor-pointer",
                         !isSelected ? "pl-8" : null,
                       )}
                     >

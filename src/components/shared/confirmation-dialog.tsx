@@ -41,7 +41,7 @@ export default function ConfirmationDialog({
   return (
     <Credenza open={open} onOpenChange={onOpenChange}>
       {trigger && <CredenzaTrigger asChild>{trigger}</CredenzaTrigger>}
-      <CredenzaContent>
+      <CredenzaContent className="!h-auto">
         <CredenzaHeader>
           <CredenzaTitle>{title}</CredenzaTitle>
           <CredenzaDescription>{description}</CredenzaDescription>

@@ -9,15 +9,17 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-type DeleteSpecialityDialogProps = {
+type SpecialityDeleteDialogProps = {
   id: string;
   disabled: boolean;
+  onSuccess?: () => void;
 };
 
-export default function DeleteSpecialityDialog({
+export default function SpecialityDeleteDialog({
   id,
   disabled,
-}: DeleteSpecialityDialogProps) {
+  onSuccess,
+}: SpecialityDeleteDialogProps) {
   const t = useTranslations("page.specialities.delete");
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -26,23 +28,20 @@ export default function DeleteSpecialityDialog({
     api.speciality.delete.useMutation({
       onSuccess: () => {
         toast.success(t("status.success"));
-      setOpen(false);
-      router.refresh();
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
+        setOpen(false);
+        router.refresh();
+        onSuccess?.();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
   return (
     <ConfirmationDialog
       trigger={
-        <Button
-          variant="ghost"
-          size="icon"
-          className="text-red-500"
-          disabled={disabled}
-        >
+        <Button variant="destructive" disabled={disabled}>
           <Trash className="size-4" />
+          {t("dialog.confirm")}
         </Button>
       }
       title={t("dialog.title")}

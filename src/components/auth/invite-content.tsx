@@ -24,7 +24,15 @@ interface Invitation {
     tenant: {
       profile: {
         name: string;
-        avatar: string | null;
+        avatar: {
+          url: string;
+          key: string;
+          id: string;
+          profileId: string | null;
+          tenantProfileId: string | null;
+          createdAt: Date;
+          updatedAt: Date;
+        } | null;
       };
     };
   };
@@ -47,7 +55,7 @@ const InvitePageContent: React.FC<InvitePageContentProps> = ({
     <Card className="mx-auto max-w-md">
       <CardHeader className="flex flex-col items-center">
         <AvatarComponent
-          src={tenantAvatar}
+          src={tenantAvatar?.url}
           alt={tenantName}
           fallback={tenantName}
           width={100}
@@ -71,7 +79,7 @@ const InvitePageContent: React.FC<InvitePageContentProps> = ({
           </span>
         </p>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="vertical gap-2">
         <Link
           href={`/sign-up?email=${inviteeEmail}`}
           className={cn(

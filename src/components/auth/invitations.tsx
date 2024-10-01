@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useTranslations } from "@/lib/translations";
 import { api } from "@/trpc/server";
-import type { InvitationAccount } from "@/types/schema";
 import InvitationCard from "./invitation-card";
 
 export default async function Invitations() {
@@ -41,7 +40,7 @@ export default async function Invitations() {
           {invitations.map((invitation) => (
             <InvitationCard
               key={invitation.token}
-              invitation={invitation as InvitationAccount}
+              invitation={invitation}
             />
           ))}
         </CardContent>

@@ -19,31 +19,39 @@ const PriceInput = React.forwardRef<HTMLInputElement, PriceInputProps>(
     const [displayValue, setDisplayValue] = React.useState(formatPrice(value));
 
     React.useEffect(() => {
-      setDisplayValue(formatPrice(value));
-    }, [value]);
+      if (onChange) {
+        onChange(parsePrice(displayValue));
+      }
+    }, [displayValue]);
 
     function formatPrice(value: number): string {
       return (value / 100).toFixed(2);
     }
 
     function parsePrice(value: string): number {
-      return Math.round(Number.parseFloat(value) * 100);
+      const parsed = Math.round(Number.parseFloat(value) * 100);
+      return Number.isNaN(parsed) ? 0 : parsed;
     }
 
     function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
       const inputValue = e.target.value.replace(/[^\d.]/g, "");
-      const parsedValue = parsePrice(inputValue);
 
       setDisplayValue(inputValue);
 
       if (onChange) {
-        onChange(parsedValue);
+        const parsedValue = Number.parseFloat(inputValue);
+        onChange(Number.isNaN(parsedValue) ? 0 : parsedValue);
       }
     }
 
     function handleBlur() {
-      const formattedValue = formatPrice(parsePrice(displayValue));
+      const parsedValue = parsePrice(displayValue);
+      const formattedValue = formatPrice(parsedValue);
       setDisplayValue(formattedValue);
+
+      if (onChange) {
+        onChange(parsedValue);
+      }
     }
 
     return (

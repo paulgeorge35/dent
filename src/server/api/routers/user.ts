@@ -557,7 +557,11 @@ export const userRouter = createTRPCRouter({
             },
             tenant: {
               include: {
-                profile: true,
+                profile: {
+                  include: {
+                    avatar: true,
+                  },
+                },
                 users: {
                   select: {
                     profile: {

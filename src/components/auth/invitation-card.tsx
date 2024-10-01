@@ -41,7 +41,7 @@ export default function InvitationCard({ invitation }: InvitationCardProps) {
       <Avatar className="size-12 rounded-sm">
         {tenantAvatar && (
           <Image
-            src={tenantAvatar.url}
+            src={tenantAvatar.url}  
             alt={invitation.invitedBy.tenant.profile.name}
             width={48}
             height={48}

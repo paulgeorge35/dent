@@ -7,7 +7,6 @@ import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import { Info } from "lucide-react";
 import AvatarComponent from "../shared/avatar-component";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
-import MaterialRowActions from "./row-actions";
 
 type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
@@ -127,17 +126,6 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Material>[] {
       },
       enableSorting: false,
       enableColumnFilter: true,
-    },
-    {
-      accessorKey: "actions",
-      header: "",
-      cell: ({ row }) => {
-        return (
-          <div>
-            <MaterialRowActions material={row.original} disabled={false} />
-          </div>
-        );
-      },
     },
   ];
 }

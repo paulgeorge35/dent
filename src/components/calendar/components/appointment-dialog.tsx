@@ -1,13 +1,13 @@
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Credenza,
-  CredenzaBody,
-  CredenzaContent,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Form } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 import { Separator } from "@/components/ui/separator";
@@ -67,24 +67,19 @@ export default function AppointmentDialog({
   });
 
   return (
-    <Credenza sheet open={open} onOpenChange={() => onClose()}>
-      <CredenzaContent
-        sheet
+    <Drawer open={open} onOpenChange={() => onClose()}>
+      <DrawerContent
         className={cn({
-          "horizontal my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl bg-neutral-200 p-0":
-            isDesktop,
-          "lg:translate-x-[75%]": openMedicalCheckup.value,
+          "!flex-row bg-background/80 backdrop-blur-sm p-0": isDesktop,
+          "lg:translate-x-[calc(100%-50px)]": openMedicalCheckup.value && isDesktop,
         })}
       >
         <span className="hidden md:flex vertical shrink-0 items-center p-2">
           <PlusCircle className="size-10 rounded-full bg-background p-2 text-muted-foreground" />
         </span>
-        <span className="vertical grow rounded-3xl bg-background pt-0 md:pt-6 p-6">
-          <CredenzaHeader sheet className="lg:pb-4">
-            <CredenzaTitle
-              sheet
-              className="flex flex-col md:flex-row items-center gap-2"
-            >
+        <span className="vertical grow rounded-xl bg-background pt-0 md:pt-6 p-6">
+          <DrawerHeader className="lg:pb-4">
+            <DrawerTitle className="flex flex-col md:flex-row items-center gap-2">
               <span className="text-sm font-medium text-muted-foreground">
                 Appointment ID{" "}
                 <span className="font-mono text-lg font-bold text-primary">{`#APPT${zeroPad(event?.index ?? 0)}`}</span>
@@ -98,9 +93,9 @@ export default function AppointmentDialog({
                   ? "AUTOMATIC APPOINTMENT"
                   : "MANUAL APPOINTMENT"}
               </span>
-            </CredenzaTitle>
-          </CredenzaHeader>
-          <CredenzaBody sheet className="px-0">
+            </DrawerTitle>
+          </DrawerHeader>
+          <DrawerBody className="px-0">
             {event && (
               <span className="vertical gap-4 md:gap-8">
                 {event?.patient && (
@@ -118,8 +113,8 @@ export default function AppointmentDialog({
                 />
               </span>
             )}
-          </CredenzaBody>
-          <CredenzaFooter sheet className="grid grid-cols-2 gap-2 px-0">
+          </DrawerBody>
+          <DrawerFooter className="grid grid-cols-2 gap-2 px-0">
             <Button
               onClick={openMedicalCheckup.toggle}
               variant={hasMedicalCheckup ? "default" : "outline"}
@@ -176,15 +171,15 @@ export default function AppointmentDialog({
                 appointment.
               </span>
             </p>
-          </CredenzaFooter>
+          </DrawerFooter>
         </span>
-      </CredenzaContent>
+      </DrawerContent>
       <MedicalCheckup
         open={openMedicalCheckup.value}
         onOpenChange={openMedicalCheckup.toggle}
         form={form}
       />
-    </Credenza>
+    </Drawer>
   );
 }
 
@@ -293,23 +288,17 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
   const Component = steps[step.value]!.Component;
 
   return (
-    <Credenza sheet open={open} onOpenChange={onOpenChange}>
-      <CredenzaContent
-        sheet
-        side="left"
+    <Drawer open={open} onOpenChange={onOpenChange}>
+      <DrawerContent
         noOverlay
-        noCloseButton
         className={cn({
-          "vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-2xl p-0 opacity-0 transition-opacity duration-300 ease-in-out":
-            isDesktop,
-          "lg:translate-x-[calc(100vw-125%-32px)] opacity-100": open,
+          "opacity-0 transition-opacity duration-300 ease-in-out": isDesktop,
+          "opacity-100": open,
+          "right-20": open && isDesktop,
         })}
       >
-        <CredenzaHeader sheet className="p-6">
-          <CredenzaTitle
-            sheet
-            className="horizontal relative h-9 w-full items-center"
-          >
+        <DrawerHeader className="p-6">
+          <DrawerTitle className="horizontal relative h-9 w-full items-center">
             Medical Checkup
             <Button
               size="icon"
@@ -319,22 +308,22 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             >
               <ChevronRight className="size-4" />
             </Button>
-          </CredenzaTitle>
-        </CredenzaHeader>
+          </DrawerTitle>
+        </DrawerHeader>
         <Separator />
         <Steps
           steps={steps}
           currentStep={step.value}
           className="px-2 md:px-14 py-4"
         />
-        <CredenzaBody sheet className="px-0">
+        <DrawerBody className="px-0">
           <Form {...form}>
             <form onSubmit={onSubmit}>
               <Component form={form} />
             </form>
           </Form>
-        </CredenzaBody>
-        <CredenzaFooter sheet className="p-6 grid grid-cols-3 gap-2 px-4">
+        </DrawerBody>
+        <DrawerFooter className="p-6 grid grid-cols-3 gap-2 px-4">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -380,8 +369,8 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           >
             {step.value === steps.length - 1 ? "Save" : "Next"}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

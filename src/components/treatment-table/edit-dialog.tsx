@@ -1,14 +1,14 @@
 "use client";
 
 import {
-  Credenza,
-  CredenzaBody,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -57,23 +57,17 @@ export default function EditServiceDialog({
   if (!service) return null;
 
   return (
-    <Credenza
-      sheet
+    <Drawer
       open={!!dialogOpen.value}
       onOpenChange={() => dialogOpen.setValue(null)}
     >
-      <CredenzaContent
-        sheet
+      <DrawerContent
         className={cn({
-          "!vertical my-8 mr-4 md:h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] gap-0 rounded-3xl p-0":
-            isDesktop,
+          "p-0": isDesktop,
         })}
       >
-        <CredenzaHeader sheet className="p-6">
-          <CredenzaTitle
-            sheet
-            className="flex gap-2 items-center justify-center sm:justify-start"
-          >
+        <DrawerHeader className="p-6">
+          <DrawerTitle className="flex gap-2 items-center justify-center sm:justify-start">
             {service?.name}
             {service.children.length > 0 ? (
               <span className="bg-purple-500/20 px-2 py-1 rounded-full text-purple-800 font-medium uppercase text-xs whitespace-nowrap">
@@ -84,8 +78,8 @@ export default function EditServiceDialog({
                 {t("fields.type.options.SINGLE_VISIT")}
               </span>
             )}
-          </CredenzaTitle>
-          <CredenzaDescription sheet>
+          </DrawerTitle>
+          <DrawerDescription>
             {service?.description ? (
               service.description
             ) : (
@@ -93,12 +87,12 @@ export default function EditServiceDialog({
                 {t("fields.description.no-description")}
               </span>
             )}
-          </CredenzaDescription>
-        </CredenzaHeader>
-        <CredenzaBody sheet className="pb-4 vertical gap-8 ">
+          </DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody className="pb-4 vertical gap-8 ">
           <ServiceDetails service={service} extendedService={extendedService} />
-        </CredenzaBody>
-        <CredenzaFooter className="grid grid-cols-2 gap-2 p-6">
+        </DrawerBody>
+        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
           <Button
             variant="secondary"
             className="w-full col-span-2"
@@ -106,9 +100,9 @@ export default function EditServiceDialog({
           >
             {t("close.trigger")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 

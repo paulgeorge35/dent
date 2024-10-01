@@ -2,22 +2,24 @@ import type { AppointmentSchema } from "@/components/calendar/components/calenda
 import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import {
-  Credenza,
-  CredenzaContent,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { Form } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import Steps from "@/components/ui/steps";
-import useMediaQuery from "@/hooks/use-media-query";
+import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Star } from "lucide-react";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useTranslations } from "next-intl";
+import { useEffect, useTransition } from "react";
 import { useBoolean, useNumber } from "react-hanger";
 import type { UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
@@ -35,19 +37,19 @@ interface CreateAppointmentDialogProps {
 
 const steps = [
   {
-    title: "Treatment & Specialist",
+    title: "treatment-specialist",
     Icon: Icons.activity,
     Component: TreatmentSpecialist,
-    errorFields: ["serviceId"],
+    errorFields: ["serviceId", "date", "start", "end"],
   },
   {
-    title: "Basic Information",
+    title: "basic-information",
     Icon: Icons.user,
     Component: BasicInformation,
     errorFields: ["patient"],
   },
   {
-    title: "Oral Hygiene",
+    title: "oral-hygiene",
     Icon: Star,
     Component: OralHygiene,
   },
@@ -60,20 +62,19 @@ export default function CreateAppointmentDialog({
   resourceId,
   refetch,
 }: CreateAppointmentDialogProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)");
-  const { mutateAsync: createAppointment } = api.appointment.create.useMutation(
-    {
+  const t = useTranslations("page.appointments.add");
+  const { mutateAsync: createAppointment, isPending: isSubmitting } =
+    api.appointment.create.useMutation({
       onSuccess: () => {
         form.reset();
         onOpenChange(false);
-        toast.success("Appointment created successfully");
+        toast.success(t("status.success"));
         refetch();
       },
       onError: (error) => {
-        toast.error(error.message);
+        showErrorToast(error);
       },
-    },
-  );
+    });
   const confirmationDialog = useBoolean(false);
   const [, startTransition] = useTransition();
   const step = useNumber(0, {
@@ -82,35 +83,9 @@ export default function CreateAppointmentDialog({
     loop: false,
     step: 1,
   });
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = useState(0);
 
   const { mutateAsync: deleteFile, isPending: isDeleting } =
     api.storage.delete.useMutation();
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    setScrollTop(target.scrollTop);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollAreaRef.current) {
-        setScrollTop(scrollAreaRef.current.scrollTop);
-      }
-    };
-
-    const scrollArea = scrollAreaRef.current;
-    if (scrollArea) {
-      scrollArea.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (scrollArea) {
-        scrollArea.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
 
   useEffect(() => {
     if (open) {
@@ -138,9 +113,6 @@ export default function CreateAppointmentDialog({
 
   const handleBack = () => {
     step.decrease();
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
   };
 
   const handleNext = () => {
@@ -149,17 +121,19 @@ export default function CreateAppointmentDialog({
       form
         .trigger()
         .then(() => {
-          if (
-            steps[step.value]!.errorFields?.some((field) =>
-              Object.keys(form.formState.errors).includes(field),
-            )
-          ) {
-            return;
+          for (let i = 0; i < steps.length; i++) {
+            if (
+              steps[i]!.errorFields?.some((field) =>
+                Object.keys(form.formState.errors).includes(field),
+              )
+            ) {
+              step.setValue(i);
+              return;
+            }
           }
+
+          form.clearErrors();
           step.increase();
-          if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTo({ top: 0, behavior: "smooth" });
-          }
         })
         .catch((error) => {
           console.error(error);
@@ -170,8 +144,7 @@ export default function CreateAppointmentDialog({
   const Component = steps[step.value]!.Component;
 
   return (
-    <Credenza
-      sheet
+    <Drawer
       open={open}
       onOpenChange={(value) => {
         if (!value && form.formState.isDirty) {
@@ -181,63 +154,36 @@ export default function CreateAppointmentDialog({
         onOpenChange(value);
       }}
     >
-      <CredenzaContent
-        sheet
-        className={cn({
-          "vertical my-8 mr-4 h-[calc(100vh-64px)] !w-[90vw] !max-w-[800px] rounded-2xl":
-            isDesktop,
-        })}
-      >
-        <CredenzaHeader sheet>
-          <CredenzaTitle sheet>Add new appointment</CredenzaTitle>
-        </CredenzaHeader>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{t("title")}</DrawerTitle>
+          <DrawerDescription>
+            {t(`steps.${steps[step.value]!.title}.description`)}
+          </DrawerDescription>
+        </DrawerHeader>
         <Steps steps={steps} currentStep={step.value} className="px-8 py-2" />
-        <AnimatePresence mode="wait">
-          <ScrollArea
-            className="relative grow"
-            viewportRef={scrollAreaRef}
-            onScroll={handleScroll}
+        <DrawerBody key={step.value}>
+          <motion.div
+            key={step.value}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.3 }}
           >
-            <div
-              className={cn(
-                "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
-                {
-                  "h-0": scrollTop === 0,
-                },
-              )}
-            />
-            <div
-              className={cn(
-                "ease-in-outƒ pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
-                {
-                  "h-0":
-                    scrollTop + (scrollAreaRef.current?.clientHeight ?? 0) >=
-                    (scrollAreaRef.current?.scrollHeight ?? 0),
-                },
-              )}
-            />
-            <motion.div
-              key={step.value}
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Form {...form}>
-                <form onSubmit={onSubmit}>
-                  <Component form={form} resourceId={resourceId} />
-                </form>
-              </Form>
-            </motion.div>
-          </ScrollArea>
-        </AnimatePresence>
-        <CredenzaFooter sheet>
+            <Form {...form}>
+              <form onSubmit={onSubmit}>
+                <Component form={form} resourceId={resourceId} />
+              </form>
+            </Form>
+          </motion.div>
+        </DrawerBody>
+        <DrawerFooter className="flex justify-end">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title="Are you sure you want to close this appointment?"
-            description="This action cannot be undone."
-            confirmButtonText="Yes"
+            title={t("close.confirmation.title")}
+            description={t("close.confirmation.description")}
+            confirmButtonText={t("close.confirmation.confirm")}
             loading={isDeleting}
             onConfirm={async () => {
               await Promise.all(
@@ -255,7 +201,7 @@ export default function CreateAppointmentDialog({
             }}
             trigger={
               <Button size="lg" variant="secondary">
-                Close
+                {t("close.trigger")}
               </Button>
             }
           />
@@ -269,22 +215,26 @@ export default function CreateAppointmentDialog({
             className="overflow-hidden"
           >
             <Button size="lg" variant="outline" onClick={handleBack}>
-              Back
+              {t("actions.back")}
             </Button>
           </motion.div>
           <Button
             onClick={handleNext}
             size="lg"
+            disabled={isSubmitting}
+            isLoading={isSubmitting}
             className={cn(
               step.value === steps.length - 1
                 ? "bg-green-600 hover:bg-green-700"
                 : "",
             )}
           >
-            {step.value === steps.length - 1 ? "Save" : "Next"}
+            {step.value === steps.length - 1
+              ? t("actions.submit")
+              : t("actions.next")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

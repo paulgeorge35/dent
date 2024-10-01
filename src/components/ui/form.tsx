@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import OptionalInputTag from "./optional-input-tag";
 
 const Form = FormProvider;
 
@@ -176,7 +177,7 @@ const FormFieldCompact = <
   description,
   className,
   render,
-  required,
+  required = true,
   ...props
 }: {
   label?: React.ReactNode;
@@ -192,11 +193,9 @@ const FormFieldCompact = <
           <FormItem className={className}>
             {!!label && (
               <FormLabel>
-                {label}
-                {required === false && (
-                  <span className="ml-1 font-light text-muted-foreground">
-                    (Optional)
-                  </span>
+                {label}{" "}
+                {!required && (
+                  <OptionalInputTag />
                 )}
               </FormLabel>
             )}

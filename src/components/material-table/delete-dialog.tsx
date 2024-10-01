@@ -4,20 +4,22 @@ import ConfirmationDialog from "@/components/shared/confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
-import { Trash } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { Icons } from "../ui/icons";
 
 type MaterialDeleteDialogProps = {
   id: string;
   disabled: boolean;
+  onSuccess?: () => void;
 };
 
 export default function MaterialDeleteDialog({
   id,
   disabled,
+  onSuccess,
 }: MaterialDeleteDialogProps) {
   const t = useTranslations("page.materials.delete");
   const [open, setOpen] = useState(false);
@@ -29,6 +31,7 @@ export default function MaterialDeleteDialog({
         toast.success(t("status.success"));
         setOpen(false);
         router.refresh();
+        onSuccess?.();
       },
       onError: (error) => {
         showErrorToast(error);
@@ -38,12 +41,11 @@ export default function MaterialDeleteDialog({
     <ConfirmationDialog
       trigger={
         <Button
-          variant="ghost"
-          size="icon"
-          className="text-red-500"
+          variant="destructive"
           disabled={disabled}
         >
-          <Trash className="size-4" />
+          <Icons.trash className="size-4 mr-2" />
+          {t("dialog.confirm")}
         </Button>
       }
       title={t("dialog.title")}

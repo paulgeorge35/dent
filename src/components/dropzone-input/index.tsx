@@ -4,6 +4,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { Trash2, Upload, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { type Accept, ErrorCode, useDropzone } from "react-dropzone";
 import { toast } from "sonner";
@@ -61,6 +62,7 @@ export function DropzoneFiles({
   onChange,
   ...rest
 }: DropzoneFilesProps) {
+  const t = useTranslations("fields.files");
   const { mutateAsync: getUploadUrl } =
     api.storage.generateUploadUrl.useMutation();
   const { mutateAsync: updateFile } = api.storage.update.useMutation();
@@ -199,32 +201,32 @@ export function DropzoneFiles({
 
   return (
     <div {...getRootProps()} className={cn("dropzone", wrapperClassName)}>
-      <div className={cn("relative flex items-center gap-2", className)}>
+      <div className={cn("relative flex w-full items-center gap-2", className)}>
         <input
           {...getInputProps({
             ...rest,
           })}
         />
         <Upload />
-        {!isDragActive && <p>Drag & drop files here</p>}
-        {isDragAccept && <p>Drop the files here ...</p>}
-        {isDragReject && <p>Some files will be rejected</p>}
+        {!isDragActive && <p>{t("drag-drop")}</p>}
+        {isDragAccept && <p>{t("drop")}</p>}
+        {isDragReject && <p>{t("reject")}</p>}
         <Separator orientation="vertical" className="h-8 shrink-0" />
         <Button
           variant="ghost"
           className="!p-0 text-link hover:bg-transparent hover:text-link-hover"
           onClick={(e) => {
-            e.preventDefault();
+            // e.preventDefault();
             getInputProps().onClick?.(
               e as unknown as React.MouseEvent<HTMLInputElement>,
             );
           }}
         >
-          Browse Files
+          {t("browse")}
         </Button>
       </div>
       <div className="horizontal mt-2 w-full items-center justify-between text-xs text-muted-foreground">
-        <p>Maximum upload file size: {maxSize}MB</p>
+        <p>{t("maximum-size", { size: maxSize })}</p>
         <p>
           {value?.length ?? 0} / {maxFiles}
         </p>
@@ -261,6 +263,7 @@ const FileUpload = ({
   isDeleting: boolean;
   isUploading: boolean;
 }) => {
+  const t = useTranslations("fields.files");
   return (
     <div className="flex w-full items-start gap-2 text-xs ">
       <Icons.file className="size-8 rounded-lg bg-muted p-2" />
@@ -293,7 +296,7 @@ const FileUpload = ({
           <span>{(file.size / 1024 / 1024).toFixed(2)} MB</span>
           <span className="text-muted-foreground">
             {uploadProgress === 100
-              ? "Completed"
+              ? t("completed")
               : `${uploadProgress.toFixed(0)}%`}
           </span>
         </span>

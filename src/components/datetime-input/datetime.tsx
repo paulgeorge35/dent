@@ -322,8 +322,9 @@ const DateTimePicker = React.forwardRef<
     jsDate?: Date | null;
     onJsDateChange?: (date: Date | null) => void;
     showClearButton?: boolean;
+    className?: string;
   }
->(({ jsDate, onJsDateChange, showClearButton = true, ...props }, ref) => {
+>(({ jsDate, onJsDateChange, showClearButton = true, className, ...props }, ref) => {
   const divRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const contentRef = useRef<HTMLDivElement | null>(null);
@@ -380,7 +381,8 @@ const DateTimePicker = React.forwardRef<
       ref={divRef}
       className={cn(
         groupProps.className,
-        "p-1 h-9 flex grow items-center rounded-md border bg-background shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+        className,
+        "p-1 h-10 flex grow items-center rounded-md border bg-background shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
       )}
     >
       <Popover open={props.isOpen} onOpenChange={props.onOpenChange}>

@@ -3,8 +3,10 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import type { Patient } from "@prisma/client";
 import { DateTime } from "luxon";
+import { useTranslations } from "next-intl";
 
 export default function PatientDetails({ patient }: { patient?: Patient }) {
+  const t = useTranslations("page.appointments.add.steps.basic-information.fields");
   if (!patient) {
     return null;
   }
@@ -29,10 +31,13 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
       </span>
       <Separator className="mt-4" />
       <span className="grid grid-cols-2 gap-4 p-4">
-        <Field label="Phone" value={patient.phone} />
-        <Field label="Gender" value={patient.gender} />
+        <Field label={t("phone.label")} value={patient.phone} />
         <Field
-          label="Date of Birth"
+          label={t("gender.label")}
+          value={t(`gender.options.${patient.gender}`)}
+        />
+        <Field
+          label={t("dob.label")}
           value={
             patient.dob
               ? DateTime.fromJSDate(patient.dob).toFormat("dd-MM-yyyy")
@@ -40,7 +45,7 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
           }
         />
         <Field
-          label="Age"
+          label={t("age.label")}
           value={
             patient.dob
               ? DateTime.now()
@@ -49,8 +54,8 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
               : "-"
           }
         />
-        <Field label="County" value={patient.county} />
-        <Field label="City" value={patient.city} />
+        <Field label={t("county.label")} value={patient.county} />
+        <Field label={t("city.label")} value={patient.city} />
       </span>
     </div>
   );

@@ -151,6 +151,7 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
                       autoComplete="tel"
                       {...field}
                       required={false}
+                      className="w-full"
                     />
                   </FormControl>
                   <FormMessage />

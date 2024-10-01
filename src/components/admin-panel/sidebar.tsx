@@ -8,10 +8,14 @@ import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
+import { AnimatePresence } from "framer-motion";
 import { Box, Plus, Settings } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Link from "next/link";
+import { useState } from "react";
 import GlobalSearch from "../global-search";
 import LocaleSwitch from "../shared/locale-switch";
+import { LoadingSpinner } from "../ui/spinner";
 
 export function Sidebar({
   session,
@@ -24,12 +28,24 @@ export function Sidebar({
   accounts: TenantAccount[];
   locale: "en" | "ro";
 }) {
+  const t = useTranslations("layout");
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!sidebar) return null;
 
   return (
     <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+          <div className="absolute inset-0 bg-background/90 backdrop-blur-sm z-[100] h-screen w-screen vertical center gap-2">
+            <LoadingSpinner className="size-10" />
+            {/* <p className="text-lg font-medium text-muted-foreground">
+              {t("loading")}
+            </p> */}
+          </div>
+        )}
+      </AnimatePresence>
       <Shell
         variant="nav"
         className={cn(
@@ -67,10 +83,11 @@ export function Sidebar({
           session={session}
           accounts={accounts}
           className="flex-shrink-0"
+          setIsLoadingTenant={setIsLoading}
         />
       </Shell>
       <span
-        className={cn("lg:hidden fixed inset-0 z-[35] bg-black/80", {
+        className={cn("lg:hidden fixed inset-0 z-[35] bg-black/30 backdrop-blur-sm", {
           hidden: sidebar?.isOpen === false,
         })}
         onClick={() => sidebar?.setIsOpen?.()}

@@ -239,6 +239,7 @@ export const PhoneInput = React.forwardRef<
         onKeyDown={handleKeyDown}
         required={required}
         aria-required={required}
+        className="grow"
         {...rest}
       />
     </div>

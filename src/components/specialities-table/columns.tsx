@@ -5,7 +5,6 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import { cn } from "@/lib/utils";
 import type { SpecialityUserCount } from "@/server/api/routers/user";
-import SpecialityRowActions from "../specialities/row-actions";
 
 type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
@@ -56,7 +55,11 @@ export function getColumns({
         />
       ),
       cell: ({ row }) => {
-        return <div>{row.getValue("description")}</div>;
+        return (
+          <div className="w-[30vw] truncate whitespace-nowrap">
+            {row.getValue("description")}
+          </div>
+        );
       },
       enableSorting: true,
     },
@@ -67,26 +70,12 @@ export function getColumns({
       ),
       cell: ({ row }) => {
         return (
-          <div className="vertical grow items-start">
+          <div className="vertical grow items-start whitespace-nowrap">
             {row.original._count.users} {t("fields.users.unit")}
           </div>
         );
       },
       enableSorting: false,
-    },
-    {
-      accessorKey: "actions",
-      header: "",
-      cell: ({ row }) => {
-        return (
-          <div>
-            <SpecialityRowActions
-              speciality={row.original}
-              disabled={row.original._count.users > 0}
-            />
-          </div>
-        );
-      },
     },
   ];
 }

@@ -2,42 +2,40 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Credenza,
-  CredenzaBody,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
 import { showErrorToast } from "@/lib/handle-error";
+import type { SpecialityUserCount } from "@/server/api/routers/user";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { Speciality } from "@prisma/client";
-import { Edit2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useBoolean } from "react-hanger";
+import { useEffect, useMemo } from "react";
+import type { UseStateful } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import SpecialityDeleteDialog from "./delete-dialog";
 import SpecialityForm, { type FormValues, specialitySchema } from "./form";
 
-interface EditSpecialityDialogProps {
-  speciality: Speciality;
+interface SpecialityEditDialogProps {
+  dialogOpen: UseStateful<SpecialityUserCount | null>;
 }
 
-export default function EditSpecialityDialog({
-  speciality,
-}: EditSpecialityDialogProps) {
+export default function SpecialityEditDialog({
+  dialogOpen,
+}: SpecialityEditDialogProps) {
   const t = useTranslations("page.specialities.edit");
   const router = useRouter();
   const { mutateAsync: updateSpeciality } = api.speciality.update.useMutation({
     onSuccess: () => {
       toast.success("Speciality updated");
-      dialogOpen.setFalse();
+      dialogOpen.setValue(null);
       router.refresh();
     },
     onError: (error) => {
@@ -45,51 +43,57 @@ export default function EditSpecialityDialog({
     },
   });
 
-  const dialogOpen = useBoolean(false);
+  const speciality = useMemo(() => dialogOpen.value, [dialogOpen.value]);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(specialitySchema),
     defaultValues: {
-      name: speciality.name,
-      description: speciality.description ?? undefined,
-      color: speciality.color,
+      name: speciality?.name,
+      description: speciality?.description ?? undefined,
+      color: speciality?.color,
     },
   });
 
   const onSubmit = form.handleSubmit(async (data) => {
-    await updateSpeciality({ id: speciality.id, ...data });
+    await updateSpeciality({ id: speciality?.id ?? "", ...data });
   });
 
   useEffect(() => {
     if (dialogOpen.value) {
       form.reset({
-        name: speciality.name,
-        description: speciality.description ?? undefined,
-        color: speciality.color,
+        name: speciality?.name,
+        description: speciality?.description ?? undefined,
+        color: speciality?.color,
       });
     }
   }, [dialogOpen.value, form, speciality]);
 
   return (
-    <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Edit2 className="size-4" />
-        </Button>
-      </CredenzaTrigger>
-      <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
-          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-        </CredenzaHeader>
-        <CredenzaBody>
+    <Drawer
+      open={!!dialogOpen.value}
+      onOpenChange={() => dialogOpen.setValue(null)}
+    >
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{t("dialog.title")}</DrawerTitle>
+          <DrawerDescription>{t("dialog.description")}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerBody>
           <SpecialityForm form={form} onSubmit={onSubmit} />
-        </CredenzaBody>
-        <CredenzaFooter>
-          <CredenzaClose asChild>
-            <Button variant="secondary" className="w-full md:w-auto">
-              {t("dialog.cancel")}
-            </Button>
-          </CredenzaClose>
+        </DrawerBody>
+        <DrawerFooter className="grid-cols-2 md:grid-cols-3">
+          <SpecialityDeleteDialog
+            id={speciality?.id ?? ""}
+            disabled={form.formState.isSubmitting}
+            onSuccess={() => dialogOpen.setValue(null)}
+          />
+          <Button
+            variant="secondary"
+            className="col-span-1 md:col-span-1"
+            onClick={() => dialogOpen.setValue(null)}
+          >
+            {t("dialog.cancel")}
+          </Button>
           <Button
             onClick={onSubmit}
             disabled={
@@ -97,12 +101,13 @@ export default function EditSpecialityDialog({
               !form.formState.isDirty ||
               form.formState.isSubmitting
             }
+            className="col-span-2 md:col-span-1"
             isLoading={form.formState.isSubmitting}
           >
             {t("dialog.confirm")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

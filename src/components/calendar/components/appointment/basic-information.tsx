@@ -20,6 +20,7 @@ import {
 import { api } from "@/trpc/react";
 import type { Patient } from "@prisma/client";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useInput } from "react-hanger";
 import type { UseFormReturn } from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -32,6 +33,7 @@ type BasicInformationProps = {
 };
 
 export default function BasicInformation({ form }: BasicInformationProps) {
+  const t = useTranslations("page.appointments.add.steps.basic-information.fields");
   const { data: patient, isLoading: patientLoading } = api.patient.get.useQuery(
     {
       id: form.watch("patient.id"),
@@ -70,7 +72,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
 
   if (patient ?? patientLoading) {
     return (
-      <div className="grid grid-cols-4 gap-4 px-4">
+      <div className="grid grid-cols-4 gap-4 p-4">
         <span className="horizontal col-span-4 items-center gap-3">
           <PatientSearch
             search={search.value}
@@ -83,7 +85,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
           <Button
             size="icon"
             variant="outline"
-            className="shrink-0 !size-[42px]"
+            className="shrink-0"
             onClick={() => {
               search.setValue("");
               form.setValue("patient", {
@@ -109,7 +111,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4 px-4">
+    <div className="grid grid-cols-4 gap-4 p-4">
       <PatientSearch
         search={search.value}
         setSearch={(value) => search.setValue(value)}
@@ -122,14 +124,14 @@ export default function BasicInformation({ form }: BasicInformationProps) {
         className="col-span-2"
         control={form.control}
         name="patient.firstName"
-        label="First Name"
+        label={t("firstName.label")}
         render={({ field }) => <Input {...field} placeholder="First Name" />}
       />
       <FormFieldCompact
         className="col-span-2"
         control={form.control}
         name="patient.lastName"
-        label="Last Name"
+        label={t("lastName.label")}
         render={({ field }) => <Input {...field} placeholder="Last Name" />}
       />
       <Controller
@@ -140,7 +142,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
             className="col-span-2"
             control={form.control}
             name="patient.dob"
-            label="Date of Birth"
+            label={t("dob.label")}
             render={() => (
               <DateTimePicker
                 granularity="day"
@@ -155,7 +157,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
         className="col-span-2"
         control={form.control}
         name="patient.gender"
-        label="Gender"
+        label={t("gender.label")}
         render={({ field }) => (
           <FormItem className="col-span-2">
             <FormControl>
@@ -168,20 +170,20 @@ export default function BasicInformation({ form }: BasicInformationProps) {
                 <FormItem className="col-span-1">
                   <FormLabel className="group">
                     <FormControl>
-                      <RadioGroupItem value="male" className="sr-only" />
+                      <RadioGroupItem value="M" className="sr-only" />
                     </FormControl>
                     <div className="relative flex h-10 w-full cursor-pointer items-center justify-center gap-4 rounded-lg border border-border p-4 group-has-[:checked]:border-primary">
-                      Male
+                      {t("gender.options.M")}
                     </div>
                   </FormLabel>
                 </FormItem>
                 <FormItem className="col-span-1">
                   <FormLabel className="group">
                     <FormControl>
-                      <RadioGroupItem value="female" className="sr-only" />
+                      <RadioGroupItem value="F" className="sr-only" />
                     </FormControl>
                     <div className="relative flex h-10 w-full cursor-pointer items-center justify-center gap-4 rounded-lg border border-border p-4 group-has-[:checked]:border-primary">
-                      Female
+                      {t("gender.options.F")}
                     </div>
                   </FormLabel>
                 </FormItem>
@@ -194,7 +196,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
         className="col-span-4"
         control={form.control}
         name="patient.email"
-        label="Email"
+        label={t("email.label")}
         render={({ field }) => (
           <Input {...field} placeholder="email@example.com" />
         )}
@@ -207,7 +209,7 @@ export default function BasicInformation({ form }: BasicInformationProps) {
             className="col-span-4"
             control={form.control}
             name="patient.phone"
-            label="Phone"
+            label={t("phone.label")}
             render={() => (
               <PhoneInput
                 id={field.name}
@@ -223,11 +225,11 @@ export default function BasicInformation({ form }: BasicInformationProps) {
         className="col-span-2"
         control={form.control}
         name="patient.county"
-        label="County"
+        label={t("county.label")}
         render={({ field }) => (
           <Select onValueChange={handleCountyChange}>
             <SelectTrigger disabled={counties?.length === 0}>
-              <SelectValue {...field} placeholder="Select a county" />
+              <SelectValue {...field} placeholder={t("county.placeholder")} />
             </SelectTrigger>
             <SelectContent>
               {counties?.map((county, index) => (
@@ -243,13 +245,13 @@ export default function BasicInformation({ form }: BasicInformationProps) {
         className="col-span-2"
         control={form.control}
         name="patient.city"
-        label="City"
+        label={t("city.label")}
         render={({ field }) => (
           <Select onValueChange={handleCityChange}>
             <SelectTrigger
               disabled={!form.watch("patient.county") || cities?.length === 0}
             >
-              <SelectValue {...field} placeholder="Select a city" />
+              <SelectValue {...field} placeholder={t("city.placeholder")} />
             </SelectTrigger>
             <SelectContent>
               {cities?.map((city, index) => (
@@ -282,14 +284,15 @@ const PatientSearch = ({
   patients,
   className,
 }: PatientSearchProps) => {
+  const t = useTranslations("page.appointments.add.steps.basic-information.fields.patient");
   return (
     <AutoComplete<string>
       options={patients.map((patient) => ({
         value: patient.id,
         label: `${patient.firstName} ${patient.lastName}`,
       }))}
-      emptyMessage="No results."
-      placeholder="Search for a patient..."
+      emptyMessage={t("empty")}
+      placeholder={t("placeholder")}
       isLoading={isLoading}
       onValueChange={(option) => onSelect(option.value)}
       disabled={isLoading}

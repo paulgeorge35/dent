@@ -1,5 +1,8 @@
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
+import React from "react";
 import { Progress } from "./progress";
 
 type StepsProps = {
@@ -13,7 +16,12 @@ type StepsProps = {
 
 export default function Steps({ steps, currentStep, className }: StepsProps) {
   return (
-    <span className={cn("horizontal items-start justify-between sm:justify-center gap-1", className)}>
+    <span
+      className={cn(
+        "horizontal items-start justify-between sm:justify-center gap-1",
+        className,
+      )}
+    >
       {steps.map((step, index) => (
         <Step
           key={step.title}
@@ -45,11 +53,22 @@ const Step = ({
   isLast,
   stepNumber,
 }: StepProps) => {
+  const t = useTranslations("page.appointments.add");
   return (
-    <>
+    <React.Fragment>
       <span className="vertical center-h relative items-start gap-1">
         {isActive && (
-          <span className="absolute inset-0 left-1/2 size-10 -translate-x-1/2 rounded-full border-[2px] border-dashed border-blue-500" />
+          <motion.span
+            className="absolute inset-0 size-10 left-1/4 rounded-full border-[2px] border-dashed border-blue-500"
+            animate={{
+              rotate: 360,
+            }}
+            transition={{
+              duration: 10,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
+          />
         )}
         <span
           className={cn(
@@ -73,9 +92,11 @@ const Step = ({
           )}
         </span>
         <span className="text-xs text-muted-foreground">
-          Step {stepNumber + 1}
+          {t("step", { index: stepNumber + 1 })}
         </span>
-        <span className="w-20 text-center text-xs font-semibold">{title}</span>
+        <span className="w-20 text-center text-xs font-semibold">
+          {t(`steps.${title}.title`)}
+        </span>
       </span>
       {!isLast && (
         <Progress
@@ -87,6 +108,6 @@ const Step = ({
           value={isCompleted ? 100 : isActive ? 50 : 0}
         />
       )}
-    </>
+    </React.Fragment>
   );
 };
