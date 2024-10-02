@@ -17,7 +17,7 @@ const cookieOpts = {
   secure: env.NODE_ENV === "production",
   sameSite: "lax",
   path: "/",
-  domain: env.NODE_ENV === "production" ? env.URL : undefined,
+  domain: env.NODE_ENV === "production" ? env.DOMAIN : undefined,
   maxAge: 1000 * 60 * 60 * 24 * 365,
 } as const;
 
@@ -59,6 +59,8 @@ export async function setSession(user: SessionUser, duration: DurationLike) {
       data: { lastLoginAt: DateTime.now().toJSDate() },
     });
   }
+
+  console.log(session);
 
   cookies().set("session", session, cookieOpts);
 }
