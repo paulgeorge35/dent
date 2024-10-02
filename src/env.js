@@ -26,7 +26,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     GOOGLE_AUTH_CALLBACK_URL: z.string(),
     URL: z.string().url(),
-    DOMAIN: z.string().url(),
+    DOMAIN: z.string(),
     RESEND_API_KEY: z.string(),
     STRIPE_SECRET_KEY: z.string(),
     STRIPE_PUBLIC_KEY: z.string(),
