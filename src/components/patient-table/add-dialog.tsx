@@ -2,16 +2,16 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Credenza,
-  CredenzaBody,
-  CredenzaClose,
-  CredenzaContent,
-  CredenzaDescription,
-  CredenzaFooter,
-  CredenzaHeader,
-  CredenzaTitle,
-  CredenzaTrigger,
-} from "@/components/ui/credenza";
+  Drawer,
+  DrawerBody,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
@@ -60,8 +60,8 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
   }, [dialogOpen.value, form]);
 
   return (
-    <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger asChild>
+    <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
+      <DrawerTrigger asChild>
         {isDesktop ? (
           <Button
             variant="expandIcon"
@@ -79,19 +79,21 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
             <Plus className="size-6" />
           </Button>
         )}
-      </CredenzaTrigger>
-      <CredenzaContent>
-        <CredenzaHeader>
-          <CredenzaTitle>{t("dialog.title")}</CredenzaTitle>
-          <CredenzaDescription>{t("dialog.description")}</CredenzaDescription>
-          <CredenzaBody>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>{t("dialog.title")}</DrawerTitle>
+          <DrawerDescription>{t("dialog.description")}</DrawerDescription>
+          <DrawerBody>
             <PatientForm form={form} />
-          </CredenzaBody>
-        </CredenzaHeader>
-        <CredenzaFooter>
-          <CredenzaClose>
-            <Button variant="secondary">{t("dialog.cancel")}</Button>
-          </CredenzaClose>
+          </DrawerBody>
+        </DrawerHeader>
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button variant="secondary" className="w-full md:w-auto">
+              {t("dialog.cancel")}
+            </Button>
+          </DrawerClose>
           <Button
             onClick={form.handleSubmit(onSubmit)}
             disabled={
@@ -103,8 +105,8 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
           >
             {t("dialog.confirm")}
           </Button>
-        </CredenzaFooter>
-      </CredenzaContent>
-    </Credenza>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

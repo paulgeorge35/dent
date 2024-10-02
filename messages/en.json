@@ -439,13 +439,16 @@
           }
         },
         "county": {
-          "label": "County"
+          "label": "County",
+          "placeholder": "Select a county"
         },
         "city": {
-          "label": "City"
+          "label": "City",
+          "placeholder": "Select a city"
         },
         "sector": {
-          "label": "Sector"
+          "label": "Sector",
+          "placeholder": "Select a sector"
         },
         "createdAt": {
           "label": "Registered"

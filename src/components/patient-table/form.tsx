@@ -1,20 +1,23 @@
 import {
   Form,
   FormControl,
-  FormField,
+  FormFieldCompact,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
+import { Controller, type UseFormReturn } from "react-hook-form";
 import { z } from "zod";
-import { CitySelect } from "../address-input/city-input";
-import { CountySelect } from "../address-input/county-input";
 import { DateTimePicker } from "../datetime-input/datetime";
 import { PhoneInput } from "../phone-input";
 
@@ -36,16 +39,8 @@ export const patientSchema = z.object({
   gender: z.string({
     required_error: "Gender is required",
   }),
-  city: z
-    .string({
-      required_error: "City is required",
-    })
-    .min(1, "City is required"),
-  county: z
-    .string({
-      required_error: "County is required",
-    })
-    .min(1, "County is required"),
+  city: z.string().optional(),
+  county: z.string().optional(),
 });
 
 export type FormValues = z.infer<typeof patientSchema>;
@@ -56,167 +51,176 @@ type PatientFormProps = {
 
 export default function PatientForm({ form }: PatientFormProps) {
   const t = useTranslations("page.patients.fields");
-  const [county, setCounty] = useState<string | undefined>(undefined);
 
-  const { data: counties, isFetching: isFetchingCounties } =
-    api.utils.getCounties.useQuery();
-  const { data: cities, isFetching: isFetchingCities } =
-    api.utils.getCities.useQuery(county);
+  const { data: counties } = api.utils.getCounties.useQuery();
+  const { data: cities } = api.utils.getCities.useQuery(form.watch("county"), {
+    enabled: !!form.watch("county"),
+  });
+
+  const handleCountyChange = (value: string) => {
+    form.setValue("county", value);
+    form.setValue("city", undefined);
+  };
+
+  const handleCityChange = (value: string) => {
+    form.setValue("city", value);
+  };
 
   return (
     <Form {...form}>
-      <form className="grid grid-cols-2 gap-4">
-        <FormField
+      <form className="grid grid-cols-4 gap-4 py-4">
+        <FormFieldCompact
+          className="col-span-2"
+          control={form.control}
           name="firstName"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>{t("firstName.label")}</FormLabel>
-              <Input id={field.name} {...field} placeholder="John" />
-            </FormItem>
-          )}
+          label={t("firstName.label")}
+          render={({ field }) => <Input {...field} placeholder="First Name" />}
         />
-        <FormField
+        <FormFieldCompact
+          className="col-span-2"
+          control={form.control}
           name="lastName"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>{t("lastName.label")}</FormLabel>
-              <Input id={field.name} {...field} placeholder="Doe" />
-            </FormItem>
-          )}
+          label={t("lastName.label")}
+          render={({ field }) => <Input {...field} placeholder="Last Name" />}
         />
-        <FormField
-          name="email"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>{t("email.label")}</FormLabel>
-              <Input
-                id={field.name}
-                {...field}
-                placeholder="john@example.com"
-              />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="phone"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>{t("phone.label")}</FormLabel>
-              <FormControl>
-                <PhoneInput
-                  id={field.name}
-                  autoComplete="tel"
-                  value={field.value}
-                  onChange={field.onChange}
-                  required={true}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
+        <Controller
           name="dob"
           control={form.control}
           render={({ field }) => (
-            <FormItem className="col-span-2 w-full">
-              <FormLabel htmlFor={field.name}>{t("dob.label")}</FormLabel>
-              <FormControl>
+            <FormFieldCompact
+              className="col-span-2"
+              control={form.control}
+              name="dob"
+              label={t("dob.label")}
+              render={() => (
                 <DateTimePicker
                   granularity="day"
                   jsDate={field.value}
                   onJsDateChange={field.onChange}
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              )}
+            />
           )}
         />
-        <FormField
+        <FormFieldCompact
+          className="col-span-2"
           control={form.control}
           name="gender"
+          label={t("gender.label")}
           render={({ field }) => (
-            <FormItem className="col-span-2 space-y-3">
-              <FormLabel>{t("gender.label")}</FormLabel>
+            <FormItem className="col-span-2">
               <FormControl>
                 <RadioGroup
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  className="flex space-x-4"
+                  onValueChange={(value) => field.onChange(value)}
+                  className="col-span-2 grid grid-cols-2 gap-4"
+                  value={field.value}
+                  name={field.name}
                 >
-                  <FormItem className="flex items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="M" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      {t("gender.options.M")}
+                  <FormItem className="col-span-1 w-full">
+                    <FormLabel className="group w-full">
+                      <FormControl>
+                        <RadioGroupItem value="M" className="sr-only" />
+                      </FormControl>
+                      <div className="relative flex h-10 w-full cursor-pointer items-center justify-center gap-4 rounded-lg border border-border p-4 group-has-[:checked]:border-primary">
+                        {t("gender.options.M")}
+                      </div>
                     </FormLabel>
                   </FormItem>
-                  <FormItem className="flex items-center space-x-2 space-y-0">
-                    <FormControl>
-                      <RadioGroupItem value="F" />
-                    </FormControl>
-                    <FormLabel className="font-normal">
-                      {t("gender.options.F")}
+                  <FormItem className="col-span-1 w-full">
+                    <FormLabel className="group w-full">
+                      <FormControl>
+                        <RadioGroupItem value="F" className="sr-only" />
+                      </FormControl>
+                      <div className="relative flex h-10 w-full cursor-pointer items-center justify-center gap-4 rounded-lg border border-border p-4 group-has-[:checked]:border-primary">
+                        {t("gender.options.F")}
+                      </div>
                     </FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
-              <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
+        <FormFieldCompact
+          className="col-span-4"
+          control={form.control}
+          name="email"
+          label={t("email.label")}
+          render={({ field }) => (
+            <Input {...field} placeholder="email@example.com" />
+          )}
+        />
+        <Controller
+          name="phone"
+          control={form.control}
+          render={({ field }) => (
+            <FormFieldCompact
+              className="col-span-4"
+              control={form.control}
+              name="phone"
+              label={t("phone.label")}
+              render={() => (
+                <PhoneInput
+                  id={field.name}
+                  autoComplete="tel"
+                  {...field}
+                  required={false}
+                />
+              )}
+            />
+          )}
+        />
+        <FormFieldCompact
+          className="col-span-2"
+          control={form.control}
           name="county"
-          control={form.control}
+          label={t("county.label")}
           render={({ field }) => (
-            <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>{t("county.label")}</FormLabel>
-              <FormControl>
-                <CountySelect
-                  name={field.value}
-                  value={field.value}
-                  onSelect={(value) => {
-                    field.onChange(value);
-                    setCounty(value);
-                    form.setValue("city", "");
-                  }}
-                  counties={counties ?? []}
-                  loading={isFetchingCounties}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+            <Select onValueChange={handleCountyChange}>
+              <SelectTrigger disabled={counties?.length === 0}>
+                <SelectValue {...field} placeholder={t("county.placeholder")} />
+              </SelectTrigger>
+              <SelectContent>
+                {counties?.map((county, index) => (
+                  <SelectItem key={index} value={county.name}>
+                    {county.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         />
-        <FormField
-          name="city"
+        <FormFieldCompact
+          className="col-span-2"
           control={form.control}
+          name="city"
+          label={
+            form.getValues("county") === "București"
+              ? t("sector.label")
+              : t("city.label")
+          }
           render={({ field }) => (
-            <FormItem className="col-span-1 w-full">
-              <FormLabel htmlFor={field.name}>
-                {form.getValues("county") === "București"
-                  ? t("sector.label")
-                  : t("city.label")}
-              </FormLabel>
-              <FormControl>
-                <CitySelect
-                  disabled={!form.getValues("county")}
-                  name={field.value}
-                  onSelect={(value) => {
-                    field.onChange(value);
-                  }}
-                  value={field.value}
-                  cities={cities ?? []}
-                  loading={isFetchingCities}
+            <Select onValueChange={handleCityChange}>
+              <SelectTrigger
+                disabled={!form.watch("county") || cities?.length === 0}
+              >
+                <SelectValue
+                  {...field}
+                  placeholder={
+                    form.getValues("county") === "București"
+                      ? t("sector.placeholder")
+                      : t("city.placeholder")
+                  }
                 />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
+              </SelectTrigger>
+              <SelectContent>
+                {cities?.map((city, index) => (
+                  <SelectItem key={index} value={city.name}>
+                    {city.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         />
       </form>

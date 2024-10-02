@@ -439,13 +439,16 @@
           }
         },
         "county": {
-          "label": "Județ"
+          "label": "Județ",
+          "placeholder": "Selectează un județ"
         },
         "city": {
-          "label": "Oraș"
+          "label": "Oraș",
+          "placeholder": "Selectează un oraș"
         },
         "sector": {
-          "label": "Sector"
+          "label": "Sector",
+          "placeholder": "Selectează un sector"
         },
         "createdAt": {
           "label": "Înregistrat"

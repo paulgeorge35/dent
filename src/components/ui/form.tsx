@@ -199,7 +199,7 @@ const FormFieldCompact = <
                 )}
               </FormLabel>
             )}
-            <FormControl>
+            <FormControl className="w-full">
               {render({ field, fieldState, formState })}
             </FormControl>
             {!!description && <FormDescription>{description}</FormDescription>}
