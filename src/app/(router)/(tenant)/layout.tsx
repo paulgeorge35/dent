@@ -19,6 +19,8 @@ export default async function RootLayout({
 
   const locale = (await getLocale()) as "en" | "ro";
 
+  if (!session.user.id) return null;
+
   return (
     <AdminPanelLayout session={session} accounts={accounts} locale={locale}>
       {children}

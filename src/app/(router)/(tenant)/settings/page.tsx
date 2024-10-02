@@ -26,7 +26,7 @@ export interface StaffPageProps {
 export default async function Settings({ searchParams }: StaffPageProps) {
   const session = await auth();
   const { tab } = searchParamsSchema.parse(searchParams);
-  const isAdmin = session!.user?.role === "ADMIN";
+  const isAdmin = session?.user?.role === "ADMIN";
   const adminOnlyTabs = ["staff", "plan"];
 
   if (tab && adminOnlyTabs.includes(tab) && !isAdmin) redirect("/settings");
