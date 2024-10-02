@@ -31,13 +31,13 @@ export default function AuthHero() {
           src={background}
           alt="Login background"
           fill
-          className="object-cover dark:opacity-10"
+          className="object-cover dark:mix-blend-plus-lighter"
           placeholder="blur"
           blurDataURL={background.blurDataURL}
         />
       </motion.span>
       <motion.div
-        className="relative z-20 flex items-center p-4 font-mono text-lg font-medium text-primary"
+        className="relative z-20 flex items-center p-4 font-mono text-lg font-medium text-primary dark:text-black"
         animate={{
           opacity: 1,
         }}

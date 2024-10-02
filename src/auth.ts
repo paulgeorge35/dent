@@ -1,8 +1,8 @@
 "use server";
 
-import crypto from "crypto";
 import { MagicLink } from "@/components/emails/magic-link";
 import type { TokenType } from "@prisma/client";
+import crypto from "crypto";
 import { DateTime, type DurationLike } from "luxon";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
