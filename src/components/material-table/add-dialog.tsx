@@ -89,7 +89,7 @@ export default function AddMaterialDialog({
         <DrawerBody>
           <MaterialForm form={form} />
         </DrawerBody>
-        <DrawerFooter>
+        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
           <Button
             variant="secondary"
             onClick={dialogOpen.setFalse}

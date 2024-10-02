@@ -4,13 +4,12 @@ import { Button } from "@/components/ui/button";
 import {
   Drawer,
   DrawerBody,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
+  DrawerTrigger
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
@@ -60,7 +59,11 @@ export default function AddSpecialityDialog({
   });
 
   return (
-    <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
+    <Drawer
+      open={dialogOpen.value}
+      onOpenChange={dialogOpen.toggle}
+      dismissible={false}
+    >
       <DrawerTrigger asChild>
         {isDesktop ? (
           <Button
@@ -88,12 +91,10 @@ export default function AddSpecialityDialog({
         <DrawerBody>
           <SpecialityForm form={form} onSubmit={onSubmit} />
         </DrawerBody>
-        <DrawerFooter>
-          <DrawerClose asChild>
-            <Button variant="secondary" className="w-full md:w-auto">
-              {t("dialog.cancel")}
-            </Button>
-          </DrawerClose>
+        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
+          <Button variant="secondary" onClick={dialogOpen.setFalse}>
+            {t("dialog.cancel")}
+          </Button>
           <Button
             onClick={onSubmit}
             disabled={

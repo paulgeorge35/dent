@@ -301,6 +301,7 @@ function ComplexTreatmentDialog({
       open={open}
       onOpenChange={handleOpenChange}
       direction={isDesktop ? "left" : undefined}
+      dismissible={false}
     >
       <DrawerContent
         noOverlay={isDesktop}

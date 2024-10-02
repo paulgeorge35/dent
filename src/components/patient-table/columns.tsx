@@ -26,7 +26,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
       ),
       cell: ({ row }) => {
         return (
-          <div className="horizontal center-v gap-2">
+          <div className="horizontal center-v gap-2 whitespace-nowrap">
             <AvatarComponent
               src={""}
               alt={"Profile picture"}
