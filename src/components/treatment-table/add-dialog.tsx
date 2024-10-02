@@ -252,7 +252,6 @@ function ComplexTreatmentDialog({
       .trigger()
       .then(() => {
         if (Object.keys(complexServicesForm.formState.errors).length > 0) {
-          console.log(form.formState.errors);
           return;
         }
 

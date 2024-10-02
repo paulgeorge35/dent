@@ -101,7 +101,6 @@ export default function PatientForm({ className }: PatientFormProps) {
       });
       return;
     }
-    console.log(data);
   };
 
   return (
@@ -221,6 +220,7 @@ export default function PatientForm({ className }: PatientFormProps) {
                 <FormControl>
                   <CountySelect
                     name={field.value}
+                    value={field.value}
                     onSelect={(value) => {
                       field.onChange(value);
                       setCounty(value);
@@ -246,6 +246,7 @@ export default function PatientForm({ className }: PatientFormProps) {
                   <CitySelect
                     disabled={!form.getValues("county")}
                     name={field.value}
+                    value={field.value}
                     onSelect={(value) => {
                       field.onChange(value);
                     }}

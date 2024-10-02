@@ -60,8 +60,6 @@ export async function setSession(user: SessionUser, duration: DurationLike) {
     });
   }
 
-  console.log(session);
-
   cookies().set("session", session, cookieOpts);
 }
 
