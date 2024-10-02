@@ -329,7 +329,7 @@ const AvatarInput = forwardRef<HTMLInputElement, AvatarInputProps>(
     return (
       <>
         <Credenza open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <CredenzaContent className="sm:max-w-[425px]">
+          <CredenzaContent className="sm:max-w-[425px] max-h-[50vh]">
             <CredenzaHeader>
               <CredenzaTitle>{t("avatar.crop")}</CredenzaTitle>
             </CredenzaHeader>
