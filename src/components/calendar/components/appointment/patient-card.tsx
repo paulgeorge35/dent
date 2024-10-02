@@ -77,7 +77,7 @@ export default function PatientCard({
         </span>
       </CardHeader>
       <Separator />
-      <CardFooter className="flex flex-row items-center gap-4 !py-4 text-muted-foreground">
+      <CardFooter className="flex-row hidden md:flex items-center gap-4 !py-4 text-muted-foreground">
         <StickyNote className="size-6" />
         <p className="text-sm">
           {description ? description : "No observations"}

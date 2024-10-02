@@ -115,20 +115,30 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
   return (
     <Drawer open={dialogOpen.value} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
-        <Button
-          variant="expandIcon"
-          Icon={PlusCircle}
-          iconPlacement="right"
-          className={className}
-          shortcut={[CONTROL_KEY, "t"]}
-        >
-          {t("trigger")}
-        </Button>
+        {isDesktop ? (
+          <Button
+            variant="expandIcon"
+            Icon={PlusCircle}
+            iconPlacement="right"
+            className={className}
+            shortcut={[CONTROL_KEY, "t"]}
+          >
+            {t("trigger")}
+          </Button>
+        ) : (
+          <Button
+            className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
+            size="icon"
+          >
+            <Plus className="size-6" />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent
         className={cn({
           "p-0": isDesktop,
-          "lg:translate-x-[calc(100%-50px)]": secondDialogOpen.value && isDesktop,
+          "lg:translate-x-[calc(100%-50px)]":
+            secondDialogOpen.value && isDesktop,
         })}
       >
         <DrawerHeader className="p-6">

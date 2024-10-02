@@ -90,6 +90,7 @@ export default function AccountButton({
                 className="size-9"
                 height={36}
                 width={36}
+                randomColor
               />
               <AvatarComponent
                 src={tenant?.profile.avatar?.url}
@@ -98,6 +99,7 @@ export default function AccountButton({
                 className="size-5 absolute -top-1 -right-2 border-[2px] border-background"
                 height={20}
                 width={20}
+                randomColor
               />
             </span>
             <span className="hidden md:flex flex-col items-start overflow-hidden">
@@ -124,14 +126,14 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
+                "flex flex-row items-center justify-start gap-2 text-xs rounded-none",
               )}
               onClick={async () => {
                 await logoutTenant();
                 setOpen(false);
               }}
             >
-              <SquareActivity className="size-4" />
+              <SquareActivity className="size-4 mx-1" />
               {t("my-clinics")}
             </Link>
             <Separator />
@@ -146,12 +148,24 @@ export default function AccountButton({
                     key={account.tenantId}
                     variant="ghost"
                     size="sm"
-                    className="flex w-56 flex-row items-center justify-start gap-4 overflow-hidden whitespace-nowrap text-xs rounded-none"
+                    className="flex w-56 flex-row items-center justify-between gap-4 overflow-hidden whitespace-nowrap text-xs rounded-none"
                     disabled={
                       account.tenantId === session.user?.tenantId || pending
                     }
                     onClick={() => handleTenantClick(account.tenantId)}
                   >
+                    <span className="truncate horizontal center-v gap-2">
+                      <AvatarComponent
+                        src={account.tenant.profile.avatar?.url}
+                        alt={`${account.tenant.profile.name}`}
+                        fallback={`${account.tenant.profile.name}`}
+                        className="size-6 rounded-sm"
+                        height={24}
+                        width={24}
+                        randomColor
+                      />
+                      {account.tenant.profile.name}
+                    </span>
                     <CheckIcon
                       className={cn(
                         "size-4 flex-shrink-0 font-light opacity-0",
@@ -161,17 +175,6 @@ export default function AccountButton({
                         },
                       )}
                     />
-                    <span className="truncate horizontal center-v gap-2">
-                      <AvatarComponent
-                        src={account.tenant.profile.avatar?.url}
-                        alt={`${account.tenant.profile.name}`}
-                        fallback={`${account.tenant.profile.name}`}
-                        className="size-6 border-[2px] border-background rounded-sm"
-                        height={24}
-                        width={24}
-                      />
-                      {account.tenant.profile.name}
-                    </span>
                   </Button>
                 ))}
             </div>
@@ -192,11 +195,11 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
+                "flex flex-row items-center justify-start gap-2 text-xs rounded-none",
               )}
               onClick={() => setOpen(false)}
             >
-              <User className="size-4" />
+              <User className="size-4 mx-1" />
               {t("profile")}
             </Link>
             <Link
@@ -206,20 +209,20 @@ export default function AccountButton({
                   variant: "ghost",
                   size: "sm",
                 }),
-                "flex flex-row items-center justify-start gap-4 text-xs rounded-none",
+                "flex flex-row items-center justify-start gap-2 text-xs rounded-none",
               )}
               onClick={() => setOpen(false)}
             >
-              <Settings className="size-4" />
+              <Settings className="size-4 mx-1" />
               {t("settings")}
             </Link>
             <LogoutDialog>
               <Button
                 variant="ghost"
                 size="sm"
-                className="flex flex-row items-center justify-start gap-4 text-xs text-red-500 rounded-none"
+                className="flex flex-row items-center justify-start gap-2 text-xs text-red-500 rounded-none"
               >
-                <DoorOpen className="size-4" />
+                <DoorOpen className="size-4 mx-1" />
                 {t("logout.trigger")}
               </Button>
             </LogoutDialog>

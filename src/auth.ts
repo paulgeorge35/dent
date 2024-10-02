@@ -12,6 +12,15 @@ import { db } from "./server/db";
 import { resend } from "./server/resend";
 import type { SessionUser } from "./types/schema";
 
+const cookieOpts = {
+  httpOnly: true,
+  secure: env.NODE_ENV === "production",
+  sameSite: "lax",
+  path: "/",
+  domain: env.NODE_ENV === "production" ? env.URL : undefined,
+  maxAge: 1000 * 60 * 60 * 24 * 365,
+} as const;
+
 export async function sendMagicLink(email: string, tenantId: string) {
   "use server";
   const token = await generateToken({
@@ -51,7 +60,7 @@ export async function setSession(user: SessionUser, duration: DurationLike) {
     });
   }
 
-  cookies().set("session", session, { expires, httpOnly: true });
+  cookies().set("session", session, cookieOpts);
 }
 
 export async function updateSession(request: NextRequest) {
@@ -79,8 +88,7 @@ export async function updateSession(request: NextRequest) {
   res.cookies.set({
     name: "session",
     value: await encrypt(parsed, expires),
-    httpOnly: true,
-    expires,
+    ...cookieOpts,
   });
   return res;
 }

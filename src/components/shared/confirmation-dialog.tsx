@@ -48,7 +48,7 @@ export default function ConfirmationDialog({
         </CredenzaHeader>
         <CredenzaFooter>
           {isDesktop && (
-            <CredenzaClose>
+            <CredenzaClose asChild>
               <Button variant="outline">{t("cancel")}</Button>
             </CredenzaClose>
           )}

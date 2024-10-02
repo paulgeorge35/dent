@@ -17,7 +17,7 @@ import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useTransition } from "react";
 import { useBoolean, useNumber } from "react-hanger";
@@ -161,7 +161,14 @@ export default function CreateAppointmentDialog({
             {t(`steps.${steps[step.value]!.title}.description`)}
           </DrawerDescription>
         </DrawerHeader>
-        <Steps steps={steps} currentStep={step.value} className="px-8 py-2" />
+        <Steps
+          steps={steps.map((step) => ({
+            ...step,
+            title: t(`steps.${step.title}.title`),
+          }))}
+          currentStep={step.value}
+          className="px-8 py-2"
+        />
         <DrawerBody key={step.value}>
           <motion.div
             key={step.value}
@@ -177,7 +184,7 @@ export default function CreateAppointmentDialog({
             </Form>
           </motion.div>
         </DrawerBody>
-        <DrawerFooter className="flex justify-end">
+        <DrawerFooter className="grid grid-cols-3 gap-2">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
@@ -214,13 +221,23 @@ export default function CreateAppointmentDialog({
             transition={{ duration: 0.15 }}
             className="overflow-hidden"
           >
-            <Button size="lg" variant="outline" onClick={handleBack}>
+            <Button
+              size="lg"
+              variant="expandIcon"
+              Icon={ChevronLeft}
+              iconPlacement="left"
+              className="w-full border border-input shadow-sm text-primary bg-background hover:bg-accent hover:text-accent-foreground"
+              onClick={handleBack}
+            >
               {t("actions.back")}
             </Button>
           </motion.div>
           <Button
             onClick={handleNext}
             size="lg"
+            variant="expandIcon"
+            Icon={step.value === steps.length - 1 ? Check : ChevronRight}
+            iconPlacement="right"
             disabled={isSubmitting}
             isLoading={isSubmitting}
             className={cn(

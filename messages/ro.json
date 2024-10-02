@@ -226,9 +226,41 @@
           "all-doctors": "Toți doctorii"
         }
       },
+      "view": {
+        "medical-checkup": {
+          "title": "Examen medical",
+          "description": "Completează un examen medical pentru acest pacient.",
+          "actions": {
+            "back": "Înapoi",
+            "next": "Înainte",
+            "submit": "Salvează"
+          },
+          "close": {
+            "trigger": "Anulează",
+            "confirmation": {
+              "title": "Șterge modificările",
+              "description": "Acest lucru nu poate fi făcut din nou și toate modificările vor fi pierdute.",
+              "confirm": "Șterge"
+            }
+          },
+          "steps": {
+            "medical-data": {
+              "title": "Date medicale"
+            },
+            "treatment-plan": {
+              "title": "Plan de tratament"
+            },
+            "oral-check": {
+              "title": "Examen oral"
+            },
+            "plan-agreement": {
+              "title": "Confirmare plan"
+            }
+          }
+        }
+      },
       "add": {
         "title": "Adaugă programare nouă",
-        "step": "Pasul {index}",
         "actions": {
           "back": "Înapoi",
           "next": "Înainte",
@@ -987,6 +1019,9 @@
     "user-profile": {
       "title": "Profil utilizator"
     }
+  },
+  "global": {
+    "step": "Pasul {index}"
   },
   "enums": {
     "event": {

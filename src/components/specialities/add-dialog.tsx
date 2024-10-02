@@ -12,10 +12,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
+import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useBoolean } from "react-hanger";
@@ -31,6 +32,7 @@ export default function AddSpecialityDialog({
   className,
 }: AddSpecialityDialogProps) {
   const t = useTranslations("page.specialities.add");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const dialogOpen = useBoolean(false);
   const router = useRouter();
 
@@ -59,15 +61,24 @@ export default function AddSpecialityDialog({
 
   return (
     <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <DrawerTrigger className="horizontal justify-start" asChild>
-        <Button
-          variant="expandIcon"
-          Icon={PlusCircle}
-          iconPlacement="right"
-          className={className}
-        >
-          {t("trigger")}
-        </Button>
+      <DrawerTrigger asChild>
+        {isDesktop ? (
+          <Button
+            variant="expandIcon"
+            Icon={PlusCircle}
+            iconPlacement="right"
+            className={className}
+          >
+            {t("trigger")}
+          </Button>
+        ) : (
+          <Button
+            className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
+            size="icon"
+          >
+            <Plus className="size-6" />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>

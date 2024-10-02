@@ -4,6 +4,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerContent,
+  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -26,6 +27,7 @@ import {
   Check,
   CheckCheck,
   CheckCircle,
+  ChevronLeft,
   ChevronRight,
   FilePenLine,
   Info,
@@ -33,7 +35,7 @@ import {
   PlusCircle,
 } from "lucide-react";
 import { DateTime } from "luxon";
-import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { useBoolean, useNumber } from "react-hanger";
 import { type UseFormReturn, useForm } from "react-hook-form";
 import AppointmentDetailsCard from "./appointment/appointment-details-card";
@@ -70,7 +72,8 @@ export default function AppointmentDialog({
     <Drawer open={open} onOpenChange={() => onClose()}>
       <DrawerContent
         className={cn({
-          "!flex-row bg-background/80 backdrop-blur-sm p-0": isDesktop,
+          "!flex-row bg-background/40 dark:bg-background/80 backdrop-blur-sm p-0":
+            isDesktop,
           "lg:translate-x-[calc(100%-50px)]":
             openMedicalCheckup.value && isDesktop,
         })}
@@ -78,8 +81,8 @@ export default function AppointmentDialog({
         <span className="hidden md:flex vertical shrink-0 items-center p-2">
           <PlusCircle className="size-10 rounded-full bg-background p-2 text-muted-foreground" />
         </span>
-        <span className="vertical grow rounded-xl bg-background pt-0 md:pt-6 p-6">
-          <DrawerHeader className="lg:pb-4">
+        <span className="vertical grow rounded-xl bg-background p-6 pt-0 border-l border-border">
+          <DrawerHeader className="lg:pb-4 px-0">
             <DrawerTitle className="flex flex-col md:flex-row items-center gap-2">
               <span className="text-sm font-medium text-muted-foreground">
                 Appointment ID{" "}
@@ -88,12 +91,12 @@ export default function AppointmentDialog({
               <span className="hidden md:block text-xs text-muted-foreground">
                 &bull;
               </span>
-              <span className="horizontal items-center gap-2 text-xs font-medium text-muted-foreground">
+              <DrawerDescription className="horizontal items-center gap-2 text-xs font-medium text-muted-foreground">
                 <Monitor className="size-4 shrink-0" />
                 {event?.initiator === "SYSTEM"
                   ? "AUTOMATIC APPOINTMENT"
                   : "MANUAL APPOINTMENT"}
-              </span>
+              </DrawerDescription>
             </DrawerTitle>
           </DrawerHeader>
           <DrawerBody className="px-0">
@@ -119,7 +122,7 @@ export default function AppointmentDialog({
             <Button
               onClick={openMedicalCheckup.toggle}
               variant={hasMedicalCheckup ? "default" : "outline"}
-              className={cn("col-span-1 font-light", {
+              className={cn("col-span-2 md:col-span-1 font-light", {
                 "bg-green-600 text-white hover:bg-green-700": hasMedicalCheckup,
                 "border-dashed border-blue-800 text-blue-800 hover:text-blue-700":
                   !hasMedicalCheckup,
@@ -138,7 +141,7 @@ export default function AppointmentDialog({
               )}
             </Button>
             <Button
-              className={cn("col-span-1 font-light", {
+              className={cn("col-span-2 md:col-span-1 font-light", {
                 "bg-green-600 text-white hover:bg-green-700": hasMedicalRecord,
                 "border-dashed border-blue-800 text-blue-800 hover:text-blue-700":
                   !hasMedicalRecord,
@@ -186,24 +189,24 @@ export default function AppointmentDialog({
 
 const steps = [
   {
-    title: "Medical Data",
+    title: "medical-data",
     Icon: Icons.activity,
     Component: MedicalData,
     errorFields: ["serviceId"],
   },
   {
-    title: "Treatment Plan",
+    title: "treatment-plan",
     Icon: Icons.user,
     Component: TreatmentPlan,
     errorFields: ["patient"],
   },
   {
-    title: "Oral Check",
+    title: "oral-check",
     Icon: Icons.heart,
     Component: OralCheck,
   },
   {
-    title: "Plan Agreement",
+    title: "plan-agreement",
     Icon: Icons.heart,
     Component: PlanAgreement,
   },
@@ -216,6 +219,7 @@ type MedicalCheckupProps = {
 };
 
 function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
+  const t = useTranslations("page.appointments.view.medical-checkup");
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const confirmationDialog = useBoolean(false);
   const step = useNumber(0, {
@@ -224,32 +228,6 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
     loop: false,
     step: 1,
   });
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const [scrollTop, setScrollTop] = useState(0);
-
-  const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLDivElement;
-    setScrollTop(target.scrollTop);
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollAreaRef.current) {
-        setScrollTop(scrollAreaRef.current.scrollTop);
-      }
-    };
-
-    const scrollArea = scrollAreaRef.current;
-    if (scrollArea) {
-      scrollArea.addEventListener("scroll", handleScroll);
-    }
-
-    return () => {
-      if (scrollArea) {
-        scrollArea.removeEventListener("scroll", handleScroll);
-      }
-    };
-  }, []);
 
   const onSubmit = form.handleSubmit((values) => {
     console.log("onSubmit", values);
@@ -257,9 +235,6 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
 
   const handleBack = () => {
     step.decrease();
-    if (scrollAreaRef.current) {
-      scrollAreaRef.current.scrollTo({ top: 0, behavior: "smooth" });
-    }
   };
 
   const handleNext = () => {
@@ -276,9 +251,6 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
             return;
           }
           step.increase();
-          if (scrollAreaRef.current) {
-            scrollAreaRef.current.scrollTo({ top: 0, behavior: "smooth" });
-          }
         })
         .catch((error) => {
           console.error(error);
@@ -298,22 +270,24 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           "right-20": open && isDesktop,
         })}
       >
-        <DrawerHeader className="p-6">
-          <DrawerTitle className="horizontal relative h-9 w-full items-center">
-            Medical Checkup
-            <Button
-              size="icon"
-              variant="secondary"
-              className="absolute right-0 top-0 ml-auto rounded-full !p-2"
-              onClick={() => onOpenChange(false)}
-            >
-              <ChevronRight className="size-4" />
-            </Button>
-          </DrawerTitle>
+        <DrawerHeader className="p-6 relative">
+          <Button
+            size="icon"
+            variant="secondary"
+            className="absolute hidden md:flex right-6 top-6 rounded-full !p-2"
+            onClick={() => onOpenChange(false)}
+          >
+            <ChevronRight className="size-4" />
+          </Button>
+          <DrawerTitle>{t("title")}</DrawerTitle>
+          <DrawerDescription>{t("description")}</DrawerDescription>
         </DrawerHeader>
         <Separator />
         <Steps
-          steps={steps}
+          steps={steps.map((step) => ({
+            ...step,
+            title: t(`steps.${step.title}.title`),
+          }))}
           currentStep={step.value}
           className="px-2 md:px-14 py-4"
         />
@@ -328,16 +302,16 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title="Are you sure you want to close this medical checkup?"
-            description="This action cannot be undone and all changes will be lost."
-            confirmButtonText="Yes"
+            title={t("close.confirmation.title")}
+            description={t("close.confirmation.description")}
+            confirmButtonText={t("close.confirmation.confirm")}
             onConfirm={async () => {
               confirmationDialog.setFalse();
               onOpenChange(false);
             }}
             trigger={
               <Button size="lg" variant="secondary">
-                Close
+                {t("close.trigger")}
               </Button>
             }
           />
@@ -352,23 +326,30 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           >
             <Button
               size="lg"
-              className="w-full"
-              variant="outline"
+              variant="expandIcon"
+              Icon={ChevronLeft}
+              iconPlacement="left"
+              className="w-full border border-input shadow-sm text-primary bg-background hover:bg-accent hover:text-accent-foreground"
               onClick={handleBack}
             >
-              Back
+              {t("actions.back")}
             </Button>
           </motion.div>
           <Button
             onClick={handleNext}
             size="lg"
+            variant="expandIcon"
+            Icon={step.value === steps.length - 1 ? Check : ChevronRight}
+            iconPlacement="right"
             className={cn(
               step.value === steps.length - 1
                 ? "bg-green-600 hover:bg-green-700"
                 : "",
             )}
           >
-            {step.value === steps.length - 1 ? "Save" : "Next"}
+            {step.value === steps.length - 1
+              ? t("actions.submit")
+              : t("actions.next")}
           </Button>
         </DrawerFooter>
       </DrawerContent>

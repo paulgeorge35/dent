@@ -1,10 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -31,6 +32,7 @@ export default function AddMaterialDialog({
   className,
 }: AddMaterialDialogProps) {
   const t = useTranslations("page.materials.add");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
   const { mutateAsync: createMaterial } = api.material.create.useMutation({
     onSuccess: () => {
@@ -60,7 +62,8 @@ export default function AddMaterialDialog({
 
   return (
     <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle} dismissible={false}>
-      <DrawerTrigger asChild className="horizontal justify-start">
+      <DrawerTrigger asChild>
+        {isDesktop ? (
         <Button
           variant="expandIcon"
           Icon={PlusCircle}
@@ -69,6 +72,14 @@ export default function AddMaterialDialog({
         >
           {t("trigger")}
         </Button>
+        ) : (
+          <Button
+            className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
+            size="icon"
+          >
+            <Plus className="size-6" />
+          </Button>
+        )}
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>

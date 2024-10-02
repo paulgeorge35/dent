@@ -59,6 +59,7 @@ export async function GET(request: Request): Promise<Response> {
         id: true,
         firstName: true,
         lastName: true,
+        preferredTenantId: true,
         email: true,
         avatar: true,
       },
@@ -103,8 +104,24 @@ export async function GET(request: Request): Promise<Response> {
         },
       });
     }
+    const preferredTenant = existingProfile.preferredTenantId
+      ? await db.user.findFirst({
+          where: {
+            profileId: existingProfile.id,
+            tenantId: existingProfile.preferredTenantId,
+          },
+          select: {
+            id: true,
+            role: true,
+            tenantId: true,
+          },
+        })
+      : null;
 
-    await setSession(existingProfile as SessionUser, { days: 30 });
+    await setSession(
+      { ...existingProfile, user: preferredTenant } as SessionUser,
+      { days: 30 },
+    );
 
     return new Response(null, {
       status: 302,

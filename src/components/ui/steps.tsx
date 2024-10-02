@@ -53,7 +53,7 @@ const Step = ({
   isLast,
   stepNumber,
 }: StepProps) => {
-  const t = useTranslations("page.appointments.add");
+  const t = useTranslations("global");
   return (
     <React.Fragment>
       <span className="vertical center-h relative items-start gap-1">
@@ -94,9 +94,7 @@ const Step = ({
         <span className="text-xs text-muted-foreground">
           {t("step", { index: stepNumber + 1 })}
         </span>
-        <span className="w-20 text-center text-xs font-semibold">
-          {t(`steps.${title}.title`)}
-        </span>
+        <span className="w-20 text-center text-xs font-semibold">{title}</span>
       </span>
       {!isLast && (
         <Progress

@@ -116,8 +116,8 @@ const Button = React.forwardRef<
             {Icon && iconPlacement === "left" && (
               <div
                 className={cn(
-                  "md:group-hover:translate-x-100 mr-2 md:mr-0 md:w-0 md:translate-x-[0%] md:opacity-0 md:transition-all md:duration-200 md:group-hover:mr-2 md:group-hover:w-5 md:group-hover:opacity-100",
-                  isLoading && "hidden",
+                  "mr-2 md:mr-0 md:w-0 md:translate-x-[0%] md:opacity-0 md:transition-all md:duration-200 md:group-hover:mr-2 md:group-hover:w-5 md:group-hover:translate-x-0 md:group-hover:opacity-100",
+                  { hidden: isLoading },
                 )}
               >
                 <Icon className="size-5" />
@@ -128,8 +128,8 @@ const Button = React.forwardRef<
             {Icon && iconPlacement === "right" && (
               <div
                 className={cn(
-                  "ml-0 w-0 translate-x-[100%] opacity-0 transition-all duration-200 group-hover:ml-2 group-hover:w-5 group-hover:translate-x-0 group-hover:opacity-100",
-                  isLoading && "hidden",
+                  "ml-2 md:ml-0 md:w-0 md:translate-x-[100%] md:opacity-0 md:transition-all md:duration-200 md:group-hover:ml-2 md:group-hover:w-5 md:group-hover:translate-x-0 md:group-hover:opacity-100",
+                  { hidden: isLoading },
                 )}
               >
                 <Icon className="size-5" />

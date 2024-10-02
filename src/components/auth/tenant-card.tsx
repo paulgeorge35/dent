@@ -66,6 +66,7 @@ export default function TenantCard({ account }: TenantCardProps) {
           width={48}
           height={48}
           className="size-12 rounded-sm"
+          randomColor
         />
         <div className="ml-4 flex flex-col">
           <h3 className="text-left font-semibold">
@@ -74,7 +75,7 @@ export default function TenantCard({ account }: TenantCardProps) {
           <div className="flex flex-row items-center gap-2">
             {account.tenant.users.slice(0, isDesktop ? 5 : 3).map((user) => (
               <Avatar
-                key={user.profile.firstName}
+                key={user.profile.avatar?.id}
                 className="relative size-4 rounded-sm border border-background [&:not(:first-child)]:ml-[-12px]"
               >
                 {user.profile.avatar ? (

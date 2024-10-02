@@ -11,7 +11,11 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ShortcutKeys } from "@/components/ui/shortcut-key";
 import { SwitchView } from "@/components/ui/switch-enhanced";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import type FullCalendar from "@fullcalendar/react";
 import type { Avatar, Event, Patient, Profile, User } from "@prisma/client";
 import {
@@ -59,8 +63,6 @@ export default function CalendarToolbar({
   activeUsers,
 }: CalendarToolbarProps) {
   const t = useTranslations("page.appointments.calendar");
-  const calendar = calendarRef.current?.getApi();
-  if (!calendar) return;
 
   const appointments = users
     ?.flatMap((user) => user.events)

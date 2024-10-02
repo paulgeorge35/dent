@@ -20,6 +20,13 @@ export async function toggleTenant(tenantId: string) {
     },
   });
 
+  await db.profile.update({
+    where: { id: session.id },
+    data: {
+      preferredTenantId: tenantId,
+    },
+  });
+
   if (!user) {
     return;
   }

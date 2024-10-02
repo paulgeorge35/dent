@@ -226,9 +226,41 @@
           "all-doctors": "All doctors"
         }
       },
+      "view": {
+        "medical-checkup": {
+          "title": "Medical Checkup",
+          "description": "Complete a medical checkup for the patient.",
+          "actions": {
+            "back": "Back",
+            "next": "Next",
+            "submit": "Submit"
+          },
+          "close": {
+            "trigger": "Close",
+            "confirmation": {
+              "title": "Discard changes",
+              "description": "This action cannot be undone and all changes will be lost.",
+              "confirm": "Discard"
+            }
+          },
+          "steps": {
+            "medical-data": {
+              "title": "Medical Data"
+            },
+            "treatment-plan": {
+              "title": "Treatment Plan"
+            },
+            "oral-check": {
+              "title": "Oral Check"
+            },
+            "plan-agreement": {
+              "title": "Plan Agreement"
+            }
+          }
+        }
+      },
       "add": {
         "title": "Add new appointment",
-        "step": "Step {index}",
         "actions": {
           "back": "Back",
           "next": "Next",
@@ -987,6 +1019,9 @@
     "user-profile": {
       "title": "User Profile"
     }
+  },
+  "global": {
+    "step": "Step {index}"
   },
   "enums": {
     "event": {

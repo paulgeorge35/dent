@@ -2,20 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Credenza,
-    CredenzaBody,
-    CredenzaClose,
-    CredenzaContent,
-    CredenzaDescription,
-    CredenzaFooter,
-    CredenzaHeader,
-    CredenzaTitle,
-    CredenzaTrigger,
+  Credenza,
+  CredenzaBody,
+  CredenzaClose,
+  CredenzaContent,
+  CredenzaDescription,
+  CredenzaFooter,
+  CredenzaHeader,
+  CredenzaTitle,
+  CredenzaTrigger,
 } from "@/components/ui/credenza";
+import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { Plus, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -30,6 +31,7 @@ type AddPatientDialogProps = {
 
 export default function AddPatientDialog({ className }: AddPatientDialogProps) {
   const t = useTranslations("page.patients.add");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
   const { mutateAsync: createPatient } = api.patient.create.useMutation({
     onSuccess: () => {
@@ -59,15 +61,24 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
 
   return (
     <Credenza open={dialogOpen.value} onOpenChange={dialogOpen.toggle}>
-      <CredenzaTrigger className="horizontal justify-start">
-        <Button
-          variant="expandIcon"
-          Icon={PlusCircle}
-          iconPlacement="right"
-          className={className}
-        >
-          {t("trigger")}
-        </Button>
+      <CredenzaTrigger asChild>
+        {isDesktop ? (
+          <Button
+            variant="expandIcon"
+            Icon={PlusCircle}
+            iconPlacement="right"
+            className={className}
+          >
+            {t("trigger")}
+          </Button>
+        ) : (
+          <Button
+            className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
+            size="icon"
+          >
+            <Plus className="size-6" />
+          </Button>
+        )}
       </CredenzaTrigger>
       <CredenzaContent>
         <CredenzaHeader>
