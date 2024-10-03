@@ -43,11 +43,9 @@ export const ConfirmUserDelete = ({
 
   return (
     <ConfirmationDialog
-      title={t("dialog.title")}
-      description={t("dialog.description")}
+      title="delete-title"
       open={dialogOpen.value}
       onOpenChange={disabled ? dialogOpen.setFalse : dialogOpen.toggle}
-      confirmButtonText={t("dialog.confirm")}
       onConfirm={handleDelete}
       loading={isPending}
       trigger={

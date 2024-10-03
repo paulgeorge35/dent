@@ -45,8 +45,6 @@ type ClinicFormProps = {
 export default function ClinicForm({ clinic }: ClinicFormProps) {
   const t = useTranslations("page.settings.tabs.clinic.details");
   const te = useTranslations("errors");
-  const { data: counties, isFetching: isFetchingCounties } =
-    api.utils.getCounties.useQuery();
   const router = useRouter();
   const { mutate, isPending } = api.tenant.updateClinic.useMutation({
     onSuccess: (data) => {
@@ -190,8 +188,6 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
                         field.onChange(value);
                       }}
                       value={field.value ?? ""}
-                      counties={counties ?? []}
-                      loading={isFetchingCounties}
                     />
                   </FormControl>
                   <FormMessage />

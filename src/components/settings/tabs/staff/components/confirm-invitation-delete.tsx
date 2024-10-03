@@ -40,11 +40,9 @@ export const ConfirmInvitationDelete = ({ id }: { id: string }) => {
 
   return (
     <ConfirmationDialog
-      title={t("dialog.title")}
-      description={t("dialog.description")}
+      title="delete-title"
       open={dialogOpen.value}
       onOpenChange={dialogOpen.toggle}
-      confirmButtonText={t("dialog.confirm")}
       onConfirm={handleDelete}
       loading={isPending}
       trigger={

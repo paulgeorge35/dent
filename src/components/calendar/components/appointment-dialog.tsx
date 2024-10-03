@@ -302,9 +302,6 @@ function MedicalCheckup({ open, onOpenChange, form }: MedicalCheckupProps) {
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title={t("close.confirmation.title")}
-            description={t("close.confirmation.description")}
-            confirmButtonText={t("close.confirmation.confirm")}
             onConfirm={async () => {
               confirmationDialog.setFalse();
               onOpenChange(false);

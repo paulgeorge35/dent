@@ -16,10 +16,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Material } from "@prisma/client";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
-import type { UseStateful } from "react-hanger";
+import { useCallback, useEffect, useMemo } from "react";
+import { type UseStateful, useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import ConfirmationDialog from "../shared/confirmation-dialog";
 import MaterialDeleteDialog from "./delete-dialog";
 import MaterialForm, { type FormValues, schema } from "./form";
 
@@ -32,6 +33,7 @@ export default function EditMaterialDialog({
 }: EditMaterialDialogProps) {
   const t = useTranslations("page.materials.edit");
   const router = useRouter();
+  const confirmationDialog = useBoolean(false);
 
   const { mutateAsync: updateMaterial } = api.material.update.useMutation({
     onSuccess: () => {
@@ -77,11 +79,16 @@ export default function EditMaterialDialog({
     }
   }, [dialogOpen.value, form, material]);
 
+  const onClose = useCallback(() => {
+    if (form.formState.isDirty) {
+      confirmationDialog.setTrue();
+    } else {
+      dialogOpen.setValue(null);
+    }
+  }, [form, confirmationDialog, dialogOpen]);
+
   return (
-    <Drawer
-      open={!!dialogOpen.value}
-      onOpenChange={() => dialogOpen.setValue(null)}
-    >
+    <Drawer open={!!dialogOpen.value} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>{t("dialog.title")}</DrawerTitle>
@@ -91,6 +98,14 @@ export default function EditMaterialDialog({
           <MaterialForm form={form} />
         </DrawerBody>
         <DrawerFooter className="grid-cols-2 md:grid-cols-3">
+          <ConfirmationDialog
+            open={confirmationDialog.value}
+            onOpenChange={confirmationDialog.toggle}
+            onConfirm={async () => {
+              confirmationDialog.setFalse();
+              dialogOpen.setValue(null);
+            }}
+          />
           <MaterialDeleteDialog
             id={material?.id ?? ""}
             disabled={form.formState.isSubmitting}

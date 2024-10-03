@@ -1,26 +1,29 @@
+import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
-import type { County } from "prisma/generated/zod";
 import { useEffect } from "react";
 import { useStateful } from "react-hanger";
 import { AutoComplete } from "../ui/autocomplete";
 
 interface CountySelectProps {
   name: string;
-  value: string;
+  value?: string;
   onSelect: (_name: string) => void;
-  counties: County[];
-  loading?: boolean;
 }
 
 export function CountySelect({
   name,
-  value,
+  value = "",
   onSelect,
-  counties,
-  loading,
 }: CountySelectProps) {
   const t = useTranslations("fields.county");
   const search = useStateful("");
+
+  const { data: counties, isFetching } = api.utils.getCounties.useQuery(
+    undefined,
+    {
+      initialData: [],
+    },
+  );
 
   useEffect(() => {
     if (value && value !== "") {
@@ -31,7 +34,7 @@ export function CountySelect({
   return (
     <AutoComplete<string>
       id={name}
-      disabled={loading}
+      disabled={isFetching}
       value={{
         label: value,
         value: value,
@@ -47,8 +50,9 @@ export function CountySelect({
       onValueChange={(option) => {
         onSelect(option.value);
       }}
-      placeholder={loading ? t("loading") : t("placeholder")}
+      placeholder={isFetching ? t("loading") : t("placeholder")}
       emptyMessage={t("no-results")}
+      className="w-full"
     />
   );
 }

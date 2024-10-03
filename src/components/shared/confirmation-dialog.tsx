@@ -16,9 +16,9 @@ import { useTranslations } from "next-intl";
 
 type ConfirmationDialogProps = {
   trigger?: React.ReactNode;
-  title: string;
-  description: string;
-  confirmButtonText: string;
+  title?: string;
+  description?: string;
+  confirmButtonText?: string;
   onConfirm: () => void;
   loading?: boolean;
   open: boolean;
@@ -27,9 +27,9 @@ type ConfirmationDialogProps = {
 
 export default function ConfirmationDialog({
   trigger,
-  title,
-  description,
-  confirmButtonText,
+  title = "title",
+  description = "description",
+  confirmButtonText = "confirm",
   onConfirm,
   loading,
   open,
@@ -43,8 +43,8 @@ export default function ConfirmationDialog({
       {trigger && <CredenzaTrigger asChild>{trigger}</CredenzaTrigger>}
       <CredenzaContent className="!h-auto">
         <CredenzaHeader>
-          <CredenzaTitle>{title}</CredenzaTitle>
-          <CredenzaDescription>{description}</CredenzaDescription>
+          <CredenzaTitle>{t(title)}</CredenzaTitle>
+          <CredenzaDescription>{t(description)}</CredenzaDescription>
         </CredenzaHeader>
         <CredenzaFooter>
           {isDesktop && (
@@ -53,7 +53,7 @@ export default function ConfirmationDialog({
             </CredenzaClose>
           )}
           <Button onClick={onConfirm} isLoading={loading}>
-            {confirmButtonText}
+            {t(confirmButtonText)}
           </Button>
         </CredenzaFooter>
       </CredenzaContent>

@@ -48,9 +48,7 @@ export default function MaterialDeleteDialog({
           {t("dialog.confirm")}
         </Button>
       }
-      title={t("dialog.title")}
-      description={t("dialog.description")}
-      confirmButtonText={t("dialog.confirm")}
+      title="delete-title"
       onConfirm={async () => {
         if (disabled) return;
         await deleteMaterial(id);

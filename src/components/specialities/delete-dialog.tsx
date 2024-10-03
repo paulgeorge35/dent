@@ -44,9 +44,7 @@ export default function SpecialityDeleteDialog({
           {t("dialog.confirm")}
         </Button>
       }
-      title={t("dialog.title")}
-      description={t("dialog.description")}
-      confirmButtonText={t("dialog.confirm")}
+      title="delete-title"
       onConfirm={async () => {
         await deleteSpeciality({ id });
       }}

@@ -9,7 +9,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
@@ -18,10 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
+import ConfirmationDialog from "../shared/confirmation-dialog";
+import { CONTROL_KEY } from "../ui/shortcut-key";
 import PatientForm, { type FormValues, patientSchema } from "./form";
 
 type AddPatientDialogProps = {
@@ -44,6 +47,8 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
   });
 
   const dialogOpen = useBoolean(false);
+  const confirmationDialog = useBoolean(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(patientSchema),
   });
@@ -58,12 +63,23 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
     }
   }, [dialogOpen.value, form]);
 
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open && form.formState.isDirty) {
+        confirmationDialog.setTrue();
+      } else {
+        dialogOpen.setValue(open);
+      }
+    },
+    [form, confirmationDialog, dialogOpen],
+  );
+
+  useHotkeys("ctrl+a", () => {
+    dialogOpen.setTrue();
+  });
+
   return (
-    <Drawer
-      open={dialogOpen.value}
-      onOpenChange={dialogOpen.toggle}
-      dismissible={false}
-    >
+    <Drawer open={dialogOpen.value} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
         {isDesktop ? (
           <Button
@@ -71,6 +87,7 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
             Icon={PlusCircle}
             iconPlacement="right"
             className={className}
+            shortcut={[CONTROL_KEY, "a"]}
           >
             {t("trigger")}
           </Button>
@@ -87,12 +104,20 @@ export default function AddPatientDialog({ className }: AddPatientDialogProps) {
         <DrawerHeader>
           <DrawerTitle>{t("dialog.title")}</DrawerTitle>
           <DrawerDescription>{t("dialog.description")}</DrawerDescription>
-          <DrawerBody>
-            <PatientForm form={form} />
-          </DrawerBody>
         </DrawerHeader>
-        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
-          <Button variant="secondary" onClick={dialogOpen.setFalse}>
+        <DrawerBody>
+          <PatientForm form={form} />
+        </DrawerBody>
+        <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
+          <ConfirmationDialog
+            open={confirmationDialog.value}
+            onOpenChange={confirmationDialog.toggle}
+            onConfirm={async () => {
+              confirmationDialog.setFalse();
+              dialogOpen.setFalse();
+            }}
+          />
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
             {t("dialog.cancel")}
           </Button>
           <Button

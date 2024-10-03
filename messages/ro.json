@@ -2,7 +2,11 @@
   "layout": {
     "loading": "Se încarcă...",
     "confirmation-dialog": {
-      "cancel": "Anulează"
+      "cancel": "Anulează",
+      "confirm": "Confirmă",
+      "title": "Șterge modificările",
+      "delete-title": "Confirmare ștergere",
+      "description": "Această acțiune nu poate fi anulată și toate modificările vor fi pierdute."
     },
     "sidebar": {
       "back": "Înapoi",
@@ -1241,6 +1245,13 @@
       "label": "Oraș",
       "placeholder": "Selectează orașul...",
       "search": "Caută oraș...",
+      "loading": "Se încarcă...",
+      "no-results": "Nici un rezultat"
+    },
+    "sector": {
+      "label": "Sector",
+      "placeholder": "Selectează sectorul...",
+      "search": "Caută sector...",
       "loading": "Se încarcă...",
       "no-results": "Nici un rezultat"
     }

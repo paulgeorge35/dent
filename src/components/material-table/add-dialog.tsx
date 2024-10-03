@@ -8,10 +8,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus, PlusCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
+import ConfirmationDialog from "../shared/confirmation-dialog";
 import {
   Drawer,
   DrawerBody,
@@ -20,8 +22,9 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
+  DrawerTrigger,
 } from "../ui/drawer";
+import { CONTROL_KEY } from "../ui/shortcut-key";
 import MaterialForm, { type FormValues, schema } from "./form";
 
 type AddMaterialDialogProps = {
@@ -45,9 +48,20 @@ export default function AddMaterialDialog({
     },
   });
 
+  const confirmationDialog = useBoolean(false);
   const dialogOpen = useBoolean(false);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      name: "",
+      unit_price: 0,
+      unit: "",
+      keepInventory: false,
+      stock: 0,
+      description: "",
+      tags: [],
+    },
   });
 
   const onSubmit = async (values: FormValues) => {
@@ -60,18 +74,37 @@ export default function AddMaterialDialog({
     }
   }, [dialogOpen.value, form]);
 
+  const onOpenChange = useCallback(
+    (open: boolean) => {
+      if (!open && form.formState.isDirty) {
+        confirmationDialog.setTrue();
+      } else {
+        dialogOpen.setValue(open);
+      }
+    },
+    [form, confirmationDialog, dialogOpen],
+  );
+
+  useHotkeys("ctrl+a", () => {
+    dialogOpen.setTrue();
+  });
+
   return (
-    <Drawer open={dialogOpen.value} onOpenChange={dialogOpen.toggle} dismissible={false}>
+    <Drawer
+      open={dialogOpen.value}
+      onOpenChange={onOpenChange}
+    >
       <DrawerTrigger asChild>
         {isDesktop ? (
-        <Button
-          variant="expandIcon"
-          Icon={PlusCircle}
-          iconPlacement="right"
-          className={className}
-        >
-          {t("trigger")}
-        </Button>
+          <Button
+            variant="expandIcon"
+            Icon={PlusCircle}
+            iconPlacement="right"
+            className={className}
+            shortcut={[CONTROL_KEY, "a"]}
+          >
+            {t("trigger")}
+          </Button>
         ) : (
           <Button
             className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
@@ -89,11 +122,16 @@ export default function AddMaterialDialog({
         <DrawerBody>
           <MaterialForm form={form} />
         </DrawerBody>
-        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
-          <Button
-            variant="secondary"
-            onClick={dialogOpen.setFalse}
-          >
+        <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
+          <ConfirmationDialog
+            open={confirmationDialog.value}
+            onOpenChange={confirmationDialog.toggle}
+            onConfirm={async () => {
+              confirmationDialog.setFalse();
+              dialogOpen.setFalse();
+            }}
+          />
+          <Button variant="secondary" onClick={() => onOpenChange(false)}>
             {t("dialog.cancel")}
           </Button>
           <Button

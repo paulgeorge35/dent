@@ -18,7 +18,6 @@ import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import { api } from "@/trpc/react";
 import { emailSchema } from "@/types/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check } from "lucide-react";
@@ -85,11 +84,6 @@ export default function PatientForm({ className }: PatientFormProps) {
       city: "",
     },
   });
-
-  const { data: counties, isFetching: isFetchingCounties } =
-    api.utils.getCounties.useQuery();
-  const { data: cities, isFetching: isFetchingCities } =
-    api.utils.getCities.useQuery(county);
 
   const onSubmit = (data: PatientFormValues) => {
     const phoneData = getPhoneData(data.phone);
@@ -226,8 +220,6 @@ export default function PatientForm({ className }: PatientFormProps) {
                       setCounty(value);
                       form.setValue("city", "");
                     }}
-                    counties={counties ?? []}
-                    loading={isFetchingCounties}
                   />
                 </FormControl>
                 <FormMessage />
@@ -244,14 +236,12 @@ export default function PatientForm({ className }: PatientFormProps) {
                 </FormLabel>
                 <FormControl>
                   <CitySelect
-                    disabled={!form.getValues("county")}
                     name={field.value}
                     value={field.value}
                     onSelect={(value) => {
                       field.onChange(value);
                     }}
-                    cities={cities ?? []}
-                    loading={isFetchingCities}
+                    county={form.watch("county")}
                   />
                 </FormControl>
                 <FormMessage />

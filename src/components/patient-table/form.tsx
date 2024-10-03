@@ -7,17 +7,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { api } from "@/trpc/react";
 import { useTranslations } from "next-intl";
 import { Controller, type UseFormReturn } from "react-hook-form";
 import { z } from "zod";
+import { CitySelect } from "../address-input/city-input";
+import { CountySelect } from "../address-input/county-input";
 import { DateTimePicker } from "../datetime-input/datetime";
 import { PhoneInput } from "../phone-input";
 
@@ -52,20 +46,6 @@ type PatientFormProps = {
 export default function PatientForm({ form }: PatientFormProps) {
   const t = useTranslations("page.patients.fields");
 
-  const { data: counties } = api.utils.getCounties.useQuery();
-  const { data: cities } = api.utils.getCities.useQuery(form.watch("county"), {
-    enabled: !!form.watch("county"),
-  });
-
-  const handleCountyChange = (value: string) => {
-    form.setValue("county", value);
-    form.setValue("city", undefined);
-  };
-
-  const handleCityChange = (value: string) => {
-    form.setValue("city", value);
-  };
-
   return (
     <Form {...form}>
       <form className="grid grid-cols-4 gap-4 py-4">
@@ -88,7 +68,7 @@ export default function PatientForm({ form }: PatientFormProps) {
           control={form.control}
           render={({ field }) => (
             <FormFieldCompact
-              className="col-span-2"
+              className="col-span-4 md:col-span-2"
               control={form.control}
               name="dob"
               label={t("dob.label")}
@@ -103,7 +83,7 @@ export default function PatientForm({ form }: PatientFormProps) {
           )}
         />
         <FormFieldCompact
-          className="col-span-2"
+          className="col-span-4 md:col-span-2"
           control={form.control}
           name="gender"
           label={t("gender.label")}
@@ -175,19 +155,18 @@ export default function PatientForm({ form }: PatientFormProps) {
           control={form.control}
           name="county"
           label={t("county.label")}
+          required={false}
           render={({ field }) => (
-            <Select onValueChange={handleCountyChange}>
-              <SelectTrigger disabled={counties?.length === 0}>
-                <SelectValue {...field} placeholder={t("county.placeholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                {counties?.map((county, index) => (
-                  <SelectItem key={index} value={county.name}>
-                    {county.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FormControl>
+              <CountySelect
+                name={field.name}
+                value={field.value}
+                onSelect={(value) => {
+                  field.onChange(value);
+                  form.setValue("city", "");
+                }}
+              />
+            </FormControl>
           )}
         />
         <FormFieldCompact
@@ -199,28 +178,18 @@ export default function PatientForm({ form }: PatientFormProps) {
               ? t("sector.label")
               : t("city.label")
           }
+          required={false}
           render={({ field }) => (
-            <Select onValueChange={handleCityChange}>
-              <SelectTrigger
-                disabled={!form.watch("county") || cities?.length === 0}
-              >
-                <SelectValue
-                  {...field}
-                  placeholder={
-                    form.getValues("county") === "București"
-                      ? t("sector.placeholder")
-                      : t("city.placeholder")
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {cities?.map((city, index) => (
-                  <SelectItem key={index} value={city.name}>
-                    {city.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <FormControl>
+              <CitySelect
+                name={field.name}
+                value={field.value}
+                onSelect={(value) => {
+                  field.onChange(value);
+                }}
+                county={form.watch("county")}
+              />
+            </FormControl>
           )}
         />
       </form>

@@ -32,6 +32,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { useForm, type UseFormReturn } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
 import { z } from "zod";
 import ConfirmationDialog from "../shared/confirmation-dialog";
@@ -112,6 +113,10 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
     [form, confirmationDialog, dialogOpen],
   );
 
+  useHotkeys("ctrl+a", () => {
+    dialogOpen.setTrue();
+  });
+
   return (
     <Drawer open={dialogOpen.value} onOpenChange={onOpenChange}>
       <DrawerTrigger asChild>
@@ -121,7 +126,7 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
             Icon={PlusCircle}
             iconPlacement="right"
             className={className}
-            shortcut={[CONTROL_KEY, "t"]}
+            shortcut={[CONTROL_KEY, "a"]}
           >
             {t("trigger")}
           </Button>
@@ -153,13 +158,10 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
             />
           </span>
         </DrawerBody>
-        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
+        <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title={tClose("confirmation.title")}
-            description={tClose("confirmation.description")}
-            confirmButtonText={tClose("confirmation.confirm")}
             onConfirm={async () => {
               confirmationDialog.setFalse();
               dialogOpen.setFalse();
@@ -355,13 +357,10 @@ function ComplexTreatmentDialog({
               ))}
           </span>
         </DrawerBody>
-        <DrawerFooter className="grid grid-cols-2 gap-2 p-6">
+        <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title={tClose("confirmation.title")}
-            description={tClose("confirmation.description")}
-            confirmButtonText={tClose("confirmation.confirm")}
             onConfirm={async () => {
               confirmationDialog.setFalse();
               onOpenChange(false);

@@ -2,7 +2,11 @@
   "layout": {
     "loading": "Loading clinic...",
     "confirmation-dialog": {
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "title": "Discard changes",
+      "delete-title": "Confirm deletion",
+      "description": "This action cannot be undone and all changes will be lost."
     },
     "sidebar": {
       "back": "Back",
@@ -1241,6 +1245,13 @@
       "label": "City",
       "placeholder": "Select city...",
       "search": "Search city...",
+      "loading": "Loading...",
+      "no-results": "No results"
+    },
+    "sector": {
+      "label": "Sector",
+      "placeholder": "Select sector...",
+      "search": "Search sector...",
       "loading": "Loading...",
       "no-results": "No results"
     }

@@ -188,9 +188,6 @@ export default function CreateAppointmentDialog({
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}
-            title={t("close.confirmation.title")}
-            description={t("close.confirmation.description")}
-            confirmButtonText={t("close.confirmation.confirm")}
             loading={isDeleting}
             onConfirm={async () => {
               await Promise.all(

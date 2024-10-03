@@ -16,10 +16,11 @@ import { api } from "@/trpc/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo } from "react";
-import type { UseStateful } from "react-hanger";
+import { useCallback, useEffect, useMemo } from "react";
+import { type UseStateful, useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import ConfirmationDialog from "../shared/confirmation-dialog";
 import SpecialityDeleteDialog from "./delete-dialog";
 import SpecialityForm, { type FormValues, specialitySchema } from "./form";
 
@@ -31,6 +32,7 @@ export default function SpecialityEditDialog({
   dialogOpen,
 }: SpecialityEditDialogProps) {
   const t = useTranslations("page.specialities.edit");
+  const confirmationDialog = useBoolean(false);
   const router = useRouter();
   const { mutateAsync: updateSpeciality } = api.speciality.update.useMutation({
     onSuccess: () => {
@@ -68,11 +70,16 @@ export default function SpecialityEditDialog({
     }
   }, [dialogOpen.value, form, speciality]);
 
+  const onClose = useCallback(() => {
+    if (form.formState.isDirty) {
+      confirmationDialog.setTrue();
+    } else {
+      dialogOpen.setValue(null);
+    }
+  }, [form, confirmationDialog, dialogOpen]);
+
   return (
-    <Drawer
-      open={!!dialogOpen.value}
-      onOpenChange={() => dialogOpen.setValue(null)}
-    >
+    <Drawer open={!!dialogOpen.value} onOpenChange={onClose}>
       <DrawerContent>
         <DrawerHeader>
           <DrawerTitle>{t("dialog.title")}</DrawerTitle>
@@ -82,6 +89,14 @@ export default function SpecialityEditDialog({
           <SpecialityForm form={form} onSubmit={onSubmit} />
         </DrawerBody>
         <DrawerFooter className="grid-cols-2 md:grid-cols-3">
+          <ConfirmationDialog
+            open={confirmationDialog.value}
+            onOpenChange={confirmationDialog.toggle}
+            onConfirm={async () => {
+              confirmationDialog.setFalse();
+              dialogOpen.setValue(null);
+            }}
+          />
           <SpecialityDeleteDialog
             id={speciality?.id ?? ""}
             disabled={form.formState.isSubmitting}
@@ -90,7 +105,7 @@ export default function SpecialityEditDialog({
           <Button
             variant="secondary"
             className="col-span-1 md:col-span-1"
-            onClick={() => dialogOpen.setValue(null)}
+            onClick={onClose}
           >
             {t("dialog.cancel")}
           </Button>

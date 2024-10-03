@@ -41,6 +41,7 @@ export const AutoComplete = <T,>({
   value,
   onValueChange,
   isLoading = false,
+  disabled = false,
   className,
 }: AutoCompleteProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -108,6 +109,7 @@ export const AutoComplete = <T,>({
           onFocus={() => setOpen(true)}
           placeholder={placeholder}
           className="text-base md:text-sm h-9"
+          disabled={disabled}
         />
       </div>
       <div

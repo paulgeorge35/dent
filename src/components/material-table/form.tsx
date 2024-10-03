@@ -41,7 +41,9 @@ export default function MaterialForm({ form }: MaterialFormProps) {
 
   useEffect(() => {
     if (!form.watch("keepInventory")) {
-      form.setValue("stock", 0);
+      form.setValue("stock", 0, {
+        shouldDirty: false,
+      });
     }
   }, [form.watch("keepInventory")]);
 
@@ -93,36 +95,34 @@ export default function MaterialForm({ form }: MaterialFormProps) {
             </FormItem>
           )}
         />
-        <span className="col-span-2 grid grid-cols-[auto_1fr] gap-4">
-          <FormField
-            name="unit_price"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="w-full col-span-1">
-                <FormLabel htmlFor={field.name}>
-                  {t("unit_price.label")}
-                </FormLabel>
-                <PriceInput id={field.name} {...field} />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="unit"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="col-span-1">
-                <FormLabel htmlFor={field.name}>{t("unit.label")}</FormLabel>
-                <FormControl>
-                  <Input
-                    id={field.name}
-                    {...field}
-                    placeholder={t("unit.placeholder")}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </span>
+        <FormField
+          name="unit_price"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="w-full col-span-1">
+              <FormLabel htmlFor={field.name}>
+                {t("unit_price.label")}
+              </FormLabel>
+              <PriceInput id={field.name} {...field} />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="unit"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem className="col-span-1">
+              <FormLabel htmlFor={field.name}>{t("unit.label")}</FormLabel>
+              <FormControl>
+                <Input
+                  id={field.name}
+                  {...field}
+                  placeholder={t("unit.placeholder")}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="stock"
