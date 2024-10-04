@@ -69,8 +69,8 @@ export function CountySelect({
             )}
             disabled={isFetching}
           >
-          {value === "" && (
-            <MagnifyingGlassIcon className="size-4 text-muted-foreground shrink-0" />
+            {value === "" && (
+              <MagnifyingGlassIcon className="size-4 text-muted-foreground shrink-0" />
             )}
             {value !== "" ? value : t("placeholder")}
           </Button>
@@ -79,7 +79,11 @@ export function CountySelect({
           <Command>
             <DrawerHeader>
               <DrawerTitle className="grid grid-cols-[1fr_auto] items-center gap-2">
-                <CommandInput placeholder={t("search")} defaultValue={value} autoFocus />
+                <CommandInput
+                  placeholder={t("search")}
+                  defaultValue={value}
+                  className="text-base"
+                />
                 <Button
                   variant="ghost"
                   onClick={() => {
