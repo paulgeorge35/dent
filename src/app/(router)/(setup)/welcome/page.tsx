@@ -25,7 +25,7 @@ export default async function Welcome() {
       </div>
       <Tenants />
       <Invitations />
-      <LogoutDialog className="w-full border border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-white mb-8" />
+      <LogoutDialog className="!w-full border border-destructive bg-transparent text-destructive hover:bg-destructive hover:text-white mb-8" />
     </div>
   );
 }

@@ -14,11 +14,11 @@ import type { SessionUser } from "./types/schema";
 
 const cookieOpts = {
   httpOnly: true,
-  secure: env.NODE_ENV === "production",
-  sameSite: "lax",
-  path: "/",
-  domain: env.NODE_ENV === "production" ? env.DOMAIN : undefined,
-  maxAge: 1000 * 60 * 60 * 24 * 365,
+  // secure: env.NODE_ENV === "production",
+  // sameSite: "lax",
+  // path: "/",
+  // domain: env.NODE_ENV === "production" ? env.DOMAIN : undefined,
+  // maxAge: 1000 * 60 * 60 * 24 * 365,
 } as const;
 
 export async function sendMagicLink(email: string, tenantId: string) {
@@ -125,7 +125,7 @@ export async function generateToken({
     data: {
       token,
       type,
-      userId: user.id,
+      profileId: user.profileId,
       expires,
     },
   });
@@ -161,9 +161,11 @@ export async function consumeToken(
     throw new Error("Token expired");
   }
 
-  const user = await db.user.findUnique({
+  
+
+  const user = await db.user.findFirst({
     where: {
-      id: existingToken.userId,
+      profileId: existingToken.profileId,
     },
     select: {
       id: true,

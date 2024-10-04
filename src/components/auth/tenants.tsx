@@ -48,7 +48,10 @@ export default async function Tenants() {
         </CardHeader>
         <CardContent className="px-0 pb-0">
           {accounts.map((account) => (
-            <TenantCard key={account.id} account={account as TenantAccount} />
+            <TenantCard
+              key={account.tenant.id}
+              account={account as TenantAccount}
+            />
           ))}
         </CardContent>
       </Card>

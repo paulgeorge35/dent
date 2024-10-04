@@ -38,7 +38,6 @@ export default function TenantCard({ account }: TenantCardProps) {
   const tenantAvatar = account.tenant.profile.avatar?.url;
   return (
     <div
-      role="button"
       onKeyDown={(e) => {
         if (e.key === "Enter") {
           handleTenantClick(account.tenantId);
@@ -73,9 +72,9 @@ export default function TenantCard({ account }: TenantCardProps) {
             {account.tenant.profile.name}
           </h3>
           <div className="flex flex-row items-center gap-2">
-            {account.tenant.users.slice(0, isDesktop ? 5 : 3).map((user) => (
+            {account.tenant.users.slice(0, isDesktop ? 5 : 3).map((user,index) => (
               <Avatar
-                key={user.profile.avatar?.id}
+                key={index}
                 className="relative size-4 rounded-sm border border-background [&:not(:first-child)]:ml-[-12px]"
               >
                 {user.profile.avatar ? (

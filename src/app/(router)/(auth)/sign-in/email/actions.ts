@@ -12,7 +12,7 @@ export async function signIn(email: string, password: string) {
     const profile = await tx.profile.findUnique({
       where: { email },
       include: {
-        auth: {
+        accounts: {
           where: {
             type: "password",
             provider: "credentials",
@@ -61,7 +61,7 @@ export async function signIn(email: string, password: string) {
     throw new Error("account.invalid");
   }
 
-  const auth = user.profile.auth.find((a) => a.type === "password");
+  const auth = user.profile.accounts.find((a) => a.type === "password");
 
   if (!auth) {
     throw new Error("account.invalid");
@@ -89,10 +89,14 @@ export async function signIn(email: string, password: string) {
 
   const session = await encrypt(
     {
-      ...user.profile,
+      id: user.profile.id,
+      avatar: user.profile.avatar,
+      firstName: user.profile.firstName,
+      lastName: user.profile.lastName,
+      email: user.profile.email,
       user: user.tenant
         ? {
-            id: user.tenant.id,
+            id: user.tenant.users[0].id,
             role: user.tenant.users[0].role,
             tenantId: user.tenant.id,
           }

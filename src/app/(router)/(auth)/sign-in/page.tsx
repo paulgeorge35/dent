@@ -7,6 +7,7 @@ import { useTranslations } from "@/lib/translations";
 import { cn, constructMetadata } from "@/lib/utils";
 import type { SearchParams } from "@/types";
 import { RectangleEllipsis } from "lucide-react";
+import React from "react";
 import { z } from "zod";
 import GoogleSignIn from "./google";
 import MagicLinkSignIn from "./magic-link-form";
@@ -28,7 +29,7 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
   const t = await useTranslations("page.auth.sign-in.with-email");
 
   return (
-    <>
+    <React.Fragment>
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-balance text-muted-foreground">{t("subtitle")}</p>
@@ -65,6 +66,6 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
         <RectangleEllipsis className="mr-2 size-5" />
         {t("sign-in-with-password")}
       </Link>
-    </>
+    </React.Fragment>
   );
 }

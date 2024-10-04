@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { auth } from "@/auth";
 import { constructMetadata } from "@/lib/utils";
+import React from "react";
 import ChangePasswordForm from "./change-password-form";
 
 export const metadata = constructMetadata({
@@ -41,7 +42,7 @@ export default async function ForgotPassword({
   }
 
   return (
-    <>
+    <React.Fragment>
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">Change Password</h1>
         <p className="text-balance text-muted-foreground">
@@ -54,6 +55,6 @@ export default async function ForgotPassword({
       <Link href="/sign-in" className="text-center underline">
         Back to login
       </Link>
-    </>
+    </React.Fragment>
   );
 }

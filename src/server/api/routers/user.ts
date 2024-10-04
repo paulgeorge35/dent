@@ -60,7 +60,7 @@ export type UserComplete = Prisma.UserGetPayload<{
 
 export type SpecialityUserCount = Prisma.SpecialityGetPayload<{
   include: typeof specialityUserCount;
-}>
+}>;
 
 export const userRouter = createTRPCRouter({
   profile: protectedProcedure.query(async ({ ctx }) => {
@@ -116,14 +116,14 @@ export const userRouter = createTRPCRouter({
           email,
           firstName,
           lastName,
-          auth: {
+          accounts: {
             create: {
               provider: "credentials",
               type: "password",
               passwordHash,
             },
           },
-          authTokens: {
+          tokens: {
             create: {
               type: TokenType.ACTIVATION,
               token,
@@ -151,7 +151,7 @@ export const userRouter = createTRPCRouter({
   confirmAccount: publicProcedure
     .input(z.string())
     .mutation(async ({ ctx, input }) => {
-      const token = await ctx.db.authToken.findFirst({
+      const token = await ctx.db.token.findFirst({
         where: { token: input, type: TokenType.ACTIVATION },
         include: { profile: true },
         cacheStrategy: {
@@ -171,7 +171,7 @@ export const userRouter = createTRPCRouter({
         data: { activatedAt: new Date() },
       });
 
-      await ctx.db.authToken.delete({
+      await ctx.db.token.delete({
         where: { id: token.id },
       });
 
@@ -249,7 +249,7 @@ export const userRouter = createTRPCRouter({
       const profileId = ctx.session.id;
 
       return await ctx.db.$transaction(async (tx) => {
-        const auth = await tx.accountAuth.findUnique({
+        const auth = await tx.account.findUnique({
           where: { id: profileId, type: "credentials", provider: "database" },
           include: {
             profile: true,
@@ -283,7 +283,7 @@ export const userRouter = createTRPCRouter({
           });
         }
 
-        return await tx.accountAuth.update({
+        return await tx.account.update({
           where: { id: auth.id },
           data: { passwordHash: await bcrypt.hash(password, 10) },
         });

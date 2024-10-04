@@ -1239,21 +1239,24 @@
       "placeholder": "Select county...",
       "search": "Search county...",
       "loading": "Loading...",
-      "no-results": "No results"
+      "no-results": "No results",
+      "clear": "Clear"
     },
     "city": {
       "label": "City",
       "placeholder": "Select city...",
       "search": "Search city...",
       "loading": "Loading...",
-      "no-results": "No results"
+      "no-results": "No results",
+      "clear": "Clear"
     },
     "sector": {
       "label": "Sector",
       "placeholder": "Select sector...",
       "search": "Search sector...",
       "loading": "Loading...",
-      "no-results": "No results"
+      "no-results": "No results",
+      "clear": "Clear"
     }
   },
   "table": {

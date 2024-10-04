@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export default async function ActivatePage({
   params,
@@ -18,7 +19,7 @@ export default async function ActivatePage({
     <div className="flex min-h-screen items-center justify-center">
       <div className="w-full max-w-md p-8">
         {success ? (
-          <>
+          <React.Fragment>
             <h1 className="mb-6 text-center text-3xl font-bold">
               Account Activated
             </h1>
@@ -33,7 +34,7 @@ export default async function ActivatePage({
                 <Link href="/sign-in">Go to Sign In</Link>
               </Button>
             </div>
-          </>
+          </React.Fragment>
         ) : (
           <div className="text-center">
             <h1 className="mb-4 text-2xl font-bold">Activation Failed</h1>

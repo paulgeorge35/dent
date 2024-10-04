@@ -49,11 +49,6 @@ export async function GET(request: Request): Promise<Response> {
     const existingProfile = await db.profile.findFirst({
       where: {
         email: profile.email,
-        auth: {
-          some: {
-            provider: "google",
-          },
-        },
       },
       select: {
         id: true,
@@ -77,7 +72,7 @@ export async function GET(request: Request): Promise<Response> {
               key: profile.picture,
             },
           },
-          auth: {
+          accounts: {
             create: {
               type: "oauth",
               provider: "google",
@@ -104,11 +99,53 @@ export async function GET(request: Request): Promise<Response> {
         },
       });
     }
+
+    const account = await db.account.findFirst({
+      where: {
+        profileId: existingProfile.id,
+        provider: "google",
+      },
+    });
+
+    if (!account) {
+      await db.account.create({
+        data: {
+          profileId: existingProfile.id,
+          type: "oauth",
+          provider: "google",
+          access_token: accessToken.token.access_token as string,
+          refresh_token: accessToken.token.refresh_token as string,
+        },
+      });
+
+      await setSession({ ...existingProfile } as SessionUser, { days: 30 });
+
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: "/dashboard",
+        },
+      });
+    }
+
     const preferredTenant = existingProfile.preferredTenantId
       ? await db.user.findFirst({
           where: {
             profileId: existingProfile.id,
             tenantId: existingProfile.preferredTenantId,
+            activatedAt: {
+              not: null,
+            },
+            bannedAt: null,
+            deletedAt: null,
+            tenant: {
+              disabledAt: {
+                not: null,
+              },
+              deletedAt: {
+                not: null,
+              },
+            },
           },
           select: {
             id: true,

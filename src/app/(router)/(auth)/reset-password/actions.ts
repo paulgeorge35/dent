@@ -16,7 +16,7 @@ export async function updatePassword(token: string, password: string) {
 
   if (!profile) return;
 
-  const auth = await db.accountAuth.findFirst({
+  const auth = await db.account.findFirst({
     where: {
       profileId: profile.id,
       type: "password",
@@ -26,7 +26,7 @@ export async function updatePassword(token: string, password: string) {
 
   if (!auth) return;
 
-  await db.accountAuth.update({
+  await db.account.update({
     where: { id: auth.id },
     data: { passwordHash: await bcrypt.hash(password, 10) },
   });

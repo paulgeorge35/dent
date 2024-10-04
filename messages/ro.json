@@ -1239,21 +1239,24 @@
       "placeholder": "Selectează județul...",
       "search": "Caută județ...",
       "loading": "Se încarcă...",
-      "no-results": "Nici un rezultat"
+      "no-results": "Nici un rezultat",
+      "clear": "Șterge"
     },
     "city": {
       "label": "Oraș",
       "placeholder": "Selectează orașul...",
       "search": "Caută oraș...",
       "loading": "Se încarcă...",
-      "no-results": "Nici un rezultat"
+      "no-results": "Nici un rezultat",
+      "clear": "Șterge"
     },
     "sector": {
       "label": "Sector",
       "placeholder": "Selectează sectorul...",
       "search": "Caută sector...",
       "loading": "Se încarcă...",
-      "no-results": "Nici un rezultat"
+      "no-results": "Nici un rezultat",
+      "clear": "Șterge"
     }
   },
   "table": {

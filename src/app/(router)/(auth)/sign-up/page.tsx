@@ -4,6 +4,7 @@ import { useTranslations } from "@/lib/translations";
 import { constructMetadata } from "@/lib/utils";
 import type { SearchParams } from "@/types";
 import Link from "next/link";
+import React from "react";
 import { z } from "zod";
 import GoogleSignUp from "./google";
 import RegisterForm from "./register-form";
@@ -25,7 +26,7 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
   const { error, email } = searchParamsSchema.parse(searchParams);
 
   return (
-    <>
+    <React.Fragment>
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-balance text-muted-foreground">{t("subtitle")}</p>
@@ -50,6 +51,6 @@ export default async function SignUp({ searchParams }: SignUpPageProps) {
           {t("sign-in")}
         </Link>
       </div>
-    </>
+    </React.Fragment>
   );
 }
