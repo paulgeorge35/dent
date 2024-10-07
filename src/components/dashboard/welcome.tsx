@@ -21,7 +21,12 @@ type WelcomeProps = {
   className?: string;
 };
 
-export default function Welcome({ name, avatar, appointments, className }: WelcomeProps) {
+export default function Welcome({
+  name,
+  avatar,
+  appointments,
+  className,
+}: WelcomeProps) {
   return (
     <Card className={cn("w-full", className)}>
       <CardHeader className="flex !flex-row items-center gap-4">

@@ -13,12 +13,16 @@ export const metadata = constructMetadata({
 
 export default async function Dashboard() {
   const session = await auth();
-  const today = await api.appointment.stats("today");
-  const currentWeek = await api.appointment.stats("currentWeek");
-  const lastWeek = await api.appointment.stats("lastWeek");
-  const currentMonth = await api.appointment.stats("currentMonth");
-  const services = await api.appointment.commonTreatments();
-  const appointments = await api.appointment.today();
+
+  const [today, currentWeek, lastWeek, currentMonth, services, appointments] =
+    await Promise.all([
+      await api.appointment.stats("today"),
+      await api.appointment.stats("currentWeek"),
+      await api.appointment.stats("lastWeek"),
+      await api.appointment.stats("currentMonth"),
+      await api.appointment.commonTreatments(),
+      await api.appointment.today(),
+    ]);
 
   return (
     <Shell>
