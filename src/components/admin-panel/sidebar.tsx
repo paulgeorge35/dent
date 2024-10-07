@@ -40,16 +40,13 @@ export function Sidebar({
         {isLoading && (
           <div className="absolute inset-0 bg-background/60 backdrop-blur-sm z-[100] h-screen w-screen vertical center gap-2">
             <LoadingSpinner className="size-10" />
-            {/* <p className="text-lg font-medium text-muted-foreground">
-              {t("loading")}
-            </p> */}
           </div>
         )}
       </AnimatePresence>
       <Shell
         variant="nav"
         className={cn(
-          "w-full justify-between lg:pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[30] lg:z-[50]", // Add z-index here
+          "w-full justify-between lg:pl-8 transition-[width] duration-300 ease-in-out lg:w-[calc(100vw-91px)] z-[30] lg:z-[50]",
           {
             "lg:w-[calc(100vw-289px)]": sidebar?.isOpen,
           },
@@ -87,9 +84,12 @@ export function Sidebar({
         />
       </Shell>
       <span
-        className={cn("lg:hidden fixed inset-0 z-[35] bg-black/30 backdrop-blur-sm", {
-          hidden: sidebar?.isOpen === false,
-        })}
+        className={cn(
+          "lg:hidden fixed inset-0 z-[35] bg-black/30 backdrop-blur-sm",
+          {
+            hidden: sidebar?.isOpen === false,
+          },
+        )}
         onClick={() => sidebar?.setIsOpen?.()}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -106,7 +106,7 @@ export function Sidebar({
             : "w-72",
         )}
       >
-        <div className="relative flex h-full flex-col overflow-y-auto bg-background px-3 py-4 shadow-md dark:shadow-zinc-800">
+        <div className="relative flex h-full flex-col bg-background px-3 py-4 shadow-md dark:shadow-zinc-800">
           <Button
             className={cn(
               "mb-1 transition-transform duration-300 ease-in-out",

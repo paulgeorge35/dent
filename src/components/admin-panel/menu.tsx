@@ -19,7 +19,7 @@ import { getMenuList } from "@/lib/menu-list";
 import { cn } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
 import { useTranslations } from "next-intl";
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { useStore } from "zustand";
 import { ShortcutKeys } from "../ui/shortcut-key";
@@ -56,121 +56,135 @@ export function Menu({ isOpen, accounts, session }: MenuProps) {
   }
 
   return (
-    <ScrollArea className="mt-2 [&>div>div[style]]:!block">
+    <React.Fragment>
       <CurrentTenant tenant={tenant} isOpen={isOpen} />
-      <nav className="mt-4 h-full w-full">
-        <ul className="flex min-h-[calc(100vh-48px-36px-16px-32px-36px)] flex-col items-start space-y-1 px-2 lg:min-h-[calc(100vh-96px-40px-32px-36px)]">
-          {menuList.map(({ groupLabel, menus, hideLabel }, index: number) => (
-            <li className={cn("w-full", groupLabel ? "pt-5" : "")} key={index}>
-              {(isOpen && groupLabel && !hideLabel) ?? isOpen === undefined ? (
-                <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground">
-                  {t(`links.sections.${groupLabel}.title`)}
-                </p>
-              ) : !isOpen &&
-                isOpen !== undefined &&
-                groupLabel &&
-                !hideLabel ? (
-                <TooltipProvider>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger className="w-full">
-                      <div className="flex w-full items-center justify-center">
-                        <Ellipsis className="h-5 w-5" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">
-                      <p>{t(`links.sections.${groupLabel}.title`)}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              ) : (
-                <p className="pb-2" />
-              )}
-              {menus.map(
-                (
-                  { href, label, icon: Icon, active, submenus, shortcut },
-                  index,
-                ) =>
-                  submenus.length === 0 ? (
-                    <div className="w-full" key={index}>
-                      <TooltipProvider disableHoverableContent>
-                        <Tooltip delayDuration={100}>
-                          <TooltipTrigger asChild>
-                            <Button
-                              id={shortcut}
-                              variant={active ? "secondary" : "ghost"}
-                              className="mb-1 h-10 w-full justify-start"
-                              asChild
-                              onClick={() => {
-                                if (isMobile) {
-                                  sidebar?.setIsOpen();
-                                }
-                              }}
-                            >
-                              <Link href={href}>
-                                <span
-                                  className={cn(isOpen === false ? "" : "mr-4")}
-                                >
-                                  <Icon size={18} />
-                                </span>
-                                <p
-                                  className={cn(
-                                    "max-w-[200px] truncate",
-                                    isOpen === false
-                                      ? "-translate-x-96 opacity-0"
-                                      : "translate-x-0 opacity-100",
+      <ScrollArea className="grow">
+        <nav className="h-full w-full">
+          <ul className="flex flex-col items-start space-y-1 px-2">
+            {menuList.map(({ groupLabel, menus, hideLabel }, index: number) => (
+              <li
+                className={cn("w-full", groupLabel ? "pt-5" : "")}
+                key={index}
+              >
+                {((isOpen && groupLabel && !hideLabel) ??
+                isOpen === undefined) ? (
+                  <p className="max-w-[248px] truncate px-4 pb-2 text-sm font-medium text-muted-foreground">
+                    {t(`links.sections.${groupLabel}.title`)}
+                  </p>
+                ) : !isOpen &&
+                  isOpen !== undefined &&
+                  groupLabel &&
+                  !hideLabel ? (
+                  <TooltipProvider>
+                    <Tooltip delayDuration={100}>
+                      <TooltipTrigger className="w-full">
+                        <div className="flex w-full items-center justify-center">
+                          <Ellipsis className="h-5 w-5" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">
+                        <p>{t(`links.sections.${groupLabel}.title`)}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : (
+                  <p className="pb-2" />
+                )}
+                {menus.map(
+                  (
+                    { href, label, icon: Icon, active, submenus, shortcut },
+                    index,
+                  ) =>
+                    submenus.length === 0 ? (
+                      <div className="w-full" key={index}>
+                        <TooltipProvider disableHoverableContent>
+                          <Tooltip delayDuration={100}>
+                            <TooltipTrigger asChild>
+                              <Button
+                                id={shortcut}
+                                variant={active ? "secondary" : "ghost"}
+                                className="mb-1 h-10 w-full justify-start"
+                                asChild
+                                onClick={() => {
+                                  if (isMobile) {
+                                    sidebar?.setIsOpen();
+                                  }
+                                }}
+                              >
+                                <Link href={href}>
+                                  <span
+                                    className={cn(
+                                      isOpen === false ? "" : "mr-4",
+                                    )}
+                                  >
+                                    <Icon size={18} />
+                                  </span>
+                                  <p
+                                    className={cn(
+                                      "max-w-[200px] truncate",
+                                      isOpen === false
+                                        ? "-translate-x-96 opacity-0"
+                                        : "translate-x-0 opacity-100",
+                                    )}
+                                  >
+                                    {t(
+                                      `links.sections.${groupLabel}.items.${label}`,
+                                    )}
+                                  </p>
+                                  {shortcut && isOpen && (
+                                    <ShortcutKeys
+                                      shortcut={shortcut}
+                                      className="ml-auto"
+                                    />
                                   )}
-                                >
-                                  {t(
-                                    `links.sections.${groupLabel}.items.${label}`,
-                                  )}
-                                </p>
-                                {shortcut && isOpen && (
-                                  <ShortcutKeys
-                                    shortcut={shortcut}
-                                    className="ml-auto"
-                                  />
+                                </Link>
+                              </Button>
+                            </TooltipTrigger>
+                            {isOpen === false && (
+                              <TooltipContent
+                                side="right"
+                                className="horizontal gap-2 center-v"
+                              >
+                                {t(
+                                  `links.sections.${groupLabel}.items.${label}`,
                                 )}
-                              </Link>
-                            </Button>
-                          </TooltipTrigger>
-                          {isOpen === false && (
-                            <TooltipContent
-                              side="right"
-                              className="horizontal gap-2 center-v"
-                            >
-                              {t(`links.sections.${groupLabel}.items.${label}`)}
-                              {shortcut && <ShortcutKeys shortcut={shortcut} />}
-                            </TooltipContent>
+                                {shortcut && (
+                                  <ShortcutKeys shortcut={shortcut} />
+                                )}
+                              </TooltipContent>
+                            )}
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    ) : (
+                      <div className="w-full" key={index}>
+                        <CollapseMenuButton
+                          icon={Icon}
+                          label={t(
+                            `links.sections.${groupLabel}.items.${label}`,
                           )}
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  ) : (
-                    <div className="w-full" key={index}>
-                      <CollapseMenuButton
-                        icon={Icon}
-                        label={t(`links.sections.${groupLabel}.items.${label}`)}
-                        active={active}
-                        submenus={submenus.map((submenu) => ({
-                          ...submenu,
-                          label: t(
-                            `links.sections.${groupLabel}.items.${submenu.label}`,
-                          ),
-                        }))}
-                        isOpen={isOpen}
-                        onClick={() => {
-                          if (isMobile) {
-                            sidebar?.setIsOpen();
-                          }
-                        }}
-                      />
-                    </div>
-                  ),
-              )}
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </ScrollArea>
+                          active={active}
+                          submenus={submenus.map((submenu) => ({
+                            ...submenu,
+                            label: t(
+                              `links.sections.${groupLabel}.items.${submenu.label}`,
+                            ),
+                          }))}
+                          isOpen={isOpen}
+                          onClick={() => {
+                            if (isMobile) {
+                              sidebar?.setIsOpen();
+                            }
+                          }}
+                        />
+                      </div>
+                    ),
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </ScrollArea>
+    </React.Fragment>
   );
 }
