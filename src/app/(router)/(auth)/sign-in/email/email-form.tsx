@@ -74,7 +74,7 @@ export default function EmailSignIn() {
           control={form.control}
           render={({ field }) => (
             <FormItem className="col-span-2 w-full">
-              <div className="flex items-center">
+              <div className="horizontal center-v w-full">
                 <FormLabel htmlFor="password">{t("password")}</FormLabel>
                 <Link
                   href="/forgot-password"

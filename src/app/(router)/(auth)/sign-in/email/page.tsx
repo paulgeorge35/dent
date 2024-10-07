@@ -4,6 +4,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "@/lib/translations";
 import { cn, constructMetadata } from "@/lib/utils";
+import React from "react";
 import EmailSignIn from "./email-form";
 
 export const metadata = constructMetadata({
@@ -13,7 +14,7 @@ export const metadata = constructMetadata({
 export default async function SignInEmail() {
   const t = await useTranslations("page.auth.sign-in.with-password");
   return (
-    <>
+    <React.Fragment>
       <div className="grid gap-2 text-center">
         <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-balance text-muted-foreground">{t("subtitle")}</p>
@@ -38,6 +39,6 @@ export default async function SignInEmail() {
       >
         {t("create-account")}
       </Link>
-    </>
+    </React.Fragment>
   );
 }
