@@ -64,7 +64,6 @@ type AddServiceDialogProps = {
 
 export default function AddServiceDialog({ className }: AddServiceDialogProps) {
   const t = useTranslations("page.treatments.add");
-  const tClose = useTranslations("page.treatments.close");
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const router = useRouter();
   const { mutateAsync: createService } = api.service.create.useMutation({
@@ -84,9 +83,12 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
+      name: "",
+      description: "",
       unit_price: 0,
       duration: 0,
-      unit: "TOOTH",
+      unit: "VISIT",
+      tags: [],
       relatedServices: [],
       materials: [],
     },
@@ -118,83 +120,85 @@ export default function AddServiceDialog({ className }: AddServiceDialogProps) {
   });
 
   return (
-    <Drawer open={dialogOpen.value} onOpenChange={onOpenChange}>
-      <DrawerTrigger asChild>
-        {isDesktop ? (
-          <Button
-            variant="expandIcon"
-            Icon={PlusCircle}
-            iconPlacement="right"
-            className={className}
-            shortcut={[CONTROL_KEY, "a"]}
-          >
-            {t("trigger")}
-          </Button>
-        ) : (
-          <Button
-            className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
-            size="icon"
-          >
-            <Plus className="size-6" />
-          </Button>
-        )}
-      </DrawerTrigger>
-      <DrawerContent
-        className={cn({
-          "p-0": isDesktop,
-          "lg:translate-x-[calc(100%-50px)]":
-            secondDialogOpen.value && isDesktop,
-        })}
-      >
-        <DrawerHeader className="p-6">
-          <DrawerTitle>{t("dialog.title")}</DrawerTitle>
-          <DrawerDescription>{t("dialog.description")}</DrawerDescription>
-        </DrawerHeader>
-        <DrawerBody className="pb-4">
-          <span className="vertical gap-8 px-1">
-            <ServiceForm
-              form={form}
-              onSetupMultivisit={() => secondDialogOpen.setTrue()}
-            />
-          </span>
-        </DrawerBody>
-        <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
-          <ConfirmationDialog
-            open={confirmationDialog.value}
-            onOpenChange={confirmationDialog.toggle}
-            onConfirm={async () => {
-              confirmationDialog.setFalse();
-              dialogOpen.setFalse();
-            }}
-          />
-          <Button
-            variant="secondary"
-            className="w-full"
-            onClick={() => {
-              if (form.formState.isDirty) {
-                confirmationDialog.setTrue();
-              } else {
+    <AnimatePresence mode="wait">
+      <Drawer open={dialogOpen.value} onOpenChange={onOpenChange}>
+        <DrawerTrigger asChild>
+          {isDesktop ? (
+            <Button
+              variant="expandIcon"
+              Icon={PlusCircle}
+              iconPlacement="right"
+              className={className}
+              shortcut={[CONTROL_KEY, "a"]}
+            >
+              {t("trigger")}
+            </Button>
+          ) : (
+            <Button
+              className="fixed bottom-8 right-4 rounded-full size-12 shadow-lg"
+              size="icon"
+            >
+              <Plus className="size-6" />
+            </Button>
+          )}
+        </DrawerTrigger>
+        <DrawerContent
+          className={cn({
+            "p-0": isDesktop,
+            "lg:translate-x-[calc(100%-50px)]":
+              secondDialogOpen.value && isDesktop,
+          })}
+        >
+          <DrawerHeader className="p-6">
+            <DrawerTitle>{t("dialog.title")}</DrawerTitle>
+            <DrawerDescription>{t("dialog.description")}</DrawerDescription>
+          </DrawerHeader>
+          <DrawerBody className="pb-4">
+            <span className="vertical gap-8 px-1">
+              <ServiceForm
+                form={form}
+                onSetupMultivisit={() => secondDialogOpen.setTrue()}
+              />
+            </span>
+          </DrawerBody>
+          <DrawerFooter className="grid grid-cols-2 gap-2 py-6">
+            <ConfirmationDialog
+              open={confirmationDialog.value}
+              onOpenChange={confirmationDialog.toggle}
+              onConfirm={async () => {
+                confirmationDialog.setFalse();
                 dialogOpen.setFalse();
-              }
-            }}
-          >
-            {t("dialog.cancel")}
-          </Button>
-          <Button
-            onClick={form.handleSubmit(onSubmit)}
-            disabled={!form.formState.isDirty || form.formState.isSubmitting}
-            isLoading={form.formState.isSubmitting}
-          >
-            {t("dialog.confirm")}
-          </Button>
-        </DrawerFooter>
-      </DrawerContent>
-      <ComplexTreatmentDialog
-        open={secondDialogOpen.value}
-        onOpenChange={secondDialogOpen.toggle}
-        form={form}
-      />
-    </Drawer>
+              }}
+            />
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => {
+                if (form.formState.isDirty) {
+                  confirmationDialog.setTrue();
+                } else {
+                  dialogOpen.setFalse();
+                }
+              }}
+            >
+              {t("dialog.cancel")}
+            </Button>
+            <Button
+              onClick={form.handleSubmit(onSubmit)}
+              disabled={!form.formState.isDirty || form.formState.isSubmitting}
+              isLoading={form.formState.isSubmitting}
+            >
+              {t("dialog.confirm")}
+            </Button>
+          </DrawerFooter>
+        </DrawerContent>
+        <ComplexTreatmentDialog
+          open={secondDialogOpen.value}
+          onOpenChange={secondDialogOpen.toggle}
+          form={form}
+        />
+      </Drawer>
+    </AnimatePresence>
   );
 }
 
