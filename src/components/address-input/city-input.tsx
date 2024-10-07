@@ -89,6 +89,7 @@ export function CitySelect({
                 <CommandInput
                   placeholder={searchPlaceholder}
                   defaultValue={value}
+                  className="text-base"
                 />
                 <Button
                   variant="ghost"
