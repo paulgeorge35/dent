@@ -75,7 +75,21 @@ export const userRouter = createTRPCRouter({
   register: publicProcedure
     .input(
       z.object({
-        email: z.string().email(),
+        email: z
+          .string()
+          .email()
+          .transform((val) => val.toLowerCase().trim())
+          .transform((val) => {
+            if (val.endsWith("@gmail.com")) {
+              // Normalize Gmail addresses
+              const [localPart, domain] = val.split("@");
+              const normalizedLocalPart = localPart!
+                .replace(/\./g, "") // Remove all dots
+                .split("+")[0]; // Remove everything after and including '+'
+              return `${normalizedLocalPart}@${domain}`;
+            }
+            return val;
+          }),
         password: z.string().min(8).max(64),
         confirm: z.string().min(8).max(64),
         firstName: z.string().max(50),
