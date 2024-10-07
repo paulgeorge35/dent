@@ -461,11 +461,13 @@ export const userRouter = createTRPCRouter({
       const user = await ctx.db.user.update({
         where: { id: userId },
         data: {
-          speciality: {
-            connect: {
-              id: input.specialityId,
-            },
-          },
+          speciality: input.specialityId
+            ? {
+                connect: {
+                  id: input.specialityId,
+                },
+              }
+            : undefined,
           profile: {
             update: {
               email: input.email,
