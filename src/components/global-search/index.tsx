@@ -2,12 +2,18 @@ import { highlightText } from "@/lib/highlighter";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import type { Patient } from "@prisma/client";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import debounce from "lodash/debounce";
 import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { useHotkeys } from "react-hotkeys-hook";
 import AvatarComponent from "../shared/avatar-component";
@@ -122,80 +128,75 @@ export default function GlobalSearch() {
         </span>
       </Button>
 
-      <AnimatePresence>
-        {globalSearch.value && (
+      {globalSearch.value && (
+        <div
+          className="pt-20 px-4 md:p-0 fixed inset-0 horizontal center-h items-start md:center z-[100]"
+        >
+          <div
+            className="fixed inset-0 bg-background/20 backdrop-blur-sm transition-[backdrop-filter] duration-200"
+            onClick={globalSearch.setFalse}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                globalSearch.setFalse();
+              }
+            }}
+          />
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="pt-20 px-4 md:p-0 fixed inset-0 horizontal center-h items-start md:center z-[100]"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className={cn(
+              "bg-background rounded-lg shadow-xl z-[100] w-full max-w-3xl rounded-t-[32px] vertical p-2 border border-border",
+              {
+                "rounded-b-[32px]": !isData && !isLoading,
+              },
+            )}
           >
-            <motion.div
-              initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-              animate={{ opacity: 1, backdropFilter: "blur(4px)" }}
-              exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-              transition={{ duration: 0.2 }}
-              className="fixed inset-0 bg-background/20 transition-[backdrop-filter] duration-200"
-              onClick={globalSearch.setFalse}
+            <Input
+              ref={inputRef}
+              loading={isLoading}
+              placeholder={t("search.placeholder")}
+              searchClassName="flex-grow rounded-3xl bg-transparent bg-background"
+              autoFocus
+              search
+              value={search.value}
+              onChange={(e) => {
+                search.setValue(e.target.value);
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") {
+                  globalSearch.setFalse();
+                }
+                if (e.key === "Enter" && selectedIndex === -1) {
+                  e.preventDefault();
+                }
+                if (e.key === "ArrowDown" && patients?.content.length) {
+                  e.preventDefault();
+                  setSelectedIndex(0);
+                  inputRef.current.blur();
+                }
+              }}
             />
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className={cn(
-                "bg-background rounded-lg shadow-xl z-[100] w-full max-w-3xl rounded-t-[32px] vertical p-2 border border-border",
-                {
-                  "rounded-b-[32px]": !isData && !isLoading,
-                },
-              )}
-            >
-              <Input
-                ref={inputRef}
-                loading={isLoading}
-                placeholder={t("search.placeholder")}
-                searchClassName="flex-grow rounded-3xl bg-transparent bg-background"
-                autoFocus
-                search
-                value={search.value}
-                onChange={(e) => {
-                  search.setValue(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") {
-                    globalSearch.setFalse();
-                  }
-                  if (e.key === "Enter" && selectedIndex === -1) {
-                    e.preventDefault();
-                  }
-                  if (e.key === "ArrowDown" && patients?.content.length) {
-                    e.preventDefault();
-                    setSelectedIndex(0);
-                    inputRef.current.blur();
-                  }
-                }}
-              />
-              {isLoading && (
-                <span className="grid gap-2 max-h-[500px] overflow-y-auto pt-2">
-                  <Skeleton className="w-40 rounded-full h-[30px]" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                  <Skeleton className="h-12 w-full" />
-                </span>
-              )}
-              <PatientSearchResults
-                patients={patients?.content ?? []}
-                search={search.value.trim()}
-                onClose={globalSearch.setFalse}
-                selectedIndex={selectedIndex}
-                setSelectedIndex={setSelectedIndex}
-              />
-            </motion.div>
+            {isLoading && (
+              <span className="grid gap-2 max-h-[500px] overflow-y-auto pt-2">
+                <Skeleton className="w-40 rounded-full h-[30px]" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+                <Skeleton className="h-12 w-full" />
+              </span>
+            )}
+            <PatientSearchResults
+              patients={patients?.content ?? []}
+              search={search.value.trim()}
+              onClose={globalSearch.setFalse}
+              selectedIndex={selectedIndex}
+              setSelectedIndex={setSelectedIndex}
+            />
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
     </React.Fragment>
   );
 }
