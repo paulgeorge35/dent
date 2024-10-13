@@ -5,7 +5,7 @@ import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { CommandLoading } from "cmdk";
 import { Check } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useBoolean, useStateful } from "react-hanger";
 import { AutoComplete } from "../ui/autocomplete";
 import { Button } from "../ui/button";
@@ -41,6 +41,7 @@ export function CountySelect({
   const search = useStateful("");
   const dialog = useBoolean(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: counties, isFetching } = api.utils.getCounties.useQuery(
     undefined,
@@ -54,6 +55,14 @@ export function CountySelect({
       search.setValue(value);
     }
   }, [value]);
+
+  useEffect(() => {
+    if (inputRef.current && dialog.value) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [dialog.value]);
 
   if (!isDesktop)
     return (
@@ -83,6 +92,7 @@ export function CountySelect({
                   placeholder={t("search")}
                   defaultValue={value}
                   className="text-base"
+                  ref={inputRef}
                 />
                 <Button
                   variant="ghost"

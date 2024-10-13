@@ -125,7 +125,7 @@
     "sharp": "^0.33.5",
     "simple-oauth2": "^5.0.0",
     "sonner": "^1.4.41",
-    "stripe": "^16.7.0",
+    "stripe": "^17.2.0",
     "superjson": "^2.2.1",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",

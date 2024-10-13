@@ -349,11 +349,11 @@
               },
               "county": {
                 "label": "County",
-                "placeholder": "Select a county"
+                "placeholder": "Select..."
               },
               "city": {
                 "label": "City",
-                "placeholder": "Select a city"
+                "placeholder": "Select..."
               }
             }
           },
@@ -1236,7 +1236,7 @@
     },
     "county": {
       "label": "County",
-      "placeholder": "Select county...",
+      "placeholder": "Select...",
       "search": "Search county...",
       "loading": "Loading...",
       "no-results": "No results",
@@ -1244,7 +1244,7 @@
     },
     "city": {
       "label": "City",
-      "placeholder": "Select city...",
+      "placeholder": "Select...",
       "search": "Search city...",
       "loading": "Loading...",
       "no-results": "No results",
@@ -1252,7 +1252,7 @@
     },
     "sector": {
       "label": "Sector",
-      "placeholder": "Select sector...",
+      "placeholder": "Select...",
       "search": "Search sector...",
       "loading": "Loading...",
       "no-results": "No results",

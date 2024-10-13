@@ -184,7 +184,7 @@ export default function CreateAppointmentDialog({
             </Form>
           </motion.div>
         </DrawerBody>
-        <DrawerFooter className="grid grid-cols-3 gap-2">
+        <DrawerFooter className="grid grid-cols-3 gap-2 py-6">
           <ConfirmationDialog
             open={confirmationDialog.value}
             onOpenChange={confirmationDialog.toggle}

@@ -349,11 +349,11 @@
               },
               "county": {
                 "label": "Județ",
-                "placeholder": "Selectează un județ"
+                "placeholder": "Selectează..."
               },
               "city": {
                 "label": "Oraș",
-                "placeholder": "Selectează un oraș"
+                "placeholder": "Selectează..."
               }
             }
           },
@@ -1236,7 +1236,7 @@
     },
     "county": {
       "label": "Județ",
-      "placeholder": "Selectează județul...",
+      "placeholder": "Selectează...",
       "search": "Caută județ...",
       "loading": "Se încarcă...",
       "no-results": "Nici un rezultat",
@@ -1244,7 +1244,7 @@
     },
     "city": {
       "label": "Oraș",
-      "placeholder": "Selectează orașul...",
+      "placeholder": "Selectează...",
       "search": "Caută oraș...",
       "loading": "Se încarcă...",
       "no-results": "Nici un rezultat",
@@ -1252,7 +1252,7 @@
     },
     "sector": {
       "label": "Sector",
-      "placeholder": "Selectează sectorul...",
+      "placeholder": "Selectează...",
       "search": "Caută sector...",
       "loading": "Se încarcă...",
       "no-results": "Nici un rezultat",
