@@ -7,7 +7,6 @@ import useMediaQuery from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ScrollArea } from "./scroll-area";
 
 const Drawer = ({
   shouldScaleBackground = true,
@@ -131,32 +130,34 @@ const DrawerBody = ({
 
   return (
     <AnimatePresence mode="wait">
-      <ScrollArea
-        className="relative grow"
-        viewportRef={scrollAreaRef}
-        onScroll={handleScroll}
-      >
+      <div className="relative overflow-hidden grow">
         <div
-          className={cn(
-            "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
-            {
-              "h-0": scrollTop <= 0,
-            },
-          )}
-        />
-        <div className={cn("px-4", className)} {...props}>
-          {children}
+          className="h-full w-full rounded-[inherit] overflow-y-auto"
+          ref={scrollAreaRef}
+          onScroll={handleScroll}
+        >
+          <div
+            className={cn(
+              "pointer-events-none absolute left-0 right-0 top-0 z-50 h-16 bg-gradient-to-b from-secondary to-transparent transition-[height] duration-300 ease-in-out",
+              {
+                "h-0": scrollTop <= 0,
+              },
+            )}
+          />
+          <div className={cn("px-4", className)} {...props}>
+            {children}
+          </div>
+          <div
+            className={cn(
+              "ease-in-out pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
+              {
+                "h-0":
+                  scrollTop >= scrollPosition,
+              },
+            )}
+          />
         </div>
-        <div
-          className={cn(
-            "ease-in-outƒ pointer-events-none absolute bottom-0 left-0 right-0 z-50 h-24 bg-gradient-to-t from-secondary to-transparent transition-[height] duration-300",
-            {
-              "h-0":
-                scrollTop >= scrollPosition,
-            },
-          )}
-        />
-      </ScrollArea>
+      </div>
     </AnimatePresence>
   );
 };
