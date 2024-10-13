@@ -60,7 +60,7 @@ const isSubscriptionUpdateAllowed = async (
 export const stripeRouter = createTRPCRouter({
   products: protectedProcedure.query(async () => {
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
+      apiVersion: "2024-09-30.acacia",
     });
 
     const products = await stripe.products.list();
@@ -75,7 +75,7 @@ export const stripeRouter = createTRPCRouter({
 
   plans: protectedProcedure.query(async () => {
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
+      apiVersion: "2024-09-30.acacia",
     });
 
     const plans = (
@@ -100,7 +100,7 @@ export const stripeRouter = createTRPCRouter({
     const tenantId = ctx.session.user.tenantId;
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
+      apiVersion: "2024-09-30.acacia",
     });
 
     const tenant = await ctx.db.tenant.findUniqueOrThrow({
@@ -155,7 +155,7 @@ export const stripeRouter = createTRPCRouter({
       });
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-        apiVersion: "2024-06-20",
+        apiVersion: "2024-09-30.acacia",
       });
 
       const userId = uuidv4();
@@ -213,7 +213,7 @@ export const stripeRouter = createTRPCRouter({
       const { priceId, prorationDate } = input;
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-        apiVersion: "2024-06-20",
+        apiVersion: "2024-09-30.acacia",
         typescript: true,
       });
 
@@ -347,7 +347,7 @@ export const stripeRouter = createTRPCRouter({
     const tenantId = ctx.session.user.tenantId;
 
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
+      apiVersion: "2024-09-30.acacia",
       typescript: true,
     });
 
@@ -400,7 +400,7 @@ export const stripeRouter = createTRPCRouter({
       const { priceId, prorationDate } = input;
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-        apiVersion: "2024-06-20",
+        apiVersion: "2024-09-30.acacia",
       });
 
       const stripePlan = await stripe.plans.retrieve(priceId);
@@ -487,7 +487,7 @@ export const stripeRouter = createTRPCRouter({
   cancelSubscription: adminProcedure.mutation(async ({ ctx }) => {
     const tenantId = ctx.session.user.tenantId;
     const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-      apiVersion: "2024-06-20",
+      apiVersion: "2024-09-30.acacia",
     });
 
     const tenant = await ctx.db.tenant.findUniqueOrThrow({
