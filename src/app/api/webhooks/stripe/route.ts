@@ -79,6 +79,28 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
           });
         }
 
+        const existingTenant = await tx.tenant.findFirst({
+          where: { email: metadata.email },
+        });
+
+        if (existingTenant) {
+          return await tx.tenant.update({
+            where: { id: existingTenant.id },
+            data: {
+              profile: {
+                update: {
+                  stripeSubscriptionId: subscription.id,
+                  planId: plan.id,
+                  activeSubscription:
+                    subscription.status === "active" ||
+                    subscription.status === "trialing",
+                },
+              },
+            },
+            include: { profile: true },
+          });
+        }
+        
         tenant = await tx.tenant.create({
           data: {
             email: metadata.email,
