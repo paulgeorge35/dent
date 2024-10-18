@@ -23,6 +23,7 @@ type ConfirmationDialogProps = {
   loading?: boolean;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  t?: ReturnType<typeof useTranslations<string>>;
 };
 
 export default function ConfirmationDialog({
@@ -34,8 +35,8 @@ export default function ConfirmationDialog({
   loading,
   open,
   onOpenChange,
+  t = useTranslations("layout.confirmation-dialog"),
 }: ConfirmationDialogProps) {
-  const t = useTranslations("layout.confirmation-dialog");
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   return (

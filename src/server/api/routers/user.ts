@@ -663,4 +663,28 @@ export const userRouter = createTRPCRouter({
         });
       });
     }),
+
+  updateWebhookApiKey: tenantProcedure.mutation(async ({ ctx }) => {
+    const userId = ctx.session.user!.id;
+
+    return await ctx.db.$transaction(async (tx) => {
+      const targetUser = await tx.user.findUnique({
+        where: { id: userId },
+      });
+
+      if (!targetUser) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "User not found",
+        });
+      }
+
+      const webhookApiKey = crypto.randomUUID();
+
+      return await tx.user.update({
+        where: { id: userId },
+        data: { webhookApiKey },
+      });
+    });
+  }),
 });

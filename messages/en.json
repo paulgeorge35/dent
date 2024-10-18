@@ -753,6 +753,22 @@
             "status": {
               "success": "Password updated successfully"
             }
+          },
+          "webhook-api-key": {
+            "title": "Webhook API Key",
+            "description": "The webhook API key is used to communicate with other applications (e.g. Google Forms, Zapier etc.).",
+            "generate": "Generate",
+            "regenerate": "Regenerate",
+            "copied": "Webhook API key copied successfully",
+            "status": {
+              "success": "Webhook API key generated successfully"
+            },
+            "dialog": {
+              "title": "Regenerate webhook API key",
+              "description": "Are you sure you want to regenerate the webhook API key? This will invalidate the current key and generate a new one.",
+              "confirm": "Regenerate",
+              "cancel": "Cancel"
+            }
           }
         },
         "clinic": {

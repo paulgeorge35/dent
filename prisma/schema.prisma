@@ -67,6 +67,7 @@ model User {
   workingHours   Json      @default("[]")
   firstDayOfWeek DayOfWeek @default(MONDAY)
   showWeekends   Boolean   @default(true)
+  webhookApiKey  String?
 
   specialityId String?
   speciality   Speciality? @relation(fields: [specialityId], references: [id], onDelete: SetNull)

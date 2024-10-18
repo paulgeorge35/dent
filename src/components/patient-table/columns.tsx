@@ -80,7 +80,7 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
         />
       ),
       cell: ({ row }) => {
-        return (
+        return row.original.email ? (
           <div className="horizontal center-v gap-2 group">
             <MailIcon className="size-4" />
             <a
@@ -96,6 +96,8 @@ export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
               />
             )}
           </div>
+        ) : (
+          <div>-</div>
         );
       },
       enableSorting: true,

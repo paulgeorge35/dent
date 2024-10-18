@@ -753,6 +753,22 @@
             "status": {
               "success": "Parola a fost actualizată cu succes"
             }
+          },
+          "webhook-api-key": {
+            "title": "Webhook API Key",
+            "description": "Cheia API webhook este folosită pentru a comunica cu alte aplicații (ex. Google Forms, Zapier etc.).",
+            "generate": "Generează",
+            "regenerate": "Regenerează",
+            "copied": "Cheia API a fost copiată cu succes",
+            "status": {
+              "success": "Cheia API a fost regenerată cu succes"
+            },
+            "dialog": {
+              "title": "Regenerează cheia API webhook",
+              "description": "Ești sigur că vrei să regenerezi cheia API webhook? Această acțiune va invalida cheia curentă și va genera una nouă.",
+              "confirm": "Regenerează",
+              "cancel": "Anulează"
+            }
           }
         },
         "clinic": {
