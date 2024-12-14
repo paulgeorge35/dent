@@ -127,13 +127,13 @@ const isTenant = t.middleware(async ({ ctx, next }) => {
       id: ctx.session.user.id,
       deletedAt: null,
       bannedAt: null,
-      activatedAt: { not: null },
     },
   });
 
   if (!user) {
     throw new TRPCError({ code: "FORBIDDEN" });
   }
+
   return next({
     ctx: {
       session: {

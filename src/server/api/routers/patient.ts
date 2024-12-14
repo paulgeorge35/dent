@@ -17,6 +17,31 @@ export const createInput = z.object({
   status: StatusSchema.optional().default("ACTIVE"),
   smsNotifications: z.boolean().optional(),
   emailNotifications: z.boolean().optional(),
+  note: z.string().optional(),
+});
+
+export const updateInput = createInput
+  .partial()
+  .merge(z.object({ id: z.string() }));
+
+const medicalDataSchema = z.object({
+  allergies: z.string().nullish(),
+  medications: z.string().nullish(),
+  conditions: z.string().nullish(),
+});
+
+const oralCheckSchema = z.object({
+  occlusion: z.string().nullish(),
+  parodontosis: z.string().nullish(),
+  toothDecay: z.string().nullish(),
+  toothDiscoloration: z.string().nullish(),
+});
+
+const medicalSchema = medicalDataSchema.merge(oralCheckSchema);
+
+export const updateMedicalInput = z.object({
+  id: z.string(),
+  medical: medicalSchema.optional(),
 });
 
 const pagination = z.object({
@@ -62,7 +87,7 @@ export const patientRouter = createTRPCRouter({
     .input(
       z
         .object({
-          search: z.string().optional(),
+          search: z.string().optional().transform((val) => val?.trim()?.toLowerCase()),
         })
         .merge(pagination)
         .merge(z.object({ sort: sort })),
@@ -155,6 +180,9 @@ export const patientRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const patient = await ctx.db.patient.findUnique({
         where: { id: input.id },
+        include: {
+          data: true,
+        },
       });
 
       if (!patient) {
@@ -182,5 +210,55 @@ export const patientRouter = createTRPCRouter({
       });
 
       return patient;
+    }),
+
+  update: tenantProcedure
+    .input(updateInput)
+    .mutation(async ({ ctx, input }) => {
+      const tenantId = ctx.session.user!.tenantId;
+      const userId = ctx.session.user!.id;
+
+      const patient = await ctx.db.patient.findUnique({
+        where: { id: input.id, tenantId, userId },
+      });
+
+      if (!patient) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Patient not found",
+        });
+      }
+
+      const updatedPatient = await ctx.db.patient.update({
+        where: { id: input.id, tenantId, userId },
+        data: input,
+      });
+
+      return updatedPatient;
+    }),
+
+  updateMedical: tenantProcedure
+    .input(updateMedicalInput)
+    .mutation(async ({ ctx, input }) => {
+      const tenantId = ctx.session.user!.tenantId;
+      const userId = ctx.session.user!.id;
+
+      const patient = await ctx.db.patient.findUnique({
+        where: { id: input.id, tenantId, userId },
+      });
+
+      if (!patient) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Patient not found",
+        });
+      }
+
+      const updatedPatient = await ctx.db.patient.update({
+        where: { id: input.id, tenantId, userId },
+        data: input,
+      });
+
+      return updatedPatient;
     }),
 });
