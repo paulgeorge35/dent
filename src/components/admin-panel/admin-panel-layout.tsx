@@ -35,9 +35,9 @@ export default function AdminPanelLayout({
   const pathname = usePathname();
   const sidebar = useStore(useSidebarToggle, (state) => state);
   const { appointmentId, clear } = useAppointmentDialog();
-  const { open, setOpen } = useCreateAppointmentDialog();
+  const { open, setOpen, form, setForm } = useCreateAppointmentDialog();
 
-  const form = useForm<AppointmentSchema>({
+  const appointmentForm = useForm<AppointmentSchema>({
     resolver: zodResolver(appointmentCreateInput),
     defaultValues: {
       description: "",
@@ -45,6 +45,12 @@ export default function AdminPanelLayout({
       end: undefined,
     },
   });
+
+  if (!form) {
+    setForm(appointmentForm);
+    return null;
+  }
+
   if (!sidebar) return null;
 
   return (

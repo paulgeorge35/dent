@@ -1,5 +1,6 @@
+import type { AppointmentSchema } from "@/components/calendar/components/calendar";
+import type { UseFormReturn } from "react-hook-form";
 import { create } from "zustand";
-
 
 interface useAppointmentDialogStore {
   appointmentId?: string;
@@ -18,6 +19,8 @@ export const useAppointmentDialog = create<useAppointmentDialogStore>(
 interface useCreateAppointmentDialogStore {
   open: boolean;
   setOpen: (value: boolean) => void;
+  form: UseFormReturn<AppointmentSchema> | undefined;
+  setForm: (value: UseFormReturn<AppointmentSchema>) => void;
 }
 
 export const useCreateAppointmentDialog =
@@ -25,5 +28,7 @@ export const useCreateAppointmentDialog =
     return {
       open: false,
       setOpen: (value) => set({ open: value }),
+      form: undefined,
+      setForm: (value) => set({ form: value }),
     };
   });

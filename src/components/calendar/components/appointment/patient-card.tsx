@@ -48,7 +48,9 @@ export default function PatientCard({
           />
           <span className="flex flex-col justify-around">
             <p className="text-sm text-muted-foreground">Patient name</p>
-            <p className="text-lg md:text-2xl">{fullName}</p>
+            <a href={`/patient/${patient.id}`} className="text-lg md:text-2xl hover:underline">
+              {fullName}
+            </a>
           </span>
         </span>
         <span className="md:ml-auto horizontal center-v gap-2">

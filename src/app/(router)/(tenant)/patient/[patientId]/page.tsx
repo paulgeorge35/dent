@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTranslations } from "@/lib/translations";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { PlusIcon } from "lucide-react";
+import { CreateAppointmentButton } from "./_components/CreateAppointmentButton";
 import NoteInput from "./_components/NoteInput";
 import AppointmentsHistory from "./_components/tabs/AppointmentsHistory";
 import FutureTreatments from "./_components/tabs/FutureTreatments";
@@ -44,6 +44,7 @@ export default async function Patient({
     console.error(error);
     notFound();
   });
+
   if (!patient) notFound();
 
   const t = await useTranslations("page.patient");
@@ -69,9 +70,7 @@ export default async function Patient({
           </span>
 
           <span className="horizontal items-center gap-2 ml-auto">
-            <Button variant='expandIcon' Icon={PlusIcon} iconPlacement="right" className="capitalize">
-              {t("header.actions.create-appointment")}
-            </Button>
+            <CreateAppointmentButton patientId={patientId} />
             <Button variant="outline" className="!p-2">
               <DotsVerticalIcon className="size-4" />
             </Button>
