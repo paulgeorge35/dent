@@ -56,7 +56,7 @@ async function MembershipCard() {
       <section className="flex flex-col gap-2 rounded-lg bg-muted px-4 py-2 md:flex-row md:items-center md:justify-between">
         <span>
           <span className="horizontal center-v gap-2">
-            <h1 className="text-lg">{`MyDent - ${plan.name} Plan`}</h1>
+            <h1 className="text-lg">{`${plan.name} Plan`}</h1>
             <span className="rounded-full border border-blue-500 px-2 py-[2px] text-xs font-light">
               {t("subscription.status.active")}
             </span>
@@ -75,7 +75,7 @@ async function MembershipCard() {
         <CancelMembership />
       </section>
       <p className="text-xs text-muted-foreground px-2">
-        {t("subscription.active-until")}{" "}
+        {t("subscription.subscription-renews")}{" "}
         <b>
           {DateTime.fromMillis(
             subscription.current_period_end * 1000,
@@ -101,7 +101,7 @@ const Trial = async ({ plan, subscription }: PlanProps) => {
       <section className="flex flex-col gap-2 rounded-lg bg-muted px-4 py-2 md:flex-row md:items-center md:justify-between">
         <span>
           <span className="horizontal center-v gap-2">
-            <h1 className="text-lg">{`MyDent - ${plan.name} Plan`}</h1>
+            <h1 className="text-lg">{`${plan.name} Plan`}</h1>
             <span className="rounded-full border border-primary px-2 py-[2px] text-xs font-light">
               {t("subscription.status.trialing")}
             </span>
@@ -139,7 +139,7 @@ const Canceled = async ({ plan, subscription }: PlanProps) => {
       <section className="flex flex-col gap-2 rounded-lg bg-muted px-4 py-2 md:flex-row md:items-center md:justify-between">
         <span>
           <span className="horizontal center-v gap-2">
-            <h1 className="text-lg">{`MyDent - ${plan.name} Plan`}</h1>
+            <h1 className="text-lg">{`${plan.name} Plan`}</h1>
             <span className="rounded-full border border-destructive px-2 py-[2px] text-xs font-light">
               {t("subscription.status.canceled")}
             </span>

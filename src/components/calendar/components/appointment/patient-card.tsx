@@ -76,7 +76,7 @@ export default function PatientCard({
           </Select>
         </span>
       </CardHeader>
-      <Separator />
+      <Separator className="hidden md:block" />
       <CardFooter className="flex-row hidden md:flex items-center gap-4 !py-4 text-muted-foreground">
         <StickyNote className="size-6" />
         <p className="text-sm">

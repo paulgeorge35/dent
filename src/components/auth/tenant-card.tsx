@@ -30,7 +30,7 @@ export default function TenantCard({ account }: TenantCardProps) {
       startTransition(() => toggleTenant(tenantId));
     } else {
       if (isAdmin) {
-        router.push("/subscription/resume");
+        startTransition(() => toggleTenant(tenantId, "/subscription/resume"));
       }
     }
   };

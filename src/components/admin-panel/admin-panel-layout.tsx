@@ -1,14 +1,24 @@
 "use client";
 
 import { Sidebar } from "@/components/admin-panel/sidebar";
+import AppointmentDialog from "@/components/calendar/components/appointment-dialog";
+import { useAppointmentDialog, useCreateAppointmentDialog } from "@/hooks/use-appointment-dialog";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn, getPageTitle } from "@/lib/utils";
 import type { SessionUser, TenantAccount } from "@/types/schema";
+import { appointmentCreateInput } from "@/types/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { DateTime } from "luxon";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import React from "react";
+import { useForm } from "react-hook-form";
+import type { z } from "zod";
+import CreateAppointmentDialog from "../calendar/components/create-appointment-dialog";
 import { Shell } from "../layout/shell";
+
+type AppointmentSchema = z.infer<typeof appointmentCreateInput>;
 
 export default function AdminPanelLayout({
   children,
@@ -24,10 +34,32 @@ export default function AdminPanelLayout({
   const t = useTranslations("page");
   const pathname = usePathname();
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const { appointmentId, clear } = useAppointmentDialog();
+  const { open, setOpen } = useCreateAppointmentDialog();
+
+  const form = useForm<AppointmentSchema>({
+    resolver: zodResolver(appointmentCreateInput),
+    defaultValues: {
+      description: "",
+      start: DateTime.now().set({ second: 0, millisecond: 0 }).toJSDate(),
+      end: undefined,
+    },
+  });
   if (!sidebar) return null;
 
   return (
     <React.Fragment>
+      <AppointmentDialog
+        open={!!appointmentId}
+        eventId={appointmentId ?? ""}
+        onClose={clear}
+      />
+      <CreateAppointmentDialog
+        open={open}
+        resourceId={session.user!.id}
+        onOpenChange={setOpen}
+        form={form}
+      />
       <Sidebar
         title={t(`${getPageTitle(pathname ?? "")}.title`)}
         session={session}

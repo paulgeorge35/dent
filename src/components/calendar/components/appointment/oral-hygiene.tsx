@@ -6,7 +6,9 @@ import {
   FormItem,
   FormMessage
 } from "@/components/ui/form";
+import { Icons } from "@/components/ui/icons";
 import quiz from "@/lib/quiz-questions.json";
+import { useTranslations } from "next-intl";
 import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
 import type { AppointmentSchema } from "../calendar";
 
@@ -17,8 +19,13 @@ type OralHygieneProps = {
 
 export default function OralHygiene({ form }: OralHygieneProps) {
   const questions = quiz;
+  const t = useTranslations("page.appointments.add.steps.oral-hygiene");
   return (
     <div className="grid gap-4 p-4">
+      <span className="text-sm bg-blue-300/50 p-2 rounded-md flex items-center gap-2">
+        <Icons.info className="size-4 shrink-0" />
+        <p><strong>{t("title")}</strong> {t("hint")}</p>
+      </span>
       {questions.map((question, index) => (
         <Card key={index}>
           <CardHeader>

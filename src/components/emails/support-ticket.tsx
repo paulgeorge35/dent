@@ -52,6 +52,12 @@ export const SupportTicket = ({
 
           <Section style={section}>
             <Text style={global.text}>
+              <strong>Date & Time:</strong>{" "}
+              {DateTime.fromJSDate(new Date()).toFormat(
+                "FF",
+              )}
+            </Text>
+            <Text style={global.text}>
               <strong>From:</strong> {user.profile.firstName}{" "}
               {user.profile.lastName} ({user.profile.email})
             </Text>
@@ -70,8 +76,8 @@ export const SupportTicket = ({
             <Text style={global.text}>
               <strong>Member Since:</strong>{" "}
               {DateTime.fromJSDate(user.tenant.profile.createdAt).toFormat(
-                "DDD, LLL dd, yyyy HH:mm",
-              )}
+                "DDD",
+              )} ({DateTime.fromJSDate(user.tenant.profile.createdAt).toRelative()})
             </Text>
           </Section>
 

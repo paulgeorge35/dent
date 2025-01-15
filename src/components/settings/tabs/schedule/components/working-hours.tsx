@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import RootFormError from "@/components/ui/root-form-error";
 import { Switch } from "@/components/ui/switch";
+import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
 import { cn } from "@/lib/utils";
 import { api } from "@/trpc/react";
@@ -160,6 +161,7 @@ function WorkingDay({ day, form }: WorkingDayProps) {
   const isWorking =
     !!form.watch(`workingHours.${day}.endTime`) &&
     !!form.watch(`workingHours.${day}.startTime`);
+  const isMobile = useMediaQuery("(max-width: 768px)");
   const t = useTranslations("page.settings.tabs.schedule.working-hours");
   return (
     <div
@@ -171,7 +173,9 @@ function WorkingDay({ day, form }: WorkingDayProps) {
         control={form.control}
         name={`workingHours.${day}`}
         render={({ field }) => (
-          <FormItem className="flex items-center gap-2 col-span-2 sm:col-span-1">
+          <FormItem className={cn("flex items-center gap-2 col-span-2 sm:col-span-1", {
+            "flex-row splace-y-0": isMobile,
+          })}>
             <Switch
               id={`working-day-${day}`}
               checked={isWorking}
@@ -186,7 +190,7 @@ function WorkingDay({ day, form }: WorkingDayProps) {
                 })
               }
             />
-            <FormLabel htmlFor={`working-day-${day}`}>
+            <FormLabel htmlFor={`working-day-${day}`} className="!mt-0">
               {t(`days-of-week.${day}`)}
             </FormLabel>
           </FormItem>

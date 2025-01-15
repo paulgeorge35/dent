@@ -18,6 +18,19 @@ const config = {
     ignoreDuringBuilds: true,
   },
   reactStrictMode: true,
+  async headers() {
+    return [
+      {
+        source: "/form",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "ALLOWALL",
+          },
+        ],
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

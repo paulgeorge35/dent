@@ -6,6 +6,7 @@ import Welcome from "@/components/dashboard/welcome";
 import { Shell } from "@/components/layout/shell";
 import { constructMetadata } from "@/lib/utils";
 import { api } from "@/trpc/server";
+import { getLocale } from "next-intl/server";
 
 export const metadata = constructMetadata({
   page: "Dashboard",
@@ -23,6 +24,7 @@ export default async function Dashboard() {
       await api.appointment.commonTreatments(),
       await api.appointment.today(),
     ]);
+  const locale = (await getLocale()) as "en" | "ro";
 
   return (
     <Shell>
@@ -37,6 +39,7 @@ export default async function Dashboard() {
           currentWeek={currentWeek}
           lastWeek={lastWeek}
           currentMonth={currentMonth}
+          locale={locale}
           className="col-span-6 lg:col-span-4"
         />
         <CommonTreatments services={services} className="col-span-2" />

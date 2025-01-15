@@ -44,7 +44,7 @@ const schema = z.object({
   title: z.string().optional(),
   email: z.string().email("Invalid email address"),
   phone: z.string().optional(),
-  avatarId: z.string().nullable(),
+  avatarId: z.string().nullish().transform((value) => value ?? null),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -56,7 +56,6 @@ interface ProfileFormProps {
 
 export default function ProfileForm({ me, specialities }: ProfileFormProps) {
   const t = useTranslations("page.settings.tabs.account.profile");
-  const te = useTranslations("errors");
   const router = useRouter();
   const { mutate, isPending } = api.user.update.useMutation({
     onSuccess: (data) => {
@@ -103,7 +102,7 @@ export default function ProfileForm({ me, specialities }: ProfileFormProps) {
     if (!phoneData.isValid) {
       form.setError("phone", {
         type: "manual",
-        message: te("phone.error"),
+        message: "phone.error",
       });
       return;
     }
@@ -193,9 +192,10 @@ export default function ProfileForm({ me, specialities }: ProfileFormProps) {
                   <Select
                     onValueChange={(value) => field.onChange(value)}
                     value={form.watch(field.name)}
+                    disabled={specialities.length === 0}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Choose speciality" />
+                      <SelectValue placeholder={t("speciality.placeholder")} />
                     </SelectTrigger>
                     <SelectContent>
                       {specialities.map((speciality) => (

@@ -32,7 +32,7 @@ interface CreateAppointmentDialogProps {
   onOpenChange: (_value: boolean) => void;
   form: UseFormReturn<AppointmentSchema>;
   resourceId: string;
-  refetch: () => void;
+  refetch?: () => void;
 }
 
 const steps = [
@@ -69,7 +69,7 @@ export default function CreateAppointmentDialog({
         form.reset();
         onOpenChange(false);
         toast.success(t("status.success"));
-        refetch();
+        refetch?.();
       },
       onError: (error) => {
         showErrorToast(error);

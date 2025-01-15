@@ -59,9 +59,9 @@ export default function PlanSwitch({
   const now = useMemo(() => Math.floor(Date.now() / 1000), []);
   const { mutateAsync: updateSubscription, isPending } =
     api.stripe.updateSubscription.useMutation({
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success("Subscription updated successfully");
-        router.push(redirect);
+        router.push(data?.redirectUrl ?? redirect);
       },
     });
   const form = useForm<PlanFormValues>({

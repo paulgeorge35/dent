@@ -4,7 +4,7 @@ import { auth, setSession } from "@/auth";
 import { db } from "@/server/db";
 import { redirect } from "next/navigation";
 
-export async function toggleTenant(tenantId: string) {
+export async function toggleTenant(tenantId: string, redirectTo?: string) {
   const session = await auth();
 
   if (!session) {
@@ -39,7 +39,7 @@ export async function toggleTenant(tenantId: string) {
     { days: 30 },
   );
 
-  redirect("/dashboard");
+  redirect(redirectTo ?? "/dashboard");
 }
 
 export async function logoutTenant() {

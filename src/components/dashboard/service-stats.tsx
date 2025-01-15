@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/card";
 
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { Cell, Pie, PieChart } from "recharts";
 import {
   type ChartConfig,
@@ -30,6 +31,7 @@ type StatsProps = {
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
 export default function CommonTreatments({ services, className }: StatsProps) {
+  const t = useTranslations("page.dashboard.services");
   const chartConfig = {} satisfies ChartConfig;
 
   const chartData = services.map((service, index) => ({
@@ -42,11 +44,9 @@ export default function CommonTreatments({ services, className }: StatsProps) {
     <Card className={cn("w-full flex-col hidden lg:flex", className)}>
       <CardHeader>
         <CardTitle className="flex justify-between">
-          Common Treatments
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Here are some stats about your most common treatments.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="flex items-center justify-center grow">
         <ChartContainer config={chartConfig} className="min-h-[200px] h-full">
@@ -72,6 +72,6 @@ export default function CommonTreatments({ services, className }: StatsProps) {
           </PieChart>
         </ChartContainer>
       </CardContent>
-    </Card>
+    </Card >
   );
 }

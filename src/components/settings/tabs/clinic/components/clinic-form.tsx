@@ -33,7 +33,7 @@ const schema = z.object({
   address: z.string().optional(),
   zip: z.string().optional(),
   phone: z.string().optional(),
-  avatarId: z.string().nullable(),
+  avatarId: z.string().nullish().transform((value) => value ?? null),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -44,7 +44,6 @@ type ClinicFormProps = {
 
 export default function ClinicForm({ clinic }: ClinicFormProps) {
   const t = useTranslations("page.settings.tabs.clinic.details");
-  const te = useTranslations("errors");
   const router = useRouter();
   const { mutate, isPending } = api.tenant.updateClinic.useMutation({
     onSuccess: (data) => {
@@ -89,7 +88,7 @@ export default function ClinicForm({ clinic }: ClinicFormProps) {
     if (!phoneData.isValid) {
       form.setError("phone", {
         type: "manual",
-        message: te("phone.error"),
+        message: "phone.error",
       });
       return;
     }

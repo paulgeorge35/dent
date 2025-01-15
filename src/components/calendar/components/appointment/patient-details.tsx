@@ -31,12 +31,12 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
       </span>
       <Separator className="mt-4" />
       <span className="grid grid-cols-2 gap-4 p-4">
-        <Field label={t("phone.label")} value={patient.phone} />
-        <Field
+        <PatientField label={t("phone.label")} value={patient.phone} />
+        <PatientField
           label={t("gender.label")}
           value={t(`gender.options.${patient.gender}`)}
         />
-        <Field
+        <PatientField
           label={t("dob.label")}
           value={
             patient.dob
@@ -44,7 +44,7 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
               : "-"
           }
         />
-        <Field
+        <PatientField
           label={t("age.label")}
           value={
             patient.dob
@@ -54,18 +54,18 @@ export default function PatientDetails({ patient }: { patient?: Patient }) {
               : "-"
           }
         />
-        <Field label={t("county.label")} value={patient.county} />
-        <Field label={t("city.label")} value={patient.city} />
+        <PatientField label={t("county.label")} value={patient.county} />
+        <PatientField label={t("city.label")} value={patient.city} />
       </span>
     </div>
   );
 }
 
-const Field = ({ label, value }: { label: string; value: string | null }) => {
+export const PatientField = ({ label, value }: { label: string; value: string | null }) => {
   return (
     <span className="vertical gap-2 text-sm text-muted-foreground">
-      <Label className="font-bold">{label}</Label>
-      <span className="font-mono">{value ?? "-"}</span>
+      <Label>{label}</Label>
+      <span className="font-mono font-bold">{value ?? "-"}</span>
     </span>
   );
 };

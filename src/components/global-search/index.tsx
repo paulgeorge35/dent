@@ -119,12 +119,12 @@ export default function GlobalSearch() {
     <React.Fragment>
       <Button
         onClick={globalSearch.setTrue}
-        className="rounded-full w-10 justify-center md:w-80 bg-muted h-10 text-muted-foreground text-base md:justify-start font-normal gap-2 border border-input shadow-sm hover:bg-background/50"
+        className="group rounded-full w-10 justify-center md:w-80 bg-muted h-10 text-muted-foreground text-base md:justify-start font-normal gap-2 border border-input shadow-sm hover:bg-background/50"
       >
         <Search className="size-4 shrink-0" />
         <p className="hidden md:flex truncate">{t("search.placeholder")}</p>
         <span className="hidden md:flex ml-auto items-center gap-1 shrink-0">
-          <ShortcutKeys shortcut={[CONTROL_KEY, "/"]} />
+          <ShortcutKeys shortcut={[CONTROL_KEY, "/"]} keyClassName="dark:border-muted-foreground/50 dark:group-hover:border-secondary" />
         </span>
       </Button>
 

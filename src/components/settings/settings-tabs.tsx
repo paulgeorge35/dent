@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export const tabs = [
   {
@@ -55,17 +56,19 @@ interface SettingsTabsProps {
 export default function SettingsTabs({
   children,
   isAdmin,
-  tab: activeTab,
+  tab,
 }: SettingsTabsProps) {
   const t = useTranslations("page.settings.tabs");
+  const [activeTab, setActiveTab] = useState(tab);
   const router = useRouter();
 
   const onTabChange = (value: string) => {
+    setActiveTab(value);
     router.replace(`/settings?tab=${value}`, { scroll: false });
   };
 
   return (
-    <Tabs defaultValue={activeTab} className="safe-area">
+    <Tabs defaultValue="account" value={activeTab} className="safe-area">
       <TabsList className="mb-2 md:mb-4 flex h-10 overflow-x-auto md:top-20 z-[5]">
         {tabs
           .filter((tab) => !tab.adminsOnly || isAdmin)

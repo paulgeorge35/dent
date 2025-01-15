@@ -210,6 +210,7 @@ export const stripeRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const tenantId = ctx.session.user.tenantId;
       const userId = ctx.session.user.id;
+      const profileId = ctx.session.id;
       const { priceId, prorationDate } = input;
 
       const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
@@ -253,6 +254,12 @@ export const stripeRouter = createTRPCRouter({
       );
 
       if (!subscription || subscription.status === "canceled") {
+        const profile = await ctx.db.profile.findUniqueOrThrow({
+          where: {
+            id: profileId,
+          },
+        });
+
         const checkoutSession = await stripe.checkout.sessions.create({
           mode: "subscription",
           line_items: [
@@ -273,6 +280,7 @@ export const stripeRouter = createTRPCRouter({
             metadata: {
               planId: priceId,
               userId,
+              email: profile.email,
             },
           },
         });

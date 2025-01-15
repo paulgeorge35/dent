@@ -41,6 +41,8 @@ const findStripeSubscription = async (subscriptionId: string) => {
 const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
   return await db.$transaction(async (tx) => {
     const metadata = firstPaymentMetadataSchema.parse(subscription.metadata);
+    const isNewTenant = "email" in metadata;
+
     let tenant = await tx.tenant.findFirst({
       where: { users: { some: { id: metadata.userId } } },
       include: { profile: true },
@@ -83,7 +85,7 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
           where: { email: metadata.email },
         });
 
-        if (existingTenant) {
+        if (existingTenant && !isNewTenant) {
           return await tx.tenant.update({
             where: { id: existingTenant.id },
             data: {
@@ -100,7 +102,7 @@ const findOrCreateTenantAndUser = async (subscription: Stripe.Subscription) => {
             include: { profile: true },
           });
         }
-        
+
         tenant = await tx.tenant.create({
           data: {
             email: metadata.email,

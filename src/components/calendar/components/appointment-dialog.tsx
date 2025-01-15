@@ -81,7 +81,7 @@ export default function AppointmentDialog({
         <span className="hidden md:flex vertical shrink-0 items-center p-2">
           <PlusCircle className="size-10 rounded-full bg-background p-2 text-muted-foreground" />
         </span>
-        <span className="vertical grow rounded-xl bg-background p-6 pt-0 border-l border-border">
+        <span className="vertical grow rounded-xl bg-background p-6 pt-0 md:border-l border-border">
           <DrawerHeader className="lg:pb-4 px-0">
             <DrawerTitle className="flex flex-col md:flex-row items-center gap-2">
               <span className="text-sm font-medium text-muted-foreground">

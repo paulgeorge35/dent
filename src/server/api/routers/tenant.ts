@@ -56,7 +56,7 @@ export const tenantRouter = createTRPCRouter({
 
       const avatar = input.avatarId
         ? { connect: { id: input.avatarId } }
-        : undefined;
+        : { disconnect: true };
 
       return await ctx.db.tenant.update({
         where: { id: tenantId },
@@ -345,7 +345,12 @@ export const tenantRouter = createTRPCRouter({
       const userId = ctx.session.user.id;
 
       const invitationExists = await ctx.db.invitation.findFirst({
-        where: { email: input.email },
+        where: {
+          email: input.email,
+          invitedBy: {
+            tenantId,
+          },
+        },
         cacheStrategy: {
           ttl: env.DEFAULT_TTL,
           swr: env.DEFAULT_SWR,

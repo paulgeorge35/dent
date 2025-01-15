@@ -24,6 +24,24 @@ const handlerFileUploadError = (error?: ErrorCode) => {
   }
 };
 
+const FileSpecificIcon = (file: File) => {
+  const extension = file.name.split(".").pop() ?? "";
+  switch (extension) {
+    case "pdf":
+      return Icons.pdfFile;
+    case "doc":
+      return Icons.docFile;
+    case "docx":
+      return Icons.docxFile;
+    case "jpg":
+    case "jpeg":
+      return Icons.jpgFile;
+    case "png":
+      return Icons.pngFile;
+    default:
+      return Icons.file;
+  }
+}
 export interface DropzoneFilesProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
@@ -263,10 +281,15 @@ const FileUpload = ({
   isDeleting: boolean;
   isUploading: boolean;
 }) => {
+  const extension = file.name.split(".").pop() ?? "";
   const t = useTranslations("fields.files");
   return (
     <div className="flex w-full items-start gap-2 text-xs ">
-      <Icons.file className="size-8 rounded-lg bg-muted p-2" />
+      {extension === 'pdf' && <Icons.pdfFile className="size-10" />}
+      {extension === 'doc' && <Icons.docFile className="size-10" />}
+      {extension === 'docx' && <Icons.docxFile className="size-10" />}
+      {extension === 'png' && <Icons.pngFile className="size-10" />}
+      {['jpg', 'jpeg'].includes(extension) && <Icons.jpgFile className="size-10" />}
       <div className="vertical w-full gap-1">
         <span className="horizontal items-center justify-between">
           {file.name}

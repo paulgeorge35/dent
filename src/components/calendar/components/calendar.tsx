@@ -7,6 +7,7 @@ import {
   resourceLabelContent,
 } from "@/components/calendar/util";
 import { Button } from "@/components/ui/button";
+import { useAppointmentDialog } from "@/hooks/use-appointment-dialog";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { showErrorToast } from "@/lib/handle-error";
@@ -38,12 +39,11 @@ import { DateTime } from "luxon";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useBoolean, useInput } from "react-hanger";
+import { useBoolean } from "react-hanger";
 import { useForm } from "react-hook-form";
 import { useHotkeys } from "react-hotkeys-hook";
 import { toast } from "sonner";
 import { z } from "zod";
-import AppointmentDialog from "./appointment-dialog";
 import CreateAppointmentDialog from "./create-appointment-dialog";
 
 export type AppointmentSchema = z.infer<typeof appointmentCreateInput>;
@@ -86,8 +86,8 @@ export default function Calendar({
   const [, setRenderSeed] = useState(0);
   const [initialView] = useState("timeGridWeek");
   const newAppointmentDialog = useBoolean(false);
-  const openAppointmentDialog = useInput(undefined);
   const router = useRouter();
+  const { openAppointmentDialog } = useAppointmentDialog();
   const { data: activeUsers } = api.tenant.activeUsers.useQuery();
   const { data: users, refetch: refetchCalendar } =
     api.tenant.calendar.useQuery({
@@ -189,7 +189,7 @@ export default function Calendar({
     if (arg.event.extendedProps.isDayOff) return;
     const appointment = appointments.find((app) => app.id === arg.event.id);
     if (!isAdmin && appointment?.userId !== userId) return;
-    openAppointmentDialog.setValue(arg.event.id);
+    openAppointmentDialog(arg.event.id);
     setResourceId(appointment?.userId ?? userId);
   };
 
@@ -283,11 +283,6 @@ export default function Calendar({
         form={form}
         refetch={refetchCalendar}
       />
-      <AppointmentDialog
-        open={openAppointmentDialog.value !== ""}
-        eventId={openAppointmentDialog.value}
-        onClose={() => openAppointmentDialog.clear()}
-      />
       <FullCalendar
         ref={calendarRef}
         schedulerLicenseKey="0654377132-fcs-1723569352"
@@ -328,12 +323,12 @@ export default function Calendar({
             (user.workingHours as EventInput[]).length > 0
               ? (user.workingHours as EventInput[])
               : [
-                  {
-                    startTime: "00:00",
-                    endTime: "00:00",
-                    daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-                  },
-                ],
+                {
+                  startTime: "00:00",
+                  endTime: "00:00",
+                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+                },
+              ],
           extendedProps: {
             userId: user.id,
             tenantId: user.tenantId,
@@ -376,12 +371,12 @@ export default function Calendar({
           workingHours.length > 0
             ? workingHours
             : [
-                {
-                  startTime: "00:00",
-                  endTime: "00:00",
-                  daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
-                },
-              ]
+              {
+                startTime: "00:00",
+                endTime: "00:00",
+                daysOfWeek: [0, 1, 2, 3, 4, 5, 6],
+              },
+            ]
         }
         dayCellClassNames={"hover:bg-blue-600/10"}
         navLinks={true}

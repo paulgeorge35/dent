@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { DateTime } from "luxon";
+import { useTranslations } from "next-intl";
 import { useStateful } from "react-hanger";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 import {
@@ -45,6 +46,7 @@ type StatsProps = {
   lastWeek: StatsFormat;
   currentMonth: StatsFormat;
   className?: string;
+  locale: "en" | "ro";
 };
 
 export default function Stats({
@@ -52,25 +54,27 @@ export default function Stats({
   lastWeek,
   currentMonth,
   className,
+  locale,
 }: StatsProps) {
   const view = useStateful<View>("currentWeek");
+  const t = useTranslations("page.dashboard.stats");
 
   const title = (() => {
     switch (view.value) {
       case "currentWeek":
-        return "Appointments this week";
+        return t("current-week.title");
       case "lastWeek":
-        return "Appointments last week";
+        return t("last-week.title");
       case "currentMonth":
-        return "Appointments this month";
+        return t("current-month.title");
       default:
-        return "Appointments";
+        return t("title");
     }
   })();
 
   const chartConfig = {
     count: {
-      label: "Appointments",
+      label: t("title"),
       color: "#2563eb",
     },
   } satisfies ChartConfig;
@@ -79,17 +83,19 @@ export default function Stats({
     switch (view.value) {
       case "currentWeek":
         return currentWeek.dailyStats.map((stat) => ({
-          date: DateTime.fromJSDate(stat.date).toFormat("EEEE"),
+          date: DateTime.fromJSDate(stat.date).toFormat("EEEE", { locale }),
           count: stat.count,
         }));
       case "lastWeek":
         return lastWeek.dailyStats.map((stat) => ({
-          date: DateTime.fromJSDate(stat.date).toFormat("EEE, dd LLL"),
+          date: DateTime.fromJSDate(stat.date).toFormat("EEE, dd LLL", {
+            locale,
+          }),
           count: stat.count,
         }));
       case "currentMonth":
         return currentMonth.dailyStats.map((stat) => ({
-          date: DateTime.fromJSDate(stat.date).toFormat("dd LLLL"),
+          date: DateTime.fromJSDate(stat.date).toFormat("dd LLLL", { locale }),
           count: stat.count,
         }));
       default:
@@ -102,9 +108,7 @@ export default function Stats({
       <CardHeader className="flex flex-row justify-between">
         <span className="vertical">
           <CardTitle className="flex justify-between">{title}</CardTitle>
-          <CardDescription>
-            Here are some stats about your appointments.
-          </CardDescription>
+          <CardDescription>{t("description")}</CardDescription>
         </span>
         <StatsViewSelect view={view.value} setView={view.setValue} />
       </CardHeader>
@@ -145,15 +149,16 @@ function StatsViewSelect({
   view: View;
   setView: (view: View) => void;
 }) {
+  const t = useTranslations("page.dashboard.stats");
   return (
     <Select value={view} onValueChange={setView}>
-      <SelectTrigger className="w-40">
+      <SelectTrigger className="w-44">
         <SelectValue placeholder="Select a view" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="currentWeek">Current Week</SelectItem>
-        <SelectItem value="lastWeek">Last Week</SelectItem>
-        <SelectItem value="currentMonth">Current Month</SelectItem>
+        <SelectItem value="currentWeek">{t("current-week.option")}</SelectItem>
+        <SelectItem value="lastWeek">{t("last-week.option")}</SelectItem>
+        <SelectItem value="currentMonth">{t("current-month.option")}</SelectItem>
       </SelectContent>
     </Select>
   );

@@ -52,19 +52,21 @@ export const shortcutCommand = (
 export const ShortcutKeys = ({
   shortcut,
   className,
+  keyClassName,
 }: {
   shortcut: (string | Shortcut)[] | string | Shortcut;
   square?: boolean;
   className?: string;
+  keyClassName?: string;
 }) => {
   return (
     <span className={cn("hidden sm:flex items-center gap-1", className)}>
       {Array.isArray(shortcut) ? (
         shortcut.map((key, index) => (
-          <KeyComponent key={index} shortcut={key} />
+          <KeyComponent key={index} shortcut={key} className={keyClassName} />
         ))
       ) : (
-        <KeyComponent shortcut={shortcut} />
+        <KeyComponent shortcut={shortcut} className={keyClassName} />
       )}
     </span>
   );
@@ -73,7 +75,8 @@ export const ShortcutKeys = ({
 const KeyComponent = ({
   shortcut,
   square,
-}: { shortcut: string | Shortcut; square?: boolean }) => {
+  className,
+}: { shortcut: string | Shortcut; square?: boolean; className?: string }) => {
   const isMac = !isNotMac();
   if (typeof shortcut === "string" && shortcut.length === 1) {
     square = true;
@@ -87,8 +90,9 @@ const KeyComponent = ({
   return (
     <span
       className={cn(
-        "hidden h-5 min-w-5 items-center justify-center rounded border px-1 font-mono text-xs sm:flex capitalize",
+        "hidden h-5 min-w-5 items-center justify-center rounded border px-1 font-mono text-xs sm:flex capitalize transition-colors",
         square ? "aspect-square" : "aspect-auto",
+        className,
       )}
     >
       {shortcut}

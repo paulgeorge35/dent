@@ -206,7 +206,38 @@
       }
     },
     "dashboard": {
-      "title": "Administrare"
+      "title": "Administrare",
+      "welcome": {
+        "title": "Bine ai venit, {name}!",
+        "description": "Acesta este rezumatul zilei tale.",
+        "appointments": "Ai {count} programări pentru astăzi",
+        "view-appointments": "Vezi toate programările",
+        "current-tasks": "Task-uri curente"
+      },
+      "upcomming": {
+        "title": "Programări viitoare",
+        "description": "Ai {count} programări rămase pentru astăzi"
+      },
+      "services": {
+        "title": "Tratamente frecvente",
+        "description": "Aici sunt câteva statistici despre cele mai frecvente tratamente."
+      },
+      "stats": {
+        "title": "Programări",
+        "description": "Aici sunt câteva statistici despre programările tale.",
+        "current-week": {
+          "title": "Programările din aceasta săptămână",
+          "option": "Săptămâna curentă"
+        },
+        "last-week": {
+          "title": "Programările din săptămâna trecută",
+          "option": "Săptămâna trecută"
+        },
+        "current-month": {
+          "title": "Programările din această lună",
+          "option": "Luna curentă"
+        }
+      }
     },
     "appointments": {
       "title": "Programări",
@@ -358,8 +389,9 @@
             }
           },
           "oral-hygiene": {
-            "title": "Examinare orală",
-            "description": "Răspundeți la câteva întrebări pentru a începe."
+            "title": "Obiceiuri de igienă orală",
+            "description": "Răspundeți la câteva întrebări pentru a începe.",
+            "hint": "este opțional, poți reveni la el mai târziu"
           }
         }
       }
@@ -396,7 +428,86 @@
       }
     },
     "patient": {
-      "title": "Pacient"
+      "title": "Pacient",
+      "header": {
+        "note": {
+          "edit": "Editează",
+          "cancel": "Anulează",
+          "save": "Salvează"
+        },
+        "actions": {
+          "create-appointment": "Creează programare"
+        }
+      },
+      "tabs": {
+        "information": {
+          "title": "Informații pacient",
+          "patient-data": {
+            "title": "Datele pacientului",
+            "age": {
+              "label": "Vârstă",
+              "years-old": "ani"
+            },
+            "gender": {
+              "label": "Sex",
+              "options": {
+                "M": "Masculin",
+                "F": "Feminin"
+              }
+            },
+            "email": {
+              "label": "Email"
+            },
+            "phone": {
+              "label": "Telefon"
+            },
+            "county": {
+              "label": "Județ"
+            },
+            "city": {
+              "label": "Oraș"
+            }
+          },
+          "medical-data": {
+            "title": "Date medicale",
+            "last-update": "Ultima actualizare",
+            "allergies": {
+              "label": "Alergii"
+            },
+            "medications": {
+              "label": "Medicamente"
+            },
+            "conditions": {
+              "label": "Condiții medicale"
+            }
+          },
+          "oral-check": {
+            "title": "Examen oral",
+            "last-update": "Ultima actualizare",
+            "occlusion": {
+              "label": "Occluzie"
+            },
+            "parodontosis": {
+              "label": "Parodontoză"
+            },
+            "tooth-decay": {
+              "label": "Carii"
+            },
+            "tooth-discoloration": {
+              "label": "Decolorare"
+            }
+          }
+        },
+        "appointments": {
+          "title": "Istoric programări"
+        },
+        "future-treatments": {
+          "title": "Tratamente viitoare"
+        },
+        "records": {
+          "title": "Fișe medicale"
+        }
+      }
     },
     "patients": {
       "title": "Pacienți",
@@ -736,7 +847,8 @@
               "description": "Introduce-te numărul de telefon. Acesta va fi vizibil pacienților."
             },
             "speciality": {
-              "label": "Specializare"
+              "label": "Specializare",
+              "placeholder": "Selectează o specializare"
             },
             "status": {
               "success": "Profilul a fost actualizat cu succes"
@@ -816,6 +928,7 @@
             "trial-will-end": "Perioada de probă va expira pe",
             "cancel-before": "Pentru a nu fi taxat, anulează înainte de expirarea perioadei de probă.",
             "active-until": "Ai anulat abonamentul dar încă poți folosi MyDent până pe",
+            "subscription-renews": "Abonamentul se va reînnoi pe data de",
             "cancel": {
               "trigger": "Anulează abonamentul",
               "status": {
@@ -1044,7 +1157,10 @@
     }
   },
   "global": {
-    "step": "Pasul {index}"
+    "step": "Pasul {index}",
+    "edit": "Editează",
+    "no": "Nu",
+    "yes": "Da"
   },
   "enums": {
     "event": {

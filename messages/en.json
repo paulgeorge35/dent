@@ -206,7 +206,38 @@
       }
     },
     "dashboard": {
-      "title": "Dashboard"
+      "title": "Dashboard",
+      "welcome": {
+        "title": "Welcome back, {name}!",
+        "description": "Here is your summary for today.",
+        "appointments": "You have {count} appointments for today",
+        "view-appointments": "View all appointments",
+        "current-tasks": "Current tasks"
+      },
+      "upcomming": {
+        "title": "Upcomming appointments",
+        "description": "You have {count} appointments left today"
+      },
+      "services": {
+        "title": "Common treatments",
+        "description": "Here are some stats about your most common services."
+      },
+      "stats": {
+        "title": "Appointments",
+        "description": "Here are some stats about your appointments.",
+        "current-week": {
+          "title": "Appointments this week",
+          "option": "Current Week"
+        },
+        "last-week": {
+          "title": "Appointments last week",
+          "option": "Last Week"
+        },
+        "current-month": {
+          "title": "Appointments this month",
+          "option": "Current Month"
+        }
+      }
     },
     "appointments": {
       "title": "Appointments",
@@ -358,8 +389,9 @@
             }
           },
           "oral-hygiene": {
-            "title": "Oral Hygiene",
-            "description": "Answer a few questions to get started."
+            "title": "Oral Hygiene Habits",
+            "description": "Answer a few questions to get started.",
+            "hint": "is optional, you can come back to it later"
           }
         }
       }
@@ -396,7 +428,86 @@
       }
     },
     "patient": {
-      "title": "Patient Profile"
+      "title": "Patient Profile",
+      "header": {
+        "note": {
+          "edit": "Edit",
+          "cancel": "Cancel",
+          "save": "Save"
+        },
+        "actions": {
+          "create-appointment": "Create appointment"
+        }
+      },
+      "tabs": {
+        "information": {
+          "title": "Patient Information",
+          "patient-data": {
+            "title": "Patient Data",
+            "age": {
+              "label": "Age",
+              "years-old": "years old"
+            },
+            "gender": {
+              "label": "Gender",
+              "options": {
+                "M": "Male",
+                "F": "Female"
+              }
+            },
+            "email": {
+              "label": "Email"
+            },
+            "phone": {
+              "label": "Phone"
+            },
+            "county": {
+              "label": "County"
+            },
+            "city": {
+              "label": "City"
+            }
+          },
+          "medical-data": {
+            "title": "Medical Data",
+            "last-update": "Last update",
+            "allergies": {
+              "label": "Allergies"
+            },
+            "medications": {
+              "label": "Medications"
+            },
+            "conditions": {
+              "label": "Conditions"
+            }
+          },
+          "oral-check": {
+            "title": "Oral Check",
+            "last-update": "Last update",
+            "occlusion": {
+              "label": "Occlusion"
+            },
+            "parodontosis": {
+              "label": "Parodontosis"
+            },
+            "tooth-decay": {
+              "label": "Tooth Decay"
+            },
+            "tooth-discoloration": {
+              "label": "Tooth Discoloration"
+            }
+          }
+        },
+        "appointments": {
+          "title": "Appointments History"
+        },
+        "future-treatments": {
+          "title": "Future Treatments"
+        },
+        "records": {
+          "title": "Medical Records"
+        }
+      }
     },
     "patients": {
       "title": "Patients",
@@ -736,7 +847,8 @@
               "description": "This phone number will be visible to the patients."
             },
             "speciality": {
-              "label": "Specaility"
+              "label": "Specaility",
+              "placeholder": "Select a speciality"
             },
             "status": {
               "success": "Profile updated successfully"
@@ -816,6 +928,7 @@
             "trial-will-end": "Your trial will end on",
             "cancel-before": "To avoid being charged, cancel before the trial ends.",
             "active-until": "You canceled your membership but you will still be able to use MyDent until",
+            "subscription-renews": "Your subscription renews on",
             "cancel": {
               "trigger": "Cancel Membership",
               "status": {
@@ -1044,7 +1157,10 @@
     }
   },
   "global": {
-    "step": "Step {index}"
+    "step": "Step {index}",
+    "edit": "Edit",
+    "no": "No",
+    "yes": "Yes"
   },
   "enums": {
     "event": {

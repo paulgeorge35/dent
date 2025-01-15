@@ -4,6 +4,7 @@ import AccountButton from "@/components/layout/account-button";
 import { Shell } from "@/components/layout/shell";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { useCreateAppointmentDialog } from "@/hooks/use-appointment-dialog";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { useStore } from "@/hooks/use-store";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export function Sidebar({
 }) {
   const t = useTranslations("layout");
   const sidebar = useStore(useSidebarToggle, (state) => state);
+  const { setOpen } = useCreateAppointmentDialog();
   const [isLoading, setIsLoading] = useState(false);
 
   if (!sidebar) return null;
@@ -63,6 +65,7 @@ export function Sidebar({
         <Button
           size="icon"
           className="hidden md:flex flex-shrink-0 rounded-full"
+          onClick={() => setOpen(true)}
         >
           <Plus />
         </Button>
@@ -137,6 +140,6 @@ export function Sidebar({
           <LocaleSwitch locale={locale} isOpen={sidebar?.isOpen} />
         </div>
       </aside>
-    </React.Fragment>
+    </React.Fragment >
   );
 }

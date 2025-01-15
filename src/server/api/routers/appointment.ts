@@ -485,6 +485,7 @@ export const appointmentRouter = createTRPCRouter({
             id: appointment.id,
             date: appointment.start,
             patient: `${appointment.patient!.firstName} ${appointment.patient!.lastName}`,
+            phone: appointment.patient!.phone,
             service: appointment.visits[0]?.service?.name,
             duration: appointment.visits[0]?.service?.duration,
           };
