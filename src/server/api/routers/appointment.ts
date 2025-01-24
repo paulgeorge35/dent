@@ -371,7 +371,7 @@ export const appointmentRouter = createTRPCRouter({
           case "currentWeek":
             return now.endOf("week");
           case "today":
-            return now;
+            return now.endOf("day");
           default:
             return now;
         }

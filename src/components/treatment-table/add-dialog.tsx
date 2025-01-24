@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
+    Drawer,
+    DrawerBody,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
 } from "@/components/ui/drawer";
 import useMediaQuery from "@/hooks/use-media-query";
 import { showErrorToast } from "@/lib/handle-error";
@@ -19,13 +19,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { Material, Service, ServiceMaterial } from "@prisma/client";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  ArrowDown,
-  ArrowUp,
-  ChevronRight,
-  Pill,
-  Plus,
-  PlusCircle,
-  X,
+    ArrowDown,
+    ArrowUp,
+    ChevronRight,
+    Pill,
+    Plus,
+    PlusCircle,
+    X,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -39,11 +39,11 @@ import ConfirmationDialog from "../shared/confirmation-dialog";
 import { AutoComplete } from "../ui/autocomplete";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
-  Form,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
+    Form,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
 } from "../ui/form";
 import { Label } from "../ui/label";
 import NumberInput from "../ui/number-input";
@@ -53,9 +53,9 @@ import { CONTROL_KEY } from "../ui/shortcut-key";
 import { Skeleton } from "../ui/skeleton";
 import { Textarea } from "../ui/textarea";
 import ServiceForm, {
-  createRelatedServiceSchema,
-  type FormValues,
-  schema,
+    createRelatedServiceSchema,
+    type FormValues,
+    schema,
 } from "./form";
 
 type AddServiceDialogProps = {
@@ -593,7 +593,7 @@ function TreatmentVisit({ index, length, form }: TreatmentVisitProps) {
                         max={20}
                         defaultValue={1}
                         {...field}
-                        className="p-0 text-center bg-transparent text-sm rounded-r-none rounded-l-full border-none focus:outline-none"
+                        className="p-0 text-center bg-transparent text-sm rounded-r-none rounded-l-full border-none focus:outline-hidden"
                         actions={false}
                       />
                     </FormItem>

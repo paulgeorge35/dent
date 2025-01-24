@@ -8,9 +8,7 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import("next").NextConfig} */
 const config = {
-  experimental: {
-    serverComponentsExternalPackages: ["pg"],
-  },
+  serverExternalPackages: ["pg"],
   typescript: {
     ignoreBuildErrors: true,
   },

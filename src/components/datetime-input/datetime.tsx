@@ -2,62 +2,62 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import {
-  type CalendarDate,
-  isToday as _isToday,
-  createCalendar,
-  fromDate,
-  getLocalTimeZone,
-  getWeeksInMonth,
-  parseDateTime,
-  toCalendarDate,
-  toCalendarDateTime,
+    type CalendarDate,
+    isToday as _isToday,
+    createCalendar,
+    fromDate,
+    getLocalTimeZone,
+    getWeeksInMonth,
+    parseDateTime,
+    toCalendarDate,
+    toCalendarDateTime,
 } from "@internationalized/date";
 import type { DateSegment as IDateSegment } from "@react-stately/datepicker";
 import {
-  CalendarIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  X,
+    CalendarIcon,
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    X,
 } from "lucide-react";
 import React, {
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
+    useCallback,
+    useEffect,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
 } from "react";
 import {
-  type AriaDatePickerProps,
-  type AriaTimeFieldProps,
-  type CalendarProps,
-  type DateValue,
-  type TimeValue,
-  useButton,
-  useCalendar,
-  useCalendarCell,
-  useCalendarGrid,
-  useDateField,
-  useDatePicker,
-  useDateSegment,
-  useTimeField,
+    type AriaDatePickerProps,
+    type AriaTimeFieldProps,
+    type CalendarProps,
+    type DateValue,
+    type TimeValue,
+    useButton,
+    useCalendar,
+    useCalendarCell,
+    useCalendarGrid,
+    useDateField,
+    useDatePicker,
+    useDateSegment,
+    useTimeField,
 } from "react-aria";
 import {
-  type CalendarState,
-  type DateFieldState,
-  type DatePickerState,
-  type DatePickerStateOptions,
-  type TimeFieldStateOptions,
-  useCalendarState,
-  useDateFieldState,
-  useDatePickerState,
-  useTimeFieldState,
+    type CalendarState,
+    type DateFieldState,
+    type DatePickerState,
+    type DatePickerStateOptions,
+    type TimeFieldStateOptions,
+    useCalendarState,
+    useDateFieldState,
+    useDatePickerState,
+    useTimeFieldState,
 } from "react-stately";
 
 function Calendar(props: CalendarProps<DateValue>) {
@@ -231,7 +231,7 @@ function DateSegment({ segment, state }: DateSegmentProps) {
       {...segmentProps}
       ref={ref}
       className={cn(
-        "focus:rounded-[2px] focus:bg-accent focus:text-accent-foreground focus:outline-none",
+        "focus:rounded-[2px] focus:bg-accent focus:text-accent-foreground focus:outline-hidden",
         segment.type !== "literal" && "px-[1px]",
         segment.isPlaceholder && "text-muted-foreground",
       )}
@@ -260,7 +260,7 @@ function DateField(props: AriaDatePickerProps<DateValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        "inline-flex h-8 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-base md:text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "inline-flex h-8 flex-1 items-center rounded-l-md border-input bg-transparent px-3 py-2 text-base md:text-sm ring-offset-background focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         props.isDisabled && "cursor-not-allowed opacity-50",
       )}
     >
@@ -288,7 +288,7 @@ function TimeField(props: AriaTimeFieldProps<TimeValue>) {
       {...fieldProps}
       ref={ref}
       className={cn(
-        "inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+        "inline-flex h-10 w-full flex-1 rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         props.isDisabled && "cursor-not-allowed opacity-50",
       )}
     >
@@ -382,7 +382,7 @@ const DateTimePicker = React.forwardRef<
       className={cn(
         groupProps.className,
         className,
-        "p-1 h-10 flex grow items-center rounded-md border bg-background shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+        "p-1 h-10 flex grow items-center rounded-md border bg-background shadow-sm focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring",
       )}
     >
       <Popover open={props.isOpen} onOpenChange={props.onOpenChange}>

@@ -3,11 +3,12 @@ import { Shell } from "@/components/layout/shell";
 import { api } from "@/trpc/server";
 import { redirect } from "next/navigation";
 
-export default async function InvitePage({
-  params,
-}: {
-  params: { token: string };
-}) {
+export default async function InvitePage(
+  props: {
+    params: Promise<{ token: string }>;
+  }
+) {
+  const params = await props.params;
   const { token } = params;
   if (!token) {
     redirect("/dashboard");

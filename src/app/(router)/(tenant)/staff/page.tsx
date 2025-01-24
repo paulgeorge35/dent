@@ -19,10 +19,11 @@ const searchParamsSchema = z.object({
 });
 
 export interface StaffPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function Staff({ searchParams }: StaffPageProps) {
+export default async function Staff(props: StaffPageProps) {
+  const searchParams = await props.searchParams;
   const search = searchParamsSchema.parse(searchParams);
   const users = await api.user.getAll({ ...search });
 

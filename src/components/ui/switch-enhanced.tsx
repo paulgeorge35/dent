@@ -16,7 +16,7 @@ const SwitchView = React.forwardRef<
 >(({ className, values, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "group peer relative inline-flex h-9 w-[180px] shrink-0 cursor-pointer items-center rounded-sm border-2 border-transparent bg-input text-sm font-medium shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
+      "group peer relative inline-flex h-9 w-[180px] shrink-0 cursor-pointer items-center rounded-sm border-2 border-transparent bg-input text-sm font-medium shadow-sm transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50",
       className,
     )}
     {...props}

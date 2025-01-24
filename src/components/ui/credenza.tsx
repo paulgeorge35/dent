@@ -153,10 +153,6 @@ const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
     { className, children, sheet, noOverlay, noCloseButton, side, ...props },
     ref,
   ) => {
-    const isPWA = () => {
-      return window.matchMedia("(display-mode: standalone)").matches;
-    };
-
     const { isDesktop } = useContext(CredenzaContext);
     return isDesktop ? (
       sheet ? (
@@ -181,7 +177,7 @@ const CredenzaContent = React.forwardRef<HTMLDivElement, CredenzaContentProps>(
         ref={ref}
         className={cn(
           {
-            "pb-4": isPWA(),
+            "pb-4": window.matchMedia("(display-mode: standalone)").matches,
           },
           className,
         )}

@@ -1,31 +1,27 @@
 import { auth } from "@/auth";
+import Calendar from "@/components/calendar/components/calendar";
 import { constructMetadata } from "@/lib/utils";
 import { api } from "@/trpc/server";
 import type { WorkingHours } from "@/types/schema";
-import dynamic from "next/dynamic";
 import { z } from "zod";
-const Calendar = dynamic(
-  () => import("@/components/calendar/components/calendar"),
-  {
-    ssr: false,
-  },
-);
+
 
 export const metadata = constructMetadata({
   page: "Appointments",
 });
 
 type AppointmentsProps = {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>;
 };
 
 const paramsSchema = z
   .union([z.string(), z.literal("all"), z.literal("me")])
   .default("me");
 
-export default async function Appointments({ params }: AppointmentsProps) {
+export default async function Appointments(props: AppointmentsProps) {
+  const params = await props.params;
   const selected = paramsSchema.parse(params.slug[0]);
   const session = await auth();
   if (!session || !session.user) {

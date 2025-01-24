@@ -21,11 +21,11 @@ const searchParamsSchema = z.object({
 });
 
 export interface SignInPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
 export default async function SignInPage({ searchParams }: SignInPageProps) {
-  const { error } = searchParamsSchema.parse(searchParams);
+  const { error } = searchParamsSchema.parse(await searchParams);
   const t = await useTranslations("page.auth.sign-in.with-email");
 
   return (

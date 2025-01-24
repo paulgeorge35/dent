@@ -105,7 +105,7 @@ export async function signIn(email: string, password: string) {
     expires,
   );
 
-  cookies().set("session", session, { expires, httpOnly: true });
+  (await cookies()).set("session", session, { expires, httpOnly: true });
 
   redirect("/dashboard");
 }

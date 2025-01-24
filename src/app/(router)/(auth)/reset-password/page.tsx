@@ -18,12 +18,11 @@ const queryParamsSchema = z.object({
 });
 
 export interface ForgotPasswordPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function ForgotPassword({
-  searchParams,
-}: ForgotPasswordPageProps) {
+export default async function ForgotPassword(props: ForgotPasswordPageProps) {
+  const searchParams = await props.searchParams;
   const schema = queryParamsSchema.safeParse(searchParams);
 
   if (schema.error) redirect("/sign-in");

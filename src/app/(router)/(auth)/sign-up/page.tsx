@@ -19,9 +19,10 @@ const searchParamsSchema = z.object({
 });
 
 export interface SignUpPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
-export default async function SignUp({ searchParams }: SignUpPageProps) {
+export default async function SignUp(props: SignUpPageProps) {
+  const searchParams = await props.searchParams;
   const t = await useTranslations("page.auth.sign-up");
   const { error, email } = searchParamsSchema.parse(searchParams);
 

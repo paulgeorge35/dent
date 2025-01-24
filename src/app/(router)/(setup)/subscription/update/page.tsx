@@ -15,7 +15,7 @@ const searchParamsSchema = z.object({
 });
 
 interface UpdateSubscription {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 interface PlanI {
   plan: Plan;
@@ -23,9 +23,8 @@ interface PlanI {
     plan: Stripe.Plan;
   };
 }
-export default async function UpdateSubscription({
-  searchParams,
-}: UpdateSubscription) {
+export default async function UpdateSubscription(props: UpdateSubscription) {
+  const searchParams = await props.searchParams;
   const t = await useTranslations("page.subscription.update");
   const { redirectUrl } = searchParamsSchema.parse(searchParams);
   const plans = await api.stripe.plans();

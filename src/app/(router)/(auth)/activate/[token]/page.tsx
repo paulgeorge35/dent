@@ -4,11 +4,12 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
-export default async function ActivatePage({
-  params,
-}: {
-  params: { token: string };
-}) {
+export default async function ActivatePage(
+  props: {
+    params: Promise<{ token: string }>;
+  }
+) {
+  const params = await props.params;
   const { token } = params;
   if (!token) {
     redirect("/sign-in");

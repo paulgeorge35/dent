@@ -200,8 +200,8 @@ function SelectResource({ selectedUser, activeUsers }: SelectResourceProps) {
               {t("user-select.all-doctors")}
             </div>
           </SelectItem>
-          {activeUsers?.map((user) => (
-            <SelectItem key={user.id} value={user.id}>
+          {activeUsers?.map((user, index) => (
+            <SelectItem key={`${user.id}-${index}`} value={user.id}>
               <div className="flex items-center gap-2">
                 <AvatarComponent
                   src={user.profile.avatar?.url}

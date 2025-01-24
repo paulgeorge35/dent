@@ -18,10 +18,11 @@ const searchParamsSchema = z.object({
 });
 
 export interface MaterialsPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function Materials({ searchParams }: MaterialsPageProps) {
+export default async function Materials(props: MaterialsPageProps) {
+  const searchParams = await props.searchParams;
   const search = searchParamsSchema.parse(searchParams);
   const materials = await api.material.list(search);
 

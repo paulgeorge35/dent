@@ -13,6 +13,7 @@ import { ThemeProvider } from "@/components/shared/theme-provider";
 
 import { TailwindIndicator } from "@/components/ui/tailwind-indicator";
 import { cn, constructMetadata } from "@/lib/utils";
+import { HydrateClient } from "@/trpc/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 
@@ -31,20 +32,20 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  function getTheme() {
-    const cookieStore = cookies();
+  async function getTheme() {
+    const cookieStore = await cookies();
     const themeCookie = cookieStore.get("theme");
     const theme = themeCookie ? themeCookie.value : "dark";
     return theme;
   }
-  const theme = getTheme();
+  const theme = await getTheme();
 
   const messages = await getMessages();
   return (
     <html
       lang="en"
       className={cn(SFProExpanded.className, theme)}
-      style={{ colorScheme: theme }}
+            style={{ colorScheme: theme }}
     >
       <head>
         <meta
@@ -54,7 +55,8 @@ export default async function RootLayout({
         <meta name="theme-color" content={theme === "dark" ? "#020817" : "#ffffff"} />
         {/* <meta name="background-color" content={theme === "dark" ? "#020817" : "#ffffff"} /> */}
       </head>
-      <body>
+      <body className="bg-background text-foreground !overflow-x-hidden overscroll-y-contain">
+
         <ThemeProvider
           attribute="class"
           storageKey="theme"
@@ -77,9 +79,11 @@ export default async function RootLayout({
             />
             <Sonner position="bottom-center" />
             <TRPCReactProvider>
-              <NextIntlClientProvider messages={messages}>
-                {children}
-              </NextIntlClientProvider>
+              <HydrateClient>
+                <NextIntlClientProvider messages={messages}>
+                  {children}
+                </NextIntlClientProvider>
+              </HydrateClient>
             </TRPCReactProvider>
             <TailwindIndicator />
           </TooltipProvider>

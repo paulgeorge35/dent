@@ -40,13 +40,13 @@ export async function sendMagicLink(email: string, tenantId: string) {
 }
 
 export async function auth() {
-  const session = cookies().get("session")?.value;
+  const session = (await cookies()).get("session")?.value;
   return (await decrypt(session)) as SessionUser | null;
 }
 
 export async function logOut() {
   "use server";
-  cookies().delete("session");
+  (await cookies()).delete("session");
 }
 
 export async function setSession(user: SessionUser, duration: DurationLike) {
@@ -60,7 +60,7 @@ export async function setSession(user: SessionUser, duration: DurationLike) {
     });
   }
 
-  cookies().set("session", session, cookieOpts);
+  (await cookies()).set("session", session, cookieOpts);
 }
 
 export async function updateSession(request: NextRequest) {
@@ -161,7 +161,7 @@ export async function consumeToken(
     throw new Error("Token expired");
   }
 
-  
+
 
   const user = await db.user.findFirst({
     where: {

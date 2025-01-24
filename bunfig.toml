@@ -1,3 +1,4 @@
 [install.scopes]
-"@paulgeorge35" = { token = "${GITHUB_TOKEN}", url = "https://npm.pkg.github.com/" }
-
+"@paulgeorge35" = { token = "$GITHUB_TOKEN", url = "https://npm.pkg.github.com/" }
+[test]
+preload = ["./happy-dom.ts"]

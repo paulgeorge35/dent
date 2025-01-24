@@ -19,9 +19,8 @@ import FutureTreatments from "./_components/tabs/FutureTreatments";
 import MedicalRecords from "./_components/tabs/MedicalRecords";
 import PatientInformation from "./_components/tabs/PatientInformation";
 
-export async function generateMetadata({
-  params,
-}: PatientPageProps): Promise<Metadata> {
+export async function generateMetadata(props: PatientPageProps): Promise<Metadata> {
+  const params = await props.params;
   const id = params.patientId;
 
   const patient = await api.patient.get({ id }).catch((error) => {
@@ -34,12 +33,16 @@ export async function generateMetadata({
 }
 
 interface PatientPageProps {
-  params: { patientId: string };
+  params: Promise<{ patientId: string }>;
 }
 
-export default async function Patient({
-  params: { patientId },
-}: PatientPageProps) {
+export default async function Patient(props: PatientPageProps) {
+  const params = await props.params;
+
+  const {
+    patientId
+  } = params;
+
   const patient = await api.patient.get({ id: patientId }).catch((error) => {
     console.error(error);
     notFound();

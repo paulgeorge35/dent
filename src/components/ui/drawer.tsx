@@ -61,7 +61,7 @@ const DrawerContent = React.forwardRef<
       <DrawerPrimitive.Content
         ref={ref}
         className={cn(
-          "fixed z-50 vertical border bg-background outline-none shadow-lg",
+          "fixed z-50 vertical border bg-background outline-hidden shadow-lg",
           {
             "inset-x-0 bottom-0 mt-24 rounded-t-xl h-screen max-h-[95dvh]":
               !isDesktop,
@@ -225,14 +225,14 @@ DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 export type DrawerProps = React.ComponentProps<typeof Drawer>;
 
 export {
-  Drawer,
-  DrawerBody,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger
+    Drawer,
+    DrawerBody,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger
 };
 

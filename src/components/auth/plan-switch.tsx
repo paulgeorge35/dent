@@ -6,13 +6,13 @@ import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -254,7 +254,7 @@ export default function PlanSwitch({
               </div>
             </p>
             <button
-              className="flex flex-shrink-0 items-center text-xs text-primary hover:underline focus:outline-none"
+              className="flex flex-shrink-0 items-center text-xs text-primary hover:underline focus:outline-hidden"
               onClick={(e) => {
                 e.preventDefault();
                 setIsOpen(!isOpen);

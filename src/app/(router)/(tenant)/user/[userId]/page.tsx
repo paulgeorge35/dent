@@ -12,9 +12,8 @@ import { Shell } from "@/components/layout/shell";
 import AvatarComponent from "@/components/shared/avatar-component";
 import { DateTime } from "luxon";
 
-export async function generateMetadata({
-  params,
-}: UserPageProps): Promise<Metadata> {
+export async function generateMetadata(props: UserPageProps): Promise<Metadata> {
+  const params = await props.params;
   const id = params.userId;
 
   const user = await api.user.get(id).catch((error) => {
@@ -27,10 +26,16 @@ export async function generateMetadata({
 }
 
 interface UserPageProps {
-  params: { userId: string };
+  params: Promise<{ userId: string }>;
 }
 
-export default async function User({ params: { userId } }: UserPageProps) {
+export default async function User(props: UserPageProps) {
+  const params = await props.params;
+
+  const {
+    userId
+  } = params;
+
   const session = await auth();
   const user = await api.user.get(userId).catch((error) => {
     console.error(error);

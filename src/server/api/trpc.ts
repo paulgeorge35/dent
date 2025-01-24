@@ -11,7 +11,7 @@ import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { auth, logOut } from "@/auth";
+import { auth } from "@/auth";
 import { db } from "@/server/db";
 
 /**
@@ -105,7 +105,6 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
   });
 
   if (!profile) {
-    void logOut();
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 

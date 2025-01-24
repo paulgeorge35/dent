@@ -665,7 +665,7 @@ export type Avatar = z.infer<typeof AvatarSchema>
 /////////////////////////////////////////
 
 export const CountySchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date(),
@@ -679,7 +679,7 @@ export type County = z.infer<typeof CountySchema>
 /////////////////////////////////////////
 
 export const CitySchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date(),
@@ -1668,7 +1668,7 @@ export const TenantWhereInputSchema: z.ZodType<Prisma.TenantWhereInput> = z.obje
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
-  profile: z.union([ z.lazy(() => TenantProfileRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => TenantProfileScalarRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional(),
   specialities: z.lazy(() => SpecialityListRelationFilterSchema).optional(),
   preferedByProfiles: z.lazy(() => ProfileListRelationFilterSchema).optional(),
   patients: z.lazy(() => PatientListRelationFilterSchema).optional(),
@@ -1723,7 +1723,7 @@ export const TenantWhereUniqueInputSchema: z.ZodType<Prisma.TenantWhereUniqueInp
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
-  profile: z.union([ z.lazy(() => TenantProfileRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => TenantProfileScalarRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional(),
   specialities: z.lazy(() => SpecialityListRelationFilterSchema).optional(),
   preferedByProfiles: z.lazy(() => ProfileListRelationFilterSchema).optional(),
   patients: z.lazy(() => PatientListRelationFilterSchema).optional(),
@@ -1777,9 +1777,9 @@ export const TenantProfileWhereInputSchema: z.ZodType<Prisma.TenantProfileWhereI
   planId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  avatar: z.union([ z.lazy(() => AvatarNullableRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
-  plan: z.union([ z.lazy(() => PlanRelationFilterSchema),z.lazy(() => PlanWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantNullableRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
+  avatar: z.union([ z.lazy(() => AvatarNullableScalarRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
+  plan: z.union([ z.lazy(() => PlanScalarRelationFilterSchema),z.lazy(() => PlanWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantNullableScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const TenantProfileOrderByWithRelationInputSchema: z.ZodType<Prisma.TenantProfileOrderByWithRelationInput> = z.object({
@@ -1819,9 +1819,9 @@ export const TenantProfileWhereUniqueInputSchema: z.ZodType<Prisma.TenantProfile
   planId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  avatar: z.union([ z.lazy(() => AvatarNullableRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
-  plan: z.union([ z.lazy(() => PlanRelationFilterSchema),z.lazy(() => PlanWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantNullableRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
+  avatar: z.union([ z.lazy(() => AvatarNullableScalarRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
+  plan: z.union([ z.lazy(() => PlanScalarRelationFilterSchema),z.lazy(() => PlanWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantNullableScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const TenantProfileOrderByWithAggregationInputSchema: z.ZodType<Prisma.TenantProfileOrderByWithAggregationInput> = z.object({
@@ -1880,10 +1880,10 @@ export const UserWhereInputSchema: z.ZodType<Prisma.UserWhereInput> = z.object({
   bannedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  speciality: z.union([ z.lazy(() => SpecialityNullableRelationFilterSchema),z.lazy(() => SpecialityWhereInputSchema) ]).optional().nullable(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  invitation: z.union([ z.lazy(() => InvitationNullableRelationFilterSchema),z.lazy(() => InvitationWhereInputSchema) ]).optional().nullable(),
+  speciality: z.union([ z.lazy(() => SpecialityNullableScalarRelationFilterSchema),z.lazy(() => SpecialityWhereInputSchema) ]).optional().nullable(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  invitation: z.union([ z.lazy(() => InvitationNullableScalarRelationFilterSchema),z.lazy(() => InvitationWhereInputSchema) ]).optional().nullable(),
   patients: z.lazy(() => PatientListRelationFilterSchema).optional(),
   events: z.lazy(() => EventListRelationFilterSchema).optional(),
   eventActions: z.lazy(() => EventActionListRelationFilterSchema).optional(),
@@ -1946,10 +1946,10 @@ export const UserWhereUniqueInputSchema: z.ZodType<Prisma.UserWhereUniqueInput> 
   bannedAt: z.union([ z.lazy(() => DateTimeNullableFilterSchema),z.coerce.date() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  speciality: z.union([ z.lazy(() => SpecialityNullableRelationFilterSchema),z.lazy(() => SpecialityWhereInputSchema) ]).optional().nullable(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  invitation: z.union([ z.lazy(() => InvitationNullableRelationFilterSchema),z.lazy(() => InvitationWhereInputSchema) ]).optional().nullable(),
+  speciality: z.union([ z.lazy(() => SpecialityNullableScalarRelationFilterSchema),z.lazy(() => SpecialityWhereInputSchema) ]).optional().nullable(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  invitation: z.union([ z.lazy(() => InvitationNullableScalarRelationFilterSchema),z.lazy(() => InvitationWhereInputSchema) ]).optional().nullable(),
   patients: z.lazy(() => PatientListRelationFilterSchema).optional(),
   events: z.lazy(() => EventListRelationFilterSchema).optional(),
   eventActions: z.lazy(() => EventActionListRelationFilterSchema).optional(),
@@ -2021,8 +2021,8 @@ export const ProfileWhereInputSchema: z.ZodType<Prisma.ProfileWhereInput> = z.ob
   preferredTenantId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  avatar: z.union([ z.lazy(() => AvatarNullableRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
-  preferredTenant: z.union([ z.lazy(() => TenantNullableRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
+  avatar: z.union([ z.lazy(() => AvatarNullableScalarRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
+  preferredTenant: z.union([ z.lazy(() => TenantNullableScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
   accounts: z.lazy(() => AccountListRelationFilterSchema).optional(),
   tokens: z.lazy(() => TokenListRelationFilterSchema).optional()
@@ -2076,8 +2076,8 @@ export const ProfileWhereUniqueInputSchema: z.ZodType<Prisma.ProfileWhereUniqueI
   preferredTenantId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  avatar: z.union([ z.lazy(() => AvatarNullableRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
-  preferredTenant: z.union([ z.lazy(() => TenantNullableRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
+  avatar: z.union([ z.lazy(() => AvatarNullableScalarRelationFilterSchema),z.lazy(() => AvatarWhereInputSchema) ]).optional().nullable(),
+  preferredTenant: z.union([ z.lazy(() => TenantNullableScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional().nullable(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
   accounts: z.lazy(() => AccountListRelationFilterSchema).optional(),
   tokens: z.lazy(() => TokenListRelationFilterSchema).optional()
@@ -2136,7 +2136,7 @@ export const AccountWhereInputSchema: z.ZodType<Prisma.AccountWhereInput> = z.ob
   scope: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   id_token: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   session_state: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
 }).strict();
 
 export const AccountOrderByWithRelationInputSchema: z.ZodType<Prisma.AccountOrderByWithRelationInput> = z.object({
@@ -2176,7 +2176,7 @@ export const AccountWhereUniqueInputSchema: z.ZodType<Prisma.AccountWhereUniqueI
   scope: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   id_token: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   session_state: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
 }).strict());
 
 export const AccountOrderByWithAggregationInputSchema: z.ZodType<Prisma.AccountOrderByWithAggregationInput> = z.object({
@@ -2307,7 +2307,7 @@ export const TokenWhereInputSchema: z.ZodType<Prisma.TokenWhereInput> = z.object
   token: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   expires: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   profileId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
 }).strict();
 
 export const TokenOrderByWithRelationInputSchema: z.ZodType<Prisma.TokenOrderByWithRelationInput> = z.object({
@@ -2340,7 +2340,7 @@ export const TokenWhereUniqueInputSchema: z.ZodType<Prisma.TokenWhereUniqueInput
   type: z.union([ z.lazy(() => EnumTokenTypeFilterSchema),z.lazy(() => TokenTypeSchema) ]).optional(),
   expires: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   profileId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  profile: z.union([ z.lazy(() => ProfileRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
+  profile: z.union([ z.lazy(() => ProfileScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional(),
 }).strict());
 
 export const TokenOrderByWithAggregationInputSchema: z.ZodType<Prisma.TokenOrderByWithAggregationInput> = z.object({
@@ -2378,8 +2378,8 @@ export const InvitationWhereInputSchema: z.ZodType<Prisma.InvitationWhereInput> 
   userId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  invitedBy: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserNullableRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
+  invitedBy: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserNullableScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const InvitationOrderByWithRelationInputSchema: z.ZodType<Prisma.InvitationOrderByWithRelationInput> = z.object({
@@ -2437,8 +2437,8 @@ export const InvitationWhereUniqueInputSchema: z.ZodType<Prisma.InvitationWhereU
   invitedById: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  invitedBy: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserNullableRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
+  invitedBy: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserNullableScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const InvitationOrderByWithAggregationInputSchema: z.ZodType<Prisma.InvitationOrderByWithAggregationInput> = z.object({
@@ -2494,8 +2494,8 @@ export const PatientWhereInputSchema: z.ZodType<Prisma.PatientWhereInput> = z.ob
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   data: z.lazy(() => PatientDataListRelationFilterSchema).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
   files: z.lazy(() => FileListRelationFilterSchema).optional(),
   quizes: z.lazy(() => QuizListRelationFilterSchema).optional(),
   appointments: z.lazy(() => EventListRelationFilterSchema).optional(),
@@ -2556,8 +2556,8 @@ export const PatientWhereUniqueInputSchema: z.ZodType<Prisma.PatientWhereUniqueI
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   data: z.lazy(() => PatientDataListRelationFilterSchema).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
   files: z.lazy(() => FileListRelationFilterSchema).optional(),
   quizes: z.lazy(() => QuizListRelationFilterSchema).optional(),
   appointments: z.lazy(() => EventListRelationFilterSchema).optional(),
@@ -2621,7 +2621,7 @@ export const PatientDataWhereInputSchema: z.ZodType<Prisma.PatientDataWhereInput
   patientId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
 }).strict();
 
 export const PatientDataOrderByWithRelationInputSchema: z.ZodType<Prisma.PatientDataOrderByWithRelationInput> = z.object({
@@ -2645,7 +2645,7 @@ export const PatientDataWhereUniqueInputSchema: z.ZodType<Prisma.PatientDataWher
   patientId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
 }).strict());
 
 export const PatientDataOrderByWithAggregationInputSchema: z.ZodType<Prisma.PatientDataOrderByWithAggregationInput> = z.object({
@@ -2682,7 +2682,7 @@ export const SpecialityWhereInputSchema: z.ZodType<Prisma.SpecialityWhereInput> 
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict();
 
 export const SpecialityOrderByWithRelationInputSchema: z.ZodType<Prisma.SpecialityOrderByWithRelationInput> = z.object({
@@ -2712,7 +2712,7 @@ export const SpecialityWhereUniqueInputSchema: z.ZodType<Prisma.SpecialityWhereU
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   users: z.lazy(() => UserListRelationFilterSchema).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict());
 
 export const SpecialityOrderByWithAggregationInputSchema: z.ZodType<Prisma.SpecialityOrderByWithAggregationInput> = z.object({
@@ -2762,12 +2762,12 @@ export const EventWhereInputSchema: z.ZodType<Prisma.EventWhereInput> = z.object
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional(),
-  quiz: z.union([ z.lazy(() => QuizNullableRelationFilterSchema),z.lazy(() => QuizWhereInputSchema) ]).optional().nullable(),
+  quiz: z.union([ z.lazy(() => QuizNullableScalarRelationFilterSchema),z.lazy(() => QuizWhereInputSchema) ]).optional().nullable(),
   actions: z.lazy(() => EventActionListRelationFilterSchema).optional(),
   files: z.lazy(() => FileListRelationFilterSchema).optional(),
-  patient: z.union([ z.lazy(() => PatientNullableRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientNullableScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict();
 
 export const EventOrderByWithRelationInputSchema: z.ZodType<Prisma.EventOrderByWithRelationInput> = z.object({
@@ -2829,12 +2829,12 @@ export const EventWhereUniqueInputSchema: z.ZodType<Prisma.EventWhereUniqueInput
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional(),
-  quiz: z.union([ z.lazy(() => QuizNullableRelationFilterSchema),z.lazy(() => QuizWhereInputSchema) ]).optional().nullable(),
+  quiz: z.union([ z.lazy(() => QuizNullableScalarRelationFilterSchema),z.lazy(() => QuizWhereInputSchema) ]).optional().nullable(),
   actions: z.lazy(() => EventActionListRelationFilterSchema).optional(),
   files: z.lazy(() => FileListRelationFilterSchema).optional(),
-  patient: z.union([ z.lazy(() => PatientNullableRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientNullableScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict());
 
 export const EventOrderByWithAggregationInputSchema: z.ZodType<Prisma.EventOrderByWithAggregationInput> = z.object({
@@ -2894,8 +2894,8 @@ export const EventActionWhereInputSchema: z.ZodType<Prisma.EventActionWhereInput
   eventId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional(),
 }).strict();
 
 export const EventActionOrderByWithRelationInputSchema: z.ZodType<Prisma.EventActionOrderByWithRelationInput> = z.object({
@@ -2924,8 +2924,8 @@ export const EventActionWhereUniqueInputSchema: z.ZodType<Prisma.EventActionWher
   eventId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional(),
 }).strict());
 
 export const EventActionOrderByWithAggregationInputSchema: z.ZodType<Prisma.EventActionOrderByWithAggregationInput> = z.object({
@@ -2972,7 +2972,7 @@ export const MaterialWhereInputSchema: z.ZodType<Prisma.MaterialWhereInput> = z.
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   services: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict();
 
 export const MaterialOrderByWithRelationInputSchema: z.ZodType<Prisma.MaterialOrderByWithRelationInput> = z.object({
@@ -3014,7 +3014,7 @@ export const MaterialWhereUniqueInputSchema: z.ZodType<Prisma.MaterialWhereUniqu
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   services: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
 }).strict());
 
 export const MaterialOrderByWithAggregationInputSchema: z.ZodType<Prisma.MaterialOrderByWithAggregationInput> = z.object({
@@ -3074,8 +3074,8 @@ export const ServiceWhereInputSchema: z.ZodType<Prisma.ServiceWhereInput> = z.ob
   categoryId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  category: z.union([ z.lazy(() => ServiceCategoryNullableRelationFilterSchema),z.lazy(() => ServiceCategoryWhereInputSchema) ]).optional().nullable(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  category: z.union([ z.lazy(() => ServiceCategoryNullableScalarRelationFilterSchema),z.lazy(() => ServiceCategoryWhereInputSchema) ]).optional().nullable(),
   materials: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional(),
   children: z.lazy(() => RelatedServiceListRelationFilterSchema).optional()
@@ -3122,8 +3122,8 @@ export const ServiceWhereUniqueInputSchema: z.ZodType<Prisma.ServiceWhereUniqueI
   categoryId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  category: z.union([ z.lazy(() => ServiceCategoryNullableRelationFilterSchema),z.lazy(() => ServiceCategoryWhereInputSchema) ]).optional().nullable(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  category: z.union([ z.lazy(() => ServiceCategoryNullableScalarRelationFilterSchema),z.lazy(() => ServiceCategoryWhereInputSchema) ]).optional().nullable(),
   materials: z.lazy(() => ServiceMaterialListRelationFilterSchema).optional(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional(),
   children: z.lazy(() => RelatedServiceListRelationFilterSchema).optional()
@@ -3179,7 +3179,7 @@ export const RelatedServiceWhereInputSchema: z.ZodType<Prisma.RelatedServiceWher
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   service: z.lazy(() => JsonFilterSchema).optional(),
   parentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  parent: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  parent: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
 }).strict();
 
 export const RelatedServiceOrderByWithRelationInputSchema: z.ZodType<Prisma.RelatedServiceOrderByWithRelationInput> = z.object({
@@ -3205,7 +3205,7 @@ export const RelatedServiceWhereUniqueInputSchema: z.ZodType<Prisma.RelatedServi
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   service: z.lazy(() => JsonFilterSchema).optional(),
   parentId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  parent: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  parent: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
 }).strict());
 
 export const RelatedServiceOrderByWithAggregationInputSchema: z.ZodType<Prisma.RelatedServiceOrderByWithAggregationInput> = z.object({
@@ -3243,8 +3243,8 @@ export const ServiceMaterialWhereInputSchema: z.ZodType<Prisma.ServiceMaterialWh
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   serviceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   materialId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
-  material: z.union([ z.lazy(() => MaterialRelationFilterSchema),z.lazy(() => MaterialWhereInputSchema) ]).optional(),
+  service: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  material: z.union([ z.lazy(() => MaterialScalarRelationFilterSchema),z.lazy(() => MaterialWhereInputSchema) ]).optional(),
 }).strict();
 
 export const ServiceMaterialOrderByWithRelationInputSchema: z.ZodType<Prisma.ServiceMaterialOrderByWithRelationInput> = z.object({
@@ -3269,8 +3269,8 @@ export const ServiceMaterialWhereUniqueInputSchema: z.ZodType<Prisma.ServiceMate
   unit_price: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   serviceId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   materialId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
-  service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
-  material: z.union([ z.lazy(() => MaterialRelationFilterSchema),z.lazy(() => MaterialWhereInputSchema) ]).optional(),
+  service: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  material: z.union([ z.lazy(() => MaterialScalarRelationFilterSchema),z.lazy(() => MaterialWhereInputSchema) ]).optional(),
 }).strict());
 
 export const ServiceMaterialOrderByWithAggregationInputSchema: z.ZodType<Prisma.ServiceMaterialOrderByWithAggregationInput> = z.object({
@@ -3423,7 +3423,7 @@ export const TreatmentWhereInputSchema: z.ZodType<Prisma.TreatmentWhereInput> = 
   treatmentPlanId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  treatmentPlan: z.union([ z.lazy(() => TreatmentPlanNullableRelationFilterSchema),z.lazy(() => TreatmentPlanWhereInputSchema) ]).optional().nullable(),
+  treatmentPlan: z.union([ z.lazy(() => TreatmentPlanNullableScalarRelationFilterSchema),z.lazy(() => TreatmentPlanWhereInputSchema) ]).optional().nullable(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional()
 }).strict();
 
@@ -3453,7 +3453,7 @@ export const TreatmentWhereUniqueInputSchema: z.ZodType<Prisma.TreatmentWhereUni
   treatmentPlanId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  treatmentPlan: z.union([ z.lazy(() => TreatmentPlanNullableRelationFilterSchema),z.lazy(() => TreatmentPlanWhereInputSchema) ]).optional().nullable(),
+  treatmentPlan: z.union([ z.lazy(() => TreatmentPlanNullableScalarRelationFilterSchema),z.lazy(() => TreatmentPlanWhereInputSchema) ]).optional().nullable(),
   visits: z.lazy(() => VisitListRelationFilterSchema).optional()
 }).strict());
 
@@ -3495,9 +3495,9 @@ export const VisitWhereInputSchema: z.ZodType<Prisma.VisitWhereInput> = z.object
   eventId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
-  treatment: z.union([ z.lazy(() => TreatmentRelationFilterSchema),z.lazy(() => TreatmentWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  service: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  treatment: z.union([ z.lazy(() => TreatmentScalarRelationFilterSchema),z.lazy(() => TreatmentWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const VisitOrderByWithRelationInputSchema: z.ZodType<Prisma.VisitOrderByWithRelationInput> = z.object({
@@ -3525,9 +3525,9 @@ export const VisitWhereUniqueInputSchema: z.ZodType<Prisma.VisitWhereUniqueInput
   eventId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  service: z.union([ z.lazy(() => ServiceRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
-  treatment: z.union([ z.lazy(() => TreatmentRelationFilterSchema),z.lazy(() => TreatmentWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  service: z.union([ z.lazy(() => ServiceScalarRelationFilterSchema),z.lazy(() => ServiceWhereInputSchema) ]).optional(),
+  treatment: z.union([ z.lazy(() => TreatmentScalarRelationFilterSchema),z.lazy(() => TreatmentWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const VisitOrderByWithAggregationInputSchema: z.ZodType<Prisma.VisitOrderByWithAggregationInput> = z.object({
@@ -3566,8 +3566,8 @@ export const TreatmentPlanWhereInputSchema: z.ZodType<Prisma.TreatmentPlanWhereI
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   treatments: z.lazy(() => TreatmentListRelationFilterSchema).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict();
 
 export const TreatmentPlanOrderByWithRelationInputSchema: z.ZodType<Prisma.TreatmentPlanOrderByWithRelationInput> = z.object({
@@ -3598,8 +3598,8 @@ export const TreatmentPlanWhereUniqueInputSchema: z.ZodType<Prisma.TreatmentPlan
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   treatments: z.lazy(() => TreatmentListRelationFilterSchema).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict());
 
 export const TreatmentPlanOrderByWithAggregationInputSchema: z.ZodType<Prisma.TreatmentPlanOrderByWithAggregationInput> = z.object({
@@ -3639,8 +3639,8 @@ export const QuizWhereInputSchema: z.ZodType<Prisma.QuizWhereInput> = z.object({
   eventId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const QuizOrderByWithRelationInputSchema: z.ZodType<Prisma.QuizOrderByWithRelationInput> = z.object({
@@ -3678,8 +3678,8 @@ export const QuizWhereUniqueInputSchema: z.ZodType<Prisma.QuizWhereUniqueInput> 
   patientId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  patient: z.union([ z.lazy(() => PatientRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  patient: z.union([ z.lazy(() => PatientScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const QuizOrderByWithAggregationInputSchema: z.ZodType<Prisma.QuizOrderByWithAggregationInput> = z.object({
@@ -3771,7 +3771,7 @@ export const TaskWhereInputSchema: z.ZodType<Prisma.TaskWhereInput> = z.object({
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict();
 
 export const TaskOrderByWithRelationInputSchema: z.ZodType<Prisma.TaskOrderByWithRelationInput> = z.object({
@@ -3799,7 +3799,7 @@ export const TaskWhereUniqueInputSchema: z.ZodType<Prisma.TaskWhereUniqueInput> 
   userId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
 }).strict());
 
 export const TaskOrderByWithAggregationInputSchema: z.ZodType<Prisma.TaskOrderByWithAggregationInput> = z.object({
@@ -3846,10 +3846,10 @@ export const FileWhereInputSchema: z.ZodType<Prisma.FileWhereInput> = z.object({
   patientId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
-  patient: z.union([ z.lazy(() => PatientNullableRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  patient: z.union([ z.lazy(() => PatientNullableScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const FileOrderByWithRelationInputSchema: z.ZodType<Prisma.FileOrderByWithRelationInput> = z.object({
@@ -3903,10 +3903,10 @@ export const FileWhereUniqueInputSchema: z.ZodType<Prisma.FileWhereUniqueInput> 
   patientId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  tenant: z.union([ z.lazy(() => TenantRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
-  user: z.union([ z.lazy(() => UserRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
-  event: z.union([ z.lazy(() => EventNullableRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
-  patient: z.union([ z.lazy(() => PatientNullableRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
+  tenant: z.union([ z.lazy(() => TenantScalarRelationFilterSchema),z.lazy(() => TenantWhereInputSchema) ]).optional(),
+  user: z.union([ z.lazy(() => UserScalarRelationFilterSchema),z.lazy(() => UserWhereInputSchema) ]).optional(),
+  event: z.union([ z.lazy(() => EventNullableScalarRelationFilterSchema),z.lazy(() => EventWhereInputSchema) ]).optional().nullable(),
+  patient: z.union([ z.lazy(() => PatientNullableScalarRelationFilterSchema),z.lazy(() => PatientWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const FileOrderByWithAggregationInputSchema: z.ZodType<Prisma.FileOrderByWithAggregationInput> = z.object({
@@ -3962,8 +3962,8 @@ export const AvatarWhereInputSchema: z.ZodType<Prisma.AvatarWhereInput> = z.obje
   tenantProfileId: z.union([ z.lazy(() => StringNullableFilterSchema),z.string() ]).optional().nullable(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  profile: z.union([ z.lazy(() => ProfileNullableRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional().nullable(),
-  tenantProfile: z.union([ z.lazy(() => TenantProfileNullableRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional().nullable(),
+  profile: z.union([ z.lazy(() => ProfileNullableScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional().nullable(),
+  tenantProfile: z.union([ z.lazy(() => TenantProfileNullableScalarRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional().nullable(),
 }).strict();
 
 export const AvatarOrderByWithRelationInputSchema: z.ZodType<Prisma.AvatarOrderByWithRelationInput> = z.object({
@@ -4053,8 +4053,8 @@ export const AvatarWhereUniqueInputSchema: z.ZodType<Prisma.AvatarWhereUniqueInp
   url: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  profile: z.union([ z.lazy(() => ProfileNullableRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional().nullable(),
-  tenantProfile: z.union([ z.lazy(() => TenantProfileNullableRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional().nullable(),
+  profile: z.union([ z.lazy(() => ProfileNullableScalarRelationFilterSchema),z.lazy(() => ProfileWhereInputSchema) ]).optional().nullable(),
+  tenantProfile: z.union([ z.lazy(() => TenantProfileNullableScalarRelationFilterSchema),z.lazy(() => TenantProfileWhereInputSchema) ]).optional().nullable(),
 }).strict());
 
 export const AvatarOrderByWithAggregationInputSchema: z.ZodType<Prisma.AvatarOrderByWithAggregationInput> = z.object({
@@ -4105,10 +4105,10 @@ export const CountyOrderByWithRelationInputSchema: z.ZodType<Prisma.CountyOrderB
 }).strict();
 
 export const CountyWhereUniqueInputSchema: z.ZodType<Prisma.CountyWhereUniqueInput> = z.object({
-  id: z.string()
+  id: z.string().uuid()
 })
 .and(z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   AND: z.union([ z.lazy(() => CountyWhereInputSchema),z.lazy(() => CountyWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CountyWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CountyWhereInputSchema),z.lazy(() => CountyWhereInputSchema).array() ]).optional(),
@@ -4150,7 +4150,7 @@ export const CityWhereInputSchema: z.ZodType<Prisma.CityWhereInput> = z.object({
   countyId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  county: z.union([ z.lazy(() => CountyRelationFilterSchema),z.lazy(() => CountyWhereInputSchema) ]).optional(),
+  county: z.union([ z.lazy(() => CountyScalarRelationFilterSchema),z.lazy(() => CountyWhereInputSchema) ]).optional(),
 }).strict();
 
 export const CityOrderByWithRelationInputSchema: z.ZodType<Prisma.CityOrderByWithRelationInput> = z.object({
@@ -4163,10 +4163,10 @@ export const CityOrderByWithRelationInputSchema: z.ZodType<Prisma.CityOrderByWit
 }).strict();
 
 export const CityWhereUniqueInputSchema: z.ZodType<Prisma.CityWhereUniqueInput> = z.object({
-  id: z.string()
+  id: z.string().uuid()
 })
 .and(z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   AND: z.union([ z.lazy(() => CityWhereInputSchema),z.lazy(() => CityWhereInputSchema).array() ]).optional(),
   OR: z.lazy(() => CityWhereInputSchema).array().optional(),
   NOT: z.union([ z.lazy(() => CityWhereInputSchema),z.lazy(() => CityWhereInputSchema).array() ]).optional(),
@@ -4174,7 +4174,7 @@ export const CityWhereUniqueInputSchema: z.ZodType<Prisma.CityWhereUniqueInput> 
   countyId: z.union([ z.lazy(() => StringFilterSchema),z.string() ]).optional(),
   createdAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
   updatedAt: z.union([ z.lazy(() => DateTimeFilterSchema),z.coerce.date() ]).optional(),
-  county: z.union([ z.lazy(() => CountyRelationFilterSchema),z.lazy(() => CountyWhereInputSchema) ]).optional(),
+  county: z.union([ z.lazy(() => CountyScalarRelationFilterSchema),z.lazy(() => CountyWhereInputSchema) ]).optional(),
 }).strict());
 
 export const CityOrderByWithAggregationInputSchema: z.ZodType<Prisma.CityOrderByWithAggregationInput> = z.object({
@@ -6572,7 +6572,7 @@ export const AvatarUncheckedUpdateManyInputSchema: z.ZodType<Prisma.AvatarUnchec
 }).strict();
 
 export const CountyCreateInputSchema: z.ZodType<Prisma.CountyCreateInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6581,7 +6581,7 @@ export const CountyCreateInputSchema: z.ZodType<Prisma.CountyCreateInput> = z.ob
 }).strict();
 
 export const CountyUncheckedCreateInputSchema: z.ZodType<Prisma.CountyUncheckedCreateInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6590,7 +6590,7 @@ export const CountyUncheckedCreateInputSchema: z.ZodType<Prisma.CountyUncheckedC
 }).strict();
 
 export const CountyUpdateInputSchema: z.ZodType<Prisma.CountyUpdateInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6599,7 +6599,7 @@ export const CountyUpdateInputSchema: z.ZodType<Prisma.CountyUpdateInput> = z.ob
 }).strict();
 
 export const CountyUncheckedUpdateInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6608,7 +6608,7 @@ export const CountyUncheckedUpdateInputSchema: z.ZodType<Prisma.CountyUncheckedU
 }).strict();
 
 export const CountyCreateManyInputSchema: z.ZodType<Prisma.CountyCreateManyInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6616,7 +6616,7 @@ export const CountyCreateManyInputSchema: z.ZodType<Prisma.CountyCreateManyInput
 }).strict();
 
 export const CountyUpdateManyMutationInputSchema: z.ZodType<Prisma.CountyUpdateManyMutationInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6624,7 +6624,7 @@ export const CountyUpdateManyMutationInputSchema: z.ZodType<Prisma.CountyUpdateM
 }).strict();
 
 export const CountyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6632,7 +6632,7 @@ export const CountyUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CountyUnchec
 }).strict();
 
 export const CityCreateInputSchema: z.ZodType<Prisma.CityCreateInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional(),
@@ -6640,7 +6640,7 @@ export const CityCreateInputSchema: z.ZodType<Prisma.CityCreateInput> = z.object
 }).strict();
 
 export const CityUncheckedCreateInputSchema: z.ZodType<Prisma.CityUncheckedCreateInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6648,7 +6648,7 @@ export const CityUncheckedCreateInputSchema: z.ZodType<Prisma.CityUncheckedCreat
 }).strict();
 
 export const CityUpdateInputSchema: z.ZodType<Prisma.CityUpdateInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6656,7 +6656,7 @@ export const CityUpdateInputSchema: z.ZodType<Prisma.CityUpdateInput> = z.object
 }).strict();
 
 export const CityUncheckedUpdateInputSchema: z.ZodType<Prisma.CityUncheckedUpdateInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   countyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6664,7 +6664,7 @@ export const CityUncheckedUpdateInputSchema: z.ZodType<Prisma.CityUncheckedUpdat
 }).strict();
 
 export const CityCreateManyInputSchema: z.ZodType<Prisma.CityCreateManyInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   countyId: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -6672,14 +6672,14 @@ export const CityCreateManyInputSchema: z.ZodType<Prisma.CityCreateManyInput> = 
 }).strict();
 
 export const CityUpdateManyMutationInputSchema: z.ZodType<Prisma.CityUpdateManyMutationInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateManyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateManyInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   countyId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -6729,7 +6729,7 @@ export const UserListRelationFilterSchema: z.ZodType<Prisma.UserListRelationFilt
   none: z.lazy(() => UserWhereInputSchema).optional()
 }).strict();
 
-export const TenantProfileRelationFilterSchema: z.ZodType<Prisma.TenantProfileRelationFilter> = z.object({
+export const TenantProfileScalarRelationFilterSchema: z.ZodType<Prisma.TenantProfileScalarRelationFilter> = z.object({
   is: z.lazy(() => TenantProfileWhereInputSchema).optional(),
   isNot: z.lazy(() => TenantProfileWhereInputSchema).optional()
 }).strict();
@@ -6912,17 +6912,17 @@ export const BoolFilterSchema: z.ZodType<Prisma.BoolFilter> = z.object({
   not: z.union([ z.boolean(),z.lazy(() => NestedBoolFilterSchema) ]).optional(),
 }).strict();
 
-export const AvatarNullableRelationFilterSchema: z.ZodType<Prisma.AvatarNullableRelationFilter> = z.object({
+export const AvatarNullableScalarRelationFilterSchema: z.ZodType<Prisma.AvatarNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => AvatarWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => AvatarWhereInputSchema).optional().nullable()
 }).strict();
 
-export const PlanRelationFilterSchema: z.ZodType<Prisma.PlanRelationFilter> = z.object({
+export const PlanScalarRelationFilterSchema: z.ZodType<Prisma.PlanScalarRelationFilter> = z.object({
   is: z.lazy(() => PlanWhereInputSchema).optional(),
   isNot: z.lazy(() => PlanWhereInputSchema).optional()
 }).strict();
 
-export const TenantNullableRelationFilterSchema: z.ZodType<Prisma.TenantNullableRelationFilter> = z.object({
+export const TenantNullableScalarRelationFilterSchema: z.ZodType<Prisma.TenantNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => TenantWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => TenantWhereInputSchema).optional().nullable()
 }).strict();
@@ -7022,9 +7022,9 @@ export const JsonFilterSchema: z.ZodType<Prisma.JsonFilter> = z.object({
   string_contains: z.string().optional(),
   string_starts_with: z.string().optional(),
   string_ends_with: z.string().optional(),
-  array_contains: InputJsonValueSchema.optional().nullable(),
   array_starts_with: InputJsonValueSchema.optional().nullable(),
   array_ends_with: InputJsonValueSchema.optional().nullable(),
+  array_contains: InputJsonValueSchema.optional().nullable(),
   lt: InputJsonValueSchema.optional(),
   lte: InputJsonValueSchema.optional(),
   gt: InputJsonValueSchema.optional(),
@@ -7039,22 +7039,22 @@ export const EnumDayOfWeekFilterSchema: z.ZodType<Prisma.EnumDayOfWeekFilter> = 
   not: z.union([ z.lazy(() => DayOfWeekSchema),z.lazy(() => NestedEnumDayOfWeekFilterSchema) ]).optional(),
 }).strict();
 
-export const SpecialityNullableRelationFilterSchema: z.ZodType<Prisma.SpecialityNullableRelationFilter> = z.object({
+export const SpecialityNullableScalarRelationFilterSchema: z.ZodType<Prisma.SpecialityNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => SpecialityWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => SpecialityWhereInputSchema).optional().nullable()
 }).strict();
 
-export const ProfileRelationFilterSchema: z.ZodType<Prisma.ProfileRelationFilter> = z.object({
+export const ProfileScalarRelationFilterSchema: z.ZodType<Prisma.ProfileScalarRelationFilter> = z.object({
   is: z.lazy(() => ProfileWhereInputSchema).optional(),
   isNot: z.lazy(() => ProfileWhereInputSchema).optional()
 }).strict();
 
-export const TenantRelationFilterSchema: z.ZodType<Prisma.TenantRelationFilter> = z.object({
+export const TenantScalarRelationFilterSchema: z.ZodType<Prisma.TenantScalarRelationFilter> = z.object({
   is: z.lazy(() => TenantWhereInputSchema).optional(),
   isNot: z.lazy(() => TenantWhereInputSchema).optional()
 }).strict();
 
-export const InvitationNullableRelationFilterSchema: z.ZodType<Prisma.InvitationNullableRelationFilter> = z.object({
+export const InvitationNullableScalarRelationFilterSchema: z.ZodType<Prisma.InvitationNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => InvitationWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => InvitationWhereInputSchema).optional().nullable()
 }).strict();
@@ -7194,9 +7194,9 @@ export const JsonWithAggregatesFilterSchema: z.ZodType<Prisma.JsonWithAggregates
   string_contains: z.string().optional(),
   string_starts_with: z.string().optional(),
   string_ends_with: z.string().optional(),
-  array_contains: InputJsonValueSchema.optional().nullable(),
   array_starts_with: InputJsonValueSchema.optional().nullable(),
   array_ends_with: InputJsonValueSchema.optional().nullable(),
+  array_contains: InputJsonValueSchema.optional().nullable(),
   lt: InputJsonValueSchema.optional(),
   lte: InputJsonValueSchema.optional(),
   gt: InputJsonValueSchema.optional(),
@@ -7454,12 +7454,12 @@ export const EnumTokenTypeWithAggregatesFilterSchema: z.ZodType<Prisma.EnumToken
   _max: z.lazy(() => NestedEnumTokenTypeFilterSchema).optional()
 }).strict();
 
-export const UserRelationFilterSchema: z.ZodType<Prisma.UserRelationFilter> = z.object({
+export const UserScalarRelationFilterSchema: z.ZodType<Prisma.UserScalarRelationFilter> = z.object({
   is: z.lazy(() => UserWhereInputSchema).optional(),
   isNot: z.lazy(() => UserWhereInputSchema).optional()
 }).strict();
 
-export const UserNullableRelationFilterSchema: z.ZodType<Prisma.UserNullableRelationFilter> = z.object({
+export const UserNullableScalarRelationFilterSchema: z.ZodType<Prisma.UserNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => UserWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => UserWhereInputSchema).optional().nullable()
 }).strict();
@@ -7598,7 +7598,7 @@ export const EnumStatusWithAggregatesFilterSchema: z.ZodType<Prisma.EnumStatusWi
   _max: z.lazy(() => NestedEnumStatusFilterSchema).optional()
 }).strict();
 
-export const PatientRelationFilterSchema: z.ZodType<Prisma.PatientRelationFilter> = z.object({
+export const PatientScalarRelationFilterSchema: z.ZodType<Prisma.PatientScalarRelationFilter> = z.object({
   is: z.lazy(() => PatientWhereInputSchema).optional(),
   isNot: z.lazy(() => PatientWhereInputSchema).optional()
 }).strict();
@@ -7682,12 +7682,12 @@ export const VisitListRelationFilterSchema: z.ZodType<Prisma.VisitListRelationFi
   none: z.lazy(() => VisitWhereInputSchema).optional()
 }).strict();
 
-export const QuizNullableRelationFilterSchema: z.ZodType<Prisma.QuizNullableRelationFilter> = z.object({
+export const QuizNullableScalarRelationFilterSchema: z.ZodType<Prisma.QuizNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => QuizWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => QuizWhereInputSchema).optional().nullable()
 }).strict();
 
-export const PatientNullableRelationFilterSchema: z.ZodType<Prisma.PatientNullableRelationFilter> = z.object({
+export const PatientNullableScalarRelationFilterSchema: z.ZodType<Prisma.PatientNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => PatientWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => PatientWhereInputSchema).optional().nullable()
 }).strict();
@@ -7791,7 +7791,7 @@ export const EnumEventInitiatorWithAggregatesFilterSchema: z.ZodType<Prisma.Enum
   _max: z.lazy(() => NestedEnumEventInitiatorFilterSchema).optional()
 }).strict();
 
-export const EventRelationFilterSchema: z.ZodType<Prisma.EventRelationFilter> = z.object({
+export const EventScalarRelationFilterSchema: z.ZodType<Prisma.EventScalarRelationFilter> = z.object({
   is: z.lazy(() => EventWhereInputSchema).optional(),
   isNot: z.lazy(() => EventWhereInputSchema).optional()
 }).strict();
@@ -7905,7 +7905,7 @@ export const EnumServiceUnitFilterSchema: z.ZodType<Prisma.EnumServiceUnitFilter
   not: z.union([ z.lazy(() => ServiceUnitSchema),z.lazy(() => NestedEnumServiceUnitFilterSchema) ]).optional(),
 }).strict();
 
-export const ServiceCategoryNullableRelationFilterSchema: z.ZodType<Prisma.ServiceCategoryNullableRelationFilter> = z.object({
+export const ServiceCategoryNullableScalarRelationFilterSchema: z.ZodType<Prisma.ServiceCategoryNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => ServiceCategoryWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => ServiceCategoryWhereInputSchema).optional().nullable()
 }).strict();
@@ -7986,7 +7986,7 @@ export const EnumServiceUnitWithAggregatesFilterSchema: z.ZodType<Prisma.EnumSer
   _max: z.lazy(() => NestedEnumServiceUnitFilterSchema).optional()
 }).strict();
 
-export const ServiceRelationFilterSchema: z.ZodType<Prisma.ServiceRelationFilter> = z.object({
+export const ServiceScalarRelationFilterSchema: z.ZodType<Prisma.ServiceScalarRelationFilter> = z.object({
   is: z.lazy(() => ServiceWhereInputSchema).optional(),
   isNot: z.lazy(() => ServiceWhereInputSchema).optional()
 }).strict();
@@ -8028,7 +8028,7 @@ export const RelatedServiceSumOrderByAggregateInputSchema: z.ZodType<Prisma.Rela
   unit_price: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const MaterialRelationFilterSchema: z.ZodType<Prisma.MaterialRelationFilter> = z.object({
+export const MaterialScalarRelationFilterSchema: z.ZodType<Prisma.MaterialScalarRelationFilter> = z.object({
   is: z.lazy(() => MaterialWhereInputSchema).optional(),
   isNot: z.lazy(() => MaterialWhereInputSchema).optional()
 }).strict();
@@ -8147,7 +8147,7 @@ export const EnumTreatmentStatusFilterSchema: z.ZodType<Prisma.EnumTreatmentStat
   not: z.union([ z.lazy(() => TreatmentStatusSchema),z.lazy(() => NestedEnumTreatmentStatusFilterSchema) ]).optional(),
 }).strict();
 
-export const TreatmentPlanNullableRelationFilterSchema: z.ZodType<Prisma.TreatmentPlanNullableRelationFilter> = z.object({
+export const TreatmentPlanNullableScalarRelationFilterSchema: z.ZodType<Prisma.TreatmentPlanNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => TreatmentPlanWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => TreatmentPlanWhereInputSchema).optional().nullable()
 }).strict();
@@ -8200,12 +8200,12 @@ export const EnumTreatmentStatusWithAggregatesFilterSchema: z.ZodType<Prisma.Enu
   _max: z.lazy(() => NestedEnumTreatmentStatusFilterSchema).optional()
 }).strict();
 
-export const TreatmentRelationFilterSchema: z.ZodType<Prisma.TreatmentRelationFilter> = z.object({
+export const TreatmentScalarRelationFilterSchema: z.ZodType<Prisma.TreatmentScalarRelationFilter> = z.object({
   is: z.lazy(() => TreatmentWhereInputSchema).optional(),
   isNot: z.lazy(() => TreatmentWhereInputSchema).optional()
 }).strict();
 
-export const EventNullableRelationFilterSchema: z.ZodType<Prisma.EventNullableRelationFilter> = z.object({
+export const EventNullableScalarRelationFilterSchema: z.ZodType<Prisma.EventNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => EventWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => EventWhereInputSchema).optional().nullable()
 }).strict();
@@ -8429,12 +8429,12 @@ export const FileSumOrderByAggregateInputSchema: z.ZodType<Prisma.FileSumOrderBy
   size: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const ProfileNullableRelationFilterSchema: z.ZodType<Prisma.ProfileNullableRelationFilter> = z.object({
+export const ProfileNullableScalarRelationFilterSchema: z.ZodType<Prisma.ProfileNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => ProfileWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => ProfileWhereInputSchema).optional().nullable()
 }).strict();
 
-export const TenantProfileNullableRelationFilterSchema: z.ZodType<Prisma.TenantProfileNullableRelationFilter> = z.object({
+export const TenantProfileNullableScalarRelationFilterSchema: z.ZodType<Prisma.TenantProfileNullableScalarRelationFilter> = z.object({
   is: z.lazy(() => TenantProfileWhereInputSchema).optional().nullable(),
   isNot: z.lazy(() => TenantProfileWhereInputSchema).optional().nullable()
 }).strict();
@@ -8503,7 +8503,7 @@ export const CountyMinOrderByAggregateInputSchema: z.ZodType<Prisma.CountyMinOrd
   updatedAt: z.lazy(() => SortOrderSchema).optional()
 }).strict();
 
-export const CountyRelationFilterSchema: z.ZodType<Prisma.CountyRelationFilter> = z.object({
+export const CountyScalarRelationFilterSchema: z.ZodType<Prisma.CountyScalarRelationFilter> = z.object({
   is: z.lazy(() => CountyWhereInputSchema).optional(),
   isNot: z.lazy(() => CountyWhereInputSchema).optional()
 }).strict();
@@ -11109,9 +11109,9 @@ export const NestedJsonFilterSchema: z.ZodType<Prisma.NestedJsonFilter> = z.obje
   string_contains: z.string().optional(),
   string_starts_with: z.string().optional(),
   string_ends_with: z.string().optional(),
-  array_contains: InputJsonValueSchema.optional().nullable(),
   array_starts_with: InputJsonValueSchema.optional().nullable(),
   array_ends_with: InputJsonValueSchema.optional().nullable(),
+  array_contains: InputJsonValueSchema.optional().nullable(),
   lt: InputJsonValueSchema.optional(),
   lte: InputJsonValueSchema.optional(),
   gt: InputJsonValueSchema.optional(),
@@ -17630,14 +17630,14 @@ export const TenantProfileUncheckedUpdateWithoutAvatarInputSchema: z.ZodType<Pri
 }).strict();
 
 export const CityCreateWithoutCountyInputSchema: z.ZodType<Prisma.CityCreateWithoutCountyInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
 
 export const CityUncheckedCreateWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedCreateWithoutCountyInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
@@ -17681,7 +17681,7 @@ export const CityScalarWhereInputSchema: z.ZodType<Prisma.CityScalarWhereInput> 
 }).strict();
 
 export const CountyCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyCreateWithoutCitiesInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -17689,7 +17689,7 @@ export const CountyCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyCreate
 }).strict();
 
 export const CountyUncheckedCreateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUncheckedCreateWithoutCitiesInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   code: z.string(),
   createdAt: z.coerce.date().optional(),
@@ -17713,7 +17713,7 @@ export const CountyUpdateToOneWithWhereWithoutCitiesInputSchema: z.ZodType<Prism
 }).strict();
 
 export const CountyUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUpdateWithoutCitiesInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -17721,7 +17721,7 @@ export const CountyUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUpdate
 }).strict();
 
 export const CountyUncheckedUpdateWithoutCitiesInputSchema: z.ZodType<Prisma.CountyUncheckedUpdateWithoutCitiesInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   code: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -19624,28 +19624,28 @@ export const TreatmentUncheckedUpdateManyWithoutTreatmentPlanInputSchema: z.ZodT
 }).strict();
 
 export const CityCreateManyCountyInputSchema: z.ZodType<Prisma.CityCreateManyCountyInput> = z.object({
-  id: z.string().optional(),
+  id: z.string().uuid().optional(),
   name: z.string(),
   createdAt: z.coerce.date().optional(),
   updatedAt: z.coerce.date().optional()
 }).strict();
 
 export const CityUpdateWithoutCountyInputSchema: z.ZodType<Prisma.CityUpdateWithoutCountyInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateWithoutCountyInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const CityUncheckedUpdateManyWithoutCountyInputSchema: z.ZodType<Prisma.CityUncheckedUpdateManyWithoutCountyInput> = z.object({
-  id: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  id: z.union([ z.string().uuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   name: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   createdAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
   updatedAt: z.union([ z.coerce.date(),z.lazy(() => DateTimeFieldUpdateOperationsInputSchema) ]).optional(),
@@ -21485,6 +21485,11 @@ export const TenantUpdateManyArgsSchema: z.ZodType<Prisma.TenantUpdateManyArgs> 
   where: TenantWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyTenantCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTenantCreateManyAndReturnArgs> = z.object({
+  data: z.union([ TenantUpdateManyMutationInputSchema,TenantUncheckedUpdateManyInputSchema ]),
+  where: TenantWhereInputSchema.optional(),
+}).strict() ;
+
 export const TenantDeleteManyArgsSchema: z.ZodType<Prisma.TenantDeleteManyArgs> = z.object({
   where: TenantWhereInputSchema.optional(),
 }).strict() ;
@@ -21527,6 +21532,11 @@ export const TenantProfileUpdateArgsSchema: z.ZodType<Prisma.TenantProfileUpdate
 }).strict() ;
 
 export const TenantProfileUpdateManyArgsSchema: z.ZodType<Prisma.TenantProfileUpdateManyArgs> = z.object({
+  data: z.union([ TenantProfileUpdateManyMutationInputSchema,TenantProfileUncheckedUpdateManyInputSchema ]),
+  where: TenantProfileWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyTenantProfileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTenantProfileCreateManyAndReturnArgs> = z.object({
   data: z.union([ TenantProfileUpdateManyMutationInputSchema,TenantProfileUncheckedUpdateManyInputSchema ]),
   where: TenantProfileWhereInputSchema.optional(),
 }).strict() ;
@@ -21577,6 +21587,11 @@ export const UserUpdateManyArgsSchema: z.ZodType<Prisma.UserUpdateManyArgs> = z.
   where: UserWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyUserCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyUserCreateManyAndReturnArgs> = z.object({
+  data: z.union([ UserUpdateManyMutationInputSchema,UserUncheckedUpdateManyInputSchema ]),
+  where: UserWhereInputSchema.optional(),
+}).strict() ;
+
 export const UserDeleteManyArgsSchema: z.ZodType<Prisma.UserDeleteManyArgs> = z.object({
   where: UserWhereInputSchema.optional(),
 }).strict() ;
@@ -21619,6 +21634,11 @@ export const ProfileUpdateArgsSchema: z.ZodType<Prisma.ProfileUpdateArgs> = z.ob
 }).strict() ;
 
 export const ProfileUpdateManyArgsSchema: z.ZodType<Prisma.ProfileUpdateManyArgs> = z.object({
+  data: z.union([ ProfileUpdateManyMutationInputSchema,ProfileUncheckedUpdateManyInputSchema ]),
+  where: ProfileWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyProfileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyProfileCreateManyAndReturnArgs> = z.object({
   data: z.union([ ProfileUpdateManyMutationInputSchema,ProfileUncheckedUpdateManyInputSchema ]),
   where: ProfileWhereInputSchema.optional(),
 }).strict() ;
@@ -21669,6 +21689,11 @@ export const AccountUpdateManyArgsSchema: z.ZodType<Prisma.AccountUpdateManyArgs
   where: AccountWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyAccountCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyAccountCreateManyAndReturnArgs> = z.object({
+  data: z.union([ AccountUpdateManyMutationInputSchema,AccountUncheckedUpdateManyInputSchema ]),
+  where: AccountWhereInputSchema.optional(),
+}).strict() ;
+
 export const AccountDeleteManyArgsSchema: z.ZodType<Prisma.AccountDeleteManyArgs> = z.object({
   where: AccountWhereInputSchema.optional(),
 }).strict() ;
@@ -21711,6 +21736,11 @@ export const PlanUpdateArgsSchema: z.ZodType<Prisma.PlanUpdateArgs> = z.object({
 }).strict() ;
 
 export const PlanUpdateManyArgsSchema: z.ZodType<Prisma.PlanUpdateManyArgs> = z.object({
+  data: z.union([ PlanUpdateManyMutationInputSchema,PlanUncheckedUpdateManyInputSchema ]),
+  where: PlanWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyPlanCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyPlanCreateManyAndReturnArgs> = z.object({
   data: z.union([ PlanUpdateManyMutationInputSchema,PlanUncheckedUpdateManyInputSchema ]),
   where: PlanWhereInputSchema.optional(),
 }).strict() ;
@@ -21761,6 +21791,11 @@ export const TokenUpdateManyArgsSchema: z.ZodType<Prisma.TokenUpdateManyArgs> = 
   where: TokenWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyTokenCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTokenCreateManyAndReturnArgs> = z.object({
+  data: z.union([ TokenUpdateManyMutationInputSchema,TokenUncheckedUpdateManyInputSchema ]),
+  where: TokenWhereInputSchema.optional(),
+}).strict() ;
+
 export const TokenDeleteManyArgsSchema: z.ZodType<Prisma.TokenDeleteManyArgs> = z.object({
   where: TokenWhereInputSchema.optional(),
 }).strict() ;
@@ -21803,6 +21838,11 @@ export const InvitationUpdateArgsSchema: z.ZodType<Prisma.InvitationUpdateArgs> 
 }).strict() ;
 
 export const InvitationUpdateManyArgsSchema: z.ZodType<Prisma.InvitationUpdateManyArgs> = z.object({
+  data: z.union([ InvitationUpdateManyMutationInputSchema,InvitationUncheckedUpdateManyInputSchema ]),
+  where: InvitationWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyInvitationCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyInvitationCreateManyAndReturnArgs> = z.object({
   data: z.union([ InvitationUpdateManyMutationInputSchema,InvitationUncheckedUpdateManyInputSchema ]),
   where: InvitationWhereInputSchema.optional(),
 }).strict() ;
@@ -21853,6 +21893,11 @@ export const PatientUpdateManyArgsSchema: z.ZodType<Prisma.PatientUpdateManyArgs
   where: PatientWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyPatientCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyPatientCreateManyAndReturnArgs> = z.object({
+  data: z.union([ PatientUpdateManyMutationInputSchema,PatientUncheckedUpdateManyInputSchema ]),
+  where: PatientWhereInputSchema.optional(),
+}).strict() ;
+
 export const PatientDeleteManyArgsSchema: z.ZodType<Prisma.PatientDeleteManyArgs> = z.object({
   where: PatientWhereInputSchema.optional(),
 }).strict() ;
@@ -21895,6 +21940,11 @@ export const PatientDataUpdateArgsSchema: z.ZodType<Prisma.PatientDataUpdateArgs
 }).strict() ;
 
 export const PatientDataUpdateManyArgsSchema: z.ZodType<Prisma.PatientDataUpdateManyArgs> = z.object({
+  data: z.union([ PatientDataUpdateManyMutationInputSchema,PatientDataUncheckedUpdateManyInputSchema ]),
+  where: PatientDataWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyPatientDataCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyPatientDataCreateManyAndReturnArgs> = z.object({
   data: z.union([ PatientDataUpdateManyMutationInputSchema,PatientDataUncheckedUpdateManyInputSchema ]),
   where: PatientDataWhereInputSchema.optional(),
 }).strict() ;
@@ -21945,6 +21995,11 @@ export const SpecialityUpdateManyArgsSchema: z.ZodType<Prisma.SpecialityUpdateMa
   where: SpecialityWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManySpecialityCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManySpecialityCreateManyAndReturnArgs> = z.object({
+  data: z.union([ SpecialityUpdateManyMutationInputSchema,SpecialityUncheckedUpdateManyInputSchema ]),
+  where: SpecialityWhereInputSchema.optional(),
+}).strict() ;
+
 export const SpecialityDeleteManyArgsSchema: z.ZodType<Prisma.SpecialityDeleteManyArgs> = z.object({
   where: SpecialityWhereInputSchema.optional(),
 }).strict() ;
@@ -21987,6 +22042,11 @@ export const EventUpdateArgsSchema: z.ZodType<Prisma.EventUpdateArgs> = z.object
 }).strict() ;
 
 export const EventUpdateManyArgsSchema: z.ZodType<Prisma.EventUpdateManyArgs> = z.object({
+  data: z.union([ EventUpdateManyMutationInputSchema,EventUncheckedUpdateManyInputSchema ]),
+  where: EventWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyEventCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyEventCreateManyAndReturnArgs> = z.object({
   data: z.union([ EventUpdateManyMutationInputSchema,EventUncheckedUpdateManyInputSchema ]),
   where: EventWhereInputSchema.optional(),
 }).strict() ;
@@ -22037,6 +22097,11 @@ export const EventActionUpdateManyArgsSchema: z.ZodType<Prisma.EventActionUpdate
   where: EventActionWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyEventActionCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyEventActionCreateManyAndReturnArgs> = z.object({
+  data: z.union([ EventActionUpdateManyMutationInputSchema,EventActionUncheckedUpdateManyInputSchema ]),
+  where: EventActionWhereInputSchema.optional(),
+}).strict() ;
+
 export const EventActionDeleteManyArgsSchema: z.ZodType<Prisma.EventActionDeleteManyArgs> = z.object({
   where: EventActionWhereInputSchema.optional(),
 }).strict() ;
@@ -22079,6 +22144,11 @@ export const MaterialUpdateArgsSchema: z.ZodType<Prisma.MaterialUpdateArgs> = z.
 }).strict() ;
 
 export const MaterialUpdateManyArgsSchema: z.ZodType<Prisma.MaterialUpdateManyArgs> = z.object({
+  data: z.union([ MaterialUpdateManyMutationInputSchema,MaterialUncheckedUpdateManyInputSchema ]),
+  where: MaterialWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyMaterialCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyMaterialCreateManyAndReturnArgs> = z.object({
   data: z.union([ MaterialUpdateManyMutationInputSchema,MaterialUncheckedUpdateManyInputSchema ]),
   where: MaterialWhereInputSchema.optional(),
 }).strict() ;
@@ -22129,6 +22199,11 @@ export const ServiceUpdateManyArgsSchema: z.ZodType<Prisma.ServiceUpdateManyArgs
   where: ServiceWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyServiceCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyServiceCreateManyAndReturnArgs> = z.object({
+  data: z.union([ ServiceUpdateManyMutationInputSchema,ServiceUncheckedUpdateManyInputSchema ]),
+  where: ServiceWhereInputSchema.optional(),
+}).strict() ;
+
 export const ServiceDeleteManyArgsSchema: z.ZodType<Prisma.ServiceDeleteManyArgs> = z.object({
   where: ServiceWhereInputSchema.optional(),
 }).strict() ;
@@ -22171,6 +22246,11 @@ export const RelatedServiceUpdateArgsSchema: z.ZodType<Prisma.RelatedServiceUpda
 }).strict() ;
 
 export const RelatedServiceUpdateManyArgsSchema: z.ZodType<Prisma.RelatedServiceUpdateManyArgs> = z.object({
+  data: z.union([ RelatedServiceUpdateManyMutationInputSchema,RelatedServiceUncheckedUpdateManyInputSchema ]),
+  where: RelatedServiceWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyRelatedServiceCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyRelatedServiceCreateManyAndReturnArgs> = z.object({
   data: z.union([ RelatedServiceUpdateManyMutationInputSchema,RelatedServiceUncheckedUpdateManyInputSchema ]),
   where: RelatedServiceWhereInputSchema.optional(),
 }).strict() ;
@@ -22221,6 +22301,11 @@ export const ServiceMaterialUpdateManyArgsSchema: z.ZodType<Prisma.ServiceMateri
   where: ServiceMaterialWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyServiceMaterialCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyServiceMaterialCreateManyAndReturnArgs> = z.object({
+  data: z.union([ ServiceMaterialUpdateManyMutationInputSchema,ServiceMaterialUncheckedUpdateManyInputSchema ]),
+  where: ServiceMaterialWhereInputSchema.optional(),
+}).strict() ;
+
 export const ServiceMaterialDeleteManyArgsSchema: z.ZodType<Prisma.ServiceMaterialDeleteManyArgs> = z.object({
   where: ServiceMaterialWhereInputSchema.optional(),
 }).strict() ;
@@ -22259,6 +22344,11 @@ export const PriceUpdateArgsSchema: z.ZodType<Prisma.PriceUpdateArgs> = z.object
 }).strict() ;
 
 export const PriceUpdateManyArgsSchema: z.ZodType<Prisma.PriceUpdateManyArgs> = z.object({
+  data: z.union([ PriceUpdateManyMutationInputSchema,PriceUncheckedUpdateManyInputSchema ]),
+  where: PriceWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyPriceCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyPriceCreateManyAndReturnArgs> = z.object({
   data: z.union([ PriceUpdateManyMutationInputSchema,PriceUncheckedUpdateManyInputSchema ]),
   where: PriceWhereInputSchema.optional(),
 }).strict() ;
@@ -22309,6 +22399,11 @@ export const ServiceCategoryUpdateManyArgsSchema: z.ZodType<Prisma.ServiceCatego
   where: ServiceCategoryWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyServiceCategoryCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyServiceCategoryCreateManyAndReturnArgs> = z.object({
+  data: z.union([ ServiceCategoryUpdateManyMutationInputSchema,ServiceCategoryUncheckedUpdateManyInputSchema ]),
+  where: ServiceCategoryWhereInputSchema.optional(),
+}).strict() ;
+
 export const ServiceCategoryDeleteManyArgsSchema: z.ZodType<Prisma.ServiceCategoryDeleteManyArgs> = z.object({
   where: ServiceCategoryWhereInputSchema.optional(),
 }).strict() ;
@@ -22351,6 +22446,11 @@ export const TreatmentUpdateArgsSchema: z.ZodType<Prisma.TreatmentUpdateArgs> = 
 }).strict() ;
 
 export const TreatmentUpdateManyArgsSchema: z.ZodType<Prisma.TreatmentUpdateManyArgs> = z.object({
+  data: z.union([ TreatmentUpdateManyMutationInputSchema,TreatmentUncheckedUpdateManyInputSchema ]),
+  where: TreatmentWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyTreatmentCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTreatmentCreateManyAndReturnArgs> = z.object({
   data: z.union([ TreatmentUpdateManyMutationInputSchema,TreatmentUncheckedUpdateManyInputSchema ]),
   where: TreatmentWhereInputSchema.optional(),
 }).strict() ;
@@ -22401,6 +22501,11 @@ export const VisitUpdateManyArgsSchema: z.ZodType<Prisma.VisitUpdateManyArgs> = 
   where: VisitWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyVisitCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyVisitCreateManyAndReturnArgs> = z.object({
+  data: z.union([ VisitUpdateManyMutationInputSchema,VisitUncheckedUpdateManyInputSchema ]),
+  where: VisitWhereInputSchema.optional(),
+}).strict() ;
+
 export const VisitDeleteManyArgsSchema: z.ZodType<Prisma.VisitDeleteManyArgs> = z.object({
   where: VisitWhereInputSchema.optional(),
 }).strict() ;
@@ -22443,6 +22548,11 @@ export const TreatmentPlanUpdateArgsSchema: z.ZodType<Prisma.TreatmentPlanUpdate
 }).strict() ;
 
 export const TreatmentPlanUpdateManyArgsSchema: z.ZodType<Prisma.TreatmentPlanUpdateManyArgs> = z.object({
+  data: z.union([ TreatmentPlanUpdateManyMutationInputSchema,TreatmentPlanUncheckedUpdateManyInputSchema ]),
+  where: TreatmentPlanWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyTreatmentPlanCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTreatmentPlanCreateManyAndReturnArgs> = z.object({
   data: z.union([ TreatmentPlanUpdateManyMutationInputSchema,TreatmentPlanUncheckedUpdateManyInputSchema ]),
   where: TreatmentPlanWhereInputSchema.optional(),
 }).strict() ;
@@ -22493,6 +22603,11 @@ export const QuizUpdateManyArgsSchema: z.ZodType<Prisma.QuizUpdateManyArgs> = z.
   where: QuizWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyQuizCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyQuizCreateManyAndReturnArgs> = z.object({
+  data: z.union([ QuizUpdateManyMutationInputSchema,QuizUncheckedUpdateManyInputSchema ]),
+  where: QuizWhereInputSchema.optional(),
+}).strict() ;
+
 export const QuizDeleteManyArgsSchema: z.ZodType<Prisma.QuizDeleteManyArgs> = z.object({
   where: QuizWhereInputSchema.optional(),
 }).strict() ;
@@ -22531,6 +22646,11 @@ export const TagUpdateArgsSchema: z.ZodType<Prisma.TagUpdateArgs> = z.object({
 }).strict() ;
 
 export const TagUpdateManyArgsSchema: z.ZodType<Prisma.TagUpdateManyArgs> = z.object({
+  data: z.union([ TagUpdateManyMutationInputSchema,TagUncheckedUpdateManyInputSchema ]),
+  where: TagWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyTagCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTagCreateManyAndReturnArgs> = z.object({
   data: z.union([ TagUpdateManyMutationInputSchema,TagUncheckedUpdateManyInputSchema ]),
   where: TagWhereInputSchema.optional(),
 }).strict() ;
@@ -22581,6 +22701,11 @@ export const TaskUpdateManyArgsSchema: z.ZodType<Prisma.TaskUpdateManyArgs> = z.
   where: TaskWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyTaskCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyTaskCreateManyAndReturnArgs> = z.object({
+  data: z.union([ TaskUpdateManyMutationInputSchema,TaskUncheckedUpdateManyInputSchema ]),
+  where: TaskWhereInputSchema.optional(),
+}).strict() ;
+
 export const TaskDeleteManyArgsSchema: z.ZodType<Prisma.TaskDeleteManyArgs> = z.object({
   where: TaskWhereInputSchema.optional(),
 }).strict() ;
@@ -22623,6 +22748,11 @@ export const FileUpdateArgsSchema: z.ZodType<Prisma.FileUpdateArgs> = z.object({
 }).strict() ;
 
 export const FileUpdateManyArgsSchema: z.ZodType<Prisma.FileUpdateManyArgs> = z.object({
+  data: z.union([ FileUpdateManyMutationInputSchema,FileUncheckedUpdateManyInputSchema ]),
+  where: FileWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyFileCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyFileCreateManyAndReturnArgs> = z.object({
   data: z.union([ FileUpdateManyMutationInputSchema,FileUncheckedUpdateManyInputSchema ]),
   where: FileWhereInputSchema.optional(),
 }).strict() ;
@@ -22673,6 +22803,11 @@ export const AvatarUpdateManyArgsSchema: z.ZodType<Prisma.AvatarUpdateManyArgs> 
   where: AvatarWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyAvatarCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyAvatarCreateManyAndReturnArgs> = z.object({
+  data: z.union([ AvatarUpdateManyMutationInputSchema,AvatarUncheckedUpdateManyInputSchema ]),
+  where: AvatarWhereInputSchema.optional(),
+}).strict() ;
+
 export const AvatarDeleteManyArgsSchema: z.ZodType<Prisma.AvatarDeleteManyArgs> = z.object({
   where: AvatarWhereInputSchema.optional(),
 }).strict() ;
@@ -22719,6 +22854,11 @@ export const CountyUpdateManyArgsSchema: z.ZodType<Prisma.CountyUpdateManyArgs> 
   where: CountyWhereInputSchema.optional(),
 }).strict() ;
 
+export const updateManyCountyCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyCountyCreateManyAndReturnArgs> = z.object({
+  data: z.union([ CountyUpdateManyMutationInputSchema,CountyUncheckedUpdateManyInputSchema ]),
+  where: CountyWhereInputSchema.optional(),
+}).strict() ;
+
 export const CountyDeleteManyArgsSchema: z.ZodType<Prisma.CountyDeleteManyArgs> = z.object({
   where: CountyWhereInputSchema.optional(),
 }).strict() ;
@@ -22761,6 +22901,11 @@ export const CityUpdateArgsSchema: z.ZodType<Prisma.CityUpdateArgs> = z.object({
 }).strict() ;
 
 export const CityUpdateManyArgsSchema: z.ZodType<Prisma.CityUpdateManyArgs> = z.object({
+  data: z.union([ CityUpdateManyMutationInputSchema,CityUncheckedUpdateManyInputSchema ]),
+  where: CityWhereInputSchema.optional(),
+}).strict() ;
+
+export const updateManyCityCreateManyAndReturnArgsSchema: z.ZodType<Prisma.updateManyCityCreateManyAndReturnArgs> = z.object({
   data: z.union([ CityUpdateManyMutationInputSchema,CityUncheckedUpdateManyInputSchema ]),
   where: CityWhereInputSchema.optional(),
 }).strict() ;

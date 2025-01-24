@@ -1,8 +1,8 @@
 import {
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
 } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 import { type KeyboardEvent, useCallback, useRef, useState } from "react";
@@ -119,7 +119,7 @@ export const AutoComplete = <T,>({
       >
         <div
           className={cn(
-            "absolute top-0 z-10 w-full rounded-xl bg-background/80 backdrop-blur-sm outline-none animate-in fade-in-0 zoom-in-95",
+            "absolute top-0 z-10 w-full rounded-xl bg-background/80 backdrop-blur-sm outline-hidden animate-in fade-in-0 zoom-in-95",
             isOpen ? "block" : "hidden",
           )}
         >

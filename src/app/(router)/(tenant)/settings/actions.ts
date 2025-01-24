@@ -10,6 +10,6 @@ export async function signOut() {
 }
 
 export async function toggleTheme(theme: "light" | "dark" | "system") {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.set("theme", theme);
 }

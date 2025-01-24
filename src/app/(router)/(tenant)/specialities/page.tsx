@@ -17,12 +17,11 @@ const searchParamsSchema = z.object({
 });
 
 export interface SpecialitiesPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function SpecialitiesPage({
-  searchParams,
-}: SpecialitiesPageProps) {
+export default async function SpecialitiesPage(props: SpecialitiesPageProps) {
+  const searchParams = await props.searchParams;
   const search = searchParamsSchema.parse(searchParams);
   const specialities = await api.speciality.list({ ...search });
   return (

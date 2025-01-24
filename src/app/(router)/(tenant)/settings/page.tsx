@@ -20,10 +20,11 @@ const searchParamsSchema = z.object({
   tab: z.string().optional().default("account"),
 });
 export interface StaffPageProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function Settings({ searchParams }: StaffPageProps) {
+export default async function Settings(props: StaffPageProps) {
+  const searchParams = await props.searchParams;
   const session = await auth();
   const { tab } = searchParamsSchema.parse(searchParams);
   const isAdmin = session?.user?.role === "ADMIN";

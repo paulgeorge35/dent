@@ -12,12 +12,11 @@ const searchParamsSchema = z.object({
 });
 
 interface ResumeSubscriptionProps {
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function ResumeSubscription({
-  searchParams,
-}: ResumeSubscriptionProps) {
+export default async function ResumeSubscription(props: ResumeSubscriptionProps) {
+  const searchParams = await props.searchParams;
   const t = await useTranslations("page.subscription.resume");
   const plans = await api.stripe.plans();
   const { redirectUrl } = searchParamsSchema.parse(searchParams);
