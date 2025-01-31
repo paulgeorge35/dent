@@ -1,7 +1,6 @@
 import { env } from "@/env";
 // import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client/edge";
-import { withAccelerate } from "@prisma/extension-accelerate";
 // import { Pool } from "pg";
 
 // const pool = new Pool({
@@ -15,7 +14,7 @@ const createPrismaClient = () =>
     // adapter,
     log:
       env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-  }).$extends(withAccelerate());
+  });
 
 const globalForPrisma = globalThis as unknown as {
   prisma: ReturnType<typeof createPrismaClient> | undefined;

@@ -30,7 +30,7 @@ export async function GET(request: Request): Promise<Response> {
 
     const options = {
       code,
-      redirect_uri: new URL(env.GOOGLE_AUTH_CALLBACK_URL, env.URL).toString(),
+      redirect_uri: new URL(env.GOOGLE_CALLBACK_URL, env.URL).toString(),
     };
 
     const accessToken = await googleClient.getToken(options);

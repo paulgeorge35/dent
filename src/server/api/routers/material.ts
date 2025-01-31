@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
 
@@ -101,10 +100,6 @@ export const materialRouter = createTRPCRouter({
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
-          },
         });
 
         const count = await ctx.db.material.count({
@@ -148,10 +143,6 @@ export const materialRouter = createTRPCRouter({
     const material = await ctx.db.material.findUnique({
       where: {
         id: input,
-      },
-      cacheStrategy: {
-        ttl: env.DEFAULT_TTL,
-        swr: env.DEFAULT_SWR,
       },
     });
     return material;

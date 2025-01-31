@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/ui/icons";
 import { useTranslations } from "next-intl";
 import { useTransition } from "react";
-import { signUpGoogle } from "./actions";
+import { signInGoogle } from "../sign-in/actions";
 
 export default function GoogleSignUp() {
   const [pending, startTransition] = useTransition();
@@ -12,7 +12,7 @@ export default function GoogleSignUp() {
 
   const handleClick = () => {
     startTransition(async () => {
-      await signUpGoogle();
+      await signInGoogle();
     });
   };
 

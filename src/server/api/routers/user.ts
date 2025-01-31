@@ -11,11 +11,11 @@ import { z } from "zod";
 import { env } from "@/env";
 import { resend } from "@/server/resend";
 import {
-  adminProcedure,
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
-  tenantProcedure,
+    adminProcedure,
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
+    tenantProcedure,
 } from "../trpc";
 
 const userComplete = Prisma.validator<Prisma.UserInclude>()({
@@ -66,9 +66,6 @@ export const userRouter = createTRPCRouter({
   profile: protectedProcedure.query(async ({ ctx }) => {
     const profile = await ctx.db.profile.findUnique({
       where: { id: ctx.session.id },
-      cacheStrategy: {
-        ttl: 10,
-      },
     });
     return profile;
   }),
@@ -101,10 +98,6 @@ export const userRouter = createTRPCRouter({
 
       const emailExists = await ctx.db.profile.findUnique({
         where: { email },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
-        },
       });
 
       if (emailExists) {
@@ -168,10 +161,6 @@ export const userRouter = createTRPCRouter({
       const token = await ctx.db.token.findFirst({
         where: { token: input, type: TokenType.ACTIVATION },
         include: { profile: true },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
-        },
       });
 
       if (!token) {
@@ -200,9 +189,6 @@ export const userRouter = createTRPCRouter({
     const user = (await ctx.db.user.findUnique({
       where: { id: userId },
       include: userComplete,
-      cacheStrategy: {
-        ttl: 10,
-      },
     })) as zUserComplete | null;
 
     if (!user) {
@@ -227,10 +213,6 @@ export const userRouter = createTRPCRouter({
     .query(async ({ ctx, input: { token, type } }) => {
       const _token = await ctx.db.token.findFirst({
         where: { token, type },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
-        },
       });
 
       if (!_token || _token.expires < new Date()) {
@@ -267,10 +249,6 @@ export const userRouter = createTRPCRouter({
           where: { id: profileId, type: "credentials", provider: "database" },
           include: {
             profile: true,
-          },
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
           },
         });
 
@@ -313,10 +291,6 @@ export const userRouter = createTRPCRouter({
           role: true,
           bannedAt: true,
         },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
-        },
       })) as zUserComplete | null;
 
       if (!user) {
@@ -336,10 +310,6 @@ export const userRouter = createTRPCRouter({
     const user = (await ctx.db.user.findUnique({
       where: { id: input },
       include: userComplete,
-      cacheStrategy: {
-        ttl: env.DEFAULT_TTL,
-        swr: env.DEFAULT_SWR,
-      },
     })) as zUserComplete | null;
 
     if (!user) {
@@ -412,10 +382,6 @@ export const userRouter = createTRPCRouter({
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
-          },
         });
 
         const count = await ctx.db.user.count({
@@ -516,10 +482,6 @@ export const userRouter = createTRPCRouter({
       return await ctx.db.$transaction(async (tx) => {
         const targetUser = await tx.user.findUnique({
           where: { id: input },
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
-          },
         });
 
         if (!targetUser) {
@@ -592,10 +554,6 @@ export const userRouter = createTRPCRouter({
             },
           },
         },
-      },
-      cacheStrategy: {
-        ttl: env.DEFAULT_TTL,
-        swr: env.DEFAULT_SWR,
       },
     });
   }),

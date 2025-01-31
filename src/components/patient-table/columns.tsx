@@ -7,17 +7,16 @@ import { DataTableColumnHeader } from "@/components/data-table/column-header";
 import Clipboard from "@/components/ui/clipboard";
 import { ArrowRight, MailIcon, PhoneIcon } from "lucide-react";
 import { DateTime } from "luxon";
-import { useLocale } from "next-intl";
 import Link from "next/link";
 import AvatarComponent from "../shared/avatar-component";
 import { Button } from "../ui/button";
 
 type GetColumnsProps = {
   t: (v: string, options?: Record<string, string>) => string;
+  locale: string;
 };
 
-export function getColumns({ t }: GetColumnsProps): ColumnDef<Patient>[] {
-  const locale = useLocale();
+export function getColumns({ t, locale }: GetColumnsProps): ColumnDef<Patient>[] {
   return [
     {
       accessorKey: "name",

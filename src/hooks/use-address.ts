@@ -5,9 +5,11 @@ const useAddress = () => {
   const county = useStateful<string | undefined>(undefined);
   const city = useStateful<string | undefined>(undefined);
 
-  const { data: counties } = api.utils.getCounties.useQuery();
+  const { data: counties } = api.utils.getCounties.useQuery(undefined, {
+  });
 
-  const { data: cities } = api.utils.getCities.useQuery(county.value);
+  const { data: cities } = api.utils.getCities.useQuery(county.value, {
+  });
 
   return {
     county: {

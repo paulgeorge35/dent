@@ -41,9 +41,16 @@ export async function signInMagicLink(email: string) {
 
 export async function signInGoogle() {
   const authorizationUri = googleClient.authorizeURL({
-    redirect_uri: new URL(env.GOOGLE_AUTH_CALLBACK_URL, env.URL).toString(),
+    redirect_uri: new URL(env.GOOGLE_CALLBACK_URL, env.URL).toString(),
     scope: "email profile",
   });
+
+  const url = new URL(authorizationUri);
+  console.log(new URL(env.GOOGLE_CALLBACK_URL, env.URL).toString());
+  console.log(url.toString());
+  if (url.searchParams.get("authError")) {
+    throw new Error(`Failed to sign in with Google: ${url.toString()}`);
+  }
 
   redirect(authorizationUri);
 }

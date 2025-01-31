@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-import { env } from "@/env";
 import quizJsonSchema from "@/lib/quiz-questions.json";
 import type { EventChangeAction } from "@/types";
 import { appointmentCreateInput } from "@/types/schema";
@@ -40,9 +39,6 @@ export const appointmentRouter = createTRPCRouter({
             },
           },
         },
-      },
-      cacheStrategy: {
-        ttl: 5,
       },
     });
 
@@ -86,10 +82,6 @@ export const appointmentRouter = createTRPCRouter({
         return await ctx.db.$transaction(async (tx) => {
           const service = await tx.service.findUnique({
             where: { id: serviceId },
-            cacheStrategy: {
-              ttl: env.DEFAULT_TTL,
-              swr: env.DEFAULT_SWR,
-            },
           });
 
           if (!service) {
@@ -167,10 +159,6 @@ export const appointmentRouter = createTRPCRouter({
 
         const appointment = await tx.event.findFirst({
           where: { id: id },
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
-          },
         });
 
         if (!appointment) {
@@ -390,10 +378,6 @@ export const appointmentRouter = createTRPCRouter({
         _count: {
           id: true,
         },
-        cacheStrategy: {
-          ttl: 30,
-          swr: 30,
-        },
       });
 
       const dailyCounts = [];
@@ -436,9 +420,6 @@ export const appointmentRouter = createTRPCRouter({
       include: {
         visits: true,
       },
-      cacheStrategy: {
-        swr: 60 * 60 * 24,
-      },
     });
 
     return services
@@ -473,10 +454,6 @@ export const appointmentRouter = createTRPCRouter({
               service: true,
             },
           },
-        },
-        cacheStrategy: {
-          ttl: 30,
-          swr: 30,
         },
       })
       .then((appointments) => {

@@ -154,9 +154,6 @@ export const patientRouter = createTRPCRouter({
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
-          cacheStrategy: {
-            ttl: 10,
-          },
         });
 
         const count = await ctx.db.patient.count({

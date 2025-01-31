@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import type { Prisma } from "@prisma/client";
 import { ServiceUnitSchema } from "prisma/generated/zod";
 import { z } from "zod";
@@ -121,10 +120,6 @@ export const serviceRouter = createTRPCRouter({
           orderBy: { [orderBy]: order },
           skip: page && per_page ? (page - 1) * per_page : undefined,
           take: per_page,
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
-          },
         });
 
         const count = await ctx.db.service.count({
@@ -206,10 +201,6 @@ export const serviceRouter = createTRPCRouter({
           },
         },
       },
-      cacheStrategy: {
-        ttl: env.DEFAULT_TTL,
-        swr: env.DEFAULT_SWR,
-      },
     });
     return service;
   }),
@@ -231,10 +222,6 @@ export const serviceRouter = createTRPCRouter({
               material: true,
             },
           },
-        },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
         },
       });
 
@@ -271,10 +258,6 @@ export const serviceRouter = createTRPCRouter({
         const services = await tx.service.findMany({
           where: {
             id: { in: relatedServices.map((service) => service.serviceId) },
-          },
-          cacheStrategy: {
-            ttl: env.DEFAULT_TTL,
-            swr: env.DEFAULT_SWR,
           },
         });
 

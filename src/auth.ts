@@ -2,7 +2,6 @@
 
 import { MagicLink } from "@/components/emails/magic-link";
 import type { TokenType } from "@prisma/client";
-import crypto from "crypto";
 import { DateTime, type DurationLike } from "luxon";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
@@ -106,10 +105,11 @@ export async function generateToken({
   length?: number;
   duration?: DurationLike;
 }) {
-  const token = crypto
-    .randomBytes(Math.ceil(length / 2))
-    .toString("hex")
-    .slice(0, length);
+  const array = new Uint8Array(length / 2);
+  crypto.getRandomValues(array);
+  const token = Array.from(array, (byte) =>
+    byte.toString(16).padStart(2, "0"),
+  ).join("");
 
   const expires = DateTime.now().plus(duration).toJSDate();
 

@@ -1,4 +1,3 @@
-import { env } from "@/env";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { adminProcedure, createTRPCRouter, tenantProcedure } from "../trpc";
@@ -146,10 +145,6 @@ export const specialityRouter = createTRPCRouter({
               users: true,
             },
           },
-        },
-        cacheStrategy: {
-          ttl: env.DEFAULT_TTL,
-          swr: env.DEFAULT_SWR,
         },
       });
 

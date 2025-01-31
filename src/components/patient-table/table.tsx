@@ -8,7 +8,7 @@ import * as React from "react";
 import { DataTable } from "@/components/data-table/table";
 import { DataTableToolbar } from "@/components/data-table/toolbar";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import type { Patient } from "prisma/generated/zod";
 import { getColumns } from "./columns";
 import { PatientsTableToolbarActions } from "./toolbar-actions";
@@ -23,10 +23,11 @@ interface PatientsTableProps {
 
 export function PatientTable({ patients }: PatientsTableProps) {
   const t = useTranslations("page.patients");
+  const locale = useLocale();
   const { content, pageCount } = patients;
 
   const columns = React.useMemo<ColumnDef<Patient>[]>(
-    () => getColumns({ t }),
+    () => getColumns({ t, locale }),
     [],
   );
 

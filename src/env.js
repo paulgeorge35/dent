@@ -14,9 +14,6 @@ export const env = createEnv({
         (str) => !str.includes("YOUR_MYSQL_URL_HERE"),
         "You forgot to change the default URL",
       ),
-    DIRECT_DATABASE_URL: z.string().url(),
-    DEFAULT_TTL: z.coerce.number().int().positive().default(30),
-    DEFAULT_SWR: z.coerce.number().int().default(60),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -24,7 +21,7 @@ export const env = createEnv({
     SALT_ROUNDS: z.coerce.number().int().positive().default(10),
     GOOGLE_CLIENT_ID: z.string().min(1),
     GOOGLE_CLIENT_SECRET: z.string().min(1),
-    GOOGLE_AUTH_CALLBACK_URL: z.string(),
+    GOOGLE_CALLBACK_URL: z.string().default("/api/auth/google/callback"),
     URL: z.string(),
     DOMAIN: z.string(),
     RESEND_API_KEY: z.string(),
@@ -63,17 +60,14 @@ export const env = createEnv({
    */
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
-    DIRECT_DATABASE_URL: process.env.DIRECT_DATABASE_URL,
-    DEFAULT_TTL: process.env.DEFAULT_TTL,
-    DEFAULT_SWR: process.env.DEFAULT_SWR,
     NODE_ENV: process.env.NODE_ENV,
     AUTH_SECRET: process.env.AUTH_SECRET,
     SALT_ROUNDS: process.env.SALT_ROUNDS,
-    URL: process.env.VERCEL_URL || process.env.URL,
+    URL: `https://${process.env.VERCEL_URL}` || process.env.URL,
     DOMAIN: process.env.DOMAIN,
     GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-    GOOGLE_AUTH_CALLBACK_URL: process.env.GOOGLE_AUTH_CALLBACK_URL,
+    GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
     STRIPE_PUBLIC_KEY: process.env.STRIPE_PUBLIC_KEY,
